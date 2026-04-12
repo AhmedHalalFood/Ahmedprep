@@ -1,14 +1,21 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { BookOpen, Calculator, FlaskConical, PenTool, ArrowRight, Check } from "lucide-react"
+import { BookOpen, Calculator, FlaskConical, PenTool, ArrowRight, Check, GraduationCap } from "lucide-react"
 
 const programs = [
+  {
+    icon: GraduationCap,
+    title: "SHSAT Preparation",
+    description: "Intensive prep for NYC Specialized High Schools Admissions Test with proven results.",
+    features: ["ELA & Math mastery", "Revising/editing strategies", "Full-length practice exams"],
+    featured: true
+  },
   {
     icon: BookOpen,
     title: "SAT Preparation",
     description: "Comprehensive SAT prep covering all sections with proven strategies for top scores.",
     features: ["Full-length practice tests", "Personalized study plan", "Score improvement guarantee"],
-    featured: true
+    featured: false
   },
   {
     icon: Calculator,
@@ -47,7 +54,7 @@ export function Programs() {
           </p>
         </div>
 
-        <div className="mt-16 grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="mt-16 grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
           {programs.map((program, index) => (
             <Card 
               key={index} 
