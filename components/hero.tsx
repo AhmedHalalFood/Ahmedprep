@@ -1,24 +1,28 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Phone } from "lucide-react"
+import { ArrowRight, Phone, MapPin, Star } from "lucide-react"
 
 export function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center pt-20">
-      {/* Subtle background pattern */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(139,90,43,0.04),transparent_50%),radial-gradient(circle_at_70%_80%,rgba(139,90,43,0.04),transparent_50%)]" />
+    <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+      {/* Elegant background */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(139,90,43,0.08),transparent_50%)]" />
+      <div className="absolute top-1/4 right-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-1/4 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
       
       <div className="relative mx-auto max-w-7xl px-6 lg:px-8 py-24 lg:py-32">
         <div className="text-center max-w-4xl mx-auto">
-          {/* Elegant badge */}
+          {/* Location badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary border border-border mb-8">
-            <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+            <MapPin className="w-4 h-4 text-accent" />
             <span className="text-sm font-medium text-muted-foreground">
-              Live Online Classes - Join From Anywhere
+              Live Online Classes - Astoria, NY
             </span>
           </div>
           
-          {/* Main headline with serif font */}
-          <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-medium tracking-tight text-foreground leading-[1.1] text-balance">
+          {/* Main headline */}
+          <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-medium tracking-tight text-foreground leading-[1.1]">
             Welcome to
             <br />
             <span className="italic text-accent">Ahmed Prep!</span>
@@ -30,11 +34,19 @@ export function Hero() {
             We help students develop skills to think critically, learn independently, and solve problems effectively.
           </p>
           
+          {/* Trust indicators */}
+          <div className="mt-6 flex items-center justify-center gap-1">
+            {[...Array(5)].map((_, i) => (
+              <Star key={i} className="w-5 h-5 fill-accent text-accent" />
+            ))}
+            <span className="ml-2 text-sm text-muted-foreground">Premier Tutoring Since 2021</span>
+          </div>
+          
           {/* CTA Buttons */}
           <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button 
               size="lg" 
-              className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 py-6 text-base font-medium shadow-lg shadow-primary/20"
+              className="bg-accent text-accent-foreground hover:bg-accent/90 rounded-full px-8 py-6 text-base font-medium shadow-lg shadow-accent/20"
               asChild
             >
               <a href="tel:347-479-5020">
@@ -61,20 +73,29 @@ export function Hero() {
           </p>
         </div>
         
-        {/* Stats section */}
-        <div className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12 max-w-4xl mx-auto">
+        {/* Programs offered */}
+        <div className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-8 max-w-4xl mx-auto">
           {[
-            { value: "SHSAT", label: "Specialized HS Prep" },
-            { value: "SAT/ACT", label: "College Entrance" },
-            { value: "AP", label: "Advanced Placement" },
-            { value: "Regents", label: "NY State Exams" },
-          ].map((stat, index) => (
-            <div key={index} className="text-center">
-              <div className="font-serif text-2xl md:text-3xl font-medium text-foreground">
-                {stat.value}
+            { title: "SHSAT", subtitle: "Specialized HS Prep", highlight: true },
+            { title: "SAT/ACT", subtitle: "College Entrance", highlight: false },
+            { title: "AP Courses", subtitle: "Advanced Placement", highlight: false },
+            { title: "Tutoring", subtitle: "All Subjects", highlight: false },
+          ].map((program, index) => (
+            <div 
+              key={index} 
+              className={`text-center p-6 rounded-2xl border transition-all duration-200 hover:shadow-lg ${
+                program.highlight 
+                  ? "bg-accent/5 border-accent/20" 
+                  : "bg-card border-border/50 hover:border-border"
+              }`}
+            >
+              <div className={`font-serif text-2xl md:text-3xl font-medium ${
+                program.highlight ? "text-accent" : "text-foreground"
+              }`}>
+                {program.title}
               </div>
               <div className="mt-2 text-sm text-muted-foreground">
-                {stat.label}
+                {program.subtitle}
               </div>
             </div>
           ))}

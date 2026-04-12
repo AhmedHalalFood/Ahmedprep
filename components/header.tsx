@@ -6,10 +6,11 @@ import { Button } from "@/components/ui/button"
 import { Menu, X } from "lucide-react"
 
 const navLinks = [
+  { href: "#why-us", label: "Why Ahmed Prep" },
   { href: "#shsat", label: "SHSAT" },
   { href: "#sat-act", label: "SAT/ACT" },
-  { href: "#ap", label: "AP/Subjects" },
-  { href: "#about", label: "Who We Are" },
+  { href: "#ap", label: "AP Courses" },
+  { href: "#about", label: "About" },
   { href: "#contact", label: "Contact" },
 ]
 

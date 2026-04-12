@@ -10,8 +10,9 @@ const footerLinks = {
     { label: "Hunter Test", href: "#shsat" },
   ],
   company: [
-    { label: "Who We Are", href: "#about" },
-    { label: "Our Approach", href: "#about" },
+    { label: "Why Ahmed Prep", href: "#why-us" },
+    { label: "About Tariq Ahmed", href: "#about" },
+    { label: "Our Approach", href: "#why-us" },
     { label: "Contact Us", href: "#contact" },
   ],
   contact: [
