@@ -1,131 +1,193 @@
 "use client"
 
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { MapPin, Phone, Mail, Clock } from "lucide-react"
-import { useState } from "react"
+import { MapPin, Phone, Mail, Clock, Send } from "lucide-react"
 
 const contactInfo = [
   {
     icon: MapPin,
-    title: "Location",
-    content: "123 Education Street, Suite 100\nNew York, NY 10001"
+    label: "Visit Us",
+    value: "123 Education Lane",
+    subValue: "New York, NY 10001"
   },
   {
     icon: Phone,
-    title: "Phone",
-    content: "(123) 456-7890"
+    label: "Call Us",
+    value: "(917) 555-0123",
+    subValue: "Mon-Sat, 9am-7pm"
   },
   {
     icon: Mail,
-    title: "Email",
-    content: "info@ahmedprep.com"
+    label: "Email Us",
+    value: "hello@ahmedprep.com",
+    subValue: "We respond within 24 hours"
   },
   {
     icon: Clock,
-    title: "Hours",
-    content: "Mon - Fri: 9AM - 8PM\nSat - Sun: 10AM - 6PM"
-  }
+    label: "Office Hours",
+    value: "Monday - Saturday",
+    subValue: "9:00 AM - 7:00 PM"
+  },
 ]
 
 export function Contact() {
   const [formData, setFormData] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
     email: "",
     phone: "",
+    program: "",
     message: ""
   })
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle form submission
-    console.log(formData)
+    console.log("Form submitted:", formData)
   }
 
   return (
-    <section id="contact" className="py-24 bg-card">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="text-center max-w-2xl mx-auto">
-          <span className="text-primary text-sm font-semibold uppercase tracking-wider">Contact Us</span>
-          <h2 className="mt-4 text-3xl md:text-4xl font-bold text-foreground text-balance">
-            Get in Touch
-          </h2>
-          <p className="mt-4 text-muted-foreground">
-            Have questions? We&apos;re here to help. Reach out and let&apos;s discuss how we can support your academic journey.
-          </p>
-        </div>
-
-        <div className="mt-16 grid lg:grid-cols-3 gap-8">
-          {/* Contact Info */}
-          <div className="lg:col-span-1 space-y-6">
-            {contactInfo.map((info, index) => (
-              <div key={index} className="flex gap-4">
-                <div className="flex-shrink-0">
-                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <info.icon className="h-5 w-5 text-primary" />
+    <section id="contact" className="py-24 lg:py-32 bg-card">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24">
+          {/* Contact info */}
+          <div>
+            <p className="text-sm font-medium tracking-widest text-accent uppercase">
+              Get In Touch
+            </p>
+            <h2 className="mt-4 font-serif text-4xl md:text-5xl font-medium tracking-tight text-foreground text-balance">
+              Let&apos;s start a conversation
+            </h2>
+            <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
+              Have questions about our programs? Ready to enroll? We&apos;re here 
+              to help you take the next step in your educational journey.
+            </p>
+            
+            <div className="mt-12 grid sm:grid-cols-2 gap-8">
+              {contactInfo.map((info, index) => (
+                <div key={index} className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center">
+                    <info.icon className="w-5 h-5 text-accent" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">
+                      {info.label}
+                    </p>
+                    <p className="mt-1 font-medium text-foreground">
+                      {info.value}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {info.subValue}
+                    </p>
                   </div>
                 </div>
+              ))}
+            </div>
+          </div>
+          
+          {/* Contact form */}
+          <div className="bg-secondary/30 rounded-3xl p-8 lg:p-10 border border-border/50">
+            <h3 className="font-serif text-2xl font-medium text-foreground">
+              Send us a message
+            </h3>
+            <p className="mt-2 text-muted-foreground">
+              Fill out the form below and we&apos;ll get back to you within 24 hours.
+            </p>
+            
+            <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+              <div className="grid sm:grid-cols-2 gap-4">
                 <div>
-                  <h3 className="font-semibold text-foreground">{info.title}</h3>
-                  <p className="mt-1 text-muted-foreground text-sm whitespace-pre-line">{info.content}</p>
+                  <label className="text-sm font-medium text-foreground mb-2 block">
+                    First Name
+                  </label>
+                  <Input
+                    placeholder="John"
+                    value={formData.firstName}
+                    onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                    className="bg-card border-border focus:border-accent rounded-xl"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-foreground mb-2 block">
+                    Last Name
+                  </label>
+                  <Input
+                    placeholder="Doe"
+                    value={formData.lastName}
+                    onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                    className="bg-card border-border focus:border-accent rounded-xl"
+                  />
                 </div>
               </div>
-            ))}
-          </div>
-
-          {/* Contact Form */}
-          <Card className="lg:col-span-2 bg-secondary/30 border-border">
-            <CardHeader>
-              <CardTitle className="text-foreground">Send Us a Message</CardTitle>
-              <CardDescription>Fill out the form below and we&apos;ll get back to you within 24 hours.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <div>
-                    <Input
-                      placeholder="Your Name"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="bg-background border-border"
-                    />
-                  </div>
-                  <div>
-                    <Input
-                      type="email"
-                      placeholder="Email Address"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="bg-background border-border"
-                    />
-                  </div>
+              
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium text-foreground mb-2 block">
+                    Email
+                  </label>
+                  <Input
+                    type="email"
+                    placeholder="john@example.com"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="bg-card border-border focus:border-accent rounded-xl"
+                  />
                 </div>
                 <div>
+                  <label className="text-sm font-medium text-foreground mb-2 block">
+                    Phone
+                  </label>
                   <Input
                     type="tel"
-                    placeholder="Phone Number"
+                    placeholder="(555) 000-0000"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="bg-background border-border"
+                    className="bg-card border-border focus:border-accent rounded-xl"
                   />
                 </div>
-                <div>
-                  <Textarea
-                    placeholder="How can we help you?"
-                    rows={4}
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className="bg-background border-border resize-none"
-                  />
-                </div>
-                <Button type="submit" size="lg" className="w-full sm:w-auto">
-                  Send Message
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
+              </div>
+              
+              <div>
+                <label className="text-sm font-medium text-foreground mb-2 block">
+                  Program of Interest
+                </label>
+                <select
+                  value={formData.program}
+                  onChange={(e) => setFormData({ ...formData, program: e.target.value })}
+                  className="w-full h-10 px-3 rounded-xl bg-card border border-border text-foreground focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                >
+                  <option value="">Select a program</option>
+                  <option value="shsat">SHSAT Preparation</option>
+                  <option value="sat">SAT Preparation</option>
+                  <option value="act">ACT Preparation</option>
+                  <option value="ap">AP Courses</option>
+                  <option value="essays">College Essays</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="text-sm font-medium text-foreground mb-2 block">
+                  Message
+                </label>
+                <Textarea
+                  placeholder="Tell us about your goals and how we can help..."
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  className="bg-card border-border focus:border-accent rounded-xl min-h-[120px] resize-none"
+                />
+              </div>
+              
+              <Button 
+                type="submit" 
+                className="w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-full py-6 text-base font-medium"
+              >
+                <Send className="mr-2 w-4 h-4" />
+                Send Message
+              </Button>
+            </form>
+          </div>
         </div>
       </div>
     </section>
