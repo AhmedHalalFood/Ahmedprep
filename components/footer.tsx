@@ -6,7 +6,7 @@ const footerLinks = {
     { label: "SAT Prep", href: "#sat-act" },
     { label: "ACT Prep", href: "#sat-act" },
     { label: "AP Courses", href: "#ap" },
-    { label: "Regents Exams", href: "#ap" },
+    { label: "NYS Regents", href: "#regents" },
     { label: "Hunter Test", href: "#shsat" },
   ],
   company: [
@@ -25,25 +25,25 @@ const footerLinks = {
 
 export function Footer() {
   return (
-    <footer className="bg-foreground text-background">
+    <footer className="bg-secondary/50 border-t border-border/50">
       <div className="mx-auto max-w-7xl px-6 lg:px-8 py-16 lg:py-20">
         <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8">
           {/* Brand column */}
           <div className="lg:col-span-2">
             <Link href="/" className="inline-block">
-              <span className="font-serif text-2xl font-semibold tracking-tight">
+              <span className="font-serif text-2xl font-semibold tracking-tight text-foreground">
                 Ahmed<span className="text-accent">Prep</span>
               </span>
             </Link>
-            <p className="mt-4 text-background/70 leading-relaxed max-w-sm">
+            <p className="mt-4 text-muted-foreground leading-relaxed max-w-sm">
               World-class test prep that is accessible, effective, and enjoyable 
               for all students. Helping students achieve their dream scores on 
-              SHSAT, SAT, ACT, AP, and more.
+              SHSAT, SAT, ACT, AP, Regents, and more.
             </p>
             <div className="mt-6">
               <a 
                 href="tel:347-479-5020" 
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent text-accent-foreground font-medium text-sm hover:bg-accent/90 transition-colors"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary text-primary-foreground font-medium text-sm hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
               >
                 Call Now: 347-479-5020
               </a>
@@ -52,7 +52,7 @@ export function Footer() {
           
           {/* Link columns */}
           <div>
-            <h4 className="font-medium text-sm tracking-wider uppercase text-background/50 mb-4">
+            <h4 className="font-medium text-sm tracking-wider uppercase text-muted-foreground mb-4">
               Programs
             </h4>
             <ul className="space-y-3">
@@ -60,7 +60,7 @@ export function Footer() {
                 <li key={index}>
                   <Link 
                     href={link.href}
-                    className="text-background/70 hover:text-background transition-colors"
+                    className="text-foreground/70 hover:text-foreground transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -70,7 +70,7 @@ export function Footer() {
           </div>
           
           <div>
-            <h4 className="font-medium text-sm tracking-wider uppercase text-background/50 mb-4">
+            <h4 className="font-medium text-sm tracking-wider uppercase text-muted-foreground mb-4">
               Company
             </h4>
             <ul className="space-y-3">
@@ -78,7 +78,7 @@ export function Footer() {
                 <li key={index}>
                   <Link 
                     href={link.href}
-                    className="text-background/70 hover:text-background transition-colors"
+                    className="text-foreground/70 hover:text-foreground transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -88,7 +88,7 @@ export function Footer() {
           </div>
           
           <div>
-            <h4 className="font-medium text-sm tracking-wider uppercase text-background/50 mb-4">
+            <h4 className="font-medium text-sm tracking-wider uppercase text-muted-foreground mb-4">
               Contact
             </h4>
             <ul className="space-y-3">
@@ -96,7 +96,7 @@ export function Footer() {
                 <li key={index}>
                   <a 
                     href={link.href}
-                    className="text-background/70 hover:text-background transition-colors"
+                    className="text-foreground/70 hover:text-foreground transition-colors"
                   >
                     {link.label}
                   </a>
@@ -107,22 +107,22 @@ export function Footer() {
         </div>
         
         {/* Trademark disclaimer */}
-        <div className="mt-12 pt-8 border-t border-background/10">
-          <p className="text-xs text-background/40 leading-relaxed max-w-4xl">
+        <div className="mt-12 pt-8 border-t border-border/50">
+          <p className="text-xs text-muted-foreground leading-relaxed max-w-4xl">
             Specialized High School Admission Test (SHSAT) is a registered trademark of the New York City 
             Department of Education; SAT, Advanced Placement, and AP are registered trademarks of the College Board; 
-            PSAT/NMSQT is a registered trademark of the College Board and the National Merit Scholarship Corporation, 
-            and ACT is a registered trademark of ACT, Inc. which are not affiliated with, and do not endorse, 
-            this product or site.
+            PSAT/NMSQT is a registered trademark of the College Board and the National Merit Scholarship Corporation; 
+            ACT is a registered trademark of ACT, Inc.; and NYS Regents Examinations are administered by the 
+            New York State Education Department, which is not affiliated with, and does not endorse, this product or site.
           </p>
         </div>
         
         {/* Bottom bar */}
-        <div className="mt-8 pt-8 border-t border-background/10 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-background/50">
+        <div className="mt-8 pt-8 border-t border-border/50 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-sm text-muted-foreground">
             &copy; {new Date().getFullYear()} Ahmed Prep. All rights reserved.
           </p>
-          <p className="text-sm text-background/50">
+          <p className="text-sm text-muted-foreground">
             Astoria, New York
           </p>
         </div>

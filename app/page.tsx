@@ -4,6 +4,7 @@ import { WhyAhmedPrep } from "@/components/why-ahmed-prep"
 import { SHSATSection } from "@/components/shsat-section"
 import { SATACTSection } from "@/components/sat-act-section"
 import { APSection } from "@/components/ap-section"
+import { RegentsSection } from "@/components/regents-section"
 import { About } from "@/components/about"
 import { CTA } from "@/components/cta"
 import { Contact } from "@/components/contact"
@@ -18,6 +19,7 @@ export default function Home() {
       <SHSATSection />
       <SATACTSection />
       <APSection />
+      <RegentsSection />
       <About />
       <CTA />
       <Contact />
