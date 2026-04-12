@@ -1,25 +1,25 @@
-import { Users, Target, Award, Heart } from "lucide-react"
+import { Users, Target, Award, Heart, Lightbulb, BookOpen } from "lucide-react"
 
 const values = [
   {
     icon: Heart,
-    title: "Personalized Attention",
-    description: "Every student receives individualized instruction tailored to their unique learning style and goals."
+    title: "Holistic Approach",
+    description: "Combining foundational skills, critical thinking, executive skills development, and mentorship."
   },
   {
     icon: Target,
-    title: "Proven Methodology",
-    description: "Our research-backed teaching methods have consistently delivered exceptional results for over a decade."
+    title: "Unlock Potential",
+    description: "We tap into students' intelligence and creativity, striving to unlock their highest potential."
   },
   {
     icon: Award,
-    title: "Expert Instructors",
-    description: "Learn from educators who are passionate about teaching and deeply knowledgeable in their subjects."
+    title: "Empowered Learners",
+    description: "Success on a test is just a stepping stone toward becoming empowered learners and confident individuals."
   },
   {
-    icon: Users,
-    title: "Family Partnership",
-    description: "We work closely with parents to ensure alignment between home and classroom for optimal success."
+    icon: Lightbulb,
+    title: "Critical Thinking",
+    description: "We help students develop skills needed to think critically and solve problems effectively."
   },
 ]
 
@@ -27,32 +27,41 @@ export function About() {
   return (
     <section id="about" className="py-24 lg:py-32 bg-card">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
           {/* Content */}
           <div>
             <p className="text-sm font-medium tracking-widest text-accent uppercase">
-              About AhmedPrep
+              Who We Are
             </p>
             <h2 className="mt-4 font-serif text-4xl md:text-5xl font-medium tracking-tight text-foreground leading-tight text-balance">
-              Where academic excellence meets personal growth
+              Dedicated to world-class test prep
             </h2>
             <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
-              Founded with a simple belief: every student has the potential to achieve 
-              greatness. For over 12 years, AhmedPrep has been guiding students through 
-              their most important academic milestones.
+              At Ahmed Prep, we are dedicated to providing a world-class test prep experience 
+              that is accessible, effective, and enjoyable for all students, without an enormous price tag.
             </p>
             <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
-              We don&apos;t just teach test-taking strategies. We build confidence, 
-              develop critical thinking skills, and nurture a lifelong love of learning 
-              that extends far beyond any single exam.
+              We inspire our students to take charge of their future. They cultivate a resilient 
+              mindset, learn to excel in daily challenges, and acquire essential study skills. 
+              In essence, they learn how to fulfill the commitments they make to themselves.
+            </p>
+            <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
+              We simplify challenging math and science concepts to make them easy to understand. 
+              Our programs are affordable, and our classes are conducted live and online, 
+              allowing you to join from anywhere without wasting time.
             </p>
             
-            {/* Signature style element */}
-            <div className="mt-10 flex items-center gap-4">
-              <div className="w-16 h-px bg-accent" />
-              <p className="text-sm font-medium text-foreground italic">
-                &ldquo;Excellence is not a destination, but a journey.&rdquo;
-              </p>
+            {/* Instructor Info */}
+            <div className="mt-10 p-6 rounded-2xl bg-secondary/50 border border-border/50">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 rounded-full bg-accent/10 flex items-center justify-center">
+                  <BookOpen className="w-8 h-8 text-accent" />
+                </div>
+                <div>
+                  <h3 className="font-serif text-xl font-medium text-foreground">Tariq Ahmed</h3>
+                  <p className="text-sm text-muted-foreground">Lead Instructor</p>
+                </div>
+              </div>
             </div>
           </div>
           

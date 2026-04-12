@@ -6,9 +6,10 @@ import { Button } from "@/components/ui/button"
 import { Menu, X } from "lucide-react"
 
 const navLinks = [
-  { href: "#programs", label: "Programs" },
-  { href: "#about", label: "About" },
-  { href: "#testimonials", label: "Success Stories" },
+  { href: "#shsat", label: "SHSAT" },
+  { href: "#sat-act", label: "SAT/ACT" },
+  { href: "#ap", label: "AP/Subjects" },
+  { href: "#about", label: "Who We Are" },
   { href: "#contact", label: "Contact" },
 ]
 
@@ -41,16 +42,14 @@ export function Header() {
 
           {/* Desktop CTA */}
           <div className="hidden lg:flex items-center gap-4">
-            <Button 
-              variant="ghost" 
-              className="text-sm font-medium hover:bg-transparent hover:text-accent"
-            >
-              Log In
-            </Button>
+            <a href="tel:347-479-5020" className="text-sm font-medium text-muted-foreground hover:text-accent transition-colors">
+              347-479-5020
+            </a>
             <Button 
               className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-6"
+              asChild
             >
-              Book Consultation
+              <a href="#contact">Call Now</a>
             </Button>
           </div>
 
@@ -79,11 +78,11 @@ export function Header() {
                 </Link>
               ))}
               <div className="flex flex-col gap-3 pt-4 border-t border-border/50">
-                <Button variant="outline" className="w-full rounded-full">
-                  Log In
-                </Button>
-                <Button className="w-full bg-primary text-primary-foreground rounded-full">
-                  Book Consultation
+                <a href="tel:347-479-5020" className="text-center py-2 text-sm font-medium text-muted-foreground">
+                  347-479-5020
+                </a>
+                <Button className="w-full bg-primary text-primary-foreground rounded-full" asChild>
+                  <a href="#contact">Contact Us</a>
                 </Button>
               </div>
             </div>

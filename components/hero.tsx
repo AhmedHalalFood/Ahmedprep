@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, Phone } from "lucide-react"
 
 export function Hero() {
   return (
@@ -13,21 +13,21 @@ export function Hero() {
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary border border-border mb-8">
             <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
             <span className="text-sm font-medium text-muted-foreground">
-              NYC&apos;s Premier Test Prep Academy
+              Live Online Classes - Join From Anywhere
             </span>
           </div>
           
           {/* Main headline with serif font */}
           <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-medium tracking-tight text-foreground leading-[1.1] text-balance">
-            Exceptional preparation
+            Welcome to
             <br />
-            <span className="italic text-accent">for exceptional futures</span>
+            <span className="italic text-accent">Ahmed Prep!</span>
           </h1>
           
           {/* Subheadline */}
-          <p className="mt-8 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed text-pretty">
-            Personalized tutoring and test preparation designed to unlock your child&apos;s 
-            full potential. SHSAT, SAT, ACT, and beyond.
+          <p className="mt-8 text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed text-pretty">
+            World-class test prep that is accessible, effective, and enjoyable for all students. 
+            We help students develop skills to think critically, learn independently, and solve problems effectively.
           </p>
           
           {/* CTA Buttons */}
@@ -35,30 +35,42 @@ export function Hero() {
             <Button 
               size="lg" 
               className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 py-6 text-base font-medium shadow-lg shadow-primary/20"
+              asChild
             >
-              Schedule a Free Consultation
-              <ArrowRight className="ml-2 w-4 h-4" />
+              <a href="tel:347-479-5020">
+                <Phone className="mr-2 w-4 h-4" />
+                Call Now: 347-479-5020
+              </a>
             </Button>
             <Button 
               variant="outline" 
               size="lg"
               className="rounded-full px-8 py-6 text-base font-medium border-border hover:bg-secondary"
+              asChild
             >
-              Explore Our Programs
+              <a href="#shsat">
+                Explore Programs
+                <ArrowRight className="ml-2 w-4 h-4" />
+              </a>
             </Button>
           </div>
+          
+          {/* Urgency message */}
+          <p className="mt-6 text-sm text-accent font-medium">
+            Classes are filling up quickly - Don&apos;t wait!
+          </p>
         </div>
         
         {/* Stats section */}
         <div className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12 max-w-4xl mx-auto">
           {[
-            { value: "2,500+", label: "Students Mentored" },
-            { value: "96%", label: "Admission Rate" },
-            { value: "150+", label: "Points Avg. Improvement" },
-            { value: "12+", label: "Years of Excellence" },
+            { value: "SHSAT", label: "Specialized HS Prep" },
+            { value: "SAT/ACT", label: "College Entrance" },
+            { value: "AP", label: "Advanced Placement" },
+            { value: "Regents", label: "NY State Exams" },
           ].map((stat, index) => (
             <div key={index} className="text-center">
-              <div className="font-serif text-3xl md:text-4xl font-medium text-foreground">
+              <div className="font-serif text-2xl md:text-3xl font-medium text-foreground">
                 {stat.value}
               </div>
               <div className="mt-2 text-sm text-muted-foreground">
