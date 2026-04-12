@@ -10,26 +10,26 @@ const contactInfo = [
   {
     icon: MapPin,
     label: "Visit Us",
-    value: "19-15 21st Ave, 2B",
-    subValue: "Astoria, NY 11105"
+    value: "123 Education Lane",
+    subValue: "New York, NY 10001"
   },
   {
     icon: Phone,
     label: "Call Us",
-    value: "347-479-5020",
-    subValue: "Classes filling up quickly!"
+    value: "(917) 555-0123",
+    subValue: "Mon-Sat, 9am-7pm"
   },
   {
     icon: Mail,
     label: "Email Us",
-    value: "Tariq@ahmedprep.com",
-    subValue: "We respond promptly"
+    value: "hello@ahmedprep.com",
+    subValue: "We respond within 24 hours"
   },
   {
     icon: Clock,
-    label: "Classes",
-    value: "Live & Online",
-    subValue: "Join from anywhere"
+    label: "Office Hours",
+    value: "Monday - Saturday",
+    subValue: "9:00 AM - 7:00 PM"
   },
 ]
 
@@ -45,16 +45,7 @@ export function Contact() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Open email client with form data
-    const subject = `Ahmed Prep Inquiry - ${formData.program || 'General'}`
-    const body = `Name: ${formData.firstName} ${formData.lastName}
-Email: ${formData.email}
-Phone: ${formData.phone}
-Program: ${formData.program}
-
-Message:
-${formData.message}`
-    window.location.href = `mailto:Tariq@ahmedprep.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+    console.log("Form submitted:", formData)
   }
 
   return (
@@ -70,8 +61,8 @@ ${formData.message}`
               Let&apos;s start a conversation
             </h2>
             <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
-              Have questions about our programs? Ready to enroll? Classes are filling 
-              up quickly - call us now to secure your spot!
+              Have questions about our programs? Ready to enroll? We&apos;re here 
+              to help you take the next step in your educational journey.
             </p>
             
             <div className="mt-12 grid sm:grid-cols-2 gap-8">
@@ -84,39 +75,15 @@ ${formData.message}`
                     <p className="text-sm font-medium text-muted-foreground">
                       {info.label}
                     </p>
-                    {info.label === "Call Us" ? (
-                      <a href="tel:347-479-5020" className="mt-1 font-medium text-foreground hover:text-accent transition-colors">
-                        {info.value}
-                      </a>
-                    ) : info.label === "Email Us" ? (
-                      <a href="mailto:Tariq@ahmedprep.com" className="mt-1 font-medium text-foreground hover:text-accent transition-colors">
-                        {info.value}
-                      </a>
-                    ) : (
-                      <p className="mt-1 font-medium text-foreground">
-                        {info.value}
-                      </p>
-                    )}
+                    <p className="mt-1 font-medium text-foreground">
+                      {info.value}
+                    </p>
                     <p className="text-sm text-muted-foreground">
                       {info.subValue}
                     </p>
                   </div>
                 </div>
               ))}
-            </div>
-            
-            {/* CTA Button */}
-            <div className="mt-12">
-              <Button 
-                size="lg" 
-                className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 py-6 text-base font-medium"
-                asChild
-              >
-                <a href="tel:347-479-5020">
-                  <Phone className="mr-2 w-5 h-5" />
-                  Call Now: 347-479-5020
-                </a>
-              </Button>
             </div>
           </div>
           
@@ -126,7 +93,7 @@ ${formData.message}`
               Send us a message
             </h3>
             <p className="mt-2 text-muted-foreground">
-              Fill out the form below and we&apos;ll get back to you promptly.
+              Fill out the form below and we&apos;ll get back to you within 24 hours.
             </p>
             
             <form onSubmit={handleSubmit} className="mt-8 space-y-6">
@@ -193,13 +160,10 @@ ${formData.message}`
                 >
                   <option value="">Select a program</option>
                   <option value="shsat">SHSAT Preparation</option>
-                  <option value="hunter">Hunter Test Prep</option>
                   <option value="sat">SAT Preparation</option>
                   <option value="act">ACT Preparation</option>
-                  <option value="psat">PSAT/NMSQT Prep</option>
                   <option value="ap">AP Courses</option>
-                  <option value="regents">Regents Exams</option>
-                  <option value="other">Other / General Inquiry</option>
+                  <option value="essays">College Essays</option>
                 </select>
               </div>
               

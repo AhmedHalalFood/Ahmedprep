@@ -1,49 +1,39 @@
 import { Button } from "@/components/ui/button"
-import { Phone, Mail, Sparkles } from "lucide-react"
+import { Calendar, Phone } from "lucide-react"
 
 export function CTA() {
   return (
-    <section className="py-24 lg:py-32 bg-gradient-to-br from-primary/5 via-accent/5 to-primary/10">
+    <section className="py-24 lg:py-32 bg-primary">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 text-accent text-sm font-medium mb-6">
-            <Sparkles className="w-4 h-4" />
-            Limited Spots Available
-          </div>
-          <h2 className="font-serif text-4xl md:text-5xl font-medium tracking-tight text-foreground text-balance">
-            Classes are filling up quickly!
+          <h2 className="font-serif text-4xl md:text-5xl font-medium tracking-tight text-primary-foreground text-balance">
+            Ready to unlock your child&apos;s potential?
           </h2>
-          <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
-            Don&apos;t wait - secure your spot today. Our affordable programs are conducted 
-            live and online, so you can join from anywhere without wasting time.
+          <p className="mt-6 text-lg text-primary-foreground/80 leading-relaxed">
+            Schedule a complimentary consultation to discuss your goals and create 
+            a personalized learning plan. Limited spots available for the upcoming semester.
           </p>
           
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button 
               size="lg" 
-              className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 py-6 text-base font-medium shadow-lg shadow-primary/20"
-              asChild
+              className="bg-card text-foreground hover:bg-card/90 rounded-full px-8 py-6 text-base font-medium shadow-lg"
             >
-              <a href="tel:347-479-5020">
-                <Phone className="mr-2 w-5 h-5" />
-                Call Now: 347-479-5020
-              </a>
+              <Calendar className="mr-2 w-5 h-5" />
+              Book Free Consultation
             </Button>
             <Button 
               variant="outline" 
               size="lg"
-              className="rounded-full px-8 py-6 text-base font-medium border-border hover:bg-secondary"
-              asChild
+              className="rounded-full px-8 py-6 text-base font-medium border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
             >
-              <a href="mailto:Tariq@ahmedprep.com">
-                <Mail className="mr-2 w-5 h-5" />
-                Email Us
-              </a>
+              <Phone className="mr-2 w-5 h-5" />
+              Call (917) 555-0123
             </Button>
           </div>
           
-          <p className="mt-8 text-sm text-muted-foreground">
-            19-15 21st Ave, 2B, Astoria, NY 11105
+          <p className="mt-8 text-sm text-primary-foreground/60">
+            No commitment required. We&apos;ll help you make the right decision for your family.
           </p>
         </div>
       </div>
