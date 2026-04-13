@@ -28,7 +28,7 @@ export function CTA() {
               className="rounded-full px-8 py-6 text-base font-medium border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
             >
               <Phone className="mr-2 w-5 h-5" />
-              Call (917) 555-0123
+              Call (347) 479-5020
             </Button>
           </div>
           
