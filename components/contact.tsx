@@ -22,7 +22,7 @@ const contactInfo = [
   {
     icon: Mail,
     label: "Email Us",
-    value: "hello@ahmedprep.com",
+    value: "Tariq@ahmedprep.com",
     subValue: "We respond within 24 hours"
   },
   {
