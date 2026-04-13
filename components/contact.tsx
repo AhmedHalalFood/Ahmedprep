@@ -43,26 +43,31 @@ export function Contact() {
     message: ""
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
+const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault()
 
-  const subject = encodeURIComponent(
-    `AhmedPrep Inquiry - ${formData.program || "General"}`
-  )
+  const response = await fetch("/api/contact", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(formData),
+  })
 
-  const body = encodeURIComponent(
-    `First Name: ${formData.firstName}
-Last Name: ${formData.lastName}
-Email: ${formData.email}
-Phone: ${formData.phone}
-Program: ${formData.program}
-
-Message:
-${formData.message}`
-  )
-
-  window.location.href = `mailto:Tariq@ahmedprep.com?subject=${subject}&body=${body}`
+  if (response.ok) {
+    alert("Message sent successfully!")
+    setFormData({
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      program: "",
+      message: "",
+    })
+  } else {
+    alert("Failed to send message.")
   }
+}
 
   return (
     <section id="contact" className="py-24 lg:py-32 bg-card">
