@@ -10,13 +10,13 @@ const contactInfo = [
   {
     icon: MapPin,
     label: "Visit Us",
-    value: "123 Education Lane",
-    subValue: "New York, NY 10001"
+    value: "20-65 47th Street",
+    subValue: "Astoria, NY 11105"
   },
   {
     icon: Phone,
     label: "Call Us",
-    value: "(917) 555-0123",
+    value: "(347) 479-5020",
     subValue: "Mon-Sat, 9am-7pm"
   },
   {
