@@ -13,25 +13,29 @@ export function CTA() {
             Schedule a complimentary consultation to discuss your goals and create 
             a personalized learning plan. Limited spots available for the upcoming semester.
           </p>
-          
+
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button 
-              size="lg" 
+            <Button
+              size="lg"
               className="bg-card text-foreground hover:bg-card/90 rounded-full px-8 py-6 text-base font-medium shadow-lg"
             >
               <Calendar className="mr-2 w-5 h-5" />
               Book Free Consultation
             </Button>
-            <Button 
-              variant="outline" 
+
+            <Button
+              asChild
+              variant="outline"
               size="lg"
-              className="rounded-full px-8 py-6 text-base font-medium border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+              className="rounded-full px-8 py-6 text-base font-medium border-primary-foreground/30 bg-transparent text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
             >
-              <Phone className="mr-2 w-5 h-5" />
-              Call (347) 479-5020
+              <a href="tel:+13474795020">
+                <Phone className="mr-2 w-5 h-5" />
+                Call (347) 479-5020
+              </a>
             </Button>
           </div>
-          
+
           <p className="mt-8 text-sm text-primary-foreground/60">
             No commitment required. We&apos;ll help you make the right decision for your family.
           </p>
