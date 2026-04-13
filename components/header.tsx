@@ -29,13 +29,10 @@ export function Header() {
               href="#contact"
               className="text-sm font-medium text-foreground hover:text-accent transition-colors"
             >
-              Log In
+              Contact
             </a>
 
-            <Button
-              asChild
-              className="rounded-full px-6"
-            >
+            <Button asChild className="rounded-full px-6">
               <a href="#contact">Book Consultation</a>
             </Button>
           </div>
