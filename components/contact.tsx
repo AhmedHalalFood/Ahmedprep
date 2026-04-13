@@ -10,25 +10,25 @@ const contactInfo = [
   {
     icon: MapPin,
     label: "Visit Us",
-    value: "123 Education Lane",
-    subValue: "New York, NY 10001"
+    value: "19-15 21st Ave",
+    subValue: "Astoria, NY 11105"
   },
   {
     icon: Phone,
     label: "Call Us",
-    value: "(917) 555-0123",
+    value: "(347) 479-5020",
     subValue: "Mon-Sat, 9am-7pm"
   },
   {
     icon: Mail,
     label: "Email Us",
-    value: "hello@ahmedprep.com",
+    value: "Tariq@ahmedprep.com",
     subValue: "We respond within 24 hours"
   },
   {
     icon: Clock,
     label: "Office Hours",
-    value: "Monday - Saturday",
+    value: "Tuesday - Sunday",
     subValue: "9:00 AM - 7:00 PM"
   },
 ]
