@@ -37,15 +37,27 @@ export function Hero() {
               className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 py-6 text-base font-medium shadow-lg shadow-primary/20"
             >
               Schedule a Free Consultation
-              <ArrowRight className="ml-2 w-4 h-4" />
-            </Button>
-            <Button 
-              variant="outline" 
-              size="lg"
-              className="rounded-full px-8 py-6 text-base font-medium border-border hover:bg-secondary"
-            >
+             <Button
+  asChild
+  size="lg"
+  className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 py-6 text-base font-medium shadow-lg"
+>
+  <a href="#contact">
+    Schedule a Free Consultation
+    <ArrowRight className="ml-2 w-5 h-5" />
+  </a>
+</Button>
               Explore Our Programs
-            </Button>
+            <Button
+  asChild
+  variant="outline"
+  size="lg"
+  className="rounded-full px-8 py-6 text-base font-medium"
+>
+  <a href="#programs">
+    Explore Our Programs
+  </a>
+</Button>
           </div>
         </div>
         
