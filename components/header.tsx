@@ -1,94 +1,45 @@
-"use client"
-
-import { useState } from "react"
-import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Menu, X } from "lucide-react"
-
-const navLinks = [
-  { href: "#programs", label: "Programs" },
-  { href: "#about", label: "About" },
-  { href: "#testimonials", label: "Success Stories" },
-  { href: "#contact", label: "Contact" },
-]
 
 export function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border/40">
+    <header className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/95 backdrop-blur">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <nav className="flex items-center justify-between h-20">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
-            <span className="font-serif text-2xl font-semibold tracking-tight text-foreground">
-              Ahmed<span className="text-accent">Prep</span>
-            </span>
-          </Link>
+        <div className="flex h-20 items-center justify-between">
+          <a href="#home" className="font-serif text-2xl font-medium tracking-tight text-foreground">
+            Ahmed<span className="text-accent">Prep</span>
+          </a>
 
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-12">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-200"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
+          <nav className="hidden md:flex items-center gap-10">
+            <a href="#programs" className="text-sm font-medium text-foreground hover:text-accent transition-colors">
+              Programs
+            </a>
+            <a href="#about" className="text-sm font-medium text-foreground hover:text-accent transition-colors">
+              About
+            </a>
+            <a href="#results" className="text-sm font-medium text-foreground hover:text-accent transition-colors">
+              Success Stories
+            </a>
+            <a href="#contact" className="text-sm font-medium text-foreground hover:text-accent transition-colors">
+              Contact
+            </a>
+          </nav>
 
-          {/* Desktop CTA */}
-          <div className="hidden lg:flex items-center gap-4">
-            <Button 
-              variant="ghost" 
-              className="text-sm font-medium hover:bg-transparent hover:text-accent"
+          <div className="flex items-center gap-4">
+            <a
+              href="#contact"
+              className="text-sm font-medium text-foreground hover:text-accent transition-colors"
             >
               Log In
-            </Button>
-            <Button 
-              className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-6"
+            </a>
+
+            <Button
+              asChild
+              className="rounded-full px-6"
             >
-              Book Consultation
+              <a href="#contact">Book Consultation</a>
             </Button>
           </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="lg:hidden p-2 text-foreground"
-            aria-label="Toggle menu"
-          >
-            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
-        </nav>
-
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="lg:hidden py-6 border-t border-border/50">
-            <div className="flex flex-col gap-4">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setIsMenuOpen(false)}
-                  className="text-base font-medium text-muted-foreground hover:text-foreground transition-colors py-2"
-                >
-                  {link.label}
-                </Link>
-              ))}
-              <div className="flex flex-col gap-3 pt-4 border-t border-border/50">
-                <Button variant="outline" className="w-full rounded-full">
-                  Log In
-                </Button>
-                <Button className="w-full bg-primary text-primary-foreground rounded-full">
-                  Book Consultation
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
+        </div>
       </div>
     </header>
   )
