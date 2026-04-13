@@ -44,8 +44,24 @@ export function Contact() {
   })
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log("Form submitted:", formData)
+  e.preventDefault()
+
+  const subject = encodeURIComponent(
+    `AhmedPrep Inquiry - ${formData.program || "General"}`
+  )
+
+  const body = encodeURIComponent(
+    `First Name: ${formData.firstName}
+Last Name: ${formData.lastName}
+Email: ${formData.email}
+Phone: ${formData.phone}
+Program: ${formData.program}
+
+Message:
+${formData.message}`
+  )
+
+  window.location.href = `mailto:Tariq@ahmedprep.com?subject=${subject}&body=${body}`
   }
 
   return (
