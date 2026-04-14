@@ -1,3 +1,4 @@
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 
 export function Header() {
@@ -5,12 +6,16 @@ export function Header() {
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/95 backdrop-blur">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="flex h-20 items-center justify-between">
-          <a
-           href="/"
-            className="font-serif text-2xl font-medium tracking-tight text-foreground"
-          >
-            Ahmed<span className="text-accent">Prep</span>
-          </a>
+          <a href="/" className="flex items-center">
+  <Image
+    src="/ahmedprep-logo.png"
+    alt="AhmedPrep Logo"
+    width={90}
+    height={90}
+    className="h-14 w-auto"
+    priority
+  />
+</a>
 
           <nav className="hidden md:flex items-center gap-10">
             <a
