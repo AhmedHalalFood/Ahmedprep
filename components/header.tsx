@@ -6,7 +6,7 @@ export function Header() {
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="flex h-20 items-center justify-between">
           <a
-            href="#home"
+           href="/"
             className="font-serif text-2xl font-medium tracking-tight text-foreground"
           >
             Ahmed<span className="text-accent">Prep</span>
