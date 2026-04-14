@@ -39,7 +39,7 @@ export function Header() {
             </a>
           </nav>
 
-          <div className="flex items-center">
+          <div className="hidden md:flex items-center">
             <Button asChild className="rounded-full px-6">
               <a href="#contact">Book Consultation</a>
             </Button>
