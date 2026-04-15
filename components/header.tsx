@@ -7,39 +7,27 @@ export function Header() {
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="flex h-20 items-center justify-between">
           <a href="/" className="flex items-center">
-  <Image
-    src="/ahmedprep-logo.png"
-    alt="AhmedPrep Logo"
-    width={90}
-    height={90}
-    className="h-14 w-auto"
-    priority
-  />
-</a>
+            <Image
+              src="/ahmedprep-logo.png"
+              alt="AhmedPrep Logo"
+              width={120}
+              height={120}
+              className="h-14 w-auto"
+              priority
+            />
+          </a>
 
           <nav className="hidden md:flex items-center gap-10">
-            <a
-              href="#programs"
-              className="text-sm font-medium text-foreground hover:text-accent transition-colors"
-            >
+            <a href="#programs" className="text-sm font-medium text-foreground hover:text-accent transition-colors">
               Programs
             </a>
-            <a
-              href="#about"
-              className="text-sm font-medium text-foreground hover:text-accent transition-colors"
-            >
+            <a href="#about" className="text-sm font-medium text-foreground hover:text-accent transition-colors">
               About
             </a>
-            <a
-              href="#results"
-              className="text-sm font-medium text-foreground hover:text-accent transition-colors"
-            >
+            <a href="#results" className="text-sm font-medium text-foreground hover:text-accent transition-colors">
               Success Stories
             </a>
-            <a
-              href="#contact"
-              className="text-sm font-medium text-foreground hover:text-accent transition-colors"
-            >
+            <a href="#contact" className="text-sm font-medium text-foreground hover:text-accent transition-colors">
               Contact
             </a>
           </nav>
