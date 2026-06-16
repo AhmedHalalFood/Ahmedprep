@@ -35,7 +35,7 @@ export function Header() {
 
           <div className="hidden md:flex items-center">
             <Button asChild className="rounded-full px-6">
-              <a href="#contact">Book Consultation</a>
+              <a href="#booking">Book Appointment</a>
             </Button>
           </div>
         </div>

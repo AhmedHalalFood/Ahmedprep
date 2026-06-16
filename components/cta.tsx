@@ -20,7 +20,7 @@ export function CTA() {
               size="lg"
               className="bg-card text-foreground hover:bg-card/90 rounded-full px-8 py-6 text-base font-medium shadow-lg"
             >
-              <a href="#contact">
+              <a href="#booking">
                 <Calendar className="mr-2 w-5 h-5" />
                 Book Free Consultation
               </a>
