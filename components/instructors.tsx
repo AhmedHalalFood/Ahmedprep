@@ -1,30 +1,14 @@
 import { Card, CardContent } from "@/components/ui/card"
-import { GraduationCap, Award, BookMarked } from "lucide-react"
+import { GraduationCap } from "lucide-react"
 
 const instructors = [
   {
     initials: "TA",
     name: "Tariq Ahmed",
     role: "Founder & Lead Instructor",
-    credential: "Columbia University, M.A. Education",
+    credential: "New York University, M.A. Education",
     bio: "Over 12 years coaching students into Stuyvesant, Bronx Science, and Ivy League schools with a 96% specialized-HS admit rate.",
     icon: GraduationCap,
-  },
-  {
-    initials: "LC",
-    name: "Dr. Lena Cho",
-    role: "SAT & ACT Director",
-    credential: "NYU, Ph.D. Applied Mathematics",
-    bio: "Perfect-scoring test taker who has helped hundreds of students gain 150+ points through data-driven, adaptive study plans.",
-    icon: Award,
-  },
-  {
-    initials: "MR",
-    name: "Marcus Rivera",
-    role: "Regents & AP Specialist",
-    credential: "Cornell University, B.S. Chemistry",
-    bio: "Former NYC public school teacher specializing in the sciences, with a 95% Regents pass rate and countless AP 5s.",
-    icon: BookMarked,
   },
 ]
 
@@ -43,7 +27,7 @@ export function Instructors() {
           </p>
         </div>
 
-        <div className="mt-16 grid md:grid-cols-3 gap-6">
+        <div className="mt-16 max-w-md mx-auto">
           {instructors.map((person, index) => (
             <Card
               key={index}
