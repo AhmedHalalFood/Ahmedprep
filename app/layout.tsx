@@ -7,8 +7,8 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
 
 export const metadata: Metadata = {
-  title: 'AhmedPrep - Expert Test Preparation & Tutoring',
-  description: 'Achieve academic excellence with AhmedPrep. Personalized tutoring, comprehensive test prep courses, and proven strategies for success in SAT, ACT, and more.',
+  title: "AhmedPrep - NYC's Premier SHSAT, SAT & ACT Prep",
+  description: "AhmedPrep is NYC's premier test prep academy for SHSAT, SAT, ACT, AP, and Regents. Expert instructors, proven results, and personalized study plans that get students into top schools.",
   generator: 'v0.app',
   icons: {
     icon: [
@@ -35,7 +35,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="bg-background scroll-smooth">
       <body className={`${inter.variable} ${playfair.variable} font-sans antialiased`}>
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}
