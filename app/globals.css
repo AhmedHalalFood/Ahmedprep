@@ -339,7 +339,8 @@ h3 {
 
 .section-heading h2,
 .method-intro h2,
-.founder-intro h2 {
+.founder-intro h2,
+.resources-heading h2 {
   margin-top: 12px;
   color: var(--navy);
   font-size: clamp(2.1rem, 3.4vw, 3.25rem);
@@ -349,7 +350,8 @@ h3 {
 }
 
 .section-heading h2 span,
-.method-intro h2 span {
+.method-intro h2 span,
+.resources-heading h2 span {
   color: var(--blue);
 }
 
