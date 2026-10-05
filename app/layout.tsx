@@ -7,9 +7,14 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
 
 export const metadata: Metadata = {
-  title: 'AhmedPrep | NYC Test Prep & Private Tutoring',
-  description: 'Premium NYC test preparation and tutoring for SHSAT, SAT, ACT, AP, PSAT/NMSQT, Regents, and Hunter entrance exams. Founded by Tariq Ahmed.',
-  keywords: ['NYC test prep', 'SHSAT tutoring', 'SAT prep', 'Hunter entrance exam', 'private tutoring', 'AhmedPrep'],
+  title: 'AhmedPrep | SHSAT & Digital SAT Prep in NYC',
+  description: 'Specialized SHSAT tutoring and Digital SAT preparation for ambitious New York students, led by Tariq Ahmed.',
+  keywords: ['SHSAT tutoring NYC', 'SHSAT prep NYC', 'SHSAT tutor', 'Digital SAT tutoring NYC', 'SAT prep NYC', 'Digital SAT tutor NYC', 'NYC test prep'],
+  openGraph: {
+    title: 'AhmedPrep | SHSAT & Digital SAT Prep in NYC',
+    description: 'Specialized preparation for ambitious New York students.',
+    type: 'website',
+  },
   generator: 'v0.app',
   icons: {
     icon: [
