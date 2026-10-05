@@ -70,7 +70,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 }
 
   return (
-    <section id="contact" className="py-24 lg:py-32 bg-card">
+    <section id="contact" aria-labelledby="contact-heading" className="scroll-mt-20 py-24 lg:py-32 bg-card">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-24">
           {/* Contact info */}
@@ -78,7 +78,7 @@ const handleSubmit = async (e: React.FormEvent) => {
             <p className="text-sm font-medium tracking-widest text-accent uppercase">
               Get In Touch
             </p>
-            <h2 className="mt-4 font-serif text-4xl md:text-5xl font-medium tracking-tight text-foreground text-balance">
+            <h2 id="contact-heading" className="mt-4 font-serif text-4xl md:text-5xl font-medium tracking-tight text-foreground text-balance">
               Let&apos;s start a conversation
             </h2>
             <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
@@ -120,10 +120,11 @@ const handleSubmit = async (e: React.FormEvent) => {
             <form onSubmit={handleSubmit} className="mt-8 space-y-6">
               <div className="grid sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium text-foreground mb-2 block">
+                  <label htmlFor="firstName" className="text-sm font-medium text-foreground mb-2 block">
                     First Name
                   </label>
                   <Input
+                    id="firstName"
                     placeholder="John"
                     value={formData.firstName}
                     onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
@@ -171,10 +172,11 @@ const handleSubmit = async (e: React.FormEvent) => {
               </div>
               
               <div>
-                <label className="text-sm font-medium text-foreground mb-2 block">
+                <label htmlFor="program" className="text-sm font-medium text-foreground mb-2 block">
                   Program of Interest
                 </label>
                 <select
+                  id="program"
                   value={formData.program}
                   onChange={(e) => setFormData({ ...formData, program: e.target.value })}
                   className="w-full h-10 px-3 rounded-xl bg-card border border-border text-foreground focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
@@ -184,7 +186,9 @@ const handleSubmit = async (e: React.FormEvent) => {
                   <option value="sat">SAT Preparation</option>
                   <option value="act">ACT Preparation</option>
                   <option value="ap">AP Courses</option>
-                  <option value="essays">College Essays</option>
+                  <option value="psat">PSAT/NMSQT</option>
+                  <option value="regents">Regents Preparation</option>
+                  <option value="hunter">Hunter Entrance Preparation</option>
                 </select>
               </div>
               

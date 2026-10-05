@@ -3,125 +3,47 @@ import { Card, CardContent } from "@/components/ui/card"
 import { ArrowRight, GraduationCap, BookOpen, Calculator, PenTool, FlaskConical, Landmark, Trophy } from "lucide-react"
 
 const programs = [
-  {
-    icon: GraduationCap,
-    title: "SHSAT Preparation",
-    description: "Comprehensive preparation for NYC&apos;s Specialized High Schools Admissions Test with proven strategies.",
-    features: ["ELA & Math Mastery", "Revising/Editing Excellence", "Full-Length Practice Tests"],
-    highlight: true
-  },
-  {
-    icon: BookOpen,
-    title: "SAT Preparation",
-    description: "Strategic SAT prep covering all sections with personalized study plans for maximum score improvement.",
-    features: ["Evidence-Based Reading", "Math Problem Solving", "Writing & Language"],
-    highlight: false
-  },
-  {
-    icon: Calculator,
-    title: "ACT Preparation",
-    description: "Complete ACT preparation focusing on timing strategies and content mastery across all subjects.",
-    features: ["Science Reasoning", "English & Reading", "Mathematics"],
-    highlight: false
-  },
-  {
-    icon: FlaskConical,
-    title: "AP Courses",
-    description: "Advanced Placement course support to help students excel and earn college credit.",
-    features: ["AP Sciences", "AP Mathematics", "AP Humanities"],
-    highlight: false
-  },
-  {
-    icon: Landmark,
-    title: "PSAT & Regents",
-    description: "Build confidence early with focused preparation for PSAT/NMSQT and New York State Regents exams.",
-    features: ["PSAT/NMSQT Strategy", "Regents Review", "Study Planning"],
-    highlight: false
-  },
-  {
-    icon: Trophy,
-    title: "Hunter Entrance",
-    description: "Targeted support for Hunter College High School entrance preparation and competitive NYC admissions.",
-    features: ["Exam Strategy", "Advanced Math", "ELA & Writing"],
-    highlight: false
-  },
-  {
-    icon: PenTool,
-    title: "College Essays",
-    description: "Expert guidance in crafting compelling personal statements that stand out to admissions committees.",
-    features: ["Personal Statement", "Supplemental Essays", "Application Review"],
-    highlight: false
-  },
+  { icon: GraduationCap, title: "SHSAT", description: "Structured ELA and math preparation for NYC Specialized High School admissions.", features: ["ELA & Math", "Revising & Editing", "Timed practice"] },
+  { icon: BookOpen, title: "SAT", description: "Targeted instruction for the digital SAT, with a plan shaped by each student's baseline.", features: ["Reading & Writing", "Math reasoning", "Score strategy"] },
+  { icon: Calculator, title: "ACT", description: "Content review and pacing strategies across the ACT sections that matter most.", features: ["English & Reading", "Mathematics", "Science reasoning"] },
+  { icon: FlaskConical, title: "AP Courses", description: "Course support that reinforces classroom learning and prepares students for AP exams.", features: ["Math & sciences", "Humanities", "Exam review"] },
+  { icon: Landmark, title: "PSAT/NMSQT", description: "Early preparation that builds familiarity with the test and stronger academic habits.", features: ["Test strategy", "Skill building", "Study planning"] },
+  { icon: Trophy, title: "Regents", description: "Focused review for New York State Regents courses, concepts, and exam formats.", features: ["Topic review", "Practice sets", "Exam readiness"] },
+  { icon: PenTool, title: "Hunter Entrance", description: "Focused preparation for the Hunter College High School entrance process and exam.", features: ["Advanced math", "ELA & writing", "Test strategy"] },
 ]
 
 export function Programs() {
   return (
-    <section id="programs" className="py-24 lg:py-32 bg-secondary/30">
+    <section id="programs" className="scroll-mt-20 bg-secondary/30 py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        {/* Section header */}
-        <div className="text-center max-w-2xl mx-auto">
-          <p className="text-sm font-medium tracking-widest text-accent uppercase">
-            Our Programs
-          </p>
-          <h2 className="mt-4 font-serif text-4xl md:text-5xl font-medium tracking-tight text-foreground text-balance">
-            Tailored programs for every academic goal
-          </h2>
-          <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
-            From middle school admissions to college applications, we provide 
-            expert guidance at every step of your educational journey.
-          </p>
+        <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+          <div className="max-w-2xl">
+            <p className="text-sm font-medium uppercase tracking-[0.22em] text-accent">Programs</p>
+            <h2 className="mt-4 font-serif text-4xl font-medium leading-tight tracking-tight text-foreground md:text-5xl">Preparation built around the next important step.</h2>
+          </div>
+          <p className="max-w-md text-lg leading-relaxed text-muted-foreground">From middle-school admissions to advanced coursework, get direct instruction for the work in front of you.</p>
         </div>
-        
-        {/* Programs grid */}
-        <div className="mt-16 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {programs.map((program, index) => (
-            <Card 
-              key={index} 
-              className={`group relative overflow-hidden border-border/50 bg-card hover:shadow-xl transition-all duration-300 ${
-                program.highlight ? "md:col-span-2 lg:col-span-1 ring-2 ring-accent/20" : ""
-              }`}
-            >
-              {program.highlight && (
-                <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-accent text-accent-foreground text-xs font-medium">
-                  Most Popular
+            <Card key={program.title} className={`group border-border/60 bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${index === 0 ? "ring-1 ring-accent/40" : ""}`}>
+              <CardContent className="p-7">
+                <div className="flex items-start justify-between">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10"><program.icon className="h-6 w-6 text-accent" aria-hidden="true" /></div>
+                  {index === 0 && <span className="rounded-full bg-accent/10 px-3 py-1 text-xs font-medium text-accent">Featured</span>}
                 </div>
-              )}
-              <CardContent className="p-8">
-                <div className={`inline-flex items-center justify-center w-14 h-14 rounded-2xl ${
-                  program.highlight ? "bg-accent/10" : "bg-secondary"
-                }`}>
-                  <program.icon className={`w-7 h-7 ${program.highlight ? "text-accent" : "text-foreground"}`} />
-                </div>
-                
-                <h3 className="mt-6 font-serif text-2xl font-medium text-foreground">
-                  {program.title}
-                </h3>
-                
-                <p className="mt-3 text-muted-foreground leading-relaxed">
-                  {program.description}
-                </p>
-                
-                <ul className="mt-6 space-y-3">
-                  {program.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-center gap-3 text-sm text-foreground">
-                      <span className="w-1.5 h-1.5 rounded-full bg-accent" />
-                      {feature}
-                    </li>
-                  ))}
+                <h3 className="mt-6 font-serif text-2xl font-medium text-foreground">{program.title}</h3>
+                <p className="mt-3 min-h-[72px] text-sm leading-relaxed text-muted-foreground">{program.description}</p>
+                <ul className="mt-5 space-y-2.5">
+                  {program.features.map((feature) => <li key={feature} className="flex items-center gap-3 text-sm text-foreground"><span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />{feature}</li>)}
                 </ul>
-                
-                <Button 
-                  variant="ghost" 
-                  className="mt-8 p-0 h-auto font-medium text-foreground hover:text-accent hover:bg-transparent group/btn"
-                >
-                  Learn More
-                  <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
-                </Button>
+                <Button asChild variant="ghost" className="mt-7 h-auto p-0 font-medium text-foreground hover:bg-transparent hover:text-accent"><a href="#contact">Learn More <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" /></a></Button>
               </CardContent>
             </Card>
           ))}
         </div>
+        <div className="mt-12 text-center"><Button asChild className="rounded-full bg-primary px-7 py-6 text-primary-foreground hover:bg-primary/90"><a href="#contact">Book a Free Consultation <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" /></a></Button></div>
       </div>
     </section>
   )
 }
+      
