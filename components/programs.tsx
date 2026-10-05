@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { ArrowRight, GraduationCap, BookOpen, Calculator, PenTool, FlaskConical } from "lucide-react"
+import { ArrowRight, GraduationCap, BookOpen, Calculator, PenTool, FlaskConical, Landmark, Trophy } from "lucide-react"
 
 const programs = [
   {
@@ -29,6 +29,20 @@ const programs = [
     title: "AP Courses",
     description: "Advanced Placement course support to help students excel and earn college credit.",
     features: ["AP Sciences", "AP Mathematics", "AP Humanities"],
+    highlight: false
+  },
+  {
+    icon: Landmark,
+    title: "PSAT & Regents",
+    description: "Build confidence early with focused preparation for PSAT/NMSQT and New York State Regents exams.",
+    features: ["PSAT/NMSQT Strategy", "Regents Review", "Study Planning"],
+    highlight: false
+  },
+  {
+    icon: Trophy,
+    title: "Hunter Entrance",
+    description: "Targeted support for Hunter College High School entrance preparation and competitive NYC admissions.",
+    features: ["Exam Strategy", "Advanced Math", "ELA & Writing"],
     highlight: false
   },
   {

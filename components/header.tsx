@@ -1,4 +1,3 @@
-import Image from "next/image"
 import { Button } from "@/components/ui/button"
 
 
@@ -8,14 +7,7 @@ export function Header() {
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="flex h-20 items-center justify-between">
           <a href="/" className="flex items-center">
-            <Image
-              src="/ahmedprep-logo.png"
-              alt="AhmedPrep Logo"
-              width={120}
-              height={120}
-              className="h-14 w-auto"
-              priority
-            />
+            <span className="font-serif text-2xl font-semibold tracking-tight text-primary">Ahmed<span className="text-accent">Prep</span></span>
           </a>
 
           <nav className="hidden md:flex items-center gap-10">
@@ -33,8 +25,9 @@ export function Header() {
             </a>
           </nav>
 
-          <div className="hidden md:flex items-center">
-            <Button asChild className="rounded-full px-6">
+          <div className="flex items-center gap-3">
+            <a href="#contact" className="hidden sm:inline-flex text-sm font-medium text-foreground hover:text-accent transition-colors">Contact</a>
+            <Button asChild className="rounded-full px-4 sm:px-6">
               <a href="#contact">Book Consultation</a>
             </Button>
           </div>

@@ -3,8 +3,10 @@ import { ArrowRight } from "lucide-react"
 
 export function Hero() {
   return (
-    <section className="relative min-h-screen overflow-x-hidden flex items-center justify-center pt-20">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(139,90,43,0.04),transparent_50%),radial-gradient(circle_at_70%_80%,rgba(139,90,43,0.04),transparent_50%)]" />
+    <section className="relative isolate min-h-[720px] overflow-hidden flex items-center justify-center bg-primary pt-20 text-primary-foreground">
+      <div className="hero-grid pointer-events-none absolute inset-0 opacity-70" />
+      <div className="pointer-events-none absolute -right-32 top-20 h-96 w-96 rounded-full bg-accent/20 blur-3xl" />
+      <div className="pointer-events-none absolute -left-40 bottom-0 h-80 w-80 rounded-full bg-white/5 blur-3xl" />
 
       <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-32">
         <div className="text-center max-w-5xl mx-auto">
@@ -15,14 +17,14 @@ export function Hero() {
             </span>
           </div>
 
-          <h1 className="mx-auto max-w-5xl text-center font-serif text-5xl leading-tight tracking-tight text-foreground sm:text-6xl md:text-7xl lg:text-8xl">
+          <h1 className="mx-auto max-w-5xl text-center font-serif text-5xl leading-tight tracking-tight text-primary-foreground sm:text-6xl md:text-7xl lg:text-8xl">
             Exceptional preparation
             <span className="block italic text-accent">
               for exceptional futures
             </span>
           </h1>
 
-          <p className="mt-6 sm:mt-8 text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          <p className="mt-6 sm:mt-8 text-base sm:text-lg md:text-xl text-primary-foreground/75 max-w-2xl mx-auto leading-relaxed">
             Personalized tutoring and test preparation designed to unlock your child&apos;s
             full potential. SHSAT, SAT, ACT, and beyond.
           </p>
@@ -43,7 +45,7 @@ export function Hero() {
               asChild
               variant="outline"
               size="lg"
-              className="w-full sm:w-auto rounded-full px-8 py-6 text-base font-medium"
+              className="w-full sm:w-auto rounded-full border-primary-foreground/40 bg-transparent px-8 py-6 text-base font-medium text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
             >
               <a href="#programs">Explore Our Programs</a>
             </Button>
@@ -58,7 +60,7 @@ export function Hero() {
             { value: "12+", label: "Years of Excellence" },
           ].map((stat, index) => (
             <div key={index} className="text-center">
-              <div className="font-serif text-3xl md:text-4xl font-medium text-foreground">
+              <div className="font-serif text-3xl md:text-4xl font-medium text-primary-foreground">
                 {stat.value}
               </div>
               <div className="mt-2 text-sm text-muted-foreground">

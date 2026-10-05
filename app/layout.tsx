@@ -7,8 +7,9 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
 
 export const metadata: Metadata = {
-  title: 'AhmedPrep - Expert Test Preparation & Tutoring',
-  description: 'Achieve academic excellence with AhmedPrep. Personalized tutoring, comprehensive test prep courses, and proven strategies for success in SAT, ACT, and more.',
+  title: 'AhmedPrep | NYC Test Prep & Private Tutoring',
+  description: 'Premium NYC test preparation and tutoring for SHSAT, SAT, ACT, AP, PSAT/NMSQT, Regents, and Hunter entrance exams. Founded by Tariq Ahmed.',
+  keywords: ['NYC test prep', 'SHSAT tutoring', 'SAT prep', 'Hunter entrance exam', 'private tutoring', 'AhmedPrep'],
   generator: 'v0.app',
   icons: {
     icon: [
