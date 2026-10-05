@@ -2,9 +2,9 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Quote } from "lucide-react"
 
 const stories = [
-  { label: "Parent perspective", title: "A place for a verified family story", body: "This space is reserved for a real parent testimonial. Add the family's approved words here once they are available.", result: "Testimonial placeholder" },
-  { label: "Student perspective", title: "A place for a verified student story", body: "This space is reserved for a real student testimonial. Add the student&apos;s approved words here once they are available.", result: "Testimonial placeholder" },
-  { label: "Academic progress", title: "A place for a verified outcome", body: "This space is reserved for a documented outcome with permission to publish. No student names, scores, schools, or admissions are assumed here.", result: "Outcome placeholder" },
+  { label: "Parent perspective", title: "Verified student story coming soon", body: "A polished place for a permissioned parent perspective. Verified details will be added when the family approves publication.", result: "Awaiting verified story" },
+  { label: "Student perspective", title: "Verified student story coming soon", body: "A polished place for a permissioned student perspective. Verified details will be added when the student approves publication.", result: "Awaiting verified story" },
+  { label: "Academic progress", title: "Verified student story coming soon", body: "A polished place for a documented academic outcome. No names, schools, scores, or admissions are published without permission and verification.", result: "Awaiting verified outcome" },
 ]
 
 export function Testimonials() {

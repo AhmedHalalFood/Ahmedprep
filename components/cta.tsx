@@ -22,7 +22,7 @@ export function CTA() {
             >
               <a href="#contact">
                 <Calendar className="mr-2 w-5 h-5" />
-                Book Free Consultation
+                Schedule a Free Consultation
               </a>
             </Button>
 

@@ -51,12 +51,14 @@ export function About() {
                 TA
               </div>
               <div className="relative">
-                <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">Founder & instructor</p>
+                <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">Founder & lead instructor</p>
                 <h3 className="mt-2 font-serif text-3xl">Tariq Ahmed</h3>
-                <p className="mt-3 text-sm leading-relaxed text-primary-foreground/75">
-                  B.S., New York University · M.S. in Mathematics, Hunter College · NYC DOE teacher
+                <p className="mt-3 text-sm font-medium leading-relaxed text-primary-foreground">
+                  B.S., New York University · M.S. Mathematics, Hunter College
                 </p>
-                <p className="mt-4 text-sm font-medium text-primary-foreground">12+ years teaching and test-prep experience</p>
+                <p className="mt-2 text-sm leading-relaxed text-primary-foreground/75">
+                  NYC DOE Educator · 12+ Years of Teaching & Test-Prep Experience
+                </p>
               </div>
             </div>
             {values.map((value) => (

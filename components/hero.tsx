@@ -56,7 +56,7 @@ export function Hero() {
           {[
             { value: "2,500+", label: "Students Mentored" },
             { value: "96%", label: "Admission Rate" },
-            { value: "150+", label: "Points Avg. Improvement" },
+            { value: "150+", label: "Points Average SAT Improvement" },
             { value: "12+", label: "Years of Excellence" },
           ].map((stat, index) => (
             <div key={index} className="text-center">

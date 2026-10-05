@@ -3,8 +3,8 @@ import { Card, CardContent } from "@/components/ui/card"
 import { ArrowRight, GraduationCap, BookOpen, Calculator, PenTool, FlaskConical, Landmark, Trophy } from "lucide-react"
 
 const programs = [
-  { icon: GraduationCap, title: "SHSAT", description: "Structured ELA and math preparation for NYC Specialized High School admissions.", features: ["ELA & Math", "Revising & Editing", "Timed practice"] },
-  { icon: BookOpen, title: "SAT", description: "Targeted instruction for the digital SAT, with a plan shaped by each student's baseline.", features: ["Reading & Writing", "Math reasoning", "Score strategy"] },
+  { icon: GraduationCap, title: "SHSAT", description: "Structured ELA and math preparation for NYC Specialized High School admissions.", features: ["ELA & Math", "Revising & Editing", "Timed practice"], featured: true },
+  { icon: BookOpen, title: "SAT", description: "Targeted instruction for the digital SAT, with a plan shaped by each student's baseline.", features: ["Reading & Writing", "Math reasoning", "Score strategy"], featured: true },
   { icon: Calculator, title: "ACT", description: "Content review and pacing strategies across the ACT sections that matter most.", features: ["English & Reading", "Mathematics", "Science reasoning"] },
   { icon: FlaskConical, title: "AP Courses", description: "Course support that reinforces classroom learning and prepares students for AP exams.", features: ["Math & sciences", "Humanities", "Exam review"] },
   { icon: Landmark, title: "PSAT/NMSQT", description: "Early preparation that builds familiarity with the test and stronger academic habits.", features: ["Test strategy", "Skill building", "Study planning"] },
@@ -25,11 +25,11 @@ export function Programs() {
         </div>
         <div className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {programs.map((program, index) => (
-            <Card key={program.title} className={`group border-border/60 bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${index === 0 ? "ring-1 ring-accent/40" : ""}`}>
+            <Card key={program.title} className={`group border-border/60 bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${program.featured ? "ring-1 ring-accent/40" : ""}`}>
               <CardContent className="p-7">
                 <div className="flex items-start justify-between">
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10"><program.icon className="h-6 w-6 text-accent" aria-hidden="true" /></div>
-                  {index === 0 && <span className="rounded-full bg-accent/10 px-3 py-1 text-xs font-medium text-accent">Featured</span>}
+                  {program.featured && <span className="rounded-full bg-accent/10 px-3 py-1 text-xs font-medium text-accent">Core program</span>}
                 </div>
                 <h3 className="mt-6 font-serif text-2xl font-medium text-foreground">{program.title}</h3>
                 <p className="mt-3 min-h-[72px] text-sm leading-relaxed text-muted-foreground">{program.description}</p>
