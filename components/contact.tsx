@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react"
 import { ArrowUpRight } from "lucide-react"
+import { ADDRESS_LINE_1, ADDRESS_LINE_2 } from "@/lib/business"
 
 type FormData = {
   name: string
@@ -103,7 +104,7 @@ export function Contact() {
             </div>
             <div>
               <dt className="font-bold text-[#0b1d35]">Location</dt>
-              <dd>Astoria, New York</dd>
+              <dd><address className="not-italic">{ADDRESS_LINE_1}<br />{ADDRESS_LINE_2}</address></dd>
             </div>
           </dl>
         </div>

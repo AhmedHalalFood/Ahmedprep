@@ -1,6 +1,8 @@
 import Link from "next/link"
 import { ArrowUpRight, Check } from "lucide-react"
 import { Contact } from "@/components/contact"
+import { TopContactBar } from "@/components/top-contact-bar"
+import { ADDRESS_LINE_1, ADDRESS_LINE_2 } from "@/lib/business"
 
 const programs = [
   { title: "SHSAT Prep", kicker: "SPECIALIZED HIGH SCHOOL ADMISSIONS", body: "Preparation for NYC Specialized High School admissions with structured support across ELA, mathematics, pacing, and test-day strategy.", points: ["Diagnostic assessment", "Targeted practice and error analysis", "Full-length testing and pacing"] },
@@ -26,6 +28,7 @@ function GoldArrow({ label }: { label: string }) {
 export default function Home() {
   return (
     <main>
+      <TopContactBar />
       <header className="site-header">
         <div className="topbar container">
           <Link href="#top" className="brand"><span>AhmedPrep</span><small>NYC TEST PREP</small></Link>
@@ -50,7 +53,7 @@ export default function Home() {
       <section id="resources" className="resources-section" aria-labelledby="resources-heading"><div className="container"><div className="resources-heading"><p className="eyebrow">Resources</p><h2 id="resources-heading">Know the test.<br /><span>Know the next step.</span></h2></div><div className="resource-grid">{resources.map((item) => <Link key={item.title} href={item.href} className="resource-item"><span>{item.kicker}</span><h3>{item.title}</h3><p>{item.body}</p><ArrowUpRight size={18} aria-hidden="true" /></Link>)}</div></div></section>
 
       <Contact />
-      <footer className="footer"><div className="container footer-top"><div><Link href="#top" className="brand footer-brand"><span>AhmedPrep</span><small>NYC TEST PREP</small></Link><p>Serious preparation for New York students ready to aim higher.</p></div><div className="footer-links"><div><span>Programs</span><Link href="/shsat">SHSAT Prep</Link><Link href="/digital-sat">Digital SAT Prep</Link></div><div><span>Explore</span><Link href="#about">About</Link><Link href="#resources">Resources</Link><Link href="#contact">Contact</Link></div><div><span>Service area</span><p>New York City</p><p>Astoria, New York</p></div></div></div><div className="container footer-bottom"><span>© {new Date().getFullYear()} AhmedPrep. All rights reserved.</span><span>Privacy policy</span></div></footer>
+      <footer className="footer"><div className="container footer-top"><div><Link href="#top" className="brand footer-brand"><span>AhmedPrep</span><small>NYC TEST PREP</small></Link><p>Serious preparation for New York students ready to aim higher.</p></div><div className="footer-links"><div><span>Programs</span><Link href="/shsat">SHSAT Prep</Link><Link href="/digital-sat">Digital SAT Prep</Link></div><div><span>Explore</span><Link href="#about">About</Link><Link href="#resources">Resources</Link><Link href="#contact">Contact</Link></div><div><span>Service area</span><p>New York City</p><address className="not-italic">{ADDRESS_LINE_1}<br />{ADDRESS_LINE_2}</address></div></div></div><div className="container footer-bottom"><span>© {new Date().getFullYear()} AhmedPrep. All rights reserved.</span><span>Privacy policy</span></div></footer>
     </main>
   )
 }

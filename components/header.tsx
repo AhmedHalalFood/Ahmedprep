@@ -4,12 +4,14 @@ import { useState } from "react"
 import Link from "next/link"
 import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { TopContactBar } from "@/components/top-contact-bar"
 
 const links = [{ label: "Home", href: "/" }, { label: "SHSAT", href: "/shsat" }, { label: "Digital SAT", href: "/digital-sat" }, { label: "About", href: "/#about" }, { label: "Success Stories", href: "/#results" }, { label: "Contact", href: "/#contact" }]
 
 export function Header() {
   const [open, setOpen] = useState(false)
   return <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#0b1d35]/95 text-white backdrop-blur">
+    <TopContactBar />
     <div className="mx-auto flex h-[76px] max-w-7xl items-center justify-between px-5 lg:px-8">
       <Link href="/" className="font-serif text-2xl tracking-tight">Ahmed<span className="text-[#c9a45c]">Prep</span><span className="ml-2 hidden text-[10px] font-sans font-medium uppercase tracking-[0.22em] text-white/50 sm:inline">NYC test prep</span></Link>
       <nav className="hidden items-center gap-7 lg:flex">{links.map(link => <Link key={link.href} href={link.href} className="text-sm text-white/70 transition hover:text-[#e2c77e]">{link.label}</Link>)}</nav>
