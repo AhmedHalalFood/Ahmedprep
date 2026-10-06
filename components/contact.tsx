@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { ArrowUpRight } from "lucide-react"
 import { ADDRESS_LINE_1, ADDRESS_LINE_2 } from "@/lib/business"
 
@@ -40,6 +40,12 @@ export function Contact() {
   const [status, setStatus] = useState<Status>("idle")
   const formRef = useRef<HTMLFormElement>(null)
   const successRef = useRef<HTMLDivElement>(null)
+  const honeypotRef = useRef<HTMLInputElement>(null)
+  const startedAtRef = useRef(0)
+
+  useEffect(() => {
+    startedAtRef.current = Date.now()
+  }, [])
 
   const update = (key: FieldKey, value: string) => {
     setData((prev) => ({ ...prev, [key]: value }))
@@ -63,11 +69,17 @@ export function Contact() {
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          website: honeypotRef.current?.value ?? "",
+          elapsedMs: Date.now() - startedAtRef.current,
+        }),
       })
-      if (!response.ok) throw new Error("Request failed")
+      const result = await response.json().catch(() => null)
+      if (!response.ok || result?.success !== true) throw new Error("Delivery not confirmed")
       setStatus("success")
       setData(initialData)
+      startedAtRef.current = Date.now()
       requestAnimationFrame(() => successRef.current?.focus())
     } catch {
       setStatus("error")
@@ -139,6 +151,10 @@ export function Contact() {
             aria-describedby="contact-required-note"
             className="border border-[#d9d3c8] bg-white p-6 shadow-sm sm:p-9"
           >
+            <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden">
+              <label htmlFor="contact-website">Leave this field empty</label>
+              <input ref={honeypotRef} id="contact-website" name="website" type="text" tabIndex={-1} autoComplete="off" defaultValue="" />
+            </div>
             <p id="contact-required-note" className="mb-5 text-xs text-[#536174]">
               Fields marked <span aria-hidden="true" className="text-[#b42318]">*</span><span className="sr-only">with an asterisk</span> are required.
             </p>
@@ -186,9 +202,8 @@ export function Contact() {
 
             {status === "error" && (
               <p role="alert" className="mt-5 border-l-[3px] border-[#b42318] bg-[#fdf3f2] px-4 py-3 text-sm text-[#7a1a12]">
-                We couldn&apos;t send your request. Please try again, or contact us at{" "}
-                <a href="tel:+13474795020" className="font-semibold underline">(347) 479-5020</a> or{" "}
-                <a href="mailto:Tariq@ahmedprep.com" className="font-semibold underline">Tariq@ahmedprep.com</a>.
+                We couldn&apos;t send your request. Please try again or call{" "}
+                <a href="tel:+13474795020" className="font-semibold underline">(347) 479-5020</a>.
               </p>
             )}
 
