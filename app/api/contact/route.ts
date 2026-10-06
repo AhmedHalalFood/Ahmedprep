@@ -5,6 +5,12 @@ import { Resend } from "resend"
 const RECIPIENT = "Tariq@ahmedprep.com"
 const DEFAULT_FROM = "AhmedPrep Website <onboarding@resend.dev>"
 
+function getFromAddress() {
+  if (process.env.CONTACT_FROM_EMAIL) return process.env.CONTACT_FROM_EMAIL
+  const domain = process.env.RESEND_EMAIL_DOMAIN?.trim().replace(/^@/, "")
+  return domain ? `AhmedPrep Website <consultations@${domain}>` : DEFAULT_FROM
+}
+
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const PROGRAMS = new Set(["SHSAT", "Digital SAT"])
 const MIN_FILL_MS = 3000
@@ -119,7 +125,7 @@ ${rows
   const resend = new Resend(apiKey)
   const { data: sent, error } = await resend.emails.send(
     {
-      from: process.env.CONTACT_FROM_EMAIL || DEFAULT_FROM,
+      from: getFromAddress(),
       to: [RECIPIENT],
       replyTo: data.email,
       subject: `New consultation request: ${data.name} (${data.program})`,
