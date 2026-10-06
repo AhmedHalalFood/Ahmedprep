@@ -60,6 +60,11 @@ export async function POST(request: Request) {
   }
 
   const phoneDigits = data.phone.replace(/\D/g, "")
+  const formatUsPhone = (raw: string) => {
+    const national = phoneDigits.length === 11 && phoneDigits.startsWith("1") ? phoneDigits.slice(1) : phoneDigits
+    if (national.length !== 10) return raw
+    return `(${national.slice(0, 3)}) ${national.slice(3, 6)}-${national.slice(6)}`
+  }
   if (
     !data.name ||
     !data.grade ||
@@ -87,7 +92,7 @@ export async function POST(request: Request) {
     ["Parent / Student Name", data.name],
     ["Student Grade", data.grade],
     ["Email", data.email],
-    ["Phone", data.phone || "Not provided"],
+    ["Phone", data.phone ? formatUsPhone(data.phone) : "Not provided"],
     ["Program", data.program],
     ["Current score or starting level", data.level || "Not provided"],
     ["Target score or goal", data.goal || "Not provided"],
