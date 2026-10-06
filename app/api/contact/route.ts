@@ -94,7 +94,7 @@ export async function POST(request: Request) {
   const rows: [string, string, string?][] = [
     ["Parent / Student Name", data.name],
     ["Student Grade", data.grade],
-    ["Email", data.email],
+    ["Email", data.email, `mailto:${data.email}`],
     ["Phone", phoneDisplay, phoneHref],
     ["Program", data.program],
     ["Current score or starting level", data.level || "Not provided"],
@@ -104,18 +104,33 @@ export async function POST(request: Request) {
   ]
 
   const text = rows.map(([label, value]) => `${label}: ${value}`).join("\n")
-  const html = `<div style="font-family:Arial,sans-serif;color:#0b1d35">
-<h2 style="margin:0 0 16px">New consultation request</h2>
-<table cellpadding="8" style="border-collapse:collapse">
+  // Fluid "hybrid" layout: label and value are inline-blocks capped by max-width, so they sit side by side
+  // when the email is wide (~600px) and stack automatically on phones. No <style> or media queries needed,
+  // because Zoho Mail and some Gmail clients strip them. The [if mso] tables keep Outlook desktop two-column.
+  const renderValue = (label: string, value: string, href?: string) => {
+    const safe = escapeHtml(value)
+    if (!href) return safe
+    const noWrap = label === "Phone" ? "white-space:nowrap;" : ""
+    return `<a href="${escapeHtml(href)}" style="color:#0b1d35;font-weight:bold;text-decoration:underline;${noWrap}">${safe}</a>`
+  }
+
+  const html = `<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="x-apple-disable-message-reformatting"><title>New consultation request</title></head>
+<body style="margin:0;padding:0;background:#ffffff">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse"><tr><td align="left" style="padding:16px 12px">
+<!--[if mso]><table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
+<div style="max-width:600px;margin:0;font-family:Arial,Helvetica,sans-serif;color:#0b1d35">
+<h2 style="margin:0 0 12px;font-size:20px;line-height:1.3">New consultation request</h2>
 ${rows
   .map(
     ([label, value, href]) =>
-      `<tr><td style="border-bottom:1px solid #e5e7eb;font-weight:bold;vertical-align:top;white-space:nowrap">${escapeHtml(label)}</td><td style="border-bottom:1px solid #e5e7eb;white-space:pre-wrap">${
-        href ? `<a href="${escapeHtml(href)}" style="color:#0b1d35;font-weight:bold">${escapeHtml(value)}</a>` : escapeHtml(value)
-      }</td></tr>`,
+      `<div style="border-bottom:1px solid #e5e7eb;padding:10px 0;font-size:0;line-height:0"><!--[if mso]><table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0"><tr><td width="190" valign="top"><![endif]--><div style="display:inline-block;vertical-align:top;width:100%;max-width:190px;font-size:14px;line-height:1.4;font-weight:bold;color:#4b5563;padding:0 0 2px">${escapeHtml(label)}</div><!--[if mso]></td><td width="410" valign="top"><![endif]--><div style="display:inline-block;vertical-align:top;width:100%;max-width:410px;font-size:16px;line-height:1.5;color:#0b1d35;white-space:pre-wrap;word-break:normal;overflow-wrap:break-word;word-wrap:break-word">${renderValue(label, value, href)}</div><!--[if mso]></td></tr></table><![endif]--></div>`,
   )
   .join("\n")}
-</table></div>`
+</div>
+<!--[if mso]></td></tr></table><![endif]-->
+</td></tr></table>
+</body></html>`
 
   // Identical submissions within 24 hours share a key, so Resend sends them only once.
   const fingerprint = createHash("sha256")
