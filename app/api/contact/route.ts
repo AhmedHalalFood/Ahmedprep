@@ -60,11 +60,14 @@ export async function POST(request: Request) {
   }
 
   const phoneDigits = data.phone.replace(/\D/g, "")
-  const formatUsPhone = (raw: string) => {
-    const national = phoneDigits.length === 11 && phoneDigits.startsWith("1") ? phoneDigits.slice(1) : phoneDigits
-    if (national.length !== 10) return raw
-    return `(${national.slice(0, 3)}) ${national.slice(3, 6)}-${national.slice(6)}`
-  }
+  const usNational = phoneDigits.length === 11 && phoneDigits.startsWith("1") ? phoneDigits.slice(1) : phoneDigits
+  const isUsPhone = usNational.length === 10
+  const phoneDisplay = !data.phone
+    ? "Not provided"
+    : isUsPhone
+      ? `(${usNational.slice(0, 3)}) ${usNational.slice(3, 6)}-${usNational.slice(6)}`
+      : data.phone
+  const phoneHref = isUsPhone ? `tel:+1${usNational}` : undefined
   if (
     !data.name ||
     !data.grade ||
@@ -88,11 +91,11 @@ export async function POST(request: Request) {
     timeStyle: "short",
   })
 
-  const rows: [string, string][] = [
+  const rows: [string, string, string?][] = [
     ["Parent / Student Name", data.name],
     ["Student Grade", data.grade],
     ["Email", data.email],
-    ["Phone", data.phone ? formatUsPhone(data.phone) : "Not provided"],
+    ["Phone", phoneDisplay, phoneHref],
     ["Program", data.program],
     ["Current score or starting level", data.level || "Not provided"],
     ["Target score or goal", data.goal || "Not provided"],
@@ -106,8 +109,10 @@ export async function POST(request: Request) {
 <table cellpadding="8" style="border-collapse:collapse">
 ${rows
   .map(
-    ([label, value]) =>
-      `<tr><td style="border-bottom:1px solid #e5e7eb;font-weight:bold;vertical-align:top;white-space:nowrap">${escapeHtml(label)}</td><td style="border-bottom:1px solid #e5e7eb;white-space:pre-wrap">${escapeHtml(value)}</td></tr>`,
+    ([label, value, href]) =>
+      `<tr><td style="border-bottom:1px solid #e5e7eb;font-weight:bold;vertical-align:top;white-space:nowrap">${escapeHtml(label)}</td><td style="border-bottom:1px solid #e5e7eb;white-space:pre-wrap">${
+        href ? `<a href="${escapeHtml(href)}" style="color:#0b1d35;font-weight:bold">${escapeHtml(value)}</a>` : escapeHtml(value)
+      }</td></tr>`,
   )
   .join("\n")}
 </table></div>`
