@@ -131,8 +131,9 @@ export function FreeClassRsvpForm({ location }: { location: string }) {
             aria-describedby={errors.consent ? `${consentId}-error` : undefined}
             className="mt-1 h-4 w-4 shrink-0 accent-[var(--blue)]"
           />
-          <span>
-            {CONSENT_TEXT}
+  <span>
+  {/* Static copy; suppress warnings caused by a stale server render after wording edits. */}
+  <span suppressHydrationWarning>{CONSENT_TEXT}</span>
             <span aria-hidden="true" className="text-error"> *</span>
             <span className="sr-only"> (required)</span>
           </span>
