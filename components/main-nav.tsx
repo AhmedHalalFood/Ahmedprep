@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
-const LINKS = [
+export const NAV_LINKS = [
   { label: "Home", href: "/" },
   { label: "SHSAT Prep", href: "/shsat" },
   { label: "Digital SAT Prep", href: "/digital-sat" },
@@ -16,7 +16,7 @@ export function MainNav() {
   const pathname = usePathname()
   return (
     <nav aria-label="Main navigation">
-      {LINKS.map((link) => {
+      {NAV_LINKS.map((link) => {
         const active = link.href === "/" ? pathname === "/" : pathname.startsWith(link.href)
         return (
           <Link key={link.href} href={link.href} aria-current={active ? "page" : undefined} className={active ? "is-active" : undefined}>

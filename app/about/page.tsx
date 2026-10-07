@@ -4,7 +4,6 @@ import { DiagnosticSection } from "@/components/landing/diagnostic-section"
 import { GoogleReviews } from "@/components/landing/google-reviews"
 import { LocationSection } from "@/components/landing/location-section"
 import { Breadcrumbs } from "@/components/landing/primitives"
-import { ResultsSection } from "@/components/landing/results-section"
 
 export const metadata: Metadata = {
   title: "About AhmedPrep and Founder Tariq Ahmed",
@@ -49,7 +48,6 @@ export default function AboutPage() {
           </dl>
         </div>
       </section>
-      <ResultsSection />
       <GoogleReviews />
       <LocationSection location="about" />
       <DiagnosticSection location="about" />

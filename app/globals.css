@@ -134,7 +134,7 @@ h3 {
   background: #f0ca63;
 }
 
-.mobile-consult {
+.mobile-menu-trigger {
   display: none;
 }
 
@@ -759,7 +759,7 @@ a.program-card:hover h3 {
 
 @media (max-width: 800px) {
   body {
-    padding-bottom: calc(64px + env(safe-area-inset-bottom));
+    padding-bottom: calc(68px + env(safe-area-inset-bottom));
   }
 
   .mobile-cta-bar {
@@ -767,23 +767,30 @@ a.program-card:hover h3 {
     inset: auto 0 0;
     z-index: 50;
     display: grid;
-    grid-template-columns: 1fr 1fr 1.6fr;
-    padding-bottom: env(safe-area-inset-bottom);
+    grid-template-columns: 1fr 1fr 2.1fr;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
     border-top: 1px solid rgba(255, 255, 255, 0.15);
     background: var(--navy);
   }
 
-  .mobile-cta-bar a {
+  .mobile-cta-bar a,
+  .mobile-cta-bar button {
     display: inline-flex;
-    min-height: 64px;
+    min-height: 44px;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 6px;
     color: #fff;
-    font-size: 0.74rem;
+    font-size: 0.7rem;
     font-weight: 800;
     letter-spacing: 0.06em;
     text-transform: uppercase;
+  }
+
+  .mobile-cta-bar a {
+    color: rgba(255, 255, 255, 0.85);
   }
 
   .mobile-cta-bar a + a {
@@ -791,8 +798,11 @@ a.program-card:hover h3 {
   }
 
   .mobile-cta-bar .mobile-cta-primary {
+    border: 0;
     background: var(--gold);
     color: var(--navy);
+    font-size: 0.76rem;
+    cursor: pointer;
   }
 
   .hero-stats {
@@ -892,20 +902,25 @@ a.program-card:hover h3 {
     display: none;
   }
 
-  .mobile-consult {
-    display: inline-flex;
-    color: var(--blue);
-    font-size: 0.72rem;
-    font-weight: 800;
-    text-transform: uppercase;
+  .topbar {
+    min-height: 64px;
   }
 
-  .nav-inner nav {
-    width: 100%;
-    justify-content: space-between;
-    gap: 10px;
-    overflow: auto;
-    white-space: nowrap;
+  .navy-nav {
+    display: none;
+  }
+
+  .mobile-menu-trigger {
+    display: inline-flex;
+    width: 44px;
+    height: 44px;
+    margin-right: -10px;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    background: transparent;
+    color: var(--navy);
+    cursor: pointer;
   }
 
   .hero-section {
@@ -1185,10 +1200,6 @@ select {
 
   .brand small {
     display: none;
-  }
-
-  .nav-inner nav {
-    font-size: 0.61rem;
   }
 
   .program-card h3 {
