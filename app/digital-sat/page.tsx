@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { absoluteUrl } from "@/lib/seo"
 import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
 import { DiagnosticSection } from "@/components/landing/diagnostic-section"
@@ -15,11 +16,11 @@ export const metadata: Metadata = {
   title: { absolute: "Digital SAT Prep in Queens, NY | AhmedPrep Astoria" },
   description:
     "Digital SAT prep in Astoria, Queens with a free diagnostic, adaptive test strategy, Desmos instruction, and Reading & Writing and Math preparation.",
-  alternates: { canonical: "/digital-sat" },
+  alternates: { canonical: absoluteUrl("/digital-sat") },
   openGraph: {
     title: "Digital SAT Prep in Queens, NY | AhmedPrep Astoria",
     description: "Free Digital SAT diagnostic and personalized Math and Reading & Writing preparation in Astoria, Queens.",
-    url: "/digital-sat",
+    url: absoluteUrl("/digital-sat"),
   },
 }
 

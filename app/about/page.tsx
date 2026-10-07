@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 import { DiagnosticSection } from "@/components/landing/diagnostic-section"
 import { GoogleReviews } from "@/components/landing/google-reviews"
 import { LocationSection } from "@/components/landing/location-section"
@@ -9,7 +10,8 @@ export const metadata: Metadata = {
   title: "About AhmedPrep and Founder Tariq Ahmed",
   description:
     "AhmedPrep is an Astoria, Queens test prep center founded by Tariq Ahmed, an NYC DOE educator with an M.S. in Mathematics and 12+ years of experience.",
-  alternates: { canonical: "/about" },
+  alternates: { canonical: absoluteUrl("/about") },
+  openGraph: { ...baseOpenGraph, url: absoluteUrl("/about") },
 }
 
 const credentials = [

@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
 import { Breadcrumbs, Section } from "@/components/landing/primitives"
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
   title: "SHSAT & Digital SAT Resources",
   description:
     "Free SHSAT and Digital SAT guides for NYC families: test format, practice test strategy, sample Math problems, and ELA and Reading & Writing tips.",
-  alternates: { canonical: "/resources" },
+  alternates: { canonical: absoluteUrl("/resources") },
+  openGraph: { ...baseOpenGraph, url: absoluteUrl("/resources") },
 }
 
 const groups: { category: Resource["category"]; title: string; href: string; cta: string }[] = [

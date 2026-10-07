@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { absoluteUrl } from "@/lib/seo"
 import Link from "next/link"
 import { ArrowUpRight, BookOpenCheck, MessageCircleQuestion, PencilLine, Target } from "lucide-react"
 import { CallTextLinks } from "@/components/call-text-links"
@@ -20,7 +21,7 @@ const description =
 export const metadata: Metadata = {
   title: "Free Live SHSAT Class Every Sunday | Online via Zoom",
   description,
-  alternates: { canonical: FREE_CLASS.path },
+  alternates: { canonical: absoluteUrl(FREE_CLASS.path) },
   openGraph: {
     title: "Free Live SHSAT Class Every Sunday | AhmedPrep",
     description,

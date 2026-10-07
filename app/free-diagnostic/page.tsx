@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 import { DiagnosticForm } from "@/components/diagnostic-form"
 import { Breadcrumbs } from "@/components/landing/primitives"
 import { CallTextLinks } from "@/components/call-text-links"
@@ -7,7 +8,8 @@ import { ADDRESS_LINE_1, ADDRESS_LINE_2 } from "@/lib/business"
 export const metadata: Metadata = {
   title: "Book a Free SHSAT or Digital SAT Diagnostic",
   description: "Reserve a free SHSAT or Digital SAT diagnostic at AhmedPrep in Astoria, Queens. Get a breakdown of strengths, gaps, and a personalized plan.",
-  alternates: { canonical: "/free-diagnostic" },
+  alternates: { canonical: absoluteUrl("/free-diagnostic") },
+  openGraph: { ...baseOpenGraph, url: absoluteUrl("/free-diagnostic") },
 }
 
 export default function FreeDiagnosticPage() {
