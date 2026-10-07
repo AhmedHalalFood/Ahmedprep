@@ -14,10 +14,10 @@ import { STATS } from "@/lib/business"
 import { RESOURCES } from "@/lib/resources"
 
 export const metadata: Metadata = {
-  title: { absolute: "SHSAT & Digital SAT Prep in Astoria, Queens | AhmedPrep" },
+  title: { absolute: "AhmedPrep | SHSAT & Digital SAT Prep in Astoria, Queens" },
   description:
-    "Personalized SHSAT and Digital SAT preparation in Astoria, Queens. Diagnostic-based plans, practice exams, and progress tracking for NYC students. Book a free diagnostic.",
-  alternates: { canonical: "/" },
+    "AhmedPrep provides SHSAT and Digital SAT preparation in Astoria, Queens and online, with personalized instruction, diagnostic testing, timed practice, and free weekly SHSAT classes.",
+  alternates: { canonical: "https://www.ahmedprep.com/" },
 }
 
 const programs = [
