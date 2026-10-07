@@ -185,12 +185,8 @@ export default function Home() {
           <dl className="credentials" aria-label="Credentials">
             <div>
               <dt>Education</dt>
-              <dd>B.S., New York University</dd>
-            </div>
-            <div>
-              <dt>Graduate degree</dt>
-              <dd>M.S. Mathematics, Hunter College</dd>
-            </div>
+            <dd>New York University</dd>
+          </div>
             <div>
               <dt>Classroom</dt>
               <dd>NYC DOE Educator</dd>
