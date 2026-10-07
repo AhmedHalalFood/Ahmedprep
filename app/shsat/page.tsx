@@ -8,6 +8,7 @@ import { LocationSection } from "@/components/landing/location-section"
 import { Breadcrumbs, JsonLd, Section } from "@/components/landing/primitives"
 import { ProgramHero } from "@/components/landing/program-hero"
 import { SuccessStories } from "@/components/landing/success-stories"
+import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
 import { NOT_AFFILIATED_NOTE, SITE_URL } from "@/lib/business"
 import { INTENSIVE_PATH } from "@/lib/shsat-intensive"
@@ -126,9 +127,14 @@ export default function ShsatPage() {
               60 hours of live SHSAT prep · 20 classes · Oct. 12–Nov. 12, 2026 · $1,000
             </p>
           </div>
-          <Link href={INTENSIVE_PATH} className="button button-gold button-lg shrink-0 justify-center uppercase">
+          <TrackedLink
+            href={INTENSIVE_PATH}
+            event={EVENTS.shsatIntensiveClick}
+            eventProps={{ location: "shsat_page_intensive_promo" }}
+            className="button button-gold button-lg shrink-0 justify-center uppercase"
+          >
             2026 SHSAT Final Intensive <ArrowUpRight size={16} aria-hidden="true" />
-          </Link>
+          </TrackedLink>
         </div>
       </aside>
 

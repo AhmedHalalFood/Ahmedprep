@@ -18,7 +18,7 @@ export function ShsatIntensiveBar() {
         </p>
         <TrackedLink
           href={INTENSIVE_PATH}
-          event={EVENTS.shsatCtaClick}
+          event={EVENTS.shsatIntensiveClick}
           eventProps={{ location: "shsat_intensive_bar" }}
           className="button button-gold shrink-0 whitespace-nowrap uppercase"
         >

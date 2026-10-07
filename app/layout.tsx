@@ -3,6 +3,7 @@ import { Inter, Playfair_Display } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import { Footer } from '@/components/footer'
+import { GoogleAnalytics } from '@/components/google-analytics'
 import { Header } from '@/components/header'
 import { MobileCtaBar } from '@/components/mobile-cta-bar'
 import { BUSINESS, MAPS_URL, SITE_URL } from '@/lib/business'
@@ -103,6 +104,7 @@ export default function RootLayout({
         <Footer />
         <MobileCtaBar />
         {process.env.NODE_ENV === 'production' && <Analytics />}
+        <GoogleAnalytics />
       </body>
     </html>
   )

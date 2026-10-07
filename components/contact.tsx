@@ -3,6 +3,10 @@
 import { useEffect, useRef, useState } from "react"
 import { ArrowUpRight } from "lucide-react"
 import { ADDRESS_LINE_1, ADDRESS_LINE_2 } from "@/lib/business"
+import { EVENTS, trackEvent } from "@/lib/analytics"
+
+const LOCATION = "contact_section"
+const trackPhoneClick = () => trackEvent(EVENTS.phoneClick, { location: LOCATION })
 
 type FormData = {
   name: string
@@ -43,12 +47,17 @@ export function Contact() {
   const successRef = useRef<HTMLDivElement>(null)
   const honeypotRef = useRef<HTMLInputElement>(null)
   const startedAtRef = useRef(0)
+  const trackedStartRef = useRef(false)
 
   useEffect(() => {
     startedAtRef.current = Date.now()
   }, [])
 
   const update = (key: FieldKey, value: string) => {
+    if (!trackedStartRef.current) {
+      trackedStartRef.current = true
+      trackEvent(EVENTS.consultationStarted, { location: LOCATION })
+    }
     setData((prev) => ({ ...prev, [key]: value }))
     if (errors[key]) setErrors((prev) => ({ ...prev, [key]: undefined }))
   }
@@ -79,6 +88,7 @@ export function Contact() {
       const result = await response.json().catch(() => null)
       if (!response.ok || result?.success !== true) throw new Error("Delivery not confirmed")
       setStatus("success")
+      trackEvent(EVENTS.consultationSubmitted, { location: LOCATION, program: data.program })
       setData(initialData)
       startedAtRef.current = Date.now()
       requestAnimationFrame(() => successRef.current?.focus())
@@ -109,7 +119,7 @@ export function Contact() {
           <dl className="mt-8 flex flex-col gap-4 border-t border-[#d9d3c8] pt-6 text-sm text-[#536174]">
             <div>
               <dt className="font-bold text-[#0b1d35]">Phone</dt>
-              <dd><a href="tel:+13474795020" className="underline-offset-4 hover:text-[#0b2b50] hover:underline">(347) 479-5020</a></dd>
+              <dd><a href="tel:+13474795020" onClick={trackPhoneClick} className="underline-offset-4 hover:text-[#0b2b50] hover:underline">(347) 479-5020</a></dd>
             </div>
             <div>
               <dt className="font-bold text-[#0b1d35]">Email</dt>
@@ -133,7 +143,7 @@ export function Contact() {
             <h3 className="mt-4 text-2xl font-extrabold text-[#0b2b50]">Thank you. We&apos;ll be in touch shortly.</h3>
             <p className="mt-4 leading-relaxed text-[#536174]">
               Your consultation request has been sent. Expect a reply by email or phone to schedule a time. For anything urgent, call{" "}
-              <a href="tel:+13474795020" className="font-semibold text-[#0b2b50] underline underline-offset-4">(347) 479-5020</a>.
+              <a href="tel:+13474795020" onClick={trackPhoneClick} className="font-semibold text-[#0b2b50] underline underline-offset-4">(347) 479-5020</a>.
             </p>
             <button
               type="button"
@@ -204,7 +214,7 @@ export function Contact() {
             {status === "error" && (
               <p role="alert" className="mt-5 border-l-[3px] border-[#b42318] bg-[#fdf3f2] px-4 py-3 text-sm text-[#7a1a12]">
                 We couldn&apos;t send your request. Please try again or call{" "}
-                <a href="tel:+13474795020" className="font-semibold underline">(347) 479-5020</a>.
+                <a href="tel:+13474795020" onClick={trackPhoneClick} className="font-semibold underline">(347) 479-5020</a>.
               </p>
             )}
 

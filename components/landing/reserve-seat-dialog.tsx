@@ -54,8 +54,8 @@ function ReserveSeatForm() {
     endpoint: "/api/shsat-intensive",
     initial,
     validate,
-    onStart: () => trackEvent(EVENTS.diagnosticFormStarted, { location: LOCATION, program: INTENSIVE_NAME }),
-    onSuccess: () => trackEvent(EVENTS.diagnosticFormSubmitted, { location: LOCATION, program: INTENSIVE_NAME }),
+    onSuccess: () =>
+      trackEvent(EVENTS.shsatIntensiveLead, { location: LOCATION, program: INTENSIVE_NAME, lead_stage: "inquiry_submit" }),
   })
 
   const field = (key: keyof SeatData) => ({
@@ -139,7 +139,7 @@ export function ReserveSeatDialog({
       open={open}
       onOpenChange={(next) => {
         setOpen(next)
-        if (next) trackEvent(EVENTS.shsatCtaClick, { location })
+        if (next) trackEvent(EVENTS.shsatIntensiveLead, { location, lead_stage: "reserve_click" })
       }}
     >
       <DialogTrigger asChild>
