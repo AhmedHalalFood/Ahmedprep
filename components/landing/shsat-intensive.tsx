@@ -1,4 +1,6 @@
-import { CalendarDays, Check, Clock, MessageSquare, Phone } from "lucide-react"
+import Link from "next/link"
+import { ArrowUpRight, CalendarDays, Check, Clock, MessageSquare, Phone } from "lucide-react"
+import { INTENSIVE_PATH } from "@/lib/shsat-intensive"
 import { ReserveSeatDialog } from "@/components/landing/reserve-seat-dialog"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
@@ -26,34 +28,49 @@ const benefits = [
   "Final test-day strategy and preparation",
 ]
 
-export function ShsatIntensive() {
+export function ShsatIntensive({ variant = "home" }: { variant?: "home" | "page" }) {
+  const isHome = variant === "home"
   return (
     <section
       id="shsat-intensive"
-      aria-labelledby="shsat-intensive-title"
-      className="scroll-mt-4 border-t-4 border-gold bg-navy py-16 text-white md:py-20"
+      aria-labelledby={isHome ? "shsat-intensive-title" : undefined}
+      aria-label={isHome ? undefined : "Program details"}
+      className="scroll-mt-4 border-t-4 border-gold bg-navy py-12 text-white md:py-20"
     >
       <div className="container">
-        <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
+        {isHome && (
+        <div className="grid gap-5 md:gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
           <div>
             <p className="eyebrow gold">Now enrolling · SHSAT November 2026</p>
             <h2
               id="shsat-intensive-title"
-              className="mt-3 text-balance text-4xl font-extrabold leading-none tracking-tight md:text-5xl"
+              className="mt-2 text-balance text-3xl font-extrabold leading-tight tracking-tight md:mt-3 md:text-5xl md:leading-none"
             >
               2026 SHSAT Final 5-Week Intensive
             </h2>
-            <p className="mt-4 text-xl font-bold text-gold md:text-2xl">The Final Push Before the 2026 SHSAT</p>
-            <p className="mt-2 text-lg font-semibold text-white/85">60 Hours of Live SHSAT Preparation Before Test Day</p>
+            <p className="mt-3 text-lg font-bold leading-snug text-gold md:mt-4 md:text-2xl">The Final Push Before the 2026 SHSAT</p>
+            <p className="mt-1 text-base font-semibold leading-snug text-white/85 md:mt-2 md:text-lg">
+              60 Hours of Live SHSAT Preparation Before Test Day
+            </p>
           </div>
-          <p className="max-w-xl text-pretty leading-relaxed text-white/75">
+          <p className="max-w-xl text-pretty leading-relaxed text-white/75 md:hidden">
+            Five weeks of focused SHSAT preparation covering Math, ELA, pacing, timed practice, error review, and test-day strategy.
+          </p>
+          <p className="hidden max-w-xl text-pretty leading-relaxed text-white/75 md:block">
             {
               "The SHSAT is only weeks away. Ahmed Prep\u2019s Final Intensive gives students a focused, structured preparation plan before test day. Students strengthen Math and ELA, improve pacing, practice SHSAT-style questions, review mistakes, and develop the confidence and strategy needed for the exam."
             }
           </p>
+          <Link
+            href={INTENSIVE_PATH}
+            className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-gold underline-offset-4 hover:underline lg:col-start-2"
+          >
+            Full details: 2026 SHSAT Final Intensive <ArrowUpRight size={15} aria-hidden="true" />
+          </Link>
         </div>
+        )}
 
-        <dl className="mt-12 grid grid-cols-2 border border-white/20 lg:grid-cols-4" aria-label="Program at a glance">
+        <dl className={`${isHome ? "mt-8 md:mt-12" : ""} grid grid-cols-2 border border-white/20 lg:grid-cols-4`} aria-label="Program at a glance">
           {stats.map((stat, i) => (
             <div
               key={stat.label}
@@ -95,8 +112,8 @@ export function ShsatIntensive() {
           </p>
         </div>
 
-        <div className="mt-14 grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
-          <div className="flex flex-col gap-6">
+        <div className="mt-10 grid gap-6 md:mt-14 md:gap-10 lg:grid-cols-[0.8fr_1.2fr]">
+          <div className="flex flex-col gap-3 md:gap-6">
             <h3 className="text-3xl font-extrabold tracking-tight">What Students Receive</h3>
             <p className="max-w-sm leading-relaxed text-white/75">
               Every part of the Intensive is designed to maximize preparation, strengthen weak areas, and build test-day confidence in the
@@ -105,7 +122,7 @@ export function ShsatIntensive() {
           </div>
           <ul className="m-0 grid list-none gap-x-8 border-t border-white/20 p-0 sm:grid-cols-2">
             {benefits.map((item) => (
-              <li key={item} className="flex items-start gap-3 border-b border-white/20 py-3.5 text-sm leading-relaxed text-white/90">
+              <li key={item} className="flex items-start gap-3 border-b border-white/20 py-2.5 text-[0.9375rem] leading-snug text-white/90 md:py-3.5 md:text-sm md:leading-relaxed">
                 <Check size={16} className="mt-0.5 shrink-0 text-gold" aria-hidden="true" />
                 {item}
               </li>
@@ -113,12 +130,18 @@ export function ShsatIntensive() {
           </ul>
         </div>
 
-        <div id="shsat-intensive-enroll" className="mt-14 grid border border-white/20 lg:grid-cols-[1.35fr_0.65fr]">
-          <div className="flex flex-col gap-6 p-6 md:p-10">
+        <div id="shsat-intensive-enroll" className="mt-10 grid scroll-mt-4 border border-white/20 md:mt-14 lg:grid-cols-[1.35fr_0.65fr]">
+          <div className="flex flex-col gap-5 p-5 md:gap-6 md:p-10">
             <p className="max-w-2xl text-pretty text-lg font-semibold leading-relaxed text-white md:text-xl">
               For <span className="text-gold">$1,000</span>, students receive 60 hours of focused live SHSAT instruction over five weeks,
               including Math, ELA, timed practice, strategy, error review, and pacing preparation.
             </p>
+            <ul className="m-0 flex list-none flex-col gap-2 border-l-2 border-gold p-0 pl-4 text-white/85">
+              <li className="font-semibold">About $16.67 per live instructional hour</li>
+              <li>
+                <span className="font-semibold">Payment option:</span> $1,000 in full or 2 payments of $500
+              </li>
+            </ul>
             <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
               <ReserveSeatDialog />
               <TrackedLink

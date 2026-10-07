@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
 import { MainNav } from "@/components/main-nav"
+import { MobileNav } from "@/components/mobile-nav"
 import { ShsatIntensiveBar } from "@/components/shsat-intensive-bar"
 import { TopContactBar } from "@/components/top-contact-bar"
 import { TrackedLink } from "@/components/tracked-link"
@@ -26,14 +27,7 @@ export function Header() {
             Book Free Diagnostic <ArrowUpRight size={16} aria-hidden="true" />
           </TrackedLink>
         </div>
-        <TrackedLink
-          href="/free-diagnostic"
-          event={EVENTS.diagnosticCtaClick}
-          eventProps={{ location: "header_mobile" }}
-          className="mobile-consult"
-        >
-          Free Diagnostic <ArrowUpRight size={15} aria-hidden="true" />
-        </TrackedLink>
+        <MobileNav />
       </div>
       <div className="navy-nav">
         <div className="container nav-inner">

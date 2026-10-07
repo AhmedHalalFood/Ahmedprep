@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, type ReactNode } from "react"
 import { ArrowRight } from "lucide-react"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Honeypot, RequiredNote, SelectField, SubmitButton, TextAreaField, TextField } from "@/components/forms/fields"
@@ -126,20 +126,28 @@ function ReserveSeatForm() {
   )
 }
 
-export function ReserveSeatDialog() {
+export function ReserveSeatDialog({
+  trigger,
+  location = "shsat_intensive_reserve",
+}: {
+  trigger?: ReactNode
+  location?: string
+}) {
   const [open, setOpen] = useState(false)
   return (
     <Dialog
       open={open}
       onOpenChange={(next) => {
         setOpen(next)
-        if (next) trackEvent(EVENTS.shsatCtaClick, { location: "shsat_intensive_reserve" })
+        if (next) trackEvent(EVENTS.shsatCtaClick, { location })
       }}
     >
       <DialogTrigger asChild>
-        <button type="button" className="button button-gold button-lg uppercase">
-          {"Reserve My Child\u2019s Seat"} <ArrowRight size={17} aria-hidden="true" />
-        </button>
+        {trigger ?? (
+          <button type="button" className="button button-gold button-lg uppercase">
+            {"Reserve My Child\u2019s Seat"} <ArrowRight size={17} aria-hidden="true" />
+          </button>
+        )}
       </DialogTrigger>
       <DialogContent className="max-h-[90dvh] overflow-y-auto rounded-none border-t-4 border-t-gold bg-white text-navy sm:max-w-2xl">
         <DialogHeader className="text-left">

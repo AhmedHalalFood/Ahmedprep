@@ -6,12 +6,10 @@ import { CampaignBanner } from "@/components/landing/campaign-banner"
 import { DiagnosticSection } from "@/components/landing/diagnostic-section"
 import { FreeClassPromo } from "@/components/landing/free-class-promo"
 import { GoogleReviews } from "@/components/landing/google-reviews"
-import { ResultsSection } from "@/components/landing/results-section"
 import { ShsatIntensive } from "@/components/landing/shsat-intensive"
 import { SuccessStories } from "@/components/landing/success-stories"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
-import { STATS } from "@/lib/business"
 import { RESOURCES } from "@/lib/resources"
 import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 
@@ -76,24 +74,6 @@ export default function Home() {
             </TrackedLink>
             <CallTextLinks location="home_hero" />
           </div>
-          <dl className="hero-stats" aria-label="AhmedPrep at a glance">
-            {STATS.map((stat) => (
-              <div key={stat.label}>
-                <dt>{stat.label}</dt>
-                <dd>
-                  {stat.value}
-                  <span aria-hidden="true" className="text-gold">*</span>
-                </dd>
-              </div>
-            ))}
-          </dl>
-          <p className="mt-2 text-xs text-subtle">
-            * See{" "}
-            <Link href="#results" className="underline underline-offset-2 hover:text-brand">
-              results details
-            </Link>
-            .
-          </p>
         </div>
       </section>
 
@@ -173,7 +153,6 @@ export default function Home() {
         </div>
       </section>
 
-      <ResultsSection />
       <SuccessStories />
 
       <section id="about" className="founder-section" aria-labelledby="founder-title">

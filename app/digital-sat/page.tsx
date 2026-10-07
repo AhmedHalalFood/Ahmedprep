@@ -7,7 +7,6 @@ import { Faq, type FaqItem } from "@/components/landing/faq"
 import { LocationSection } from "@/components/landing/location-section"
 import { Breadcrumbs, JsonLd, Section } from "@/components/landing/primitives"
 import { ProgramHero } from "@/components/landing/program-hero"
-import { ResultsSection } from "@/components/landing/results-section"
 import { SuccessStories } from "@/components/landing/success-stories"
 import { EVENTS } from "@/lib/analytics"
 import { NOT_AFFILIATED_NOTE, SITE_URL } from "@/lib/business"
@@ -182,7 +181,6 @@ export default function DigitalSatPage() {
         </ul>
       </Section>
 
-      <ResultsSection title="Digital SAT results at AhmedPrep" />
       <SuccessStories program="Digital SAT" title="Digital SAT student results" />
       <Faq title="Digital SAT prep FAQ" items={faqs} />
       <LocationSection location="digital_sat" />
