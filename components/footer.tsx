@@ -1,2 +1,54 @@
 import Link from "next/link"
-export function Footer(){return <footer className="bg-[#071426] py-12 text-white"><div className="mx-auto flex max-w-7xl flex-col gap-8 px-5 sm:flex-row sm:items-end sm:justify-between lg:px-8"><div><Link href="/" className="font-serif text-2xl">Ahmed<span className="text-[#c9a45c]">Prep</span></Link><p className="mt-3 max-w-sm text-sm leading-relaxed text-white/50">Specialized SHSAT and Digital SAT preparation for ambitious New York students.</p></div><div className="flex flex-wrap gap-x-6 gap-y-3 text-sm text-white/60"><Link href="/shsat" className="hover:text-white">SHSAT</Link><Link href="/digital-sat" className="hover:text-white">Digital SAT</Link><Link href="/#about" className="hover:text-white">About</Link><Link href="/#contact" className="hover:text-white">Contact</Link></div></div><div className="mx-auto mt-10 max-w-7xl border-t border-white/10 px-5 pt-5 text-xs text-white/35 lg:px-8">© {new Date().getFullYear()} AhmedPrep. New York City.</div></footer>}
+import { TrackedLink } from "@/components/tracked-link"
+import { EVENTS } from "@/lib/analytics"
+import { ADDRESS_LINE_1, ADDRESS_LINE_2, BUSINESS, MAPS_URL, NOT_AFFILIATED_NOTE } from "@/lib/business"
+
+export function Footer() {
+  return (
+    <footer className="footer">
+      <div className="container footer-top">
+        <div>
+          <Link href="/" className="brand footer-brand" aria-label="AhmedPrep home">
+            <span>AhmedPrep</span>
+            <small>ASTORIA · QUEENS</small>
+          </Link>
+          <p>SHSAT and Digital SAT preparation for students across New York City.</p>
+          <address className="footer-nap not-italic">
+            <strong>{BUSINESS.name}</strong>
+            <a href={MAPS_URL} target="_blank" rel="noopener noreferrer">
+              {ADDRESS_LINE_1}
+              <br />
+              {ADDRESS_LINE_2}
+            </a>
+            <TrackedLink href={BUSINESS.phoneHref} event={EVENTS.phoneClick} eventProps={{ location: "footer" }}>
+              {BUSINESS.phoneDisplay}
+            </TrackedLink>
+            <a href={`mailto:${BUSINESS.email}`}>{BUSINESS.email}</a>
+          </address>
+        </div>
+        <div className="footer-links">
+          <div>
+            <span>Programs</span>
+            <Link href="/shsat">SHSAT Prep</Link>
+            <Link href="/digital-sat">Digital SAT Prep</Link>
+            <Link href="/free-shsat-class">Free SHSAT Class</Link>
+            <Link href="/free-diagnostic">Free Diagnostic</Link>
+          </div>
+          <div>
+            <span>Explore</span>
+            <Link href="/resources">Resources</Link>
+            <Link href="/about">About</Link>
+            <Link href="/contact">Contact</Link>
+            <Link href="/referral">Referral</Link>
+          </div>
+        </div>
+      </div>
+      <div className="container footer-bottom">
+        <span>
+          © {new Date().getFullYear()} AhmedPrep. All rights reserved.
+        </span>
+        <span className="footer-note">{NOT_AFFILIATED_NOTE}</span>
+      </div>
+    </footer>
+  )
+}

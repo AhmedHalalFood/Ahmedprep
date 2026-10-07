@@ -1,0 +1,57 @@
+import type { Metadata } from "next"
+import Link from "next/link"
+import { ArrowUpRight } from "lucide-react"
+import { Breadcrumbs, Section } from "@/components/landing/primitives"
+import { RESOURCES, type Resource } from "@/lib/resources"
+
+export const metadata: Metadata = {
+  title: "SHSAT & Digital SAT Resources",
+  description:
+    "Free SHSAT and Digital SAT guides for NYC families: test format, practice test strategy, sample Math problems, and ELA and Reading & Writing tips.",
+  alternates: { canonical: "/resources" },
+}
+
+const groups: { category: Resource["category"]; title: string; href: string; cta: string }[] = [
+  { category: "SHSAT", title: "SHSAT resources", href: "/shsat", cta: "SHSAT Prep program" },
+  { category: "Digital SAT", title: "Digital SAT resources", href: "/digital-sat", cta: "Digital SAT Prep program" },
+]
+
+export default function ResourcesPage() {
+  return (
+    <>
+      <Breadcrumbs items={[{ label: "Resources", href: "/resources" }]} />
+      <section aria-labelledby="resources-title" className="border-b border-line bg-white py-14 md:py-20">
+        <div className="container max-w-3xl">
+          <p className="eyebrow blue">Resources</p>
+          <h1 id="resources-title" className="mt-3 text-balance text-4xl font-extrabold leading-tight tracking-tight text-navy md:text-5xl">
+            Know the test. Know the next step.
+          </h1>
+          <p className="mt-5 text-pretty text-lg leading-relaxed text-subtle">
+            Practical guides for NYC families preparing for the SHSAT and the Digital SAT, written by the AhmedPrep team in Astoria, Queens.
+          </p>
+        </div>
+      </section>
+
+      {groups.map((group, i) => (
+        <Section key={group.category} id={group.category === "SHSAT" ? "shsat" : "digital-sat"} tone={i % 2 ? "warm" : "white"} title={group.title}>
+          <ul className="grid gap-px border border-line bg-line md:grid-cols-2">
+            {RESOURCES.filter((r) => r.category === group.category).map((resource) => (
+              <li key={resource.slug} className="bg-white">
+                <Link href={`/resources/${resource.slug}`} className="group flex h-full flex-col gap-3 p-6 transition-colors hover:bg-brand-soft md:p-8">
+                  <h2 className="text-xl font-extrabold text-navy group-hover:text-brand">{resource.title}</h2>
+                  <p className="leading-relaxed text-subtle">{resource.description}</p>
+                  <span className="mt-auto inline-flex items-center gap-1 pt-2 text-xs font-extrabold uppercase tracking-wider text-brand">
+                    Read guide <ArrowUpRight size={14} aria-hidden="true" />
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <Link href={group.href} className="text-link mt-8">
+            {group.cta} <ArrowUpRight size={15} aria-hidden="true" />
+          </Link>
+        </Section>
+      ))}
+    </>
+  )
+}

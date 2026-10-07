@@ -1,13 +1,46 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowUpRight, Check } from "lucide-react"
-import { Contact } from "@/components/contact"
-import { TopContactBar } from "@/components/top-contact-bar"
-import { ADDRESS_LINE_1, ADDRESS_LINE_2 } from "@/lib/business"
+import { CallTextLinks } from "@/components/call-text-links"
+import { CampaignBanner } from "@/components/landing/campaign-banner"
+import { DiagnosticSection } from "@/components/landing/diagnostic-section"
+import { FreeClassPromo } from "@/components/landing/free-class-promo"
+import { GoogleReviews } from "@/components/landing/google-reviews"
+import { ResultsSection } from "@/components/landing/results-section"
+import { SuccessStories } from "@/components/landing/success-stories"
+import { TrackedLink } from "@/components/tracked-link"
+import { EVENTS } from "@/lib/analytics"
+import { STATS } from "@/lib/business"
+import { RESOURCES } from "@/lib/resources"
+
+export const metadata: Metadata = {
+  title: { absolute: "SHSAT & Digital SAT Prep in Astoria, Queens | AhmedPrep" },
+  description:
+    "Personalized SHSAT and Digital SAT preparation in Astoria, Queens. Diagnostic-based plans, practice exams, and progress tracking for NYC students. Book a free diagnostic.",
+  alternates: { canonical: "/" },
+}
 
 const programs = [
-  { title: "SHSAT Prep", kicker: "SPECIALIZED HIGH SCHOOL ADMISSIONS", body: "Preparation for NYC Specialized High School admissions with structured support across ELA, mathematics, pacing, and test-day strategy.", points: ["Diagnostic assessment", "Targeted practice and error analysis", "Full-length testing and pacing"] },
-  { title: "Digital SAT Prep", kicker: "ADAPTIVE TEST PREPARATION", body: "Personalized preparation for the adaptive Digital SAT, built around score analysis, high-impact instruction, and timing and test-day strategy.", points: ["Reading & Writing and Math", "Desmos and adaptive strategy", "Practice testing and score analysis"] },
+  {
+    title: "SHSAT Prep",
+    kicker: "Specialized High School admissions",
+    body: "Build confidence, master difficult concepts, and prepare strategically for NYC Specialized High School admissions.",
+    points: ["Diagnostic assessment", "Targeted Math and ELA practice", "Full-length testing and pacing"],
+    cta: "Free SHSAT Diagnostic",
+    href: "/shsat",
+    event: EVENTS.shsatCtaClick,
+  },
+  {
+    title: "Digital SAT Prep",
+    kicker: "Adaptive test preparation",
+    body: "Improve your score through targeted practice, adaptive testing strategies, and personalized feedback.",
+    points: ["Reading & Writing and Math", "Desmos and digital test strategy", "Practice testing and score analysis"],
+    cta: "Free SAT Diagnostic",
+    href: "/digital-sat",
+    event: EVENTS.digitalSatCtaClick,
+  },
 ]
+
 const method = [
   ["01", "Diagnose", "Understand the starting point through a focused diagnostic and careful review of strengths and gaps."],
   ["02", "Plan", "Build a clear, realistic preparation roadmap around the student's goals, schedule, and school demands."],
@@ -15,48 +48,195 @@ const method = [
   ["04", "Measure", "Track progress with purposeful practice, testing, and the next right adjustment."],
 ]
 
-const resources = [
-  { kicker: "SHSAT", title: "SHSAT program overview", body: "How preparation is structured across ELA, mathematics, pacing, and full-length practice.", href: "/shsat" },
-  { kicker: "Digital SAT", title: "Digital SAT program overview", body: "What to expect from the adaptive format and how preparation is organized.", href: "/digital-sat" },
-  { kicker: "Free diagnostic", title: "Request a free diagnostic", body: "Start with a clear picture of current strengths, gaps, and a realistic plan.", href: "#contact" },
-]
-
-function GoldArrow({ label }: { label: string }) {
-  return <span className="gold-action"><span className="gold-circle"><ArrowUpRight size={17} strokeWidth={2.2} /></span><span>{label}</span></span>
-}
-
 export default function Home() {
+  const featuredResources = RESOURCES.slice(0, 3)
   return (
-    <main>
-      <TopContactBar />
-      <header className="site-header">
-        <div className="topbar container">
-          <Link href="#top" className="brand"><span>AhmedPrep</span><small>NYC TEST PREP</small></Link>
-          <nav className="utility-nav" aria-label="Utility navigation"><Link href="#about">About</Link><Link href="#results">Results</Link><Link href="#contact">Contact</Link><Link href="#contact" className="button button-gold">Book a Free Consultation <ArrowUpRight size={16} /></Link></nav>
-          <Link href="#contact" className="mobile-consult">Consultation <ArrowUpRight size={15} /></Link>
+    <>
+      <section id="top" className="hero-section" aria-labelledby="hero-title">
+        <div className="hero-image" aria-hidden="true" />
+        <div className="hero-panel">
+          <p className="eyebrow blue">Astoria, Queens · Serving students across NYC</p>
+          <h1 id="hero-title">
+            SHSAT & Digital SAT Prep <em>in Astoria, Queens</em>
+          </h1>
+          <p className="hero-copy">
+            Personalized test preparation that helps NYC students build confidence, improve scores, and reach their academic goals.
+          </p>
+          <div className="hero-actions">
+            <TrackedLink
+              href="#diagnostic"
+              event={EVENTS.diagnosticCtaClick}
+              eventProps={{ location: "home_hero" }}
+              className="button button-gold button-lg"
+            >
+              Book a Free Diagnostic <ArrowUpRight size={17} aria-hidden="true" />
+            </TrackedLink>
+            <CallTextLinks location="home_hero" />
+          </div>
+          <dl className="hero-stats" aria-label="AhmedPrep at a glance">
+            {STATS.map((stat) => (
+              <div key={stat.label}>
+                <dt>{stat.label}</dt>
+                <dd>
+                  {stat.value}
+                  <span aria-hidden="true" className="text-gold">*</span>
+                </dd>
+              </div>
+            ))}
+          </dl>
+          <p className="mt-2 text-xs text-subtle">
+            * See{" "}
+            <Link href="#results" className="underline underline-offset-2 hover:text-brand">
+              results details
+            </Link>
+            .
+          </p>
         </div>
-        <div className="navy-nav"><div className="container nav-inner"><nav aria-label="Main navigation"><Link href="/shsat">SHSAT Prep</Link><Link href="/digital-sat">Digital SAT Prep</Link><Link href="#method">Our Approach</Link><Link href="#resources">Resources</Link><Link href="#contact">Free Diagnostic</Link></nav><span className="nav-note">NYC students. Focused preparation.</span></div></div>
-      </header>
+      </section>
 
-      <section id="top" className="hero-section"><div className="hero-image" aria-hidden="true" /><div className="hero-panel"><p className="eyebrow blue">Specialized NYC test preparation</p><h1>Master the SHSAT.<br /><em>Conquer the Digital SAT.</em></h1><p className="hero-copy">Focused, personalized preparation for New York students who are ready to aim higher.</p><div className="hero-actions"><Link href="#programs" className="hero-link"><GoldArrow label="Explore AhmedPrep" /></Link><Link href="#contact" className="text-link">Book a free consultation <ArrowUpRight size={15} /></Link></div></div></section>
+      <section id="programs" className="section programs-section" aria-labelledby="programs-title">
+        <div className="container">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">Choose a program</p>
+              <h2 id="programs-title">
+                Two tests.
+                <br />
+                <span>Focused preparation.</span>
+              </h2>
+            </div>
+            <p>Every program starts with a free diagnostic, so students know exactly what to practice and why it matters.</p>
+          </div>
+          <div className="program-grid">
+            {programs.map((program) => (
+              <TrackedLink
+                key={program.title}
+                href={program.href}
+                event={program.event}
+                eventProps={{ location: "home_program_card" }}
+                className="program-card"
+              >
+                <p className="eyebrow blue">{program.kicker}</p>
+                <h3>{program.title}</h3>
+                <p className="program-body">{program.body}</p>
+                <ul>
+                  {program.points.map((point) => (
+                    <li key={point}>
+                      <Check size={15} aria-hidden="true" />
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+                <span className="button button-gold button-lg program-cta">
+                  {program.cta} <ArrowUpRight size={16} aria-hidden="true" />
+                </span>
+              </TrackedLink>
+            ))}
+          </div>
+        </div>
+      </section>
 
-      <section id="results" className="stats-strip"><div className="container stats-grid"><div className="stat"><strong>2,500+</strong><span>Students Mentored</span></div><div className="stat"><strong>96%</strong><span>Admission Rate</span></div><div className="stat"><strong>150+</strong><span>Average SAT Point Improvement</span></div><div className="stat"><strong>12+ Years</strong><span>Teaching & Test Prep Experience</span></div></div></section>
+      <FreeClassPromo />
 
-      <section id="programs" className="section programs-section"><div className="container"><div className="section-heading"><div><p className="eyebrow">Focused programs</p><h2>Two tests.<br /><span>Focused preparation.</span></h2></div><p>We keep the work rigorous, personal, and clear—so students know what to practice and why it matters.</p></div><div className="program-grid">{programs.map((program) => <article className="program-card" key={program.title}><p className="eyebrow blue">{program.kicker}</p><h3>{program.title}</h3><p className="program-body">{program.body}</p><ul>{program.points.map((point) => <li key={point}><Check size={15} />{point}</li>)}</ul><Link href={program.title.startsWith("SHSAT") ? "/shsat" : "/digital-sat"}><GoldArrow label={`Explore ${program.title}`} /></Link></article>)}</div></div></section>
+      <CampaignBanner />
 
-      <section id="method" className="method-section"><div className="container"><div className="method-intro"><p className="eyebrow gold">The AhmedPrep method</p><h2>Preparation built<br /><span>around the student.</span></h2><p>Effective preparation starts with knowing where a student stands, then building instruction, practice, and assessment around measurable progress.</p></div><div className="method-grid">{method.map(([number, title, body]) => <article key={title} className="method-card"><span className="method-number">{number}</span><div><h3>{title}</h3><p>{body}</p></div></article>)}</div></div></section>
+      <section id="method" className="method-section" aria-labelledby="method-title">
+        <div className="container">
+          <div className="method-intro">
+            <p className="eyebrow gold">The AhmedPrep method</p>
+            <h2 id="method-title">
+              Preparation built
+              <br />
+              <span>around the student.</span>
+            </h2>
+            <p>
+              Effective preparation starts with knowing where a student stands, then building instruction, practice, and assessment around
+              measurable progress.
+            </p>
+          </div>
+          <div className="method-grid">
+            {method.map(([number, title, body]) => (
+              <article key={title} className="method-card">
+                <span className="method-number">{number}</span>
+                <div>
+                  <h3>{title}</h3>
+                  <p>{body}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
 
-      <section id="about" className="founder-section"><div className="container founder-grid"><div className="founder-intro"><p className="eyebrow blue">Meet the founder</p><h2>Tariq Ahmed</h2><p className="founder-role">Founder & Lead Instructor</p><p className="founder-text">AhmedPrep provides New York students with focused, individualized instruction built around their starting point, goals, and progress.</p><Link href="#method" className="text-link">Learn about our approach <ArrowUpRight size={15} /></Link></div><dl className="credentials" aria-label="Credentials"><div><dt>Education</dt><dd>B.S., New York University</dd></div><div><dt>Graduate degree</dt><dd>M.S. Mathematics, Hunter College</dd></div><div><dt>Classroom</dt><dd>NYC DOE Educator</dd></div><div><dt>Experience</dt><dd>12+ Years of Teaching & Test-Prep Experience</dd></div></dl></div></section>
+      <ResultsSection />
+      <SuccessStories />
 
-      <section className="consultation-banner"><div className="container consultation-inner"><div><p className="eyebrow gold">A clear next step</p><h2>Ready to build your student's plan?</h2><p>Start with a conversation about current performance, goals, and the right preparation strategy.</p></div><Link href="#contact" className="button button-gold">Book a Free Consultation <ArrowUpRight size={17} /></Link></div></section>
+      <section id="about" className="founder-section" aria-labelledby="founder-title">
+        <div className="container founder-grid">
+          <div className="founder-intro">
+            <p className="eyebrow blue">Meet the founder</p>
+            <h2 id="founder-title">Tariq Ahmed</h2>
+            <p className="founder-role">Founder & Lead Instructor</p>
+            <p className="founder-text">
+              AhmedPrep provides New York students with focused, individualized instruction built around their starting point, goals, and
+              progress.
+            </p>
+            <Link href="/about" className="text-link">
+              More about AhmedPrep <ArrowUpRight size={15} aria-hidden="true" />
+            </Link>
+          </div>
+          <dl className="credentials" aria-label="Credentials">
+            <div>
+              <dt>Education</dt>
+            <dd>New York University</dd>
+          </div>
+            <div>
+              <dt>Classroom</dt>
+              <dd>NYC DOE Educator</dd>
+            </div>
+            <div>
+              <dt>Experience</dt>
+              <dd>12+ Years of Teaching & Test-Prep Experience</dd>
+            </div>
+          </dl>
+        </div>
+      </section>
 
-      <section id="resources" className="resources-section" aria-labelledby="resources-heading"><div className="container"><div className="resources-heading"><p className="eyebrow">Resources</p><h2 id="resources-heading">Know the test.<br /><span>Know the next step.</span></h2></div><div className="resource-grid">{resources.map((item) => <Link key={item.title} href={item.href} className="resource-item"><span>{item.kicker}</span><h3>{item.title}</h3><p>{item.body}</p><ArrowUpRight size={18} aria-hidden="true" /></Link>)}</div></div></section>
+      <GoogleReviews />
 
-      <Contact />
-      <footer className="footer"><div className="container footer-top"><div><Link href="#top" className="brand footer-brand"><span>AhmedPrep</span><small>NYC TEST PREP</small></Link><p>Serious preparation for New York students ready to aim higher.</p></div><div className="footer-links"><div><span>Programs</span><Link href="/shsat">SHSAT Prep</Link><Link href="/digital-sat">Digital SAT Prep</Link></div><div><span>Explore</span><Link href="#about">About</Link><Link href="#resources">Resources</Link><Link href="#contact">Contact</Link></div><div><span>Service area</span><p>New York City</p><address className="not-italic">{ADDRESS_LINE_1}<br />{ADDRESS_LINE_2}</address></div></div></div><div className="container footer-bottom"><span>© {new Date().getFullYear()} AhmedPrep. All rights reserved.</span><span>Privacy policy</span></div></footer>
-    </main>
+      <DiagnosticSection
+        location="home"
+        title="Start with a free diagnostic"
+        intro="Choose SHSAT or Digital SAT and tell us about your student. We'll contact you to confirm a diagnostic time at our Astoria location."
+      />
+
+      <section id="resources" className="resources-section" aria-labelledby="resources-heading">
+        <div className="container">
+          <div className="resources-heading flex flex-wrap items-end justify-between gap-6">
+            <div>
+              <p className="eyebrow">Resources</p>
+              <h2 id="resources-heading">
+                Know the test.
+                <br />
+                <span>Know the next step.</span>
+              </h2>
+            </div>
+            <Link href="/resources" className="text-link">
+              All resources <ArrowUpRight size={15} aria-hidden="true" />
+            </Link>
+          </div>
+          <div className="resource-grid">
+            {featuredResources.map((item) => (
+              <Link key={item.slug} href={`/resources/${item.slug}`} className="resource-item">
+                <span>{item.category}</span>
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
+                <ArrowUpRight size={18} aria-hidden="true" />
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
   )
 }
-
-export const metadata = { title: "AhmedPrep | NYC Test Prep for SHSAT & Digital SAT", description: "Specialized SHSAT and Digital SAT preparation for New York students, led by Tariq Ahmed." }
-export const viewport = { width: "device-width", initialScale: 1, themeColor: "#0b2b50" }

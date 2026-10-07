@@ -1,17 +1,25 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter, Playfair_Display } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
-import { BUSINESS } from '@/lib/business'
+import { Footer } from '@/components/footer'
+import { Header } from '@/components/header'
+import { MobileCtaBar } from '@/components/mobile-cta-bar'
+import { BUSINESS, MAPS_URL, SITE_URL } from '@/lib/business'
 
-const localBusinessSchema = {
+const organizationSchema = {
   '@context': 'https://schema.org',
-  '@type': 'EducationalOrganization',
+  '@type': ['EducationalOrganization', 'LocalBusiness'],
+  '@id': `${SITE_URL}/#organization`,
   name: BUSINESS.name,
-  description: 'SHSAT tutoring and Digital SAT preparation for New York students, led by Tariq Ahmed.',
+  url: SITE_URL,
+  logo: `${SITE_URL}/apple-icon.png`,
+  image: `${SITE_URL}/ahmedprep-hero.png`,
+  description: 'SHSAT and Digital SAT preparation in Astoria, Queens for students across New York City, led by Tariq Ahmed.',
   telephone: BUSINESS.phoneE164,
   email: BUSINESS.email,
-  founder: { '@type': 'Person', name: 'Tariq Ahmed' },
+  hasMap: MAPS_URL,
+  founder: { '@type': 'Person', name: 'Tariq Ahmed', jobTitle: 'Founder & Lead Instructor' },
   address: {
     '@type': 'PostalAddress',
     streetAddress: BUSINESS.address.street,
@@ -20,20 +28,41 @@ const localBusinessSchema = {
     postalCode: BUSINESS.address.postalCode,
     addressCountry: BUSINESS.address.country,
   },
-  areaServed: 'New York City',
+  areaServed: [
+    { '@type': 'Place', name: 'Astoria, Queens' },
+    { '@type': 'Place', name: 'Queens, NY' },
+    { '@type': 'City', name: 'New York City' },
+  ],
+  knowsAbout: ['SHSAT preparation', 'Digital SAT preparation', 'Test preparation'],
 }
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
+const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-playfair' })
 
 export const metadata: Metadata = {
-  title: 'AhmedPrep | SHSAT & Digital SAT Prep in NYC',
-  description: 'Specialized SHSAT tutoring and Digital SAT preparation for ambitious New York students, led by Tariq Ahmed.',
-  keywords: ['SHSAT tutoring NYC', 'SHSAT prep NYC', 'SHSAT tutor', 'Digital SAT tutoring NYC', 'SAT prep NYC', 'Digital SAT tutor NYC', 'NYC test prep'],
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: 'SHSAT & Digital SAT Prep in Astoria, Queens | AhmedPrep',
+    template: '%s | AhmedPrep',
+  },
+  description:
+    'Personalized SHSAT and Digital SAT preparation in Astoria, Queens for students across NYC. Book a free diagnostic with AhmedPrep.',
+  keywords: [
+    'SHSAT prep Queens',
+    'SHSAT tutoring Astoria',
+    'SHSAT prep NYC',
+    'Digital SAT prep Queens',
+    'SAT tutoring Astoria',
+    'Digital SAT prep NYC',
+    'test prep Astoria Queens',
+  ],
   openGraph: {
-    title: 'AhmedPrep | SHSAT & Digital SAT Prep in NYC',
-    description: 'Specialized preparation for ambitious New York students.',
+    title: 'SHSAT & Digital SAT Prep in Astoria, Queens | AhmedPrep',
+    description: 'Personalized test preparation in Astoria, Queens. Book a free diagnostic.',
     type: 'website',
+    siteName: 'AhmedPrep',
+    locale: 'en_US',
+    images: [{ url: '/ahmedprep-hero.png', width: 1376, height: 768, alt: 'Students studying with an instructor at AhmedPrep' }],
   },
   other: {
     'business:contact_data:street_address': BUSINESS.address.street,
@@ -46,21 +75,18 @@ export const metadata: Metadata = {
   generator: 'v0.app',
   icons: {
     icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
+      { url: '/icon-light-32x32.png', media: '(prefers-color-scheme: light)' },
+      { url: '/icon-dark-32x32.png', media: '(prefers-color-scheme: dark)' },
+      { url: '/icon.svg', type: 'image/svg+xml' },
     ],
     apple: '/apple-icon.png',
   },
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#08264a',
 }
 
 export default function RootLayout({
@@ -69,13 +95,19 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="bg-background">
       <body className={`${inter.variable} ${playfair.variable} font-sans antialiased`}>
+        <a href="#main" className="skip-link">
+          Skip to content
+        </a>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
         />
-        {children}
+        <Header />
+        <main id="main">{children}</main>
+        <Footer />
+        <MobileCtaBar />
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

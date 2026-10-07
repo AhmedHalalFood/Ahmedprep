@@ -26,7 +26,8 @@ function validate(data: FormData) {
   if (!data.grade.trim()) errors.grade = "Please enter the student's grade."
   if (!data.email.trim()) errors.email = "Please enter an email address."
   else if (!EMAIL_PATTERN.test(data.email.trim())) errors.email = "Please enter a valid email address."
-  if (data.phone.trim() && data.phone.replace(/\D/g, "").length < 10) errors.phone = "Please enter a 10-digit phone number."
+  if (!data.phone.trim()) errors.phone = "Please enter a phone number."
+  else if (data.phone.replace(/\D/g, "").length < 10) errors.phone = "Please enter a 10-digit phone number."
   if (!data.program) errors.program = "Please select a program."
   return errors
 }
@@ -162,7 +163,7 @@ export function Contact() {
               <Field label="Parent / Student Name" autoComplete="name" required {...fieldProps("name")} />
               <Field label="Student Grade" required placeholder="e.g. 7th grade" {...fieldProps("grade")} />
               <Field label="Email" type="email" autoComplete="email" required {...fieldProps("email")} />
-              <Field label="Phone" type="tel" autoComplete="tel" {...fieldProps("phone")} />
+              <Field label="Phone" type="tel" autoComplete="tel" required {...fieldProps("phone")} />
               <div>
                 <label htmlFor="contact-program" className="text-sm font-medium text-[#25364c]">
                   Program <span aria-hidden="true" className="text-[#b42318]">*</span>
