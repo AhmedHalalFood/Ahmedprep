@@ -3,7 +3,7 @@ export const SITE_URL = "https://ahmedprep.com"
 export const BUSINESS = {
   name: "AhmedPrep",
   phoneDisplay: "(347) 479-5020",
-  phoneHref: "tel:3474795020",
+  phoneHref: "tel:+13474795020",
   smsHref: "sms:+13474795020",
   phoneE164: "+1-347-479-5020",
   email: "Tariq@ahmedprep.com",
@@ -20,6 +20,9 @@ export const ADDRESS_LINE_1 = BUSINESS.address.street
 export const ADDRESS_LINE_2 = `${BUSINESS.address.city}, ${BUSINESS.address.region} ${BUSINESS.address.postalCode}`
 export const ADDRESS_FULL = `${ADDRESS_LINE_1} ${ADDRESS_LINE_2}`
 export const MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`AhmedPrep ${ADDRESS_FULL}`)}`
+export const DIRECTIONS_URL = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+  `${ADDRESS_LINE_1}, ${ADDRESS_LINE_2}`,
+)}`
 export const MAPS_EMBED_URL = `https://www.google.com/maps?q=${encodeURIComponent(ADDRESS_FULL)}&output=embed`
 
 export const STATS = [

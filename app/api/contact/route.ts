@@ -65,7 +65,7 @@ export async function POST(request: Request) {
     !data.grade ||
     !EMAIL_PATTERN.test(data.email) ||
     !PROGRAMS.has(data.program) ||
-    (data.phone && phoneDigits.length < 10)
+    phoneDigits.length < 10
   ) {
     return fail(400, "Please complete all required fields.")
   }
@@ -87,7 +87,7 @@ export async function POST(request: Request) {
     ["Parent / Student Name", data.name],
     ["Student Grade", data.grade],
     ["Email", data.email],
-    ["Phone", data.phone || "Not provided"],
+    ["Phone", data.phone],
     ["Program", data.program],
     ["Current score or starting level", data.level || "Not provided"],
     ["Target score or goal", data.goal || "Not provided"],

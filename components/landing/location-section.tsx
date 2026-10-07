@@ -1,7 +1,7 @@
 import { MapPin } from "lucide-react"
 import { CallTextLinks } from "@/components/call-text-links"
 import { Section } from "@/components/landing/primitives"
-import { ADDRESS_FULL, ADDRESS_LINE_1, ADDRESS_LINE_2, BUSINESS, MAPS_EMBED_URL, MAPS_URL } from "@/lib/business"
+import { ADDRESS_FULL, ADDRESS_LINE_1, ADDRESS_LINE_2, BUSINESS, DIRECTIONS_URL, MAPS_EMBED_URL } from "@/lib/business"
 
 export function LocationSection({ location }: { location: string }) {
   return (
@@ -22,10 +22,11 @@ export function LocationSection({ location }: { location: string }) {
           </p>
           <div className="flex flex-wrap items-center gap-4">
             <a
-              href={MAPS_URL}
+              href={DIRECTIONS_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-h-12 items-center gap-2 bg-navy px-5 text-xs font-extrabold uppercase tracking-wider text-white transition-colors hover:bg-brand"
+              aria-label={`Get directions to ${ADDRESS_LINE_1}, ${ADDRESS_LINE_2} (opens Google Maps)`}
+              className="button button-gold min-h-12 uppercase"
             >
               <MapPin size={16} aria-hidden="true" />
               Get directions
