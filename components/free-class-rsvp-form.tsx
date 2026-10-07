@@ -20,6 +20,9 @@ type RsvpData = {
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
+const CONSENT_TEXT =
+  "I agree that AhmedPrep may use the contact information above to send information directly related to this class registration, including the Zoom access information and class reminders, by email, phone, or text. This is not a marketing subscription. Message and data rates may apply."
+
 function validate(d: RsvpData) {
   const errors: Partial<Record<keyof RsvpData, string>> = {}
   if (!d.studentName.trim()) errors.studentName = "Please enter the student's name."
@@ -129,9 +132,7 @@ export function FreeClassRsvpForm({ location }: { location: string }) {
             className="mt-1 h-4 w-4 shrink-0 accent-[var(--blue)]"
           />
           <span>
-            I agree that AhmedPrep may use the contact information above to send information directly related to this class
-            registration, including the Zoom access information and class reminders, by email, phone, or text. This is not a marketing
-            subscription. Message and data rates may apply.
+            {CONSENT_TEXT}
             <span aria-hidden="true" className="text-error"> *</span>
             <span className="sr-only"> (required)</span>
           </span>
