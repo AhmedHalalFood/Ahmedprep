@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
 import { MainNav } from "@/components/main-nav"
+import { ShsatIntensiveBar } from "@/components/shsat-intensive-bar"
 import { TopContactBar } from "@/components/top-contact-bar"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
@@ -8,6 +9,7 @@ import { EVENTS } from "@/lib/analytics"
 export function Header() {
   return (
     <header className="site-header">
+      <ShsatIntensiveBar />
       <TopContactBar />
       <div className="topbar container">
         <Link href="/" className="brand" aria-label="AhmedPrep home">

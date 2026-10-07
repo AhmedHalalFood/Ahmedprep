@@ -7,6 +7,7 @@ import { DiagnosticSection } from "@/components/landing/diagnostic-section"
 import { FreeClassPromo } from "@/components/landing/free-class-promo"
 import { GoogleReviews } from "@/components/landing/google-reviews"
 import { ResultsSection } from "@/components/landing/results-section"
+import { ShsatIntensive } from "@/components/landing/shsat-intensive"
 import { SuccessStories } from "@/components/landing/success-stories"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
@@ -95,6 +96,8 @@ export default function Home() {
           </p>
         </div>
       </section>
+
+      <ShsatIntensive />
 
       <section id="programs" className="section programs-section" aria-labelledby="programs-title">
         <div className="container">
