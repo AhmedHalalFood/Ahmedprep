@@ -26,7 +26,7 @@ export const STATS = [
   { value: "2,500+", label: "Students Mentored" },
   { value: "96%", label: "Admission Rate" },
   { value: "150+ Points", label: "Average Improvement" },
-  { value: "12+ Years", label: "of Excellence" },
+  { value: "12+ Years", label: "of Teaching & Test Prep" },
 ] as const
 
 /** Edit this text to add methodology or supporting details for the statistics above. */

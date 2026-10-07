@@ -35,7 +35,8 @@ function validate(d: DiagnosticData) {
   if (!d.parentEmail.trim()) errors.parentEmail = "Please enter an email address."
   else if (!EMAIL_PATTERN.test(d.parentEmail.trim())) errors.parentEmail = "Please enter a valid email address."
   if (!d.program) errors.program = "Please choose SHSAT or Digital SAT."
-  if (d.preferredDate) {
+  if (!d.preferredDate) errors.preferredDate = "Please choose a preferred date."
+  else {
     const today = new Date().toLocaleDateString("en-CA")
     if (d.preferredDate < today) errors.preferredDate = "Please choose a future date."
   }
@@ -109,9 +110,9 @@ export function DiagnosticForm({ defaultProgram = "", location }: { defaultProgr
         <TextField label="Student Name" autoComplete="off" required {...field("studentName")} />
         <SelectField label="Student Grade" required placeholder="Select grade" options={GRADES} {...field("studentGrade")} />
         <TextField label="Parent/Guardian Name" autoComplete="name" required {...field("parentName")} />
-        <TextField label="Parent Phone Number" type="tel" inputMode="tel" autoComplete="tel" required placeholder="(347) 555-0123" {...field("parentPhone")} />
+        <TextField label="Parent Phone Number" type="tel" inputMode="tel" autoComplete="tel" required placeholder="Your phone number" {...field("parentPhone")} />
         <TextField label="Parent Email" type="email" inputMode="email" autoComplete="email" required {...field("parentEmail")} />
-        <TextField label="Preferred Date" type="date" hint="We'll confirm the exact time with you." {...field("preferredDate")} />
+        <TextField label="Preferred Date" type="date" required hint="We'll confirm the exact time with you." {...field("preferredDate")} />
         <TextField label="Current score, if known" placeholder={data.program === "Digital SAT" ? "e.g. 1180 PSAT" : "e.g. school practice test"} {...field("currentScore")} />
         <TextField
           label={targetLabel}

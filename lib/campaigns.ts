@@ -20,7 +20,7 @@ export const CAMPAIGNS: Campaign[] = [
     enabled: true,
     eyebrow: "Seasonal program",
     title: "SHSAT Final Countdown",
-    body: "Final preparation, practice testing, and targeted review for the upcoming SHSAT.",
+    body: "November SHSAT preparation is underway. Get a diagnostic assessment and targeted final preparation before test day.",
     ctaLabel: "Reserve Your Diagnostic",
     href: "/shsat#diagnostic",
     program: "SHSAT",

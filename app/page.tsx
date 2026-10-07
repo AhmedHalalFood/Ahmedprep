@@ -33,7 +33,7 @@ const programs = [
     title: "Digital SAT Prep",
     kicker: "Adaptive test preparation",
     body: "Improve your score through targeted practice, adaptive testing strategies, and personalized feedback.",
-    points: ["Reading & Writing and Math", "Desmos and adaptive strategy", "Practice testing and score analysis"],
+    points: ["Reading & Writing and Math", "Desmos and digital test strategy", "Practice testing and score analysis"],
     cta: "Free SAT Diagnostic",
     href: "/digital-sat",
     event: EVENTS.digitalSatCtaClick,

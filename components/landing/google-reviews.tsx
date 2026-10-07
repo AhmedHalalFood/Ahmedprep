@@ -12,8 +12,44 @@ function Stars({ rating }: { rating: number }) {
   )
 }
 
+function ReviewLinks({ readMoreUrl, leaveReviewUrl }: { readMoreUrl: string; leaveReviewUrl: string }) {
+  return (
+    <div className="flex flex-wrap gap-3">
+      <a href={readMoreUrl} target="_blank" rel="noopener noreferrer" className="button button-gold">
+        Read more reviews on Google <ArrowUpRight size={16} aria-hidden="true" />
+      </a>
+      <a
+        href={leaveReviewUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex min-h-12 items-center gap-2 border border-navy/25 px-5 text-xs font-extrabold uppercase tracking-wider text-navy transition-colors hover:bg-navy/5"
+      >
+        Leave a review <ArrowUpRight size={16} aria-hidden="true" />
+      </a>
+    </div>
+  )
+}
+
 export function GoogleReviews() {
   const { rating, reviewCount, readMoreUrl, leaveReviewUrl } = GOOGLE_REVIEWS_CONFIG
+
+  if (GOOGLE_REVIEWS.length === 0) {
+    return (
+      <section id="reviews" aria-labelledby="reviews-heading" className="scroll-mt-4 border-y border-line bg-warm py-8">
+        <div className="container flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-col gap-1">
+            <p className="eyebrow blue">Google reviews</p>
+            <h2 id="reviews-heading" className="text-xl font-extrabold text-navy text-balance">
+              What AhmedPrep families say
+            </h2>
+            <p className="text-sm leading-relaxed text-subtle">Read parent and student reviews, or share your own experience.</p>
+          </div>
+          <ReviewLinks readMoreUrl={readMoreUrl} leaveReviewUrl={leaveReviewUrl} />
+        </div>
+      </section>
+    )
+  }
+
   return (
     <Section id="reviews" tone="warm" eyebrow="Google reviews" title="What AhmedPrep families say">
       {rating !== null && (

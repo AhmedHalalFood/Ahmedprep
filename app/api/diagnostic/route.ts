@@ -27,7 +27,7 @@ export async function POST(request: Request) {
     !hasPhoneDigits(data.parentPhone) ||
     !EMAIL_PATTERN.test(data.parentEmail) ||
     !PROGRAMS.has(data.program) ||
-    (data.preferredDate && !/^\d{4}-\d{2}-\d{2}$/.test(data.preferredDate))
+    !/^\d{4}-\d{2}-\d{2}$/.test(data.preferredDate)
   ) {
     return fail(400, "Please complete all required fields.")
   }
@@ -35,8 +35,8 @@ export async function POST(request: Request) {
   return deliverLead({
     scope: "diagnostic",
     fromLocalPart: "diagnostics",
-    heading: `New free ${data.program} diagnostic request`,
-    subject: `Free diagnostic request: ${data.program} (${data.studentName})`,
+    heading: "New AhmedPrep Diagnostic Request",
+    subject: `New AhmedPrep Diagnostic Request: ${data.program} (${data.studentName})`,
     replyTo: data.parentEmail,
     rows: [
       ["Program", data.program],
@@ -45,7 +45,7 @@ export async function POST(request: Request) {
       ["Parent/Guardian Name", data.parentName],
       ["Parent Phone", data.parentPhone],
       ["Parent Email", data.parentEmail],
-      ["Preferred Date", data.preferredDate || "Not provided"],
+      ["Preferred Date", data.preferredDate],
       ["Current Score", data.currentScore || "Not provided"],
       ["Target School or SAT Score", data.target || "Not provided"],
       ["Additional Notes", data.notes || "Not provided"],
