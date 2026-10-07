@@ -12,12 +12,14 @@ import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
 import { STATS } from "@/lib/business"
 import { RESOURCES } from "@/lib/resources"
+import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 
 export const metadata: Metadata = {
   title: { absolute: "AhmedPrep | SHSAT & Digital SAT Prep in Astoria, Queens" },
   description:
     "AhmedPrep provides SHSAT and Digital SAT preparation in Astoria, Queens and online, with personalized instruction, diagnostic testing, timed practice, and free weekly SHSAT classes.",
-  alternates: { canonical: "https://www.ahmedprep.com/" },
+  alternates: { canonical: absoluteUrl("/") },
+  openGraph: { ...baseOpenGraph, url: absoluteUrl("/") },
 }
 
 const programs = [

@@ -4,7 +4,7 @@ import { RESOURCES } from "@/lib/resources"
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const pages: { path: string; priority: number }[] = [
-    { path: "", priority: 1 },
+    { path: "/", priority: 1 },
     { path: "/shsat", priority: 0.9 },
     { path: "/digital-sat", priority: 0.9 },
     { path: "/free-shsat-class", priority: 0.8 },

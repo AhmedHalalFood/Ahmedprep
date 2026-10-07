@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { absoluteUrl } from "@/lib/seo"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { ArrowUpRight } from "lucide-react"
@@ -20,8 +21,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: resource.metaTitle,
     description: resource.description,
-    alternates: { canonical: `/resources/${resource.slug}` },
-    openGraph: { title: resource.metaTitle, description: resource.description, type: "article", url: `/resources/${resource.slug}` },
+    alternates: { canonical: absoluteUrl(`/resources/${resource.slug}`) },
+    openGraph: { title: resource.metaTitle, description: resource.description, type: "article", url: absoluteUrl(`/resources/${resource.slug}`) },
   }
 }
 

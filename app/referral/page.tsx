@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 import { Check } from "lucide-react"
 import { Breadcrumbs } from "@/components/landing/primitives"
 import { ReferralForm } from "@/components/referral-form"
@@ -6,7 +7,8 @@ import { ReferralForm } from "@/components/referral-form"
 export const metadata: Metadata = {
   title: "Refer a Family to AhmedPrep",
   description: "Know a family preparing for the SHSAT or Digital SAT? Refer them to AhmedPrep in Astoria, Queens.",
-  alternates: { canonical: "/referral" },
+  alternates: { canonical: absoluteUrl("/referral") },
+  openGraph: { ...baseOpenGraph, url: absoluteUrl("/referral") },
 }
 
 const steps = ["Share the family's contact details below.", "We reach out to them personally and offer a free diagnostic.", "We'll let you know once they've connected with us."]

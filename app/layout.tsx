@@ -6,6 +6,7 @@ import { Footer } from '@/components/footer'
 import { Header } from '@/components/header'
 import { MobileCtaBar } from '@/components/mobile-cta-bar'
 import { BUSINESS, MAPS_URL, SITE_URL } from '@/lib/business'
+import { baseOpenGraph } from '@/lib/seo'
 
 const organizationSchema = {
   '@context': 'https://schema.org',
@@ -56,14 +57,7 @@ export const metadata: Metadata = {
     'Digital SAT prep NYC',
     'test prep Astoria Queens',
   ],
-  openGraph: {
-    title: 'SHSAT & Digital SAT Prep in Astoria, Queens | AhmedPrep',
-    description: 'Personalized test preparation in Astoria, Queens. Book a free diagnostic.',
-    type: 'website',
-    siteName: 'AhmedPrep',
-    locale: 'en_US',
-    images: [{ url: '/ahmedprep-hero.png', width: 1376, height: 768, alt: 'Students studying with an instructor at AhmedPrep' }],
-  },
+  openGraph: baseOpenGraph,
   other: {
     'business:contact_data:street_address': BUSINESS.address.street,
     'business:contact_data:locality': BUSINESS.address.city,

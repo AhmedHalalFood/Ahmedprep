@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { absoluteUrl } from "@/lib/seo"
 import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
 import { DiagnosticSection } from "@/components/landing/diagnostic-section"
@@ -15,11 +16,11 @@ export const metadata: Metadata = {
   title: { absolute: "SHSAT Prep in Queens, NY | AhmedPrep Astoria" },
   description:
     "SHSAT prep in Astoria, Queens with a free diagnostic, targeted Math and ELA instruction, full-length practice exams, and progress reports for parents.",
-  alternates: { canonical: "/shsat" },
+  alternates: { canonical: absoluteUrl("/shsat") },
   openGraph: {
     title: "SHSAT Prep in Queens, NY | AhmedPrep Astoria",
     description: "Free SHSAT diagnostic, personalized Math and ELA preparation, and practice exams in Astoria, Queens.",
-    url: "/shsat",
+    url: absoluteUrl("/shsat"),
   },
 }
 
