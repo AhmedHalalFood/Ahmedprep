@@ -1,4 +1,3 @@
-import Link from "next/link"
 import { ArrowUpRight, CalendarDays, Check, Clock, MessageSquare, Phone } from "lucide-react"
 import { INTENSIVE_PATH } from "@/lib/shsat-intensive"
 import { ReserveSeatDialog } from "@/components/landing/reserve-seat-dialog"
@@ -61,12 +60,14 @@ export function ShsatIntensive({ variant = "home" }: { variant?: "home" | "page"
               "The SHSAT is only weeks away. Ahmed Prep\u2019s Final Intensive gives students a focused, structured preparation plan before test day. Students strengthen Math and ELA, improve pacing, practice SHSAT-style questions, review mistakes, and develop the confidence and strategy needed for the exam."
             }
           </p>
-          <Link
+          <TrackedLink
             href={INTENSIVE_PATH}
+            event={EVENTS.shsatIntensiveClick}
+            eventProps={{ location: "home_intensive_section" }}
             className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-gold underline-offset-4 hover:underline lg:col-start-2"
           >
             Full details: 2026 SHSAT Final Intensive <ArrowUpRight size={15} aria-hidden="true" />
-          </Link>
+          </TrackedLink>
         </div>
         )}
 
