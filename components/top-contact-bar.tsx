@@ -1,4 +1,4 @@
-import { MessageSquare, Phone } from "lucide-react"
+import { ArrowRight, MessageSquare, Phone } from "lucide-react"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
 import { BUSINESS } from "@/lib/business"
@@ -6,6 +6,16 @@ import styles from "./top-contact-bar.module.css"
 
 export function TopContactBar() {
   return (
+    <>
+    <TrackedLink
+      href="/free-shsat-class"
+      event={EVENTS.freeShsatClassCtaClicked}
+      eventProps={{ location: "top_announcement" }}
+      className={styles.announce}
+    >
+      <span>Free Live SHSAT Class • Every Sunday 4–5 PM • RSVP Required</span>
+      <ArrowRight size={14} aria-hidden="true" />
+    </TrackedLink>
     <div className={`contact-strip ${styles.strip}`}>
       <div className={styles.inner}>
         <span className={styles.label}>SHSAT &amp; Digital SAT prep in Astoria, Queens</span>
@@ -33,5 +43,6 @@ export function TopContactBar() {
         </TrackedLink>
       </div>
     </div>
+    </>
   )
 }

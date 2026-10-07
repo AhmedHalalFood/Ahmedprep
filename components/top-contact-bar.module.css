@@ -67,6 +67,37 @@
   outline-offset: 2px;
 }
 
+.announce {
+  position: relative;
+  z-index: 11;
+  display: flex;
+  min-height: 36px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: var(--gold, #e2b84b);
+  color: var(--navy, #0b1d35);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1.35;
+  text-align: center;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.announce:hover span,
+.announce:focus-visible span {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.announce:focus-visible {
+  outline: 2px solid var(--navy, #0b1d35);
+  outline-offset: -4px;
+}
+
 @media (max-width: 640px) {
   .inner {
     justify-content: center;

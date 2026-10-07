@@ -13,6 +13,9 @@ export const EVENTS = {
   digitalSatCtaClick: "digital_sat_cta_click",
   diagnosticCtaClick: "diagnostic_cta_click",
   referralSubmitted: "referral_submitted",
+  freeShsatClassCtaClicked: "free_shsat_class_cta_clicked",
+  freeShsatClassRsvpStarted: "free_shsat_class_rsvp_started",
+  freeShsatClassRsvpSubmitted: "free_shsat_class_rsvp_submitted",
 } as const
 
 export type EventName = (typeof EVENTS)[keyof typeof EVENTS]

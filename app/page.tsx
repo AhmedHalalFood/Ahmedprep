@@ -4,6 +4,7 @@ import { ArrowUpRight, Check } from "lucide-react"
 import { CallTextLinks } from "@/components/call-text-links"
 import { CampaignBanner } from "@/components/landing/campaign-banner"
 import { DiagnosticSection } from "@/components/landing/diagnostic-section"
+import { FreeClassPromo } from "@/components/landing/free-class-promo"
 import { GoogleReviews } from "@/components/landing/google-reviews"
 import { ResultsSection } from "@/components/landing/results-section"
 import { SuccessStories } from "@/components/landing/success-stories"
@@ -134,6 +135,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <FreeClassPromo />
 
       <CampaignBanner />
 

@@ -52,6 +52,13 @@ export function screenSubmission(request: Request, body: Record<string, unknown>
   return null
 }
 
+type Confirmation = {
+  to: string
+  subject: string
+  heading: string
+  paragraphs: string[]
+}
+
 type LeadEmail = {
   scope: string
   fromLocalPart: string
@@ -59,9 +66,11 @@ type LeadEmail = {
   subject: string
   replyTo: string
   rows: [string, string][]
+  /** Optional courtesy email to the submitter, sent only after AhmedPrep's notification succeeds. */
+  confirmation?: Confirmation
 }
 
-export async function deliverLead({ scope, fromLocalPart, heading, subject, replyTo, rows }: LeadEmail) {
+export async function deliverLead({ scope, fromLocalPart, heading, subject, replyTo, rows, confirmation }: LeadEmail) {
   const apiKey = process.env.RESEND_API_KEY
   const domain = process.env.RESEND_EMAIL_DOMAIN
   if (!apiKey || !domain) {
@@ -112,5 +121,29 @@ ${allRows
   }
 
   console.log(`[${scope}] Delivered, Resend id:`, sent.id)
+
+  if (confirmation) {
+    // AhmedPrep already has the lead, so a failed courtesy email is logged rather than shown as a failed registration.
+    const { data: confirmed, error: confirmError } = await resend.emails.send(
+      {
+        from: `AhmedPrep <${fromLocalPart}@${domain}>`,
+        to: [confirmation.to],
+        replyTo: RECIPIENT,
+        subject: confirmation.subject,
+        text: [confirmation.heading, ...confirmation.paragraphs].join("\n\n"),
+        html: `<div style="font-family:Arial,sans-serif;color:#0b1d35;line-height:1.6;max-width:560px">
+<h2 style="margin:0 0 16px">${escapeHtml(confirmation.heading)}</h2>
+${confirmation.paragraphs.map((p) => `<p style="margin:0 0 14px;white-space:pre-wrap">${escapeHtml(p)}</p>`).join("\n")}
+</div>`,
+      },
+      { idempotencyKey: `${scope}-confirmation/${fingerprint}` },
+    )
+    if (confirmError || !confirmed?.id) {
+      console.error(`[${scope}] Confirmation email failed:`, confirmError?.name, confirmError?.message)
+    } else {
+      console.log(`[${scope}] Confirmation delivered, Resend id:`, confirmed.id)
+    }
+  }
+
   return NextResponse.json({ success: true })
 }
