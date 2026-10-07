@@ -10,6 +10,7 @@ import { ProgramHero } from "@/components/landing/program-hero"
 import { SuccessStories } from "@/components/landing/success-stories"
 import { EVENTS } from "@/lib/analytics"
 import { NOT_AFFILIATED_NOTE, SITE_URL } from "@/lib/business"
+import { INTENSIVE_PATH } from "@/lib/shsat-intensive"
 
 export const metadata: Metadata = {
   title: { absolute: "SHSAT Prep in Queens, NY | AhmedPrep Astoria" },
@@ -116,6 +117,20 @@ export default function ShsatPage() {
         ctaLabel="Reserve a Free SHSAT Diagnostic"
         ctaEvent={EVENTS.shsatCtaClick}
       />
+
+      <aside aria-label="2026 SHSAT Final Intensive" className="border-y-4 border-gold bg-navy text-white">
+        <div className="container flex flex-col gap-4 py-6 md:flex-row md:items-center md:justify-between md:gap-8">
+          <div className="flex flex-col gap-1">
+            <p className="eyebrow gold">Now enrolling</p>
+            <p className="text-lg font-extrabold leading-snug md:text-xl">
+              60 hours of live SHSAT prep · 20 classes · Oct. 12–Nov. 12, 2026 · $1,000
+            </p>
+          </div>
+          <Link href={INTENSIVE_PATH} className="button button-gold button-lg shrink-0 justify-center uppercase">
+            2026 SHSAT Final Intensive <ArrowUpRight size={16} aria-hidden="true" />
+          </Link>
+        </div>
+      </aside>
 
       <Section id="why" eyebrow="Why AhmedPrep" title="Focused SHSAT preparation in Astoria">
         <div className="grid gap-px border border-line bg-line md:grid-cols-2">

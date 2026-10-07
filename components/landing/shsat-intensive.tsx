@@ -1,4 +1,6 @@
-import { CalendarDays, Check, Clock, MessageSquare, Phone } from "lucide-react"
+import Link from "next/link"
+import { ArrowUpRight, CalendarDays, Check, Clock, MessageSquare, Phone } from "lucide-react"
+import { INTENSIVE_PATH } from "@/lib/shsat-intensive"
 import { ReserveSeatDialog } from "@/components/landing/reserve-seat-dialog"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
@@ -26,14 +28,17 @@ const benefits = [
   "Final test-day strategy and preparation",
 ]
 
-export function ShsatIntensive() {
+export function ShsatIntensive({ variant = "home" }: { variant?: "home" | "page" }) {
+  const isHome = variant === "home"
   return (
     <section
       id="shsat-intensive"
-      aria-labelledby="shsat-intensive-title"
+      aria-labelledby={isHome ? "shsat-intensive-title" : undefined}
+      aria-label={isHome ? undefined : "Program details"}
       className="scroll-mt-4 border-t-4 border-gold bg-navy py-12 text-white md:py-20"
     >
       <div className="container">
+        {isHome && (
         <div className="grid gap-5 md:gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
           <div>
             <p className="eyebrow gold">Now enrolling · SHSAT November 2026</p>
@@ -56,9 +61,16 @@ export function ShsatIntensive() {
               "The SHSAT is only weeks away. Ahmed Prep\u2019s Final Intensive gives students a focused, structured preparation plan before test day. Students strengthen Math and ELA, improve pacing, practice SHSAT-style questions, review mistakes, and develop the confidence and strategy needed for the exam."
             }
           </p>
+          <Link
+            href={INTENSIVE_PATH}
+            className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-gold underline-offset-4 hover:underline lg:col-start-2"
+          >
+            Full details: 2026 SHSAT Final Intensive <ArrowUpRight size={15} aria-hidden="true" />
+          </Link>
         </div>
+        )}
 
-        <dl className="mt-8 md:mt-12 grid grid-cols-2 border border-white/20 lg:grid-cols-4" aria-label="Program at a glance">
+        <dl className={`${isHome ? "mt-8 md:mt-12" : ""} grid grid-cols-2 border border-white/20 lg:grid-cols-4`} aria-label="Program at a glance">
           {stats.map((stat, i) => (
             <div
               key={stat.label}

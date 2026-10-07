@@ -1,11 +1,13 @@
 import type { MetadataRoute } from "next"
 import { SITE_URL } from "@/lib/business"
 import { RESOURCES } from "@/lib/resources"
+import { INTENSIVE_PATH } from "@/lib/shsat-intensive"
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const pages: { path: string; priority: number }[] = [
     { path: "/", priority: 1 },
     { path: "/shsat", priority: 0.9 },
+    { path: INTENSIVE_PATH, priority: 0.9 },
     { path: "/digital-sat", priority: 0.9 },
     { path: "/free-shsat-class", priority: 0.8 },
     { path: "/free-diagnostic", priority: 0.8 },

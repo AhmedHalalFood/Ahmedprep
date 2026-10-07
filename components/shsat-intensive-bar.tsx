@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
+import { INTENSIVE_PATH } from "@/lib/shsat-intensive"
 
 export function ShsatIntensiveBar() {
   return (
@@ -16,12 +17,12 @@ export function ShsatIntensiveBar() {
           Only <span className="text-gold">$1,000</span>
         </p>
         <TrackedLink
-          href="/#shsat-intensive"
+          href={INTENSIVE_PATH}
           event={EVENTS.shsatCtaClick}
           eventProps={{ location: "shsat_intensive_bar" }}
           className="button button-gold shrink-0 whitespace-nowrap uppercase"
         >
-          View SHSAT Intensive <ArrowRight size={15} aria-hidden="true" />
+          2026 SHSAT Final Intensive <ArrowRight size={15} aria-hidden="true" />
         </TrackedLink>
       </div>
     </div>

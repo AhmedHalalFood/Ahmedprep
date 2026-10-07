@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { ArrowUpRight, Menu } from "lucide-react"
-import { NAV_LINKS } from "@/components/main-nav"
+import { NAV_LINKS, isNavActive } from "@/components/main-nav"
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { trackEvent, EVENTS } from "@/lib/analytics"
 
@@ -23,7 +23,7 @@ export function MobileNav() {
         </div>
         <nav aria-label="Mobile navigation" className="flex flex-col px-6 py-2">
           {NAV_LINKS.map((link) => {
-            const active = link.href === "/" ? pathname === "/" : pathname.startsWith(link.href)
+            const active = isNavActive(pathname, link.href)
             return (
               <SheetClose asChild key={link.href}>
                 <Link
