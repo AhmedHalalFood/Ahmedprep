@@ -1,117 +1,103 @@
 .strip {
   position: relative;
   z-index: 11;
-  background: var(--navy, #0b1d35);
-  color: #fff;
-  border-bottom: 1px solid rgba(226, 184, 75, 0.35);
+  background: #fff;
+  color: var(--navy, #0b1d35);
+  border-bottom: 1px solid rgba(11, 29, 53, 0.12);
 }
 
 .inner {
   display: flex;
-  width: min(1180px, calc(100% - 48px));
-  min-height: 42px;
+  width: min(1180px, calc(100% - 32px));
+  min-height: 34px;
   margin-inline: auto;
   align-items: center;
-  justify-content: flex-end;
-  gap: 20px;
-  font-size: 0.875rem;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 0.8125rem;
   line-height: 1.4;
 }
 
-.label {
-  color: rgba(255, 255, 255, 0.72);
-}
-
-.phone {
+.announce {
   display: inline-flex;
-  min-height: 42px;
+  min-height: 34px;
   align-items: center;
   gap: 8px;
-  color: #fff;
+  color: var(--navy, #0b1d35);
+  font-weight: 600;
   text-decoration: none;
 }
 
-.phone svg {
-  color: var(--gold, #e2b84b);
+.tag {
+  padding: 1px 6px;
+  border: 1px solid var(--gold, #e2b84b);
+  color: var(--navy, #0b1d35);
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sep {
+  margin-inline: 4px;
+  color: rgba(11, 29, 53, 0.35);
+}
+
+.announce:hover > span:nth-child(2),
+.announce:focus-visible > span:nth-child(2) {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.contact {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.phone,
+.text {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  gap: 6px;
+  color: var(--navy, #0b1d35);
+  text-decoration: none;
 }
 
 .phone strong {
-  color: var(--gold, #e2b84b);
   font-weight: 800;
   letter-spacing: 0.01em;
 }
 
-.phone:hover strong,
-.phone:focus-visible strong {
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
 .text {
-  display: inline-flex;
-  min-height: 42px;
-  align-items: center;
-  gap: 6px;
-  color: rgba(255, 255, 255, 0.85);
-  text-decoration: none;
+  color: rgba(11, 29, 53, 0.72);
+  font-weight: 600;
 }
 
+.phone:hover strong,
 .text:hover {
-  color: #fff;
   text-decoration: underline;
   text-underline-offset: 3px;
 }
 
-.phone:focus-visible {
+.announce:focus-visible,
+.phone:focus-visible,
+.text:focus-visible {
   outline: 2px solid var(--gold, #e2b84b);
   outline-offset: 2px;
-}
-
-.announce {
-  position: relative;
-  z-index: 11;
-  display: flex;
-  min-height: 36px;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 6px 16px;
-  background: var(--gold, #e2b84b);
-  color: var(--navy, #0b1d35);
-  font-size: 0.75rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  line-height: 1.35;
-  text-align: center;
-  text-transform: uppercase;
-  text-decoration: none;
-}
-
-.announce:hover span,
-.announce:focus-visible span {
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.announce:focus-visible {
-  outline: 2px solid var(--navy, #0b1d35);
-  outline-offset: -4px;
 }
 
 @media (max-width: 640px) {
   .inner {
     justify-content: center;
-    font-size: 1rem;
   }
 
-  .label,
-  .text {
+  .contact {
     display: none;
   }
 
-  .phone {
-    width: 100%;
-    min-height: 48px;
-    justify-content: center;
+  .announce {
+    font-size: 0.75rem;
   }
 }

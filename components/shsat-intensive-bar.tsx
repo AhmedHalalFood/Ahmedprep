@@ -1,7 +1,6 @@
 import { ArrowRight } from "lucide-react"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
-import { BUSINESS } from "@/lib/business"
 
 export function ShsatIntensiveBar() {
   return (
@@ -15,15 +14,6 @@ export function ShsatIntensiveBar() {
           Oct. 12–Nov. 12
           <span className="text-white/50" aria-hidden="true">{" • "}</span>
           Only <span className="text-gold">$1,000</span>
-          <span className="text-white/50" aria-hidden="true">{" • "}</span>
-          <TrackedLink
-            href={BUSINESS.phoneHref}
-            event={EVENTS.phoneClick}
-            eventProps={{ location: "shsat_intensive_bar" }}
-            className="whitespace-nowrap underline-offset-4 hover:text-gold hover:underline"
-          >
-            Call 347-479-5020
-          </TrackedLink>
         </p>
         <TrackedLink
           href="/#shsat-intensive"

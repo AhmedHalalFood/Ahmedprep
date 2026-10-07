@@ -1,4 +1,5 @@
 import { CalendarDays, Check, Clock, MessageSquare, Phone } from "lucide-react"
+import { ReserveSeatDialog } from "@/components/landing/reserve-seat-dialog"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
 import { BUSINESS } from "@/lib/business"
@@ -60,6 +61,20 @@ export function ShsatIntensive() {
             >
               <dt className="order-2 text-xs font-bold uppercase tracking-widest text-white/70">{stat.label}</dt>
               <dd className="order-1 m-0 text-4xl font-extrabold leading-none tracking-tight text-gold md:text-5xl">{stat.value}</dd>
+              {stat.value === "$1,000" && (
+                <>
+                  <dd className="order-3 m-0 text-sm font-semibold text-white/85">
+                    60 live hours <span className="text-white/40" aria-hidden="true">•</span> approximately $16.67 per hour
+                  </dd>
+                  <dd className="order-4 m-0 mt-2 border-t border-white/15 pt-3 text-xs leading-relaxed text-white/65">
+                    <span className="font-bold uppercase tracking-widest text-white/80">Payment options</span>
+                    <br />
+                    $1,000 paid in full
+                    <br />
+                    or 2 payments of $500
+                  </dd>
+                </>
+              )}
             </div>
           ))}
         </dl>
@@ -84,28 +99,9 @@ export function ShsatIntensive() {
           <div className="flex flex-col gap-6">
             <h3 className="text-3xl font-extrabold tracking-tight">What Students Receive</h3>
             <p className="max-w-sm leading-relaxed text-white/75">
-              Every part of the Intensive is built to maximize score gains in the final weeks before test day.
+              Every part of the Intensive is designed to maximize preparation, strengthen weak areas, and build test-day confidence in the
+              final weeks before the SHSAT.
             </p>
-            <div className="flex flex-wrap items-center gap-5">
-              <TrackedLink
-                href={BUSINESS.phoneHref}
-                event={EVENTS.phoneClick}
-                eventProps={{ location: "shsat_intensive" }}
-                className="button button-gold button-lg"
-              >
-                <Phone size={16} aria-hidden="true" />
-                Call to Enroll: 347-479-5020
-              </TrackedLink>
-              <TrackedLink
-                href={BUSINESS.smsHref}
-                event={EVENTS.textClick}
-                eventProps={{ location: "shsat_intensive" }}
-                className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-white/85 hover:text-gold"
-              >
-                <MessageSquare size={15} aria-hidden="true" />
-                Text us
-              </TrackedLink>
-            </div>
           </div>
           <ul className="m-0 grid list-none gap-x-8 border-t border-white/20 p-0 sm:grid-cols-2">
             {benefits.map((item) => (
@@ -115,6 +111,47 @@ export function ShsatIntensive() {
               </li>
             ))}
           </ul>
+        </div>
+
+        <div id="shsat-intensive-enroll" className="mt-14 grid border border-white/20 lg:grid-cols-[1.35fr_0.65fr]">
+          <div className="flex flex-col gap-6 p-6 md:p-10">
+            <p className="max-w-2xl text-pretty text-lg font-semibold leading-relaxed text-white md:text-xl">
+              For <span className="text-gold">$1,000</span>, students receive 60 hours of focused live SHSAT instruction over five weeks,
+              including Math, ELA, timed practice, strategy, error review, and pacing preparation.
+            </p>
+            <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+              <ReserveSeatDialog />
+              <TrackedLink
+                href={BUSINESS.phoneHref}
+                event={EVENTS.phoneClick}
+                eventProps={{ location: "shsat_intensive" }}
+                className="button button-lg justify-center border border-white/40 uppercase text-white hover:border-gold hover:text-gold"
+              >
+                <Phone size={16} aria-hidden="true" />
+                Call to Enroll: 347-479-5020
+              </TrackedLink>
+              <TrackedLink
+                href={BUSINESS.smsHref}
+                event={EVENTS.textClick}
+                eventProps={{ location: "shsat_intensive" }}
+                className="inline-flex min-h-12 items-center justify-center gap-2 px-2 text-sm font-bold uppercase tracking-wider text-white/85 hover:text-gold"
+              >
+                <MessageSquare size={15} aria-hidden="true" />
+                Text us
+              </TrackedLink>
+            </div>
+          </div>
+          <aside
+            aria-label="Key SHSAT dates"
+            className="flex flex-col justify-center gap-3 border-t border-white/20 bg-white/5 p-6 md:p-10 lg:border-l lg:border-t-0"
+          >
+            <p className="text-sm font-extrabold uppercase tracking-widest text-gold">SHSAT testing begins November 14</p>
+            <p className="font-semibold text-white">School-Day SHSAT: November 18, 2026</p>
+            <p className="flex items-center gap-2 text-sm text-white/75">
+              <span className="size-1.5 shrink-0 bg-gold" aria-hidden="true" />
+              Limited enrollment for the Final Intensive
+            </p>
+          </aside>
         </div>
       </div>
     </section>

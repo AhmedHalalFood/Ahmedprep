@@ -6,43 +6,44 @@ import styles from "./top-contact-bar.module.css"
 
 export function TopContactBar() {
   return (
-    <>
-    <TrackedLink
-      href="/free-shsat-class"
-      event={EVENTS.freeShsatClassCtaClicked}
-      eventProps={{ location: "top_announcement" }}
-      className={styles.announce}
-    >
-      <span>Free Live SHSAT Class • Every Sunday 4–5 PM • RSVP Required</span>
-      <ArrowRight size={14} aria-hidden="true" />
-    </TrackedLink>
     <div className={`contact-strip ${styles.strip}`}>
       <div className={styles.inner}>
-        <span className={styles.label}>SHSAT &amp; Digital SAT prep in Astoria, Queens</span>
         <TrackedLink
-          href={BUSINESS.phoneHref}
-          event={EVENTS.phoneClick}
-          eventProps={{ location: "top_bar" }}
-          className={styles.phone}
-          aria-label={`Call AhmedPrep at ${BUSINESS.phoneDisplay}`}
+          href="/free-shsat-class"
+          event={EVENTS.freeShsatClassCtaClicked}
+          eventProps={{ location: "top_announcement" }}
+          className={styles.announce}
         >
-          <Phone size={16} aria-hidden="true" />
+          <span className={styles.tag}>Free</span>
           <span>
-            Call AhmedPrep: <strong>{BUSINESS.phoneDisplay}</strong>
+            Live SHSAT Class <span className={styles.sep} aria-hidden="true">•</span> Sundays 4–5 PM{" "}
+            <span className={styles.sep} aria-hidden="true">•</span> RSVP
           </span>
+          <ArrowRight size={13} aria-hidden="true" />
         </TrackedLink>
-        <TrackedLink
-          href={BUSINESS.smsHref}
-          event={EVENTS.textClick}
-          eventProps={{ location: "top_bar" }}
-          className={styles.text}
-          aria-label={`Text AhmedPrep at ${BUSINESS.phoneDisplay}`}
-        >
-          <MessageSquare size={15} aria-hidden="true" />
-          Text us
-        </TrackedLink>
+        <div className={styles.contact}>
+          <TrackedLink
+            href={BUSINESS.phoneHref}
+            event={EVENTS.phoneClick}
+            eventProps={{ location: "top_bar" }}
+            className={styles.phone}
+            aria-label={`Call AhmedPrep at ${BUSINESS.phoneDisplay}`}
+          >
+            <Phone size={14} aria-hidden="true" />
+            <strong>{BUSINESS.phoneDisplay}</strong>
+          </TrackedLink>
+          <TrackedLink
+            href={BUSINESS.smsHref}
+            event={EVENTS.textClick}
+            eventProps={{ location: "top_bar" }}
+            className={styles.text}
+            aria-label={`Text AhmedPrep at ${BUSINESS.phoneDisplay}`}
+          >
+            <MessageSquare size={13} aria-hidden="true" />
+            Text us
+          </TrackedLink>
+        </div>
       </div>
     </div>
-    </>
   )
 }
