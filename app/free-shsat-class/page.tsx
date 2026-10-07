@@ -11,7 +11,8 @@ import { EVENTS } from "@/lib/analytics"
 import { BUSINESS, SITE_URL } from "@/lib/business"
 import { FREE_CLASS, getNextClass } from "@/lib/free-class"
 
-export const revalidate = 1800
+// Rendered per request so the "next class" date rolls over exactly when Sunday's class ends.
+export const dynamic = "force-dynamic"
 
 const description =
   "Join a free, live online SHSAT class every Sunday from 4–5 PM, taught by Tariq Ahmed of AhmedPrep in Astoria, Queens. Instruction, guided practice, and strategy for NYC students. RSVP required."
@@ -159,7 +160,7 @@ export default function FreeShsatClassPage() {
             </h2>
             <p className="text-pretty leading-relaxed text-subtle">
               Seats are limited. Register below for the upcoming class on <strong className="text-navy">{nextClass.shortLabel}</strong>,{" "}
-              {FREE_CLASS.timeLabel}. The Zoom details will be sent privately to the email you provide.
+              {FREE_CLASS.timeLabel} Eastern Time. The Zoom access information will be sent privately to the email you provide.
             </p>
             <div className="border-t border-line pt-5">
               <p className="text-sm font-semibold text-ink">Questions before registering?</p>

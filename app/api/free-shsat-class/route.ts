@@ -1,8 +1,9 @@
-import { BUSINESS } from "@/lib/business"
-import { FREE_CLASS, FREE_CLASS_GRADES, getNextClass } from "@/lib/free-class"
+import { ADDRESS_LINE_1, ADDRESS_LINE_2, BUSINESS } from "@/lib/business"
+import { FREE_CLASS, FREE_CLASS_GRADES, getNextClass, getZoomAccess } from "@/lib/free-class"
 import { EMAIL_PATTERN, clean, deliverLead, fail, hasPhoneDigits, readBody, screenSubmission } from "@/lib/lead-delivery"
 
 const GRADES = new Set(FREE_CLASS_GRADES)
+const HEADING = `Your seat is reserved for AhmedPrep's ${FREE_CLASS.name}`
 
 export async function POST(request: Request) {
   const body = await readBody(request)
@@ -32,7 +33,19 @@ export async function POST(request: Request) {
   }
 
   const nextClass = getNextClass()
-  const classTime = `${nextClass.label}, ${FREE_CLASS.timeLabel} (New York time)`
+  const zoom = getZoomAccess()
+  if (!zoom) console.warn("[free-shsat-class] FREE_CLASS_ZOOM_URL is not set; confirmation sent without Zoom access details")
+
+  const zoomParagraph = zoom
+    ? [
+        "Zoom access information",
+        `Join link: ${zoom.url}`,
+        zoom.meetingId && `Meeting ID: ${zoom.meetingId}`,
+        zoom.passcode && `Passcode: ${zoom.passcode}`,
+      ]
+        .filter(Boolean)
+        .join("\n")
+    : "Zoom access information\nAhmedPrep will email the Zoom join link to this address before class begins."
 
   return deliverLead({
     scope: "free-shsat-class",
@@ -41,29 +54,36 @@ export async function POST(request: Request) {
     subject: `Free SHSAT Class RSVP: ${data.studentName} (${nextClass.shortLabel})`,
     replyTo: data.parentEmail,
     rows: [
-      ["Class", `${FREE_CLASS.name} (live via Zoom)`],
-      ["Upcoming class", classTime],
+      ["Class", `${FREE_CLASS.name}, live online via Zoom`],
+      ["Class date", nextClass.label],
+      ["Class time", `${FREE_CLASS.timeLabel} Eastern Time`],
       ["Student Name", data.studentName],
       ["Student Grade", data.studentGrade],
       ["Parent/Guardian Name", data.parentName],
       ["Parent Email", data.parentEmail],
       ["Parent Phone", data.parentPhone],
-      ["Consent", "Agreed to receive information about this registered class"],
-      ["Action needed", "Send the Zoom meeting details privately to the parent email above."],
+      ["Class communications", "Agreed to receive registration information, Zoom access, and reminders for this class"],
+      [
+        "Zoom access",
+        zoom
+          ? "Sent automatically in the parent's confirmation email."
+          : "NOT SENT. FREE_CLASS_ZOOM_URL is not configured. Please email the Zoom link to the parent.",
+      ],
     ],
     confirmation: {
       to: data.parentEmail,
-      subject: `Your seat is reserved: ${FREE_CLASS.name}`,
-      heading: `${data.studentName}'s seat is reserved`,
+      subject: HEADING,
+      heading: HEADING,
       paragraphs: [
         `Hi ${data.parentName},`,
-        `Thank you for registering ${data.studentName} for AhmedPrep's ${FREE_CLASS.name}. The seat is reserved for the upcoming class:`,
-        `${classTime}\nLive online via Zoom\nTaught by ${FREE_CLASS.instructor}, ${FREE_CLASS.instructorRole}`,
-        "The Zoom meeting details will be sent privately to this email address before the class. Please do not share the link outside your family.",
-        "The 60-minute class includes live instruction, guided practice, SHSAT strategies, and time for students to ask questions. Having a pencil and scratch paper ready is helpful.",
-        `Questions? Reply to this email, or call or text AhmedPrep at ${BUSINESS.phoneDisplay}.`,
-        "AhmedPrep\nSHSAT & Digital SAT Prep in Astoria, Queens",
+        `Thank you for registering ${data.studentName}. Here are the class details:`,
+        `Date: ${nextClass.label}\nTime: ${FREE_CLASS.timeLabel} Eastern Time\nFormat: Live Online via Zoom\nInstructor: ${FREE_CLASS.instructor}, ${FREE_CLASS.instructorRole}`,
+        zoomParagraph,
+        "This Zoom information is for your family only. Please do not share it publicly. Please have a pencil and scratch paper ready for practice questions.",
+        `AhmedPrep\n${ADDRESS_LINE_1}\n${ADDRESS_LINE_2}\nCall or text: ${BUSINESS.phoneDisplay}\nEmail: ${BUSINESS.email}`,
+        "Questions? Simply reply to this email.",
       ],
+      link: zoom ? { label: "Join the Zoom Class", href: zoom.url, afterParagraph: 3 } : undefined,
     },
   })
 }

@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { ArrowUpRight, CheckCircle2 } from "lucide-react"
 import { Honeypot, RequiredNote, SelectField, SubmitButton, TextField } from "@/components/forms/fields"
 import { useLeadForm } from "@/components/forms/use-lead-form"
@@ -28,19 +29,23 @@ function validate(d: RsvpData) {
   else if (!EMAIL_PATTERN.test(d.parentEmail.trim())) errors.parentEmail = "Please enter a valid email address."
   if (!d.parentPhone.trim()) errors.parentPhone = "Please enter a phone number."
   else if (d.parentPhone.replace(/\D/g, "").length < 10) errors.parentPhone = "Please enter a 10-digit phone number."
-  if (d.consent !== "yes") errors.consent = "Please agree so we can send the class details."
+  if (d.consent !== "yes") errors.consent = "Please agree so we can send your Zoom access information and class reminders."
   return errors
 }
 
 const initial: RsvpData = { studentName: "", studentGrade: "", parentName: "", parentEmail: "", parentPhone: "", consent: "" }
 
 export function FreeClassRsvpForm({ location }: { location: string }) {
+  const [submittedEmail, setSubmittedEmail] = useState("")
   const { data, errors, status, update, submit, formRef, honeypotRef } = useLeadForm({
     endpoint: "/api/free-shsat-class",
     initial,
     validate,
     onStart: () => trackEvent(EVENTS.freeShsatClassRsvpStarted, { location }),
-    onSuccess: (submitted) => trackEvent(EVENTS.freeShsatClassRsvpSubmitted, { location, grade: submitted.studentGrade }),
+    onSuccess: (submitted) => {
+      setSubmittedEmail(submitted.parentEmail.trim())
+      trackEvent(EVENTS.freeShsatClassRsvpSubmitted, { location, grade: submitted.studentGrade })
+    },
   })
 
   const field = (key: keyof RsvpData) => ({
@@ -57,12 +62,13 @@ export function FreeClassRsvpForm({ location }: { location: string }) {
         <CheckCircle2 size={32} aria-hidden="true" className="text-brand" />
         <div>
           <p className="eyebrow blue">Seat reserved</p>
-          <p className="mt-3 text-xl font-extrabold leading-snug text-navy">
-            Your student&apos;s seat has been reserved.
+          <p className="mt-3 text-2xl font-extrabold leading-snug text-navy">Your seat is reserved!</p>
+          <p className="mt-3 leading-relaxed text-ink">
+            We&apos;ve sent the class information to <strong className="break-all text-navy">{submittedEmail}</strong>. Check your inbox
+            for your Zoom access information.
           </p>
-          <p className="mt-3 leading-relaxed text-subtle">
-            The Zoom information will be sent privately to the email address you provided. If you don&apos;t see it, please check your spam
-            folder or contact us at{" "}
+          <p className="mt-3 text-sm leading-relaxed text-subtle">
+            Don&apos;t see it? Please check your spam folder, or call or text us at{" "}
             <a href={BUSINESS.phoneHref} className="font-semibold text-navy underline underline-offset-2">
               {BUSINESS.phoneDisplay}
             </a>
@@ -123,8 +129,9 @@ export function FreeClassRsvpForm({ location }: { location: string }) {
             className="mt-1 h-4 w-4 shrink-0 accent-[var(--blue)]"
           />
           <span>
-            I agree to receive emails, calls, or text messages from AhmedPrep about this registered class, including the Zoom details and
-            class reminders. Message and data rates may apply. I can opt out at any time.
+            I agree that AhmedPrep may use the contact information above to send information directly related to this class
+            registration, including the Zoom access information and class reminders, by email, phone, or text. This is not a marketing
+            subscription. Message and data rates may apply.
             <span aria-hidden="true" className="text-error"> *</span>
             <span className="sr-only"> (required)</span>
           </span>
@@ -150,7 +157,8 @@ export function FreeClassRsvpForm({ location }: { location: string }) {
         Reserve My Free Seat <ArrowUpRight size={17} aria-hidden="true" />
       </SubmitButton>
       <p className="text-xs leading-relaxed text-subtle">
-        Free, with no obligation. The Zoom link is never posted publicly. It is sent only to registered families.
+        <strong className="font-bold text-navy">No payment required.</strong> Free, with no obligation. The Zoom link is never posted
+        publicly. It is sent only to registered families.
       </p>
     </form>
   )

@@ -57,6 +57,29 @@ type Confirmation = {
   subject: string
   heading: string
   paragraphs: string[]
+  /** Optional button inserted after the paragraph at `afterParagraph`. Only https links are rendered. */
+  link?: { label: string; href: string; afterParagraph: number }
+}
+
+function confirmationBody({ heading, paragraphs, link }: Confirmation) {
+  const safeLink = link && /^https:\/\//i.test(link.href) ? link : undefined
+  const textParts = [heading, ...paragraphs]
+  const htmlParts = paragraphs.map((p) => `<p style="margin:0 0 14px;white-space:pre-wrap">${escapeHtml(p)}</p>`)
+  if (safeLink) {
+    textParts.splice(safeLink.afterParagraph + 2, 0, `${safeLink.label}: ${safeLink.href}`)
+    htmlParts.splice(
+      safeLink.afterParagraph + 1,
+      0,
+      `<p style="margin:0 0 18px"><a href="${escapeHtml(safeLink.href)}" style="display:inline-block;background:#f2b31a;color:#0b1d35;font-weight:bold;text-decoration:none;padding:12px 20px">${escapeHtml(safeLink.label)}</a></p>`,
+    )
+  }
+  return {
+    text: textParts.join("\n\n"),
+    html: `<div style="font-family:Arial,sans-serif;color:#0b1d35;line-height:1.6;max-width:560px">
+<h2 style="margin:0 0 16px">${escapeHtml(heading)}</h2>
+${htmlParts.join("\n")}
+</div>`,
+  }
 }
 
 type LeadEmail = {
@@ -130,11 +153,7 @@ ${allRows
         to: [confirmation.to],
         replyTo: RECIPIENT,
         subject: confirmation.subject,
-        text: [confirmation.heading, ...confirmation.paragraphs].join("\n\n"),
-        html: `<div style="font-family:Arial,sans-serif;color:#0b1d35;line-height:1.6;max-width:560px">
-<h2 style="margin:0 0 16px">${escapeHtml(confirmation.heading)}</h2>
-${confirmation.paragraphs.map((p) => `<p style="margin:0 0 14px;white-space:pre-wrap">${escapeHtml(p)}</p>`).join("\n")}
-</div>`,
+        ...confirmationBody(confirmation),
       },
       { idempotencyKey: `${scope}-confirmation/${fingerprint}` },
     )

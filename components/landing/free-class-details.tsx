@@ -15,7 +15,7 @@ export function FreeClassDetails({ nextClassLabel }: { nextClassLabel?: string }
         <p className="border-b border-line pb-5">
           <span className="block text-xs font-bold uppercase tracking-widest text-subtle">Next class</span>
           <span className="mt-1 block text-xl font-extrabold text-navy">{nextClassLabel}</span>
-          <span className="block text-sm text-subtle">{FREE_CLASS.timeLabel} (New York time)</span>
+          <span className="block text-sm text-subtle">{FREE_CLASS.timeLabel} Eastern Time</span>
         </p>
       )}
       <dl className="flex flex-col">
