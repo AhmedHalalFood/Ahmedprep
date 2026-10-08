@@ -75,10 +75,11 @@ h3 {
 
 .topbar {
   display: flex;
-  min-height: 92px;
+  min-height: 104px;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
+  padding-block: 14px;
 }
 
 .brand {
@@ -198,14 +199,16 @@ h3 {
   display: none;
 }
 
-.navy-nav {
-  background: var(--navy);
-  color: #fff;
+.site-nav-bar {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+  color: var(--navy);
 }
 
 .nav-inner {
   display: flex;
-  min-height: 48px;
+  min-height: 52px;
   align-items: center;
   justify-content: space-between;
   gap: 20px;
@@ -223,7 +226,7 @@ h3 {
 
 .nav-note {
   font-size: 0.7rem;
-  color: #b8c9da;
+  color: var(--muted);
 }
 
 .hero-section {
@@ -236,7 +239,7 @@ h3 {
 .hero-image {
   position: absolute;
   inset: 0;
-  background-image: linear-gradient(90deg, rgba(255, 255, 255, 0.97) 0%, rgba(255, 255, 255, 0.86) 30%, rgba(255, 255, 255, 0.08) 54%, rgba(255, 255, 255, 0) 100%), url('/ahmedprep-hero.png');
+  background-image: linear-gradient(90deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.82) 30%, rgba(255, 255, 255, 0.3) 46%, rgba(255, 255, 255, 0) 60%), url('/ahmedprep-hero.png');
   background-position: 70% center;
   background-size: cover;
 }
@@ -290,9 +293,64 @@ h3 {
 
 .hero-actions {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 25px;
-  margin-top: 28px;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.button-outline {
+  border-color: var(--navy);
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--navy);
+}
+
+.button-outline:hover {
+  background: var(--navy);
+  color: #fff;
+}
+
+.hero-contact {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  margin-top: 18px;
+  color: #475d73;
+  font-size: 0.85rem;
+}
+
+.hero-contact a {
+  display: inline-flex;
+  min-height: 32px;
+  align-items: center;
+  gap: 6px;
+  color: var(--navy);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: var(--gold);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.hero-contact a:hover {
+  color: var(--blue);
+}
+
+.hero-trust {
+  max-width: 520px;
+  margin-top: 22px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(8, 38, 74, 0.14);
+  color: var(--navy);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.hero-trust span {
+  color: var(--gold-deep, #9a7418);
 }
 
 .gold-action {
@@ -705,12 +763,12 @@ h3 {
 .nav-inner nav a {
   position: relative;
   display: inline-flex;
-  min-height: 48px;
+  min-height: 52px;
   align-items: center;
 }
 
 .nav-inner nav a.is-active {
-  color: var(--gold);
+  color: var(--navy);
 }
 
 .nav-inner nav a.is-active::after {
@@ -963,10 +1021,11 @@ a.program-card:hover h3 {
   }
 
   .topbar {
-    min-height: 64px;
+    min-height: 68px;
+    padding-block: 10px;
   }
 
-  .navy-nav {
+  .site-nav-bar {
     display: none;
   }
 
@@ -988,12 +1047,12 @@ a.program-card:hover h3 {
   }
 
   .hero-image {
-    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(255, 255, 255, 0.78) 55%, rgba(255, 255, 255, 0.35) 100%), url('/ahmedprep-hero.png');
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.74) 55%, rgba(255, 255, 255, 0.4) 100%), url('/ahmedprep-hero.png');
     background-position: 64% center;
   }
 
   .hero-panel {
-    padding: 56px 0 64px;
+    padding: 44px 0 52px;
   }
 
   .hero-panel h1 {
@@ -1005,9 +1064,9 @@ a.program-card:hover h3 {
   }
 
   .hero-actions {
-    align-items: flex-start;
+    align-items: stretch;
     flex-direction: column;
-    gap: 20px;
+    gap: 10px;
   }
 
   .hero-caption {
@@ -1173,6 +1232,8 @@ select {
   --color-brand-soft: var(--blue-soft);
   --color-gold: var(--gold);
   --color-gold-hover: #f0ca63;
+  --color-gold-deep: #9a7418;
+  --color-cream: #fcf8ee;
   --color-ink: var(--ink);
   --color-subtle: var(--muted);
   --color-line: var(--line);

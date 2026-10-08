@@ -43,7 +43,7 @@ export function Header() {
         </div>
         <MobileNav />
       </div>
-      <div className="navy-nav">
+      <div className="site-nav-bar">
         <div className="container nav-inner">
           <MainNav />
           <span className="nav-note">20-65 47th Street, Astoria</span>

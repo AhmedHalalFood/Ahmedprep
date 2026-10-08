@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { ArrowUpRight, Check } from "lucide-react"
-import { CallTextLinks } from "@/components/call-text-links"
+import { ArrowUpRight, Check, MessageSquare, Phone } from "lucide-react"
 import { CampaignBanner } from "@/components/landing/campaign-banner"
 import { DiagnosticSection } from "@/components/landing/diagnostic-section"
 import { FreeClassPromo } from "@/components/landing/free-class-promo"
@@ -10,6 +9,7 @@ import { ShsatIntensive } from "@/components/landing/shsat-intensive"
 import { SuccessStories } from "@/components/landing/success-stories"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
+import { BUSINESS } from "@/lib/business"
 import { RESOURCES } from "@/lib/resources"
 import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 
@@ -61,7 +61,7 @@ export default function Home() {
             SHSAT & Digital SAT Prep <em>in Astoria, Queens</em>
           </h1>
           <p className="hero-copy">
-            Personalized test preparation that helps NYC students build confidence, improve scores, and reach their academic goals.
+            Personalized preparation that helps NYC students build confidence, strengthen skills, and prepare for competitive exams.
           </p>
           <div className="hero-actions">
             <TrackedLink
@@ -72,8 +72,40 @@ export default function Home() {
             >
               Book a Free Diagnostic <ArrowUpRight size={17} aria-hidden="true" />
             </TrackedLink>
-            <CallTextLinks location="home_hero" />
+            <TrackedLink
+              href="/shsat"
+              event={EVENTS.shsatCtaClick}
+              eventProps={{ location: "home_hero_secondary" }}
+              className="button button-outline button-lg"
+            >
+              Explore SHSAT Prep
+            </TrackedLink>
           </div>
+          <div className="hero-contact">
+            <span>Questions?</span>
+            <TrackedLink
+              href={BUSINESS.phoneHref}
+              event={EVENTS.phoneClick}
+              eventProps={{ location: "home_hero" }}
+              aria-label={`Call AhmedPrep at ${BUSINESS.phoneDisplay}`}
+            >
+              <Phone size={14} aria-hidden="true" />
+              Call {BUSINESS.phoneDisplay}
+            </TrackedLink>
+            <TrackedLink
+              href={BUSINESS.smsHref}
+              event={EVENTS.textClick}
+              eventProps={{ location: "home_hero" }}
+              aria-label={`Text AhmedPrep at ${BUSINESS.phoneDisplay}`}
+            >
+              <MessageSquare size={14} aria-hidden="true" />
+              Text us
+            </TrackedLink>
+          </div>
+          <p className="hero-trust">
+            SHSAT <span aria-hidden="true">•</span> Digital SAT <span aria-hidden="true">•</span> Regents{" "}
+            <span aria-hidden="true">•</span> Academic Support
+          </p>
         </div>
       </section>
 
