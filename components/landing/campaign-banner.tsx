@@ -8,7 +8,7 @@ export function CampaignBanner() {
   if (!campaign) return null
   const event = campaign.program === "Digital SAT" ? EVENTS.digitalSatCtaClick : campaign.program === "SHSAT" ? EVENTS.shsatCtaClick : EVENTS.diagnosticCtaClick
   return (
-    <section aria-labelledby="campaign-title" className="border-y-4 border-gold bg-navy text-white">
+    <section aria-labelledby="campaign-title" className="border-y-4 border-gold bg-academic text-white">
       <div className="container flex flex-col gap-6 py-10 md:flex-row md:items-center md:justify-between">
         <div className="max-w-2xl">
           <p className="eyebrow gold">{campaign.eyebrow}</p>

@@ -2,15 +2,19 @@
 @import 'tw-animate-css';
 
 :root {
-  --navy: #08264a;
+  --navy: #0b2e52;
+  --academic: #244e73;
+  --slate: #315f82;
   --blue: #1769aa;
-  --blue-soft: #eaf3f9;
-  --gold: #e2b84b;
+  --blue-soft: #edf3f7;
+  --gold: #e8ba3f;
+  --gold-deep: #8f6c14;
   --ink: #132d4b;
-  --muted: #5f7185;
+  --muted: #556779;
   --line: #d8e0e7;
   --paper: #fff;
-  --warm: #f6f8fa;
+  --warm: #edf3f7;
+  --cream: #faf7ef;
   --background: #fff;
   --foreground: var(--ink);
   --radius: 0;
@@ -253,7 +257,7 @@ h3 {
 }
 
 .eyebrow {
-  color: #b08622;
+  color: var(--gold-deep);
   font-size: 0.68rem;
   font-weight: 800;
   letter-spacing: 0.18em;
@@ -532,8 +536,12 @@ h3 {
 
 .method-section {
   padding: 72px 0;
-  background: var(--navy);
-  color: #fff;
+  background: var(--blue-soft);
+  color: var(--navy);
+}
+
+.method-section .eyebrow.gold {
+  color: var(--gold-deep);
 }
 
 .method-section .container {
@@ -544,40 +552,40 @@ h3 {
 }
 
 .method-intro h2 {
-  color: #fff;
+  color: var(--navy);
 }
 
 .method-intro h2 span {
-  color: #a9c9e1;
+  color: var(--academic);
 }
 
 .method-intro > p:last-child {
   max-width: 390px;
   margin-top: 24px;
-  color: #b6c8da;
+  color: var(--muted);
   line-height: 1.7;
 }
 
 .method-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  border-top: 1px solid #c6d4df;
 }
 
 .method-card {
   display: flex;
   gap: 18px;
   padding: 27px 26px 27px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+  border-bottom: 1px solid #c6d4df;
 }
 
 .method-card:nth-child(even) {
   padding-left: 26px;
-  border-left: 1px solid rgba(255, 255, 255, 0.22);
+  border-left: 1px solid #c6d4df;
 }
 
 .method-number {
-  color: var(--gold);
+  color: var(--gold-deep);
   font-size: 0.73rem;
   font-weight: 800;
   letter-spacing: 0.1em;
@@ -589,7 +597,7 @@ h3 {
 
 .method-card p {
   margin-top: 8px;
-  color: #b6c8da;
+  color: #556779;
   font-size: 0.82rem;
   line-height: 1.6;
 }
@@ -1228,12 +1236,14 @@ select {
   --color-border: var(--line);
   --color-ring: var(--gold);
   --color-navy: var(--navy);
+  --color-academic: var(--academic);
+  --color-slate: var(--slate);
   --color-brand: var(--blue);
   --color-brand-soft: var(--blue-soft);
   --color-gold: var(--gold);
   --color-gold-hover: #f0ca63;
-  --color-gold-deep: #9a7418;
-  --color-cream: #fcf8ee;
+  --color-gold-deep: var(--gold-deep);
+  --color-cream: var(--cream);
   --color-ink: var(--ink);
   --color-subtle: var(--muted);
   --color-line: var(--line);

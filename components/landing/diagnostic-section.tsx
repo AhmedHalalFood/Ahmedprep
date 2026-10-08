@@ -24,7 +24,7 @@ export function DiagnosticSection({
   points?: string[]
 }) {
   return (
-    <section id="diagnostic" aria-labelledby={`${location}-diagnostic-title`} className="scroll-mt-4 bg-warm py-16 md:py-20">
+    <section id="diagnostic" aria-labelledby={`${location}-diagnostic-title`} className="scroll-mt-4 bg-cream py-16 md:py-20">
       <div className="container grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
         <div className="flex flex-col gap-6">
           <p className="eyebrow blue">Free diagnostic</p>

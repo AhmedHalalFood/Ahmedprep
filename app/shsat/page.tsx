@@ -119,7 +119,7 @@ export default function ShsatPage() {
         ctaEvent={EVENTS.shsatCtaClick}
       />
 
-      <aside aria-label="2026 SHSAT Final Intensive" className="border-y-4 border-gold bg-navy text-white">
+      <aside aria-label="2026 SHSAT Final Intensive" className="border-y-4 border-gold bg-academic text-white">
         <div className="container flex flex-col gap-4 py-6 md:flex-row md:items-center md:justify-between md:gap-8">
           <div className="flex flex-col gap-1">
             <p className="eyebrow gold">Now enrolling</p>
