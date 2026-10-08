@@ -6,7 +6,7 @@ import { INTENSIVE_PATH } from "@/lib/shsat-intensive"
 export function ShsatIntensiveBar() {
   return (
     <div
-      className="relative z-20 border-b border-gold/40 bg-cream text-navy"
+      className="relative z-20 border-b border-[var(--header-line)] bg-cream text-navy"
       role="region"
       aria-label="2026 SHSAT Final Intensive announcement"
     >

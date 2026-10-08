@@ -11,8 +11,10 @@
   --gold: #d9ac3a;
   --body: #42566a;
   --paper: #fff;
-  --header-bg: #fbfaf6;
-  --nav-bg: #f1f5f7;
+  --header-bg: #e9f0f4;
+  --nav-bg: #e3ebf1;
+  --header-strip-bg: #f3f6f8;
+  --header-line: #d4dfe7;
 
   /* Derived roles */
   --slate: var(--academic);
@@ -215,8 +217,8 @@ h3 {
 }
 
 .site-nav-bar {
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
+  border-top: 1px solid var(--header-line);
+  border-bottom: 1px solid var(--header-line);
   background: var(--nav-bg);
   color: var(--navy);
 }

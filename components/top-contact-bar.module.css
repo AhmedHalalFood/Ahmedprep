@@ -1,9 +1,9 @@
 .strip {
   position: relative;
   z-index: 11;
-  background: var(--mist);
-  color: var(--navy, #0b1d35);
-  border-bottom: 1px solid var(--line, #d8e0e7);
+  background: var(--header-strip-bg, #f3f6f8);
+  color: var(--navy, #173a5e);
+  border-bottom: 1px solid var(--header-line, #d4dfe7);
 }
 
 .inner {
