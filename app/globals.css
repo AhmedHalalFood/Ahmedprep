@@ -75,7 +75,7 @@ h3 {
 
 .topbar {
   display: flex;
-  min-height: 76px;
+  min-height: 92px;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
@@ -83,20 +83,41 @@ h3 {
 
 .brand {
   display: flex;
+  min-width: 0;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
   color: var(--navy);
-  font-size: 1.65rem;
-  font-weight: 800;
-  letter-spacing: -0.05em;
 }
 
 .brand-logo {
   display: block;
-  width: 60px;
-  height: 60px;
+  width: 68px;
+  height: 68px;
   flex-shrink: 0;
   object-fit: contain;
+}
+
+.brand-text {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.brand-wordmark {
+  display: inline-block;
+  padding-bottom: 5px;
+  border-bottom: 2px solid var(--gold);
+  color: var(--navy);
+  font-size: 2.15rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.045em;
+  white-space: nowrap;
+}
+
+.brand-wordmark-accent {
+  color: var(--blue);
 }
 
 .footer-brand-logo {
@@ -105,9 +126,22 @@ h3 {
 }
 
 @media (max-width: 800px) {
+  .brand {
+    gap: 10px;
+  }
+
   .brand-logo {
-    width: 48px;
-    height: 48px;
+    width: 46px;
+    height: 46px;
+  }
+
+  .brand-text {
+    gap: 4px;
+  }
+
+  .brand-wordmark {
+    padding-bottom: 3px;
+    font-size: 1.55rem;
   }
 
   .footer-brand-logo {
@@ -117,10 +151,11 @@ h3 {
 }
 
 .brand small {
-  font-size: 0.58rem;
+  font-size: 0.62rem;
   font-weight: 700;
-  letter-spacing: 0.16em;
-  color: var(--blue);
+  line-height: 1;
+  letter-spacing: 0.22em;
+  color: var(--muted);
 }
 
 .utility-nav {
@@ -1219,8 +1254,8 @@ select {
 }
 
 @media (max-width: 420px) {
-  .brand {
-    font-size: 1.42rem;
+  .brand-wordmark {
+    font-size: 1.45rem;
   }
 
   .brand small {
