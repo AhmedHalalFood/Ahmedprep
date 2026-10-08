@@ -36,7 +36,7 @@ const benefits = [
 const reasons = [
   {
     title: "Instruction led by an NYC educator",
-    body: "Founder Tariq Ahmed is an NYC DOE educator with an M.S. in Mathematics and 12+ years of teaching and test-prep experience.",
+    body: "Founder Tariq Ahmed is an NYC DOE educator with 12+ years of teaching and test-prep experience.",
   },
   {
     title: "Plans built from a diagnostic",
