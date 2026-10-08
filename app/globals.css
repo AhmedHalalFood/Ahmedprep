@@ -2,20 +2,31 @@
 @import 'tw-animate-css';
 
 :root {
-  --navy: #0b2e52;
-  --academic: #244e73;
-  --slate: #315f82;
-  --blue: #1769aa;
-  --blue-soft: #edf3f7;
-  --gold: #e8ba3f;
-  --gold-deep: #8f6c14;
-  --ink: #132d4b;
-  --muted: #556779;
-  --line: #d8e0e7;
+  /* Ahmed Prep palette */
+  --navy: #173a5e;
+  --academic: #365f7d;
+  --mist: #e9f0f4;
+  --ivory: #f7f4ec;
+  --sand: #eee6d7;
+  --gold: #d9ac3a;
+  --body: #42566a;
   --paper: #fff;
-  --warm: #edf3f7;
-  --cream: #faf7ef;
-  --background: #fff;
+  --header-bg: #fbfaf6;
+  --nav-bg: #f1f5f7;
+
+  /* Derived roles */
+  --slate: var(--academic);
+  --blue: var(--academic);
+  --blue-soft: var(--mist);
+  --gold-hover: #e4bc5a;
+  --gold-deep: #85640f; /* gold text on light backgrounds (AA) */
+  --gold-on-blue: #f0d27e; /* gold text on blue backgrounds (AA) */
+  --ink: var(--navy);
+  --muted: var(--body);
+  --line: #dbe2e8;
+  --warm: var(--ivory);
+  --cream: var(--ivory);
+  --background: var(--paper);
   --foreground: var(--ink);
   --radius: 0;
 }
@@ -32,7 +43,7 @@ html {
 body {
   margin: 0;
   min-width: 320px;
-  background: #fff;
+  background: var(--paper);
   color: var(--ink);
   font-family: var(--font-inter), Arial, sans-serif;
 }
@@ -74,7 +85,7 @@ h3 {
 .site-header {
   position: relative;
   z-index: 10;
-  background: #fff;
+  background: var(--header-bg);
 }
 
 .topbar {
@@ -196,7 +207,7 @@ h3 {
 }
 
 .button-gold:hover {
-  background: #f0ca63;
+  background: var(--gold-hover);
 }
 
 .mobile-menu-trigger {
@@ -206,7 +217,7 @@ h3 {
 .site-nav-bar {
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
-  background: #fff;
+  background: var(--nav-bg);
   color: var(--navy);
 }
 
@@ -237,13 +248,13 @@ h3 {
   position: relative;
   min-height: 500px;
   overflow: hidden;
-  background: #dfeaf0;
+  background: var(--mist);
 }
 
 .hero-image {
   position: absolute;
   inset: 0;
-  background-image: linear-gradient(90deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.82) 30%, rgba(255, 255, 255, 0.3) 46%, rgba(255, 255, 255, 0) 60%), url('/ahmedprep-hero.png');
+  background-image: linear-gradient(90deg, rgba(247, 244, 236, 0.96) 0%, rgba(247, 244, 236, 0.86) 30%, rgba(247, 244, 236, 0.32) 47%, rgba(247, 244, 236, 0) 60%), url('/ahmedprep-hero.png');
   background-position: 70% center;
   background-size: cover;
 }
@@ -536,7 +547,7 @@ h3 {
 
 .method-section {
   padding: 72px 0;
-  background: var(--blue-soft);
+  background: var(--ivory);
   color: var(--navy);
 }
 
@@ -604,7 +615,7 @@ h3 {
 
 .founder-section {
   padding: 76px 0;
-  background: #fff;
+  background: var(--mist);
 }
 
 .founder-grid {
@@ -673,7 +684,13 @@ h3 {
 
 .resources-section {
   padding: 100px 0;
-  background: var(--warm);
+  background: var(--paper);
+}
+
+/* Gold text on soft academic blue needs a lighter tint to stay AA-readable */
+.bg-academic .eyebrow.gold,
+.bg-academic .text-gold {
+  color: var(--gold-on-blue);
 }
 
 .resources-heading {
@@ -801,7 +818,7 @@ h3 {
   grid-template-columns: repeat(4, 1fr);
   margin-top: 40px;
   border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.94);
+  background: rgba(251, 250, 246, 0.94);
 }
 
 .hero-stats > div {
@@ -1055,7 +1072,7 @@ a.program-card:hover h3 {
   }
 
   .hero-image {
-    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.74) 55%, rgba(255, 255, 255, 0.4) 100%), url('/ahmedprep-hero.png');
+    background-image: linear-gradient(180deg, rgba(247, 244, 236, 0.92) 0%, rgba(247, 244, 236, 0.8) 55%, rgba(247, 244, 236, 0.45) 100%), url('/ahmedprep-hero.png');
     background-position: 64% center;
   }
 
@@ -1241,7 +1258,12 @@ select {
   --color-brand: var(--blue);
   --color-brand-soft: var(--blue-soft);
   --color-gold: var(--gold);
-  --color-gold-hover: #f0ca63;
+  --color-gold-hover: var(--gold-hover);
+  --color-gold-on-blue: var(--gold-on-blue);
+  --color-mist: var(--mist);
+  --color-ivory: var(--ivory);
+  --color-sand: var(--sand);
+  --color-body: var(--body);
   --color-gold-deep: var(--gold-deep);
   --color-cream: var(--cream);
   --color-ink: var(--ink);

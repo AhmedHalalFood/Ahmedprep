@@ -7,7 +7,7 @@ import { FREE_CLASS } from "@/lib/free-class"
 
 export function FreeClassPromo() {
   return (
-    <section id="free-shsat-class" aria-labelledby="free-class-promo-title" className="scroll-mt-4 bg-cream py-16 md:py-20">
+    <section id="free-shsat-class" aria-labelledby="free-class-promo-title" className="scroll-mt-4 bg-mist py-16 md:py-20">
       <div className="container grid items-center gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
         <div className="flex flex-col gap-5">
           <p className="eyebrow blue">Free weekly class</p>

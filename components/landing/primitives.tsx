@@ -56,7 +56,7 @@ type Tone = "white" | "warm" | "navy"
 const toneClass: Record<Tone, string> = {
   white: "bg-white",
   warm: "bg-warm",
-  navy: "bg-navy text-white",
+  navy: "bg-academic text-white",
 }
 
 export function Section({

@@ -1,7 +1,7 @@
 .strip {
   position: relative;
   z-index: 11;
-  background: #fff;
+  background: var(--mist);
   color: var(--navy, #0b1d35);
   border-bottom: 1px solid var(--line, #d8e0e7);
 }
