@@ -1,3 +1,4 @@
+import Image from "next/image"
 import Link from "next/link"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
@@ -9,7 +10,14 @@ export function Footer() {
       <div className="container footer-top">
         <div>
           <Link href="/" className="brand footer-brand" aria-label="AhmedPrep home">
-            <span>AhmedPrep</span>
+            <Image
+              src="/ahmedprep-logo.png"
+              alt="Ahmed Prep logo"
+              width={1254}
+              height={1254}
+              sizes="80px"
+              className="brand-logo footer-brand-logo"
+            />
             <small>ASTORIA · QUEENS</small>
           </Link>
           <p>SHSAT and Digital SAT preparation for students across New York City.</p>

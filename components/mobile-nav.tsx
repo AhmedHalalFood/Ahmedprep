@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { ArrowUpRight, Menu } from "lucide-react"
@@ -17,9 +18,19 @@ export function MobileNav() {
         </button>
       </SheetTrigger>
       <SheetContent side="right" className="w-[86vw] max-w-sm gap-0 border-l-4 border-l-gold bg-navy p-0 text-white">
-        <div className="flex flex-col gap-1 border-b border-white/15 px-6 pb-5 pt-6">
-          <SheetTitle className="text-2xl font-extrabold tracking-tight text-white">AhmedPrep</SheetTitle>
-          <SheetDescription className="text-xs font-bold uppercase tracking-widest text-gold">Astoria · Queens</SheetDescription>
+        <div className="flex items-center gap-4 border-b border-white/15 px-6 pb-5 pt-6">
+          <Image
+            src="/ahmedprep-logo.png"
+            alt="Ahmed Prep logo"
+            width={1254}
+            height={1254}
+            sizes="56px"
+            className="size-14 shrink-0 object-contain"
+          />
+          <div className="flex flex-col gap-1">
+            <SheetTitle className="sr-only">AhmedPrep menu</SheetTitle>
+            <SheetDescription className="text-xs font-bold uppercase tracking-widest text-gold">Astoria · Queens</SheetDescription>
+          </div>
         </div>
         <nav aria-label="Mobile navigation" className="flex flex-col px-6 py-2">
           {NAV_LINKS.map((link) => {
