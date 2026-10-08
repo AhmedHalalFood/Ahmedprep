@@ -69,8 +69,13 @@ export const metadata: Metadata = {
   },
   generator: 'v0.app',
   icons: {
-    icon: [{ url: '/ahmedprep-logo.png', type: 'image/png', sizes: '1254x1254' }],
-    apple: '/ahmedprep-logo.png',
+    icon: [
+      { url: '/favicon.ico', sizes: '16x16 32x32 48x48' },
+      { url: '/favicon-32x32.png', type: 'image/png', sizes: '32x32' },
+      { url: '/favicon-16x16.png', type: 'image/png', sizes: '16x16' },
+    ],
+    shortcut: '/favicon.ico',
+    apple: [{ url: '/apple-touch-icon.png', type: 'image/png', sizes: '180x180' }],
   },
 }
 
