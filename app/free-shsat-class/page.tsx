@@ -84,7 +84,7 @@ export default function FreeShsatClassPage() {
     <>
       <Breadcrumbs items={[{ label: "Free SHSAT Class", href: FREE_CLASS.path }]} />
 
-      <section aria-labelledby="free-class-title" className="bg-navy py-14 text-white md:py-20">
+      <section aria-labelledby="free-class-title" className="bg-academic py-14 text-white md:py-20">
         <div className="container grid items-center gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
           <div className="flex flex-col gap-6">
             <p className="eyebrow gold">Free weekly SHSAT class</p>

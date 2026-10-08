@@ -34,7 +34,7 @@ export function ShsatIntensive({ variant = "home" }: { variant?: "home" | "page"
       id="shsat-intensive"
       aria-labelledby={isHome ? "shsat-intensive-title" : undefined}
       aria-label={isHome ? undefined : "Program details"}
-      className="scroll-mt-4 border-t-4 border-gold bg-navy py-12 text-white md:py-20"
+      className="scroll-mt-4 border-t-4 border-gold bg-academic py-12 text-white md:py-20"
     >
       <div className="container">
         {isHome && (
