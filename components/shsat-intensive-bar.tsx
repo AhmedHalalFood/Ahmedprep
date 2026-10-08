@@ -6,10 +6,11 @@ import { INTENSIVE_PATH } from "@/lib/shsat-intensive"
 export function ShsatIntensiveBar() {
   return (
     <div
-      className="relative z-20 border-t-[3px] border-b border-t-gold border-b-gold/40 bg-cream text-navy"
+      className="relative z-20 border-b border-gold/40 bg-cream text-navy"
       role="region"
       aria-label="2026 SHSAT Final Intensive announcement"
     >
+      <div className="h-[3px] bg-gold" aria-hidden="true" />
       <div className="mx-auto flex w-[min(1180px,calc(100%-32px))] flex-col items-center gap-3 py-4 text-center md:flex-row md:justify-between md:gap-8 md:py-5 md:text-left">
         <div className="flex flex-col items-center gap-2 md:items-start">
           <span className="inline-flex items-center rounded-sm bg-gold px-2.5 py-1 text-[11px] font-extrabold uppercase leading-none tracking-[0.16em] text-navy">
