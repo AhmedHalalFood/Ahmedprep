@@ -21,10 +21,15 @@ export function Header() {
             width={1254}
             height={1254}
             priority
-            sizes="(max-width: 800px) 48px, 60px"
+            sizes="(max-width: 800px) 46px, 68px"
             className="brand-logo"
           />
-          <small>ASTORIA · QUEENS</small>
+          <span className="brand-text">
+            <span className="brand-wordmark">
+              Ahmed<span className="brand-wordmark-accent">Prep</span>
+            </span>
+            <small>ASTORIA • QUEENS</small>
+          </span>
         </Link>
         <div className="utility-nav">
           <TrackedLink
