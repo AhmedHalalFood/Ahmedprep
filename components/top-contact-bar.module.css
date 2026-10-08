@@ -3,13 +3,13 @@
   z-index: 11;
   background: #fff;
   color: var(--navy, #0b1d35);
-  border-bottom: 1px solid rgba(11, 29, 53, 0.12);
+  border-bottom: 1px solid var(--line, #d8e0e7);
 }
 
 .inner {
   display: flex;
   width: min(1180px, calc(100% - 32px));
-  min-height: 34px;
+  min-height: 42px;
   margin-inline: auto;
   align-items: center;
   justify-content: space-between;
@@ -29,8 +29,9 @@
 }
 
 .tag {
-  padding: 1px 6px;
+  padding: 2px 7px;
   border: 1px solid var(--gold, #e2b84b);
+  background: var(--gold, #e2b84b);
   color: var(--navy, #0b1d35);
   font-size: 0.6875rem;
   font-weight: 800;
