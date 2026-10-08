@@ -1,3 +1,4 @@
+import Image from "next/image"
 import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
 import { MainNav } from "@/components/main-nav"
@@ -14,7 +15,15 @@ export function Header() {
       <TopContactBar />
       <div className="topbar container">
         <Link href="/" className="brand" aria-label="AhmedPrep home">
-          <span>AhmedPrep</span>
+          <Image
+            src="/ahmedprep-logo.png"
+            alt="Ahmed Prep logo"
+            width={1254}
+            height={1254}
+            priority
+            sizes="(max-width: 800px) 48px, 60px"
+            className="brand-logo"
+          />
           <small>ASTORIA · QUEENS</small>
         </Link>
         <div className="utility-nav">
