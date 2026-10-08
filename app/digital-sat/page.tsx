@@ -38,7 +38,7 @@ const reasons = [
   },
   {
     title: "Math taught by a mathematician",
-    body: "Founder Tariq Ahmed holds an M.S. in Mathematics and is an NYC DOE educator with 12+ years of teaching and test-prep experience.",
+    body: "Founder Tariq Ahmed is an NYC DOE educator with 12+ years of teaching and test-prep experience.",
   },
   {
     title: "Plans built from a diagnostic",

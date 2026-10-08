@@ -8,14 +8,13 @@ import { Breadcrumbs } from "@/components/landing/primitives"
 export const metadata: Metadata = {
   title: "About AhmedPrep and Founder Tariq Ahmed",
   description:
-    "AhmedPrep is an Astoria, Queens test prep center founded by Tariq Ahmed, an NYC DOE educator with an M.S. in Mathematics and 12+ years of experience.",
+    "AhmedPrep is an Astoria, Queens test prep center founded by Tariq Ahmed, an NYC DOE educator with 12+ years of experience.",
   alternates: { canonical: absoluteUrl("/about") },
   openGraph: { ...baseOpenGraph, url: absoluteUrl("/about") },
 }
 
 const credentials = [
-  ["Education", "B.S., New York University"],
-  ["Graduate degree", "M.S. Mathematics, Hunter College"],
+  ["Education", "New York University"],
   ["Classroom", "NYC DOE Educator"],
   ["Experience", "12+ Years of Teaching & Test-Prep Experience"],
 ]
