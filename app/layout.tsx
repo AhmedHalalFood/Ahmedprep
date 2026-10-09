@@ -67,7 +67,6 @@ export const metadata: Metadata = {
     'business:contact_data:country_name': 'United States',
     'business:contact_data:phone_number': BUSINESS.phoneE164,
   },
-  generator: 'v0.app',
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: '16x16 32x32 48x48' },
