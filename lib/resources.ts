@@ -1,19 +1,35 @@
-export type ResourceSection = {
+import { SHSAT_2026_GUIDES } from "./resources-shsat-2026"
+
+export type ResourceBlock = {
   heading: string
   body: string[]
   list?: string[]
 }
 
+export type ResourceSection = ResourceBlock & {
+  subsections?: ResourceBlock[]
+}
+
 export type Resource = {
   slug: string
   category: "SHSAT" | "Digital SAT"
+  /** Short label shown on Resources cards, e.g. "Test Format". */
+  topic?: string
+  /** Featured guides get their own section on /resources. */
+  featured?: boolean
   title: string
+  cardTitle?: string
   metaTitle: string
   description: string
+  cardDescription?: string
+  datePublished?: string
+  dateModified?: string
+  intro?: string[]
   sections: ResourceSection[]
 }
 
 export const RESOURCES: Resource[] = [
+  ...SHSAT_2026_GUIDES,
   {
     slug: "shsat-guide",
     category: "SHSAT",

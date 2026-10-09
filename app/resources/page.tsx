@@ -1,14 +1,14 @@
 import type { Metadata } from "next"
 import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 import Link from "next/link"
-import { ArrowUpRight } from "lucide-react"
+import { ArrowRight, ArrowUpRight } from "lucide-react"
 import { Breadcrumbs, Section } from "@/components/landing/primitives"
 import { RESOURCES, type Resource } from "@/lib/resources"
 
 export const metadata: Metadata = {
   title: "SHSAT & Digital SAT Resources",
   description:
-    "Free SHSAT and Digital SAT guides for NYC families: test format, practice test strategy, sample Math problems, and ELA and Reading & Writing tips.",
+    "Free SHSAT and Digital SAT guides for NYC families: 2026 SHSAT dates, the digital SHSAT format, SHSAT Math topics, practice test strategy, and ELA tips.",
   alternates: { canonical: absoluteUrl("/resources") },
   openGraph: { ...baseOpenGraph, url: absoluteUrl("/resources") },
 }
@@ -19,6 +19,7 @@ const groups: { category: Resource["category"]; title: string; href: string; cta
 ]
 
 export default function ResourcesPage() {
+  const featured = RESOURCES.filter((r) => r.featured)
   return (
     <>
       <Breadcrumbs items={[{ label: "Resources", href: "/resources" }]} />
@@ -34,10 +35,35 @@ export default function ResourcesPage() {
         </div>
       </section>
 
+      <Section
+        id="shsat-2026"
+        tone="warm"
+        eyebrow="Fall 2026 SHSAT"
+        title="2026 SHSAT guides for NYC families"
+        intro="Dates, the digital test format, SHSAT Math review, practice test strategy, and planning advice for Queens families."
+      >
+        <ul className="grid gap-px border border-line bg-line md:grid-cols-2 lg:grid-cols-3">
+          {featured.map((resource) => (
+            <li key={resource.slug} className="bg-white">
+              <Link href={`/resources/${resource.slug}`} className="group flex h-full flex-col gap-3 p-6 transition-colors hover:bg-brand-soft md:p-8">
+                <p className="eyebrow blue">{resource.topic}</p>
+                <h3 className="text-balance text-xl font-extrabold leading-snug text-navy group-hover:text-brand">
+                  {resource.cardTitle ?? resource.title}
+                </h3>
+                <p className="text-pretty leading-relaxed text-subtle">{resource.cardDescription ?? resource.description}</p>
+                <span className="mt-auto inline-flex items-center gap-1 pt-2 text-xs font-extrabold uppercase tracking-wider text-brand">
+                  Read guide <ArrowRight size={14} aria-hidden="true" className="transition-transform group-hover:translate-x-0.5" />
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </Section>
+
       {groups.map((group, i) => (
         <Section key={group.category} id={group.category === "SHSAT" ? "shsat" : "digital-sat"} tone={i % 2 ? "warm" : "white"} title={group.title}>
           <ul className="grid gap-px border border-line bg-line md:grid-cols-2">
-            {RESOURCES.filter((r) => r.category === group.category).map((resource) => (
+            {RESOURCES.filter((r) => r.category === group.category && !r.featured).map((resource) => (
               <li key={resource.slug} className="bg-white">
                 <Link href={`/resources/${resource.slug}`} className="group flex h-full flex-col gap-3 p-6 transition-colors hover:bg-brand-soft md:p-8">
                   <h2 className="text-xl font-extrabold text-navy group-hover:text-brand">{resource.title}</h2>
