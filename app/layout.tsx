@@ -59,6 +59,9 @@ export const metadata: Metadata = {
     'test prep Astoria Queens',
   ],
   openGraph: baseOpenGraph,
+  alternates: {
+    types: { 'application/atom+xml': [{ url: '/updates/feed.xml', title: 'AhmedPrep SHSAT & SAT Updates' }] },
+  },
   other: {
     'business:contact_data:street_address': BUSINESS.address.street,
     'business:contact_data:locality': BUSINESS.address.city,

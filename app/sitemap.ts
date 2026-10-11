@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next"
 import { SITE_URL } from "@/lib/business"
 import { RESOURCES } from "@/lib/resources"
 import { INTENSIVE_PATH } from "@/lib/shsat-intensive"
+import { UPDATES, latestUpdateModified } from "@/lib/updates"
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const pages: { path: string; priority: number }[] = [
@@ -16,8 +17,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/contact", priority: 0.6 },
     { path: "/referral", priority: 0.4 },
   ]
+  // lastModified comes only from content dates, so it changes when content changes, not on every build.
   return [
     ...pages.map(({ path, priority }) => ({ url: `${SITE_URL}${path}`, changeFrequency: "monthly" as const, priority })),
-    ...RESOURCES.map((r) => ({ url: `${SITE_URL}/resources/${r.slug}`, changeFrequency: "monthly" as const, priority: 0.6 })),
+    { url: `${SITE_URL}/updates`, lastModified: latestUpdateModified(), changeFrequency: "weekly" as const, priority: 0.8 },
+    ...UPDATES.map((u) => ({
+      url: `${SITE_URL}/updates/${u.slug}`,
+      lastModified: u.dateModified,
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
+    })),
+    ...RESOURCES.map((r) => ({
+      url: `${SITE_URL}/resources/${r.slug}`,
+      ...((r.dateModified ?? r.datePublished) && { lastModified: r.dateModified ?? r.datePublished }),
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    })),
   ]
 }
