@@ -9,6 +9,7 @@ export const NAV_LINKS = [
   { label: "SHSAT Prep", href: "/shsat" },
   { label: "2026 SHSAT Intensive", href: INTENSIVE_PATH },
   { label: "Digital SAT Prep", href: "/digital-sat" },
+  { label: "Free Sunday Classes", href: "/free-sunday-classes" },
   { label: "Resources", href: "/resources" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },

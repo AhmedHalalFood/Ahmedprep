@@ -8,6 +8,7 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      { source: "/free-shsat-class", destination: "/free-sunday-classes", permanent: true },
       {
         source: "/:path*",
         has: [{ type: "host", value: "www.ahmedprep.com" }],

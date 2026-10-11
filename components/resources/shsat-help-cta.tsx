@@ -28,7 +28,7 @@ export function ShsatHelpCta({ location }: { location: string }) {
         </TrackedLink>
         <TrackedLink
           href={FREE_CLASS.path}
-          event={EVENTS.freeShsatClassCtaClicked}
+          event={EVENTS.sundayClassCtaClick}
           eventProps={{ location }}
           className="button button-outline"
         >

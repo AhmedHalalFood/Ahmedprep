@@ -39,7 +39,7 @@ export function Footer() {
             <span>Programs</span>
             <Link href="/shsat">SHSAT Prep</Link>
             <Link href="/digital-sat">Digital SAT Prep</Link>
-            <Link href="/free-shsat-class">Free SHSAT Class</Link>
+            <Link href="/free-sunday-classes">Free Sunday Classes</Link>
             <Link href="/free-diagnostic">Free Diagnostic</Link>
           </div>
           <div>

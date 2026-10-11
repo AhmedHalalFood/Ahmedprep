@@ -1,13 +1,12 @@
 "use client"
 
-import { useState } from "react"
 import { ArrowUpRight, CheckCircle2 } from "lucide-react"
 import { Honeypot, RequiredNote, SelectField, SubmitButton, TextField } from "@/components/forms/fields"
 import { useLeadForm } from "@/components/forms/use-lead-form"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS, trackEvent } from "@/lib/analytics"
 import { BUSINESS } from "@/lib/business"
-import { FREE_CLASS_GRADES } from "@/lib/free-class"
+import { FREE_CLASS_GRADES, RSVP_PROGRAMS, classMatchesProgram, type SundayClass } from "@/lib/free-class"
 
 type RsvpData = {
   studentName: string
@@ -15,13 +14,16 @@ type RsvpData = {
   parentName: string
   parentEmail: string
   parentPhone: string
+  classType: string
+  classDate: string
+  currentSchool: string
   consent: string
 }
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const CONSENT_TEXT =
-  "I agree that AhmedPrep may use the contact information above to send information directly related to this class registration, including the Zoom access information and class reminders, by email, phone, or text. This is not a marketing subscription. Message and data rates may apply."
+  "I agree that AhmedPrep may use the contact information above to send information directly related to this class registration, including the live class access information and reminders, by email, phone, or text. This is not a marketing subscription. Message and data rates may apply."
 
 function validate(d: RsvpData) {
   const errors: Partial<Record<keyof RsvpData, string>> = {}
@@ -32,23 +34,43 @@ function validate(d: RsvpData) {
   else if (!EMAIL_PATTERN.test(d.parentEmail.trim())) errors.parentEmail = "Please enter a valid email address."
   if (!d.parentPhone.trim()) errors.parentPhone = "Please enter a phone number."
   else if (d.parentPhone.replace(/\D/g, "").length < 10) errors.parentPhone = "Please enter a 10-digit phone number."
-  if (d.consent !== "yes") errors.consent = "Please agree so we can send your Zoom access information and class reminders."
+  if (!d.classType) errors.classType = "Please choose SHSAT or Digital SAT."
+  if (!d.classDate) errors.classDate = "Please choose a Sunday class."
+  if (d.consent !== "yes") errors.consent = "Please agree so we can send your live class access information and reminders."
   return errors
 }
 
-const initial: RsvpData = { studentName: "", studentGrade: "", parentName: "", parentEmail: "", parentPhone: "", consent: "" }
+export function FreeClassRsvpForm({
+  location,
+  classes,
+  initialProgram = "",
+  initialDate = "",
+}: {
+  location: string
+  classes: SundayClass[]
+  initialProgram?: string
+  initialDate?: string
+}) {
+  const initial: RsvpData = {
+    studentName: "",
+    studentGrade: "",
+    parentName: "",
+    parentEmail: "",
+    parentPhone: "",
+    classType: initialProgram,
+    classDate: initialDate,
+    currentSchool: "",
+    consent: "",
+  }
 
-export function FreeClassRsvpForm({ location }: { location: string }) {
-  const [submittedEmail, setSubmittedEmail] = useState("")
+  const eventParams = (d: RsvpData) => ({ location, class_type: d.classType || "unselected", class_date: d.classDate || "unselected" })
+
   const { data, errors, status, update, submit, formRef, honeypotRef } = useLeadForm({
-    endpoint: "/api/free-shsat-class",
+    endpoint: "/api/free-sunday-class",
     initial,
     validate,
-    onStart: () => trackEvent(EVENTS.freeShsatClassRsvpStarted, { location }),
-    onSuccess: (submitted) => {
-      setSubmittedEmail(submitted.parentEmail.trim())
-      trackEvent(EVENTS.freeShsatClassRsvpSubmitted, { location, grade: submitted.studentGrade })
-    },
+    onStart: () => trackEvent(EVENTS.sundayClassRsvpStarted, eventParams(initial)),
+    onSuccess: (submitted) => trackEvent(EVENTS.sundayClassRsvpSubmitted, eventParams(submitted)),
   })
 
   const field = (key: keyof RsvpData) => ({
@@ -59,19 +81,33 @@ export function FreeClassRsvpForm({ location }: { location: string }) {
     onChange: (v: string) => update(key, v),
   })
 
+  const dateOptions = classes
+    .filter((c) => !data.classType || classMatchesProgram(c, data.classType))
+    .map((c) => ({ value: c.isoDate, label: `${c.shortLabel} · ${c.typeLabel}: ${c.topic}` }))
+
+  const changeProgram = (program: string) => {
+    update("classType", program)
+    const selected = classes.find((c) => c.isoDate === data.classDate)
+    if (selected && !classMatchesProgram(selected, program)) update("classDate", "")
+  }
+
+  const changeDate = (isoDate: string) => {
+    update("classDate", isoDate)
+    const selected = classes.find((c) => c.isoDate === isoDate)
+    if (selected && selected.type !== "workshop") update("classType", selected.type)
+  }
+
   if (status === "success") {
     return (
       <div role="status" className="flex flex-col gap-5 border border-line border-t-4 border-t-gold bg-white p-6 sm:p-9">
         <CheckCircle2 size={32} aria-hidden="true" className="text-brand" />
         <div>
           <p className="eyebrow blue">Seat reserved</p>
-          <p className="mt-3 text-2xl font-extrabold leading-snug text-navy">Your seat is reserved!</p>
-          <p className="mt-3 leading-relaxed text-ink">
-            We&apos;ve sent the class information to <strong className="break-all text-navy">{submittedEmail}</strong>. Check your inbox
-            for your Zoom access information.
+          <p className="mt-3 text-pretty text-xl font-extrabold leading-snug text-navy">
+            Your free class seat is reserved. We&apos;ll send the live class details to the email provided before the session.
           </p>
           <p className="mt-3 text-sm leading-relaxed text-subtle">
-            Don&apos;t see it? Please check your spam folder, or call or text us at{" "}
+            Don&apos;t see an email? Please check your spam folder, or call or text us at{" "}
             <a href={BUSINESS.phoneHref} className="font-semibold text-navy underline underline-offset-2">
               {BUSINESS.phoneDisplay}
             </a>
@@ -86,7 +122,7 @@ export function FreeClassRsvpForm({ location }: { location: string }) {
             eventProps={{ location: `${location}_confirmation` }}
             className="button button-gold button-lg mt-3"
           >
-            Book a Free SHSAT Diagnostic <ArrowUpRight size={16} aria-hidden="true" />
+            Book a Free Diagnostic <ArrowUpRight size={16} aria-hidden="true" />
           </TrackedLink>
         </div>
       </div>
@@ -102,19 +138,35 @@ export function FreeClassRsvpForm({ location }: { location: string }) {
       noValidate
       aria-busy={status === "submitting"}
       aria-describedby={`${location}-required-note`}
-      className="relative flex flex-col gap-5 border border-line bg-white p-5 sm:p-8"
+      className="relative flex flex-col gap-5 border border-line border-t-4 border-t-gold bg-white p-5 sm:p-8"
     >
       <Honeypot id={`${location}-website`} inputRef={honeypotRef} />
       <RequiredNote id={`${location}-required-note`} />
 
       <div className="grid gap-5 sm:grid-cols-2">
+        <SelectField
+          label="Class"
+          required
+          placeholder="SHSAT or Digital SAT"
+          options={RSVP_PROGRAMS}
+          {...field("classType")}
+          onChange={changeProgram}
+        />
+        <SelectField label="Sunday" required placeholder="Choose a date" options={dateOptions} {...field("classDate")} onChange={changeDate} />
         <TextField label="Student Name" autoComplete="off" required {...field("studentName")} />
-        <SelectField label="Student Grade" required placeholder="Select grade" options={FREE_CLASS_GRADES} {...field("studentGrade")} />
+        <SelectField label="Grade" required placeholder="Select grade" options={FREE_CLASS_GRADES} {...field("studentGrade")} />
         <TextField label="Parent/Guardian Name" autoComplete="name" required {...field("parentName")} />
-        <TextField label="Parent Email" type="email" inputMode="email" autoComplete="email" required hint="Zoom details are sent here." {...field("parentEmail")} />
-        <div className="sm:col-span-2">
-          <TextField label="Parent Phone Number" type="tel" inputMode="tel" autoComplete="tel" required placeholder="Your phone number" {...field("parentPhone")} />
-        </div>
+        <TextField
+          label="Parent Email"
+          type="email"
+          inputMode="email"
+          autoComplete="email"
+          required
+          hint="Live class details are sent here."
+          {...field("parentEmail")}
+        />
+        <TextField label="Phone Number" type="tel" inputMode="tel" autoComplete="tel" required {...field("parentPhone")} />
+        <TextField label="Current School" autoComplete="off" {...field("currentSchool")} />
       </div>
 
       <div>
@@ -131,9 +183,8 @@ export function FreeClassRsvpForm({ location }: { location: string }) {
             aria-describedby={errors.consent ? `${consentId}-error` : undefined}
             className="mt-1 h-4 w-4 shrink-0 accent-[var(--blue)]"
           />
-  <span>
-  {/* Static copy; suppress warnings caused by a stale server render after wording edits. */}
-  <span suppressHydrationWarning>{CONSENT_TEXT}</span>
+          <span>
+            {CONSENT_TEXT}
             <span aria-hidden="true" className="text-error"> *</span>
             <span className="sr-only"> (required)</span>
           </span>
@@ -159,7 +210,7 @@ export function FreeClassRsvpForm({ location }: { location: string }) {
         Reserve My Free Seat <ArrowUpRight size={17} aria-hidden="true" />
       </SubmitButton>
       <p className="text-xs leading-relaxed text-subtle">
-        <strong className="font-bold text-navy">No payment required.</strong> Free, with no obligation. The Zoom link is never posted
+        <strong className="font-bold text-navy">No cost • Live instruction • RSVP required.</strong> The live class link is never posted
         publicly. It is sent only to registered families.
       </p>
     </form>

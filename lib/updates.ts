@@ -75,7 +75,7 @@ export const UPDATES: Update[] = [
         heading: "After registration",
         paragraphs: [
           "Once registration is done, the focus shifts to preparation. Our [2026 SHSAT dates guide](/resources/2026-shsat-dates-registration-deadline) explains the full fall timeline, and a [free diagnostic](/free-diagnostic) shows where your child stands in Math and ELA right now.",
-          "Families looking for structured help can review our [SHSAT prep program](/shsat), the [final 5-week intensive](/shsat-final-intensive-2026), or join the [free Sunday SHSAT class](/free-shsat-class).",
+          "Families looking for structured help can review our [SHSAT prep program](/shsat), the [final 5-week intensive](/shsat-final-intensive-2026), or join the [free Sunday SHSAT class](/free-sunday-classes).",
         ],
       },
     ],
@@ -212,7 +212,7 @@ export const UPDATES: Update[] = [
         heading: "Using official practice well",
         paragraphs: [
           "Official practice tests are limited, so use them deliberately: take one timed to set a baseline, review every miss, and save the rest for later checkpoints. Our guide on [how to use SHSAT practice tests](/resources/how-to-use-shsat-practice-tests) walks through that process, and the [SHSAT Math topics guide](/resources/shsat-math-topics) helps target review.",
-          "If you want an outside read on your child's results, book a [free diagnostic](/free-diagnostic) or try a [free live SHSAT class](/free-shsat-class).",
+          "If you want an outside read on your child's results, book a [free diagnostic](/free-diagnostic) or try a [free live SHSAT class](/free-sunday-classes).",
         ],
       },
     ],
@@ -286,7 +286,7 @@ export const UPDATES: Update[] = [
         heading: "Who it is for",
         paragraphs: [
           "The intensive is designed for students who are already registered for the November 2026 SHSAT. Registration for the test itself is handled by NYC Public Schools and closes October 30.",
-          "Full details, pricing and enrollment are on the [2026 SHSAT Final Intensive](/shsat-final-intensive-2026) page. Families who are not ready to enroll can join the [free Sunday SHSAT class](/free-shsat-class) online or book a [free diagnostic](/free-diagnostic).",
+          "Full details, pricing and enrollment are on the [2026 SHSAT Final Intensive](/shsat-final-intensive-2026) page. Families who are not ready to enroll can join the [free Sunday SHSAT class](/free-sunday-classes) online or book a [free diagnostic](/free-diagnostic).",
         ],
       },
     ],

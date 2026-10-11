@@ -9,14 +9,14 @@ export function TopContactBar() {
     <div className={`contact-strip ${styles.strip}`}>
       <div className={styles.inner}>
         <TrackedLink
-          href="/free-shsat-class"
-          event={EVENTS.freeShsatClassCtaClicked}
+          href="/free-sunday-classes"
+          event={EVENTS.sundayClassCtaClick}
           eventProps={{ location: "top_announcement" }}
           className={styles.announce}
         >
           <span className={styles.tag}>Free</span>
           <span>
-            Live SHSAT Class <span className={styles.sep} aria-hidden="true">•</span> Sundays 4–5 PM{" "}
+            Live SHSAT & SAT Classes <span className={styles.sep} aria-hidden="true">•</span> Sundays 4–5 PM ET{" "}
             <span className={styles.sep} aria-hidden="true">•</span> RSVP
           </span>
           <ArrowRight size={13} aria-hidden="true" />

@@ -73,7 +73,9 @@ export function TextField({
   )
 }
 
-export function SelectField({ options, placeholder, ...props }: BaseProps & { options: string[]; placeholder: string }) {
+type SelectOption = string | { value: string; label: string }
+
+export function SelectField({ options, placeholder, ...props }: BaseProps & { options: SelectOption[]; placeholder: string }) {
   const { id, name, label, value, onChange, error, required, hint } = props
   return (
     <div>
@@ -90,11 +92,14 @@ export function SelectField({ options, placeholder, ...props }: BaseProps & { op
         className={inputClass}
       >
         <option value="">{placeholder}</option>
-        {options.map((o) => (
-          <option key={o} value={o}>
-            {o}
-          </option>
-        ))}
+        {options.map((o) => {
+          const { value: optionValue, label: optionLabel } = typeof o === "string" ? { value: o, label: o } : o
+          return (
+            <option key={optionValue} value={optionValue}>
+              {optionLabel}
+            </option>
+          )
+        })}
       </select>
       <Describe id={id} error={error} hint={hint} />
     </div>
