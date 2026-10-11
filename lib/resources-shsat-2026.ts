@@ -307,7 +307,7 @@ export const SHSAT_2026_GUIDES: Resource[] = [
       {
         heading: "How to build a Math review plan",
         body: [
-          `Start by finding the gaps. A timed diagnostic shows which topics need rebuilding and which only need practice. AhmedPrep offers a [free SHSAT diagnostic](/free-diagnostic) at our Astoria location, and our [free Sunday SHSAT class](/free-shsat-class) works through SHSAT Math and ELA problems live each week.`,
+          `Start by finding the gaps. A timed diagnostic shows which topics need rebuilding and which only need practice. AhmedPrep offers a [free SHSAT diagnostic](/free-diagnostic) at our Astoria location, and our [free Sunday SHSAT class](/free-sunday-classes) works through SHSAT Math and ELA problems live each week.`,
           `For a broader view of how the test is structured, see [how the digital SHSAT works](/resources/digital-shsat-2026).`,
         ],
       },
@@ -496,7 +496,7 @@ export const SHSAT_2026_GUIDES: Resource[] = [
       {
         heading: "SHSAT prep in Astoria",
         body: [
-          `AhmedPrep offers [SHSAT prep in Astoria](/shsat) for students across Queens and NYC. Families who want to see our teaching before committing can attend the [free Sunday SHSAT class](/free-shsat-class), and more guides are available in our [SHSAT resources](/resources).`,
+          `AhmedPrep offers [SHSAT prep in Astoria](/shsat) for students across Queens and NYC. Families who want to see our teaching before committing can attend the [free Sunday SHSAT class](/free-sunday-classes), and more guides are available in our [SHSAT resources](/resources).`,
         ],
       },
     ],

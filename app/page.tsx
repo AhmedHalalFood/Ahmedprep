@@ -23,7 +23,8 @@ export const metadata: Metadata = {
 }
 
 // Re-render daily so upcoming-deadline ordering in the updates section stays current.
-export const revalidate = 86400
+// Hourly so the "Next free Sunday class" card rolls over shortly after each Sunday class ends.
+export const revalidate = 3600
 
 const programs = [
   {
@@ -117,6 +118,8 @@ export default function Home() {
 
       <ShsatIntensive />
 
+      <FreeClassPromo />
+
       <section id="programs" className="section programs-section" aria-labelledby="programs-title">
         <div className="container">
           <div className="section-heading">
@@ -158,8 +161,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      <FreeClassPromo />
 
       <CampaignBanner />
 
