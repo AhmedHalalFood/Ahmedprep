@@ -8,6 +8,7 @@ import { GoogleReviews } from "@/components/landing/google-reviews"
 import { ShsatIntensive } from "@/components/landing/shsat-intensive"
 import { SuccessStories } from "@/components/landing/success-stories"
 import { TrackedLink } from "@/components/tracked-link"
+import { LatestUpdatesSection } from "@/components/updates/latest-updates-section"
 import { EVENTS } from "@/lib/analytics"
 import { BUSINESS } from "@/lib/business"
 import { RESOURCES } from "@/lib/resources"
@@ -20,6 +21,9 @@ export const metadata: Metadata = {
   alternates: { canonical: absoluteUrl("/") },
   openGraph: { ...baseOpenGraph, url: absoluteUrl("/") },
 }
+
+// Re-render daily so upcoming-deadline ordering in the updates section stays current.
+export const revalidate = 86400
 
 const programs = [
   {
@@ -108,6 +112,8 @@ export default function Home() {
           </p>
         </div>
       </section>
+
+      <LatestUpdatesSection />
 
       <ShsatIntensive />
 

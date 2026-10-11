@@ -44,6 +44,7 @@ export function Footer() {
           </div>
           <div>
             <span>Explore</span>
+            <Link href="/updates">SHSAT & SAT Updates</Link>
             <Link href="/resources">Resources</Link>
             <Link href="/about">About</Link>
             <Link href="/contact">Contact</Link>
