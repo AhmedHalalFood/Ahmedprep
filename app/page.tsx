@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Image from "next/image"
 import Link from "next/link"
 import { ArrowUpRight, Check, MessageSquare, Phone } from "lucide-react"
 import { CampaignBanner } from "@/components/landing/campaign-banner"
@@ -59,7 +60,16 @@ export default function Home() {
   return (
     <>
       <section id="top" className="hero-section" aria-labelledby="hero-title">
-        <div className="hero-image" aria-hidden="true" />
+        <div className="hero-image" aria-hidden="true">
+          <Image
+            src="/ahmedprep-hero.png"
+            alt=""
+            fill
+            preload
+            fetchPriority="high"
+            sizes="(max-width: 800px) 970px, 100vw"
+          />
+        </div>
         <div className="hero-panel">
           <p className="eyebrow blue">Astoria, Queens · Serving students across NYC</p>
           <h1 id="hero-title">
