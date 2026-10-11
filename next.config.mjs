@@ -3,6 +3,10 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  experimental: {
+    // Inlines the stylesheet into <head> in production, removing the render-blocking CSS request.
+    inlineCss: true,
+  },
   images: {
     formats: ["image/avif", "image/webp"],
   },
