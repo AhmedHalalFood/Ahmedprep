@@ -8,7 +8,9 @@
   --blue: #1769aa;
   --blue-soft: #edf3f7;
   --gold: #e8ba3f;
-  --gold-deep: #8f6c14;
+  --gold-deep: #8a6812;
+  /* Slightly lifted gold so small text on the blue intensive band clears 4.5:1 contrast. */
+  --gold-on-blue: #f0c656;
   --ink: #132d4b;
   --muted: #556779;
   --line: #d8e0e7;
@@ -275,6 +277,11 @@ h3 {
 
 .eyebrow.blue {
   color: var(--blue);
+}
+
+#shsat-intensive .eyebrow.gold,
+#shsat-intensive .text-gold {
+  color: var(--gold-on-blue);
 }
 
 .eyebrow.gold {
