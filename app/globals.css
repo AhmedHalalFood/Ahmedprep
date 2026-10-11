@@ -243,9 +243,18 @@ h3 {
 .hero-image {
   position: absolute;
   inset: 0;
-  background-image: linear-gradient(90deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.82) 30%, rgba(255, 255, 255, 0.3) 46%, rgba(255, 255, 255, 0) 60%), url('/ahmedprep-hero.png');
-  background-position: 70% center;
-  background-size: cover;
+}
+
+.hero-image img {
+  object-fit: cover;
+  object-position: 70% center;
+}
+
+.hero-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(90deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.82) 30%, rgba(255, 255, 255, 0.3) 46%, rgba(255, 255, 255, 0) 60%);
 }
 
 .hero-panel {
@@ -1054,9 +1063,12 @@ a.program-card:hover h3 {
     min-height: 540px;
   }
 
-  .hero-image {
-    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.74) 55%, rgba(255, 255, 255, 0.4) 100%), url('/ahmedprep-hero.png');
-    background-position: 64% center;
+  .hero-image img {
+    object-position: 64% center;
+  }
+
+  .hero-image::after {
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.74) 55%, rgba(255, 255, 255, 0.4) 100%);
   }
 
   .hero-panel {
