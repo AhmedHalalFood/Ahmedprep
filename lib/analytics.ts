@@ -22,6 +22,15 @@ export const EVENTS = {
   sundayClassView: "sunday_class_view",
   sundayClassRsvpStarted: "sunday_class_rsvp_start",
   sundayClassRsvpSubmitted: "sunday_class_rsvp_submit",
+  resultsCtaClick: "results_cta_click",
+  programCtaClick: "program_cta_click",
+  toolOpen: "tool_open",
+  readinessQuizStarted: "readiness_quiz_start",
+  readinessQuizCompleted: "readiness_quiz_complete",
+  satGoalPlanCreated: "sat_goal_plan_create",
+  teachingVideoPlay: "teaching_video_play",
+  reviewLinkClick: "review_link_click",
+  studentLoginClick: "student_login_click",
 } as const
 
 export type EventName = (typeof EVENTS)[keyof typeof EVENTS]

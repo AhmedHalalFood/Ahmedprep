@@ -1,18 +1,17 @@
 import type { Metadata } from "next"
 import Image from "next/image"
-import Link from "next/link"
 import { ArrowUpRight, Check, MessageSquare, Phone } from "lucide-react"
 import { CampaignBanner } from "@/components/landing/campaign-banner"
 import { DiagnosticSection } from "@/components/landing/diagnostic-section"
-import { FreeClassPromo } from "@/components/landing/free-class-promo"
 import { GoogleReviews } from "@/components/landing/google-reviews"
-import { ShsatIntensive } from "@/components/landing/shsat-intensive"
-import { SuccessStories } from "@/components/landing/success-stories"
+import { ProgramsPreview } from "@/components/landing/programs-preview"
+import { ResultsPreview } from "@/components/landing/results-preview"
+import { ToolsResources } from "@/components/landing/tools-resources"
+import { WhyFamilies } from "@/components/landing/why-families"
+import { ThisSundayStrip } from "@/components/sunday-classes/this-sunday-strip"
 import { TrackedLink } from "@/components/tracked-link"
-import { LatestUpdatesSection } from "@/components/updates/latest-updates-section"
 import { EVENTS } from "@/lib/analytics"
 import { BUSINESS } from "@/lib/business"
-import { RESOURCES } from "@/lib/resources"
 import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 
 export const metadata: Metadata = {
@@ -23,7 +22,6 @@ export const metadata: Metadata = {
   openGraph: { ...baseOpenGraph, url: absoluteUrl("/") },
 }
 
-// Re-render daily so upcoming-deadline ordering in the updates section stays current.
 // Hourly so the "Next free Sunday class" card rolls over shortly after each Sunday class ends.
 export const revalidate = 3600
 
@@ -48,15 +46,7 @@ const programs = [
   },
 ]
 
-const method = [
-  ["01", "Diagnose", "Understand the starting point through a focused diagnostic and careful review of strengths and gaps."],
-  ["02", "Plan", "Build a clear, realistic preparation roadmap around the student's goals, schedule, and school demands."],
-  ["03", "Teach", "Deliver direct instruction, guided practice, and feedback that makes difficult material manageable."],
-  ["04", "Measure", "Track progress with purposeful practice, testing, and the next right adjustment."],
-]
-
 export default function Home() {
-  const featuredResources = RESOURCES.slice(0, 3)
   return (
     <>
       <section id="top" className="hero-section" aria-labelledby="hero-title">
@@ -123,12 +113,6 @@ export default function Home() {
         </div>
       </section>
 
-      <LatestUpdatesSection />
-
-      <ShsatIntensive />
-
-      <FreeClassPromo />
-
       <section id="programs" className="section programs-section" aria-labelledby="programs-title">
         <div className="container">
           <div className="section-heading">
@@ -173,66 +157,15 @@ export default function Home() {
 
       <CampaignBanner />
 
-      <section id="method" className="method-section" aria-labelledby="method-title">
-        <div className="container">
-          <div className="method-intro">
-            <p className="eyebrow gold">The AhmedPrep method</p>
-            <h2 id="method-title">
-              Preparation built
-              <br />
-              <span>around the student.</span>
-            </h2>
-            <p>
-              Effective preparation starts with knowing where a student stands, then building instruction, practice, and assessment around
-              measurable progress.
-            </p>
-          </div>
-          <div className="method-grid">
-            {method.map(([number, title, body]) => (
-              <article key={title} className="method-card">
-                <span className="method-number">{number}</span>
-                <div>
-                  <h3>{title}</h3>
-                  <p>{body}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
+      <ResultsPreview />
 
-      <SuccessStories />
+      <ThisSundayStrip location="home" />
 
-      <section id="about" className="founder-section" aria-labelledby="founder-title">
-        <div className="container founder-grid">
-          <div className="founder-intro">
-            <p className="eyebrow blue">Meet the founder</p>
-            <h2 id="founder-title">Tariq Ahmed</h2>
-            <p className="founder-role">Founder & Lead Instructor</p>
-            <p className="founder-text">
-              AhmedPrep provides New York students with focused, individualized instruction built around their starting point, goals, and
-              progress.
-            </p>
-            <Link href="/about" className="text-link">
-              More about AhmedPrep <ArrowUpRight size={15} aria-hidden="true" />
-            </Link>
-          </div>
-          <dl className="credentials" aria-label="Credentials">
-            <div>
-              <dt>Education</dt>
-            <dd>New York University</dd>
-          </div>
-            <div>
-              <dt>Classroom</dt>
-              <dd>NYC DOE Educator</dd>
-            </div>
-            <div>
-              <dt>Experience</dt>
-              <dd>12+ Years of Teaching & Test-Prep Experience</dd>
-            </div>
-          </dl>
-        </div>
-      </section>
+      <WhyFamilies />
+
+      <ToolsResources />
+
+      <ProgramsPreview />
 
       <GoogleReviews />
 
@@ -241,34 +174,6 @@ export default function Home() {
         title="Start with a free diagnostic"
         intro="Choose SHSAT or Digital SAT and tell us about your student. We'll contact you to confirm a diagnostic time at our Astoria location."
       />
-
-      <section id="resources" className="resources-section" aria-labelledby="resources-heading">
-        <div className="container">
-          <div className="resources-heading flex flex-wrap items-end justify-between gap-6">
-            <div>
-              <p className="eyebrow">Resources</p>
-              <h2 id="resources-heading">
-                Know the test.
-                <br />
-                <span>Know the next step.</span>
-              </h2>
-            </div>
-            <Link href="/resources" className="text-link">
-              All resources <ArrowUpRight size={15} aria-hidden="true" />
-            </Link>
-          </div>
-          <div className="resource-grid">
-            {featuredResources.map((item) => (
-              <Link key={item.slug} href={`/resources/${item.slug}`} className="resource-item">
-                <span>{item.category}</span>
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
-                <ArrowUpRight size={18} aria-hidden="true" />
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
     </>
   )
 }

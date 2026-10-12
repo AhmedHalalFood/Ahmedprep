@@ -12,20 +12,30 @@ function Stars({ rating }: { rating: number }) {
   )
 }
 
-function ReviewLinks({ readMoreUrl, leaveReviewUrl }: { readMoreUrl: string; leaveReviewUrl: string }) {
+function ReviewLinks({
+  readMoreUrl,
+  leaveReviewUrl,
+  className = "flex flex-wrap gap-3",
+}: {
+  readMoreUrl: string
+  leaveReviewUrl: string | null
+  className?: string
+}) {
   return (
-    <div className="flex flex-wrap gap-3">
+    <div className={className}>
       <a href={readMoreUrl} target="_blank" rel="noopener noreferrer" className="button button-gold">
         Read more reviews on Google <ArrowUpRight size={16} aria-hidden="true" />
       </a>
-      <a
-        href={leaveReviewUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex min-h-12 items-center gap-2 border border-navy/25 px-5 text-xs font-extrabold uppercase tracking-wider text-navy transition-colors hover:bg-navy/5"
-      >
-        Leave a review <ArrowUpRight size={16} aria-hidden="true" />
-      </a>
+      {leaveReviewUrl && (
+        <a
+          href={leaveReviewUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex min-h-12 items-center gap-2 border border-navy/25 px-5 text-xs font-extrabold uppercase tracking-wider text-navy transition-colors hover:bg-navy/5"
+        >
+          Leave a review <ArrowUpRight size={16} aria-hidden="true" />
+        </a>
+      )}
     </div>
   )
 }
@@ -42,7 +52,9 @@ export function GoogleReviews() {
             <h2 id="reviews-heading" className="text-xl font-extrabold text-navy text-balance">
               What AhmedPrep families say
             </h2>
-            <p className="text-sm leading-relaxed text-subtle">Read parent and student reviews, or share your own experience.</p>
+            <p className="text-sm leading-relaxed text-subtle">
+              {leaveReviewUrl ? "Read parent and student reviews, or share your own experience." : "Read parent and student reviews on Google."}
+            </p>
           </div>
           <ReviewLinks readMoreUrl={readMoreUrl} leaveReviewUrl={leaveReviewUrl} />
         </div>
@@ -82,24 +94,7 @@ export function GoogleReviews() {
         </p>
       )}
 
-      <div className="mt-8 flex flex-wrap gap-4">
-        <a
-          href={readMoreUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="button button-gold"
-        >
-          Read more reviews on Google <ArrowUpRight size={16} aria-hidden="true" />
-        </a>
-        <a
-          href={leaveReviewUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex min-h-12 items-center gap-2 border border-navy/25 px-5 text-xs font-extrabold uppercase tracking-wider text-navy transition-colors hover:bg-navy/5"
-        >
-          Leave a review <ArrowUpRight size={16} aria-hidden="true" />
-        </a>
-      </div>
+      <ReviewLinks readMoreUrl={readMoreUrl} leaveReviewUrl={leaveReviewUrl} className="mt-8 flex flex-wrap gap-4" />
     </Section>
   )
 }

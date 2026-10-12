@@ -81,8 +81,8 @@ export default async function UpdatesPage({ searchParams }: { searchParams: Prom
             <div className="border border-line bg-warm p-6">
               <h2 className="text-base font-extrabold text-navy">How we verify updates</h2>
               <p className="mt-2 text-sm leading-relaxed text-subtle">
-                Dates and policies come only from NYC Public Schools and College Board. Every update is reviewed by a person against
-                the official source before it appears here, and each update links to that source.
+                AhmedPrep regularly reviews official NYC Public Schools and College Board sources and updates this information when
+                changes occur. Each update links to its official source.
               </p>
               <a href="/updates/feed.xml" className="text-link mt-4">
                 <Rss size={15} aria-hidden="true" /> Subscribe to the updates feed
