@@ -12,7 +12,7 @@ import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
 import { NOT_AFFILIATED_NOTE, SITE_URL } from "@/lib/business"
 import { INTENSIVE_PATH } from "@/lib/shsat-intensive"
-import { NYC_SHSAT_UNDERSTANDING_URL } from "@/lib/resources-shsat-2026"
+import { NYCPS_SHSAT_URL } from "@/lib/resources-shsat-2026"
 
 export const metadata: Metadata = {
   title: { absolute: "SHSAT Prep in Queens, NY | AhmedPrep Astoria" },
@@ -200,22 +200,34 @@ export default function ShsatPage() {
             </Link>
           </article>
         </div>
-        <p className="mt-8 max-w-3xl leading-relaxed text-subtle">
-          Beginning in Fall 2026, the SHSAT is computer-adaptive: 50 ELA and 50 Math questions in 180 minutes, answered on
-          DOE-provided computers. Students must answer each question before advancing, and Math and standalone ELA questions
-          cannot be revisited. Read{" "}
-          <Link href="/resources/digital-shsat-2026" className="font-bold text-navy underline underline-offset-4">
-            how the Fall 2026 SHSAT works
-          </Link>{" "}
-          or the official{" "}
+      </Section>
+
+      <Section id="fall-2026-format" title="New for Fall 2026: The Computer-Adaptive SHSAT">
+        <ul className="flex max-w-3xl list-disc flex-col gap-2 pl-5 leading-relaxed text-ink marker:text-brand">
+          <li>The Fall 2026 SHSAT is computer-adaptive and taken on DOE-provided computers.</li>
+          <li>50 English Language Arts questions and 50 Math questions.</li>
+          <li>180 minutes of standard testing time.</li>
+          <li>Multiple-choice, fill-in-the-blank, and technology-enhanced items.</li>
+          <li>Students must answer each question before advancing.</li>
+          <li>Math and standalone ELA questions cannot be revisited after advancing.</li>
+          <li>
+            Passage-based ELA questions may be reviewed within the passage set before the set is submitted.
+          </li>
+        </ul>
+        <p className="mt-6 max-w-3xl leading-relaxed text-subtle">
+          Confirm current details on the official{" "}
           <a
-            href={NYC_SHSAT_UNDERSTANDING_URL}
+            href={NYCPS_SHSAT_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="font-bold text-navy underline underline-offset-4"
           >
-            NYC SHSAT Portal test information
+            NYC Public Schools SHSAT page
           </a>
+          , or read{" "}
+          <Link href="/resources/digital-shsat-2026" className="font-bold text-navy underline underline-offset-4">
+            how the Fall 2026 SHSAT works
+          </Link>
           .
         </p>
       </Section>
