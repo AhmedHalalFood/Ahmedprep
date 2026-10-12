@@ -118,8 +118,7 @@ export default function Home() {
             </TrackedLink>
           </div>
           <p className="hero-trust">
-            SHSAT <span aria-hidden="true">•</span> Digital SAT <span aria-hidden="true">•</span> Regents{" "}
-            <span aria-hidden="true">•</span> Academic Support
+            SHSAT Preparation <span aria-hidden="true">•</span> Digital SAT Preparation
           </p>
         </div>
       </section>

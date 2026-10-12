@@ -47,17 +47,20 @@ export const RESOURCES: Resource[] = [
       {
         heading: "Who takes it",
         body: [
-          "NYC students take the SHSAT in 8th grade, and first-time 9th graders may also sit for it. Registration is handled through the student's school counselor and the NYC Public Schools enrollment process. Dates and registration windows change each year, so confirm them directly with your child's school and the official NYC Public Schools website.",
+          "NYC students take the SHSAT in 8th grade, and first-time 9th graders may also sit for it. Families register in MySchools; for the Fall 2026 test, registration closes October 30. Dates and registration windows change each year, so confirm them on the official NYC Public Schools Specialized High Schools page and with your child's school.",
         ],
       },
       {
         heading: "What is on the test",
-        body: ["The SHSAT has two sections, English Language Arts and Mathematics, completed in a single sitting."],
+        body: [
+          "Beginning in Fall 2026, the SHSAT is a computer-adaptive test taken on DOE-provided computers. It has two subjects, English Language Arts and Mathematics, completed in a single sitting.",
+        ],
         list: [
-          "ELA: Revising/Editing questions on grammar, sentence structure, and organization, plus Reading Comprehension passages across informational and literary texts.",
-          "Math: Multiple-choice and grid-in questions covering arithmetic, algebra, geometry, probability, statistics, and word problems.",
-          "Each section contains 57 questions, including some unscored field-test questions that students cannot identify.",
-          "Students receive 180 minutes total and decide how to divide their time between the two sections.",
+          "ELA: 50 questions, including Revising & Editing questions on grammar, sentence structure, and organization, plus Reading Comprehension passages across informational and literary texts.",
+          "Math: 50 questions covering arithmetic, algebra, geometry, probability, statistics, and word problems.",
+          "Question formats include multiple-choice, fill-in-the-blank, and technology-enhanced items.",
+          "Students receive 180 minutes total, choose which subject to begin with, and decide how to divide their time.",
+          "Every question must be answered before advancing. Math and standalone ELA questions cannot be revisited after advancing; passage-based ELA questions can be revisited within their passage set until the set is submitted.",
           "Calculators are not permitted.",
         ],
       },
@@ -76,7 +79,7 @@ export const RESOURCES: Resource[] = [
           "Rebuild foundations: close content gaps before drilling speed.",
           "Practice by section: targeted Math and ELA sets with explanations.",
           "Build stamina: full-length timed exams under test-day conditions.",
-          "Refine strategy: pacing, section order, and guessing decisions.",
+          "Refine strategy: pacing, subject order, and committing to an answer before advancing on the computer-adaptive test.",
         ],
       },
     ],
@@ -91,7 +94,7 @@ export const RESOURCES: Resource[] = [
       {
         heading: "Start with official material",
         body: [
-          "The most realistic practice comes from the official SHSAT Student Handbook published by NYC Public Schools, which includes sample tests in the current format. Use these as benchmarks rather than everyday practice, because there are only a limited number of them.",
+          "The most realistic practice comes from the official digital practice tests and Student Readiness Tool on the NYC SHSAT Portal (nycshsat.myassessmentsupport.com), published for NYC Public Schools. Use these as benchmarks rather than everyday practice, because there are only a limited number of them.",
           "Supplement with high-quality practice sets for skill building, and save the official exams for checkpoints at the start, middle, and end of preparation.",
         ],
       },
@@ -102,7 +105,9 @@ export const RESOURCES: Resource[] = [
           "One uninterrupted 180-minute sitting, timed by a parent or a clock.",
           "No calculator, phone, or notes.",
           "A quiet table, scratch paper, and pencils.",
-          "The student chooses section order and pacing, just as on test day.",
+          "Practice on a computer when possible, since the Fall 2026 SHSAT is computer-adaptive.",
+          "The student chooses subject order and pacing, just as on test day.",
+          "Answer every question before moving on, and do not go back to Math or standalone ELA questions.",
         ],
       },
       {
@@ -164,10 +169,10 @@ export const RESOURCES: Resource[] = [
         ],
       },
       {
-        heading: "Sample problem: grid-in",
+        heading: "Sample problem: fill-in-the-blank",
         body: [
           "If 3x − 7 = 2x + 5, what is the value of x?",
-          "Solution: Subtract 2x from both sides to get x − 7 = 5, then add 7 to get x = 12. On grid-in questions there are no answer choices to check against, so substitute the answer back: 3(12) − 7 = 29 and 2(12) + 5 = 29.",
+          "Solution: Subtract 2x from both sides to get x − 7 = 5, then add 7 to get x = 12. On fill-in-the-blank questions there are no answer choices to check against, so substitute the answer back before advancing: 3(12) − 7 = 29 and 2(12) + 5 = 29. On the computer-adaptive SHSAT you cannot return to a Math question once you move on.",
         ],
       },
       {
@@ -177,7 +182,7 @@ export const RESOURCES: Resource[] = [
           "Write every step; mental math causes most careless errors without a calculator.",
           "Re-read the question before choosing an answer to confirm what is being asked.",
           "Estimate first so unreasonable answers stand out.",
-          "Skip and return to long problems instead of getting stuck.",
+          "Don't get stuck: if a long problem stalls, eliminate choices, commit to the best answer, and advance. Math questions cannot be revisited.",
           "Keep an error log and review it weekly.",
         ],
       },
@@ -193,7 +198,8 @@ export const RESOURCES: Resource[] = [
       {
         heading: "Two parts of the ELA section",
         body: [
-          "SHSAT ELA combines Revising/Editing questions, which test grammar, punctuation, sentence structure, and the organization of a short text, with Reading Comprehension questions based on longer informational and literary passages.",
+          "SHSAT ELA has 50 questions that combine Revising/Editing questions, which test grammar, punctuation, sentence structure, and the organization of a short text, with Reading Comprehension questions based on longer informational and literary passages.",
+          "On the Fall 2026 computer-adaptive test, standalone Revising/Editing questions cannot be revisited once the student advances. Questions tied to a passage can be reviewed and changed within that passage set, but only until the student moves past the set's last question.",
         ],
       },
       {

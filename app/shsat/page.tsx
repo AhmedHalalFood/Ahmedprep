@@ -12,6 +12,7 @@ import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
 import { NOT_AFFILIATED_NOTE, SITE_URL } from "@/lib/business"
 import { INTENSIVE_PATH } from "@/lib/shsat-intensive"
+import { NYC_SHSAT_UNDERSTANDING_URL } from "@/lib/resources-shsat-2026"
 
 export const metadata: Metadata = {
   title: { absolute: "SHSAT Prep in Queens, NY | AhmedPrep Astoria" },
@@ -62,11 +63,15 @@ const steps = [
 const faqs: FaqItem[] = [
   {
     q: "Who takes the SHSAT?",
-    a: "NYC 8th graders, and first-time 9th graders, take the SHSAT to apply to eight of the nine Specialized High Schools. Registration is handled through the student's school counselor. Confirm current dates with your child's school and NYC Public Schools.",
+    a: "NYC 8th graders, and first-time 9th graders, take the SHSAT to apply to eight of the nine testing Specialized High Schools. Families register in MySchools; for the Fall 2026 test the deadline is October 30. Confirm current dates on the official NYC Public Schools Specialized High Schools page.",
   },
   {
     q: "What does the SHSAT test?",
-    a: "The SHSAT has an English Language Arts section with Revising/Editing and Reading Comprehension questions, and a Math section with multiple-choice and grid-in questions. Students have 180 minutes total and choose how to split their time. Calculators are not allowed.",
+    a: "Beginning in Fall 2026, the SHSAT is a computer-adaptive test with 50 English Language Arts questions (Revising/Editing and Reading Comprehension) and 50 Math questions. Questions include multiple-choice, fill-in-the-blank, and technology-enhanced items. Standard testing time is 180 minutes, students choose which subject to begin with, and calculators are not allowed. Students test on DOE-provided computers.",
+  },
+  {
+    q: "Can students skip questions or go back on the computer-adaptive SHSAT?",
+    a: "No skipping: every question must be answered before advancing. Math and standalone ELA questions generally cannot be revisited after the student advances. Passage-based ELA questions can be revisited within their passage set until the set is submitted. Once a subject is submitted, it cannot be reopened.",
   },
   {
     q: "When should my child start SHSAT preparation?",
@@ -111,7 +116,7 @@ export default function ShsatPage() {
       <ProgramHero
         location="shsat"
         eyebrow="SHSAT Prep · Astoria, Queens"
-        title="Preparing for the SHSAT? Start With a Free Diagnostic."
+        title="SHSAT Prep in Astoria, Queens: Start With a Free Diagnostic"
         intro="Your child receives a full SHSAT-style assessment, a breakdown of strengths and weaknesses, and a personalized plan for improvement."
         benefitsTitle="Every SHSAT student receives"
         benefits={benefits}
@@ -174,7 +179,7 @@ export default function ShsatPage() {
               <li>Fractions, ratios, rates, and percents</li>
               <li>Algebraic expressions, equations, and inequalities</li>
               <li>Geometry, probability, and statistics</li>
-              <li>Multi-step word problems and grid-in questions</li>
+              <li>Multi-step word problems and fill-in-the-blank questions</li>
               <li>Accurate calculation without a calculator</li>
             </ul>
             <Link href="/resources/shsat-math-practice" className="text-link mt-6">
@@ -195,6 +200,24 @@ export default function ShsatPage() {
             </Link>
           </article>
         </div>
+        <p className="mt-8 max-w-3xl leading-relaxed text-subtle">
+          Beginning in Fall 2026, the SHSAT is computer-adaptive: 50 ELA and 50 Math questions in 180 minutes, answered on
+          DOE-provided computers. Students must answer each question before advancing, and Math and standalone ELA questions
+          cannot be revisited. Read{" "}
+          <Link href="/resources/digital-shsat-2026" className="font-bold text-navy underline underline-offset-4">
+            how the Fall 2026 SHSAT works
+          </Link>{" "}
+          or the official{" "}
+          <a
+            href={NYC_SHSAT_UNDERSTANDING_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold text-navy underline underline-offset-4"
+          >
+            NYC SHSAT Portal test information
+          </a>
+          .
+        </p>
       </Section>
 
       <Section
@@ -205,7 +228,7 @@ export default function ShsatPage() {
         intro="Students take timed, full-length SHSAT practice exams in our Astoria classroom. Every exam is followed by a review of each missed question, so students understand whether an error came from content, timing, or strategy."
       >
         <ul className="grid gap-4 md:grid-cols-3">
-          {["Build stamina for a 180-minute exam", "Practice pacing and section order", "Track scores from test to test"].map((item) => (
+          {["Build stamina for a 180-minute exam", "Practice answer-before-advancing pacing", "Track scores from test to test"].map((item) => (
             <li key={item} className="border-l-4 border-gold bg-white p-5 font-bold text-navy">
               {item}
             </li>
