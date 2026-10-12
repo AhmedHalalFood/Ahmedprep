@@ -2,6 +2,7 @@ import type { Resource } from "./resources"
 
 export const NYCPS_SHSAT_URL = "https://www.schools.nyc.gov/enrollment/enroll-grade-by-grade/specialized-high-schools"
 export const NYC_SHSAT_PORTAL_URL = "https://nycshsat.myassessmentsupport.com"
+export const NYC_SHSAT_UNDERSTANDING_URL = "https://nycshsat.myassessmentsupport.com/understanding-the-test/"
 
 const PUBLISHED = "2026-10-09"
 
@@ -111,23 +112,36 @@ export const SHSAT_2026_GUIDES: Resource[] = [
     cardTitle: "How the digital SHSAT works in 2026",
     metaTitle: "Digital SHSAT 2026: Format, Timing & How to Prepare",
     description:
-      "The SHSAT is now computer-based. Learn the digital SHSAT format: ELA and Math, 50 questions each, 180 minutes, DOE computers, and official practice tools.",
+      "Starting Fall 2026 the SHSAT is computer-adaptive: 50 ELA and 50 Math questions, 180 minutes, answer-before-advancing rules, and official practice tools.",
     cardDescription: "The computer-based format, section structure, timing, and the official tools students should practice with.",
     datePublished: PUBLISHED,
     intro: [
-      "The SHSAT is no longer a paper-and-pencil test. Students now take it on a computer, which changes how they read passages, work math problems, and manage their time. The content is still middle-school English and Math, but practicing in the right format has become part of good SHSAT preparation.",
-      `This guide covers what NYC Public Schools has published about the digital SHSAT. For the most current details, read the official guide on the [NYC SHSAT Portal](${NYC_SHSAT_PORTAL_URL}).`,
+      "Beginning with the Fall 2026 administration, the SHSAT is a computer-adaptive test (CAT), not a paper-and-pencil test. That changes how students read passages, work math problems, manage their time, and, most importantly, move between questions. Strategies built for the old paper test, such as skipping hard questions and coming back later, no longer work.",
+      `This guide summarizes what NYC Public Schools has published. For the authoritative details, read the official [Understanding the Test page and test directions on the NYC SHSAT Portal](${NYC_SHSAT_UNDERSTANDING_URL}) and the [NYC Public Schools Specialized High Schools page](${NYCPS_SHSAT_URL}).`,
     ],
     sections: [
       {
-        heading: "The digital SHSAT at a glance",
+        heading: "The Fall 2026 SHSAT at a glance",
         body: [],
         list: [
-          "The test is computer-based and taken on DOE-provided computers at the testing site.",
-          "There are two sections: English Language Arts (ELA) and Mathematics.",
-          "Each section has 50 questions.",
-          "Standard testing time is 180 minutes for the full test.",
-          "Students can choose which section to begin with.",
+          "The test is computer-adaptive and taken on DOE-provided computers at the assigned testing site.",
+          "There are two subjects: English Language Arts (ELA) with 50 questions and Mathematics with 50 questions.",
+          "Standard testing time is 180 minutes for the full test, and students decide how to divide it.",
+          "Students choose which subject to begin with, and must finish and submit that subject before moving on. A submitted subject cannot be reopened.",
+          "Question formats include multiple-choice, fill-in-the-blank, and technology-enhanced items.",
+          "Students must answer every question before advancing.",
+        ],
+      },
+      {
+        heading: "Moving between questions: what can and cannot be revisited",
+        body: [
+          "This is the biggest change from the paper test, and it should shape how students practice.",
+        ],
+        list: [
+          "Math questions cannot be revisited once the student advances to the next question.",
+          "Standalone ELA Revising & Editing questions cannot be revisited once the student advances.",
+          "Passage-based ELA questions (a Reading Comprehension or Revising & Editing passage and its related questions) can be revisited and changed within that passage set, until the student advances past the last question in the set. After that, the set is locked.",
+          "Because every question must be answered, there is no blank answer to come back to. If a student is unsure, the best move is to eliminate what they can, choose the strongest answer, and keep going.",
         ],
       },
       {
@@ -152,7 +166,7 @@ export const SHSAT_2026_GUIDES: Resource[] = [
         heading: "Timing and section order",
         body: [
           "Students have 180 minutes of standard testing time for both sections together. Because they can choose which section to start with, they also decide how to divide their time. That flexibility helps students who plan ahead and can hurt students who drift.",
-          "A practical approach is to decide on a section order and a rough time split before test day, then practice that plan on full-length tests. Some students prefer to start with their stronger section to build momentum; others start with the section that requires more energy. Either can work if the student has rehearsed it.",
+          "A practical approach is to decide on a section order and a rough time split before test day, then practice that plan on full-length tests. Some students prefer to start with their stronger section to build momentum; others start with the section that requires more energy. Either can work if the student has rehearsed it. Remember that once the first subject is submitted it cannot be reopened, so budget time before moving on.",
         ],
         subsections: [
           {
@@ -168,8 +182,9 @@ export const SHSAT_2026_GUIDES: Resource[] = [
         body: ["The skills being tested are the same, but the experience is different. Students should be ready for:"],
         list: [
           "Reading long passages on a screen and keeping track of where key details appear.",
-          "Working math problems on scratch paper and then entering answers on the computer.",
-          "Navigating between questions and using on-screen tools to mark questions to revisit.",
+          "Working math problems on scratch paper and then entering answers on the computer, including typed fill-in-the-blank answers.",
+          "Committing to an answer before advancing, since Math and standalone ELA questions cannot be revisited.",
+          "Using the freedom inside an ELA passage set wisely: check answers within the set before moving past its last question.",
           "Watching an on-screen timer and pacing without a paper booklet to flip through.",
         ],
       },
@@ -188,6 +203,7 @@ export const SHSAT_2026_GUIDES: Resource[] = [
           "Practice reading passages on a computer screen, not only on paper.",
           "Take full-length practice tests in one sitting with a 180-minute timer.",
           "Settle on a section order and time split, and use it consistently.",
+          "Practice answering each Math question fully before moving on, instead of skipping and returning.",
           `Review every practice test carefully. Our guide on [how to use SHSAT practice tests](/resources/how-to-use-shsat-practice-tests) explains a review routine that works.`,
         ],
       },
@@ -299,8 +315,8 @@ export const SHSAT_2026_GUIDES: Resource[] = [
           "Write each step on scratch paper instead of relying on mental math.",
           "Underline or note what the question is asking before solving.",
           "Estimate first so an unreasonable answer stands out.",
-          "Plug answers back into the original problem when time allows.",
-          "Skip a problem that stalls you and return to it later.",
+          "Plug answers back into the original problem before advancing, because Math questions cannot be revisited on the computer-adaptive SHSAT.",
+          "If a problem stalls you, eliminate what you can, choose the best answer, and move on rather than losing minutes.",
           "Keep an error log and review it every week.",
         ],
       },
@@ -345,6 +361,7 @@ export const SHSAT_2026_GUIDES: Resource[] = [
           "Practice on a computer whenever possible, since the real SHSAT is digital.",
           "Use only scratch paper and pencils: no phone, notes, or help.",
           "Choose a section order and time split ahead of time, just as on test day.",
+          "Follow the real navigation rules: answer every question, do not go back to Math or standalone ELA questions, and revisit passage questions only within their set.",
           "Pick a quiet space and a start time similar to the real test.",
         ],
       },

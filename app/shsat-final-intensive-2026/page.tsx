@@ -116,8 +116,8 @@ export default function ShsatFinalIntensivePage() {
           <article className="bg-white p-6 md:p-8">
             <h3 className="text-lg font-extrabold text-navy">SHSAT Math prep</h3>
             <p className="mt-3 leading-relaxed text-subtle">
-              Word problems, ratios and percents, algebra, geometry, and grid-ins, practiced without a calculator, with strategies for
-              accuracy under time pressure.
+              Word problems, ratios and percents, algebra, geometry, and fill-in-the-blank questions, practiced without a calculator, with
+              answer-before-advancing strategies for the computer-adaptive SHSAT.
             </p>
           </article>
           <article className="bg-white p-6 md:p-8">

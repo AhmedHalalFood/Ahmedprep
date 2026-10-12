@@ -105,7 +105,7 @@ export default function DigitalSatPage() {
       <ProgramHero
         location="digital_sat"
         eyebrow="Digital SAT Prep · Astoria, Queens"
-        title="Improve Your Digital SAT Score With a Personalized Plan."
+        title="Digital SAT Prep in Astoria, Queens: Build a Personalized Score Plan"
         intro="Start with a free diagnostic. We'll analyze your score by section and skill and build a plan around the gains that matter most."
         benefitsTitle="Every Digital SAT student receives"
         benefits={benefits}
