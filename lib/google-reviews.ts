@@ -18,8 +18,11 @@ export const GOOGLE_REVIEWS_CONFIG = {
   reviewCount: null as number | null,
   /** Replace with the Google Business Profile reviews link once available. */
   readMoreUrl: MAPS_URL,
-  /** Replace with the "Ask for reviews" link from Google Business Profile (https://g.page/r/.../review). */
-  leaveReviewUrl: MAPS_URL,
+  /**
+   * Paste the verified "Ask for reviews" link from Google Business Profile (https://g.page/r/.../review).
+   * While this is null, every "Leave a review" / "Share your experience" link stays hidden.
+   */
+  leaveReviewUrl: null as string | null,
 }
 
 export const GOOGLE_REVIEWS: GoogleReview[] = []

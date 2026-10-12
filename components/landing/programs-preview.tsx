@@ -29,7 +29,7 @@ export function ProgramsPreview() {
               >
                 <span className="flex flex-col gap-1">
                   <span className="font-extrabold text-navy group-hover:text-brand">{program.name}</span>
-                  <span className="text-sm font-semibold text-subtle">{program.price ?? "Contact for pricing"}</span>
+                  <span className="text-sm font-semibold text-subtle">{program.price ?? "Contact AhmedPrep for current pricing"}</span>
                 </span>
                 <ArrowUpRight size={18} aria-hidden="true" className="mt-1 shrink-0 text-brand" />
               </TrackedLink>

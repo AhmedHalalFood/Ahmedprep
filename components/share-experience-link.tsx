@@ -5,11 +5,14 @@ import { GOOGLE_REVIEWS_CONFIG } from "@/lib/google-reviews"
 
 /** Secondary, optional review link. No incentives and shown to everyone, per Google's review policies. */
 export function ShareExperienceLink({ location, lead }: { location: string; lead: string }) {
+  const { leaveReviewUrl } = GOOGLE_REVIEWS_CONFIG
+  if (!leaveReviewUrl) return null
+
   return (
     <p className="text-sm leading-relaxed text-subtle">
       {lead}{" "}
       <TrackedLink
-        href={GOOGLE_REVIEWS_CONFIG.leaveReviewUrl}
+        href={leaveReviewUrl}
         event={EVENTS.reviewLinkClick}
         eventProps={{ location }}
         target="_blank"

@@ -89,7 +89,7 @@ export const PROGRAMS: Program[] = [
     benefits: ["Concentrated practice before test day", "Full-length timed sections", "Final strategy review"],
     schedule: "2026 SHSAT Final Intensive: 20 live classes, Oct. 12–Nov. 12, 2026",
     price: "$1,000",
-    priceNote: "2026 SHSAT Final Intensive. Pay in full or in 2 payments of $500.",
+    priceNote: "For 60 live hours (20 classes) in the 2026 SHSAT Final Intensive. Pay in full or in 2 payments of $500.",
     cta: { label: "View the 2026 Intensive", href: INTENSIVE_PATH },
   },
 ]

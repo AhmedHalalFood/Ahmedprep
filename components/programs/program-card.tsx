@@ -15,7 +15,11 @@ export function ProgramCard({ program }: { program: Program }) {
 
       <div className="border-y border-line py-4">
         <p className="text-xs font-bold uppercase tracking-widest text-subtle">Price</p>
-        <p className="mt-1 text-2xl font-extrabold text-navy">{program.price ?? "Contact for pricing"}</p>
+        {program.price ? (
+          <p className="mt-1 text-2xl font-extrabold text-navy">{program.price}</p>
+        ) : (
+          <p className="mt-1 text-base font-extrabold leading-snug text-navy">Contact AhmedPrep for current pricing</p>
+        )}
         {program.priceNote && <p className="mt-1 text-xs leading-relaxed text-subtle">{program.priceNote}</p>}
       </div>
 
