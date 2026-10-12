@@ -124,7 +124,7 @@ export const SHSAT_2026_GUIDES: Resource[] = [
         heading: "The Fall 2026 SHSAT at a glance",
         body: [],
         list: [
-          "The test is computer-adaptive and taken on DOE-provided computers at the assigned testing site.",
+          "The test is computer-adaptive and taken on NYCPS-provided computers at the assigned testing site, except for limited approved paper accommodations.",
           "There are two subjects: English Language Arts (ELA) with 50 questions and Mathematics with 50 questions.",
           "Standard testing time is 180 minutes for the full test, and students decide how to divide it.",
           "Students choose which subject to begin with, and must finish and submit that subject before moving on. A submitted subject cannot be reopened.",
@@ -140,7 +140,7 @@ export const SHSAT_2026_GUIDES: Resource[] = [
         list: [
           "Math questions cannot be revisited once the student advances to the next question.",
           "Standalone ELA Revising & Editing questions cannot be revisited once the student advances.",
-          "Passage-based ELA questions (a Reading Comprehension or Revising & Editing passage and its related questions) can be revisited and changed within that passage set, until the student advances past the last question in the set. After that, the set is locked.",
+          "Passage-based ELA questions (a Reading Comprehension or Revising & Editing passage and its related questions) can be reviewed and changed within that passage set until that set is submitted. After that, the set is locked.",
           "Because every question must be answered, there is no blank answer to come back to. If a student is unsure, the best move is to eliminate what they can, choose the strongest answer, and keep going.",
         ],
       },

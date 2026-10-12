@@ -69,11 +69,11 @@ const faqs: FaqItem[] = [
   },
   {
     q: "What does the SHSAT test?",
-    a: "Beginning in Fall 2026, the SHSAT is a computer-adaptive test with 50 English Language Arts questions (Revising/Editing and Reading Comprehension) and 50 Math questions. Questions include multiple-choice, fill-in-the-blank, and technology-enhanced items. Standard testing time is 180 minutes, students choose which subject to begin with, and calculators are not allowed. Students test on DOE-provided computers.",
+    a: "Beginning in Fall 2026, the SHSAT is a computer-adaptive test with 50 English Language Arts questions (Revising/Editing and Reading Comprehension) and 50 Math questions. Questions include multiple-choice, fill-in-the-blank, and technology-enhanced items. Standard testing time is 180 minutes, students choose which subject to begin with, and calculators are not allowed. Students test on NYCPS-provided computers, except for limited approved paper accommodations.",
   },
   {
     q: "Can students skip questions or go back on the computer-adaptive SHSAT?",
-    a: "No skipping: every question must be answered before advancing. Math and standalone ELA questions generally cannot be revisited after the student advances. Passage-based ELA questions can be revisited within their passage set until the set is submitted. Once a subject is submitted, it cannot be reopened.",
+    a: "No skipping: every question must be answered before advancing. Math and standalone ELA questions cannot be revisited after the student advances. Passage-based ELA questions can be revisited within their passage set until the set is submitted. Once a subject is submitted, it cannot be reopened.",
   },
   {
     q: "When should my child start SHSAT preparation?",
@@ -206,14 +206,18 @@ export default function ShsatPage() {
 
       <Section id="fall-2026-format" title="New for Fall 2026: The Computer-Adaptive SHSAT">
         <ul className="flex max-w-3xl list-disc flex-col gap-2 pl-5 leading-relaxed text-ink marker:text-brand">
-          <li>The Fall 2026 SHSAT is computer-adaptive and taken on DOE-provided computers.</li>
+          <li>
+            The Fall 2026 SHSAT is computer-adaptive and taken on NYCPS-provided computers, except for limited approved
+            paper accommodations.
+          </li>
           <li>50 English Language Arts questions and 50 Math questions.</li>
           <li>180 minutes of standard testing time.</li>
+          <li>Students may choose whether to begin with ELA or Math.</li>
           <li>Multiple-choice, fill-in-the-blank, and technology-enhanced items.</li>
           <li>Students must answer each question before advancing.</li>
           <li>Math and standalone ELA questions cannot be revisited after advancing.</li>
           <li>
-            Passage-based ELA questions may be reviewed within the passage set before the set is submitted.
+            Passage-set ELA questions can be reviewed within the passage set until that set is submitted.
           </li>
         </ul>
         <p className="mt-6 max-w-3xl leading-relaxed text-subtle">
