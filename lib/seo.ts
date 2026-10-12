@@ -5,6 +5,32 @@ export function absoluteUrl(path = "/") {
   return `${SITE_URL}${path.startsWith("/") ? path : `/${path}`}`
 }
 
+export function webPageSchema({
+  path,
+  name,
+  description,
+  type = "WebPage",
+}: {
+  path: string
+  name: string
+  description: string
+  type?: "WebPage" | "CollectionPage" | "WebApplication"
+}) {
+  const url = absoluteUrl(path)
+  return {
+    "@context": "https://schema.org",
+    "@type": type,
+    "@id": `${url}#webpage`,
+    url,
+    name,
+    description,
+    inLanguage: "en-US",
+    isPartOf: { "@id": `${SITE_URL}/#website` },
+    publisher: { "@id": `${SITE_URL}/#organization` },
+    ...(type === "WebApplication" && { applicationCategory: "EducationalApplication", operatingSystem: "Any", isAccessibleForFree: true }),
+  }
+}
+
 export const baseOpenGraph = {
   title: "SHSAT & Digital SAT Prep in Astoria, Queens | AhmedPrep",
   description: "Personalized test preparation in Astoria, Queens. Book a free diagnostic.",

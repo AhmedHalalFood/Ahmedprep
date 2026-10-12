@@ -8,6 +8,8 @@ import { LocationSection } from "@/components/landing/location-section"
 import { Breadcrumbs, JsonLd, Section } from "@/components/landing/primitives"
 import { ProgramHero } from "@/components/landing/program-hero"
 import { SuccessStories } from "@/components/landing/success-stories"
+import { ThisSundayStrip } from "@/components/sunday-classes/this-sunday-strip"
+import { TeachingVideos } from "@/components/videos/teaching-videos"
 import { EVENTS } from "@/lib/analytics"
 import { NOT_AFFILIATED_NOTE, SITE_URL } from "@/lib/business"
 
@@ -181,6 +183,8 @@ export default function DigitalSatPage() {
         </ul>
       </Section>
 
+      <ThisSundayStrip location="digital_sat" />
+      <TeachingVideos page="digital_sat" title="Short Digital SAT lessons from AhmedPrep" />
       <SuccessStories program="Digital SAT" title="Digital SAT student results" />
       <Faq title="Digital SAT prep FAQ" items={faqs} />
       <LocationSection location="digital_sat" />

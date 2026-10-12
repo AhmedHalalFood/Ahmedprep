@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowUpRight, CircleCheck } from "lucide-react"
 import { CallTextLinks } from "@/components/call-text-links"
+import { ShareExperienceLink } from "@/components/share-experience-link"
 
 export const metadata: Metadata = {
   title: "Thank You",
@@ -29,6 +30,9 @@ export default async function ThankYouPage({ searchParams }: { searchParams: Pro
             <div className="mt-3">
               <CallTextLinks location="thank_you" />
             </div>
+          </div>
+          <div className="mt-8 border-t border-line pt-6">
+            <ShareExperienceLink location="thank_you" lead="Already worked with AhmedPrep?" />
           </div>
           <div className="mt-8 flex flex-wrap gap-6">
             <Link href={guideHref} className="text-link">

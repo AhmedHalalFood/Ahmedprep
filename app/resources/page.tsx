@@ -3,6 +3,8 @@ import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 import Link from "next/link"
 import { ArrowRight, ArrowUpRight } from "lucide-react"
 import { Breadcrumbs, Section } from "@/components/landing/primitives"
+import { ThisSundayStrip } from "@/components/sunday-classes/this-sunday-strip"
+import { TeachingVideos } from "@/components/videos/teaching-videos"
 import { RESOURCES, type Resource } from "@/lib/resources"
 
 export const metadata: Metadata = {
@@ -80,6 +82,8 @@ export default function ResourcesPage() {
           </Link>
         </Section>
       ))}
+      <TeachingVideos page="resources" />
+      <ThisSundayStrip location="resources" />
     </>
   )
 }

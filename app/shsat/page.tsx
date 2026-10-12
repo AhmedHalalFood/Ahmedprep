@@ -8,6 +8,8 @@ import { LocationSection } from "@/components/landing/location-section"
 import { Breadcrumbs, JsonLd, Section } from "@/components/landing/primitives"
 import { ProgramHero } from "@/components/landing/program-hero"
 import { SuccessStories } from "@/components/landing/success-stories"
+import { ThisSundayStrip } from "@/components/sunday-classes/this-sunday-strip"
+import { TeachingVideos } from "@/components/videos/teaching-videos"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
 import { NOT_AFFILIATED_NOTE, SITE_URL } from "@/lib/business"
@@ -248,6 +250,8 @@ export default function ShsatPage() {
         </ul>
       </Section>
 
+      <ThisSundayStrip location="shsat" />
+      <TeachingVideos page="shsat" title="Short SHSAT lessons from AhmedPrep" />
       <SuccessStories program="SHSAT" title="SHSAT student results" />
       <Faq title="SHSAT prep FAQ" items={faqs} />
       <LocationSection location="shsat" />

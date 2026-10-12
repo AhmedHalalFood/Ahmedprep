@@ -6,6 +6,7 @@ import { ArrowUpRight } from "lucide-react"
 import { CallTextLinks } from "@/components/call-text-links"
 import { RichText } from "@/components/resources/rich-text"
 import { ShsatHelpCta } from "@/components/resources/shsat-help-cta"
+import { ResourceNextSteps } from "@/components/resources/next-steps"
 import { Breadcrumbs, JsonLd } from "@/components/landing/primitives"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
@@ -95,6 +96,7 @@ export default async function ResourcePage({ params }: { params: Promise<{ slug:
               ))}
             </div>
             {isShsat && <ShsatHelpCta location={`resource_${resource.slug}`} />}
+            <ResourceNextSteps category={resource.category} />
           </div>
 
           <aside className="flex flex-col gap-6 lg:sticky lg:top-6 lg:self-start" aria-label="Next steps">

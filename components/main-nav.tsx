@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { INTENSIVE_PATH } from "@/lib/shsat-intensive"
+import { STUDENT_PORTAL_URL } from "@/lib/student-portal"
 
 export const NAV_LINKS = [
   { label: "Home", href: "/" },
@@ -13,6 +14,7 @@ export const NAV_LINKS = [
   { label: "Resources", href: "/resources" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
+  ...(STUDENT_PORTAL_URL ? [{ label: "Student Login", href: STUDENT_PORTAL_URL }] : []),
 ]
 
 export function isNavActive(pathname: string, href: string) {

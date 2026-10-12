@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next"
 import { SITE_URL } from "@/lib/business"
 import { RESOURCES } from "@/lib/resources"
 import { INTENSIVE_PATH } from "@/lib/shsat-intensive"
+import { FREE_TOOLS, toolPath } from "@/lib/tools"
 import { UPDATES, latestUpdateModified } from "@/lib/updates"
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -12,7 +13,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/digital-sat", priority: 0.9 },
     { path: "/free-sunday-classes", priority: 0.8 },
     { path: "/free-diagnostic", priority: 0.8 },
+    { path: "/programs", priority: 0.8 },
+    { path: "/results", priority: 0.7 },
     { path: "/resources", priority: 0.7 },
+    { path: "/tools", priority: 0.7 },
+    ...FREE_TOOLS.map((t) => ({ path: toolPath(t.slug), priority: 0.6 })),
     { path: "/about", priority: 0.6 },
     { path: "/contact", priority: 0.6 },
     { path: "/referral", priority: 0.4 },
