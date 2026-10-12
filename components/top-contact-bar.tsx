@@ -16,7 +16,7 @@ export function TopContactBar() {
         >
           <span className={styles.tag}>Free</span>
           <span>
-            Live SHSAT & SAT Classes <span className={styles.sep} aria-hidden="true">•</span> Sundays 4–5 PM ET{" "}
+            Live SHSAT & Digital SAT Classes <span className={styles.sep} aria-hidden="true">•</span> Sundays 4–5 PM ET{" "}
             <span className={styles.sep} aria-hidden="true">•</span> RSVP
           </span>
           <ArrowRight size={13} aria-hidden="true" />

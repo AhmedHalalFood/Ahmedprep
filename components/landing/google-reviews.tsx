@@ -24,7 +24,7 @@ function ReviewLinks({
   return (
     <div className={className}>
       <a href={readMoreUrl} target="_blank" rel="noopener noreferrer" className="button button-gold">
-        Read more reviews on Google <ArrowUpRight size={16} aria-hidden="true" />
+        Read reviews on Google <ArrowUpRight size={16} aria-hidden="true" />
       </a>
       {leaveReviewUrl && (
         <a
