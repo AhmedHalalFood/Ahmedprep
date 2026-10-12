@@ -53,14 +53,14 @@ export const RESOURCES: Resource[] = [
       {
         heading: "What is on the test",
         body: [
-          "Beginning in Fall 2026, the SHSAT is a computer-adaptive test taken on DOE-provided computers. It has two subjects, English Language Arts and Mathematics, completed in a single sitting.",
+          "Beginning in Fall 2026, the SHSAT is a computer-adaptive test taken on NYCPS-provided computers, except for limited approved paper accommodations. It has two subjects, English Language Arts and Mathematics, completed in a single sitting.",
         ],
         list: [
           "ELA: 50 questions, including Revising & Editing questions on grammar, sentence structure, and organization, plus Reading Comprehension passages across informational and literary texts.",
           "Math: 50 questions covering arithmetic, algebra, geometry, probability, statistics, and word problems.",
           "Question formats include multiple-choice, fill-in-the-blank, and technology-enhanced items.",
           "Students receive 180 minutes total, choose which subject to begin with, and decide how to divide their time.",
-          "Every question must be answered before advancing. Math and standalone ELA questions cannot be revisited after advancing; passage-based ELA questions can be revisited within their passage set until the set is submitted.",
+          "Every question must be answered before advancing. Math and standalone ELA questions cannot be revisited after advancing; passage-set ELA questions can be reviewed within their passage set until that set is submitted.",
           "Calculators are not permitted.",
         ],
       },
@@ -199,7 +199,7 @@ export const RESOURCES: Resource[] = [
         heading: "Two parts of the ELA section",
         body: [
           "SHSAT ELA has 50 questions that combine Revising/Editing questions, which test grammar, punctuation, sentence structure, and the organization of a short text, with Reading Comprehension questions based on longer informational and literary passages.",
-          "On the Fall 2026 computer-adaptive test, standalone Revising/Editing questions cannot be revisited once the student advances. Questions tied to a passage can be reviewed and changed within that passage set, but only until the student moves past the set's last question.",
+          "On the Fall 2026 computer-adaptive test, standalone Revising/Editing questions cannot be revisited once the student advances. Questions tied to a passage can be reviewed and changed within that passage set, but only until that set is submitted.",
         ],
       },
       {
