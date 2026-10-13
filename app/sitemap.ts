@@ -4,6 +4,7 @@ import { RESOURCES } from "@/lib/resources"
 import { INTENSIVE_PATH } from "@/lib/shsat-intensive"
 import { FREE_TOOLS, toolPath } from "@/lib/tools"
 import { UPDATES, latestUpdateModified } from "@/lib/updates"
+import { WEEKLY_PRACTICE_PATH, getCurrentPractice } from "@/lib/weekly-practice"
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const pages: { path: string; priority: number }[] = [
@@ -25,6 +26,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // lastModified comes only from content dates, so it changes when content changes, not on every build.
   return [
     ...pages.map(({ path, priority }) => ({ url: `${SITE_URL}${path}`, changeFrequency: "monthly" as const, priority })),
+    {
+      url: `${SITE_URL}${WEEKLY_PRACTICE_PATH}`,
+      ...(getCurrentPractice() && { lastModified: getCurrentPractice()!.publishedDate }),
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
+    },
     { url: `${SITE_URL}/updates`, lastModified: latestUpdateModified(), changeFrequency: "weekly" as const, priority: 0.8 },
     ...UPDATES.map((u) => ({
       url: `${SITE_URL}/updates/${u.slug}`,

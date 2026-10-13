@@ -205,6 +205,9 @@ export default function ShsatPage() {
             <Link href="/resources/shsat-ela-practice" className="text-link mt-6">
               SHSAT ELA practice: reading and grammar <ArrowUpRight size={15} aria-hidden="true" />
             </Link>
+            <Link href="/weekly-practice" className="text-link mt-3">
+              Free weekly SHSAT practice question <ArrowUpRight size={15} aria-hidden="true" />
+            </Link>
           </article>
         </div>
       </Section>
