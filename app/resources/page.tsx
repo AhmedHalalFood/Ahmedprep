@@ -20,8 +20,13 @@ const groups: { category: Resource["category"]; title: string; href: string; cta
   { category: "Digital SAT", title: "Digital SAT resources", href: "/digital-sat", cta: "Digital SAT Prep program" },
 ]
 
+const PRACTICE_SLUGS = ["shsat-math-practice", "shsat-ela-practice"]
+
 export default function ResourcesPage() {
   const featured = RESOURCES.filter((r) => r.featured)
+  const practiceGuides = PRACTICE_SLUGS.map((slug) => RESOURCES.find((r) => r.slug === slug)).filter(
+    (r): r is Resource => Boolean(r),
+  )
   return (
     <>
       <Breadcrumbs items={[{ label: "Resources", href: "/resources" }]} />
@@ -55,6 +60,29 @@ export default function ResourcesPage() {
                 <p className="text-pretty leading-relaxed text-subtle">{resource.cardDescription ?? resource.description}</p>
                 <span className="mt-auto inline-flex items-center gap-1 pt-2 text-xs font-extrabold uppercase tracking-wider text-brand">
                   Read guide <ArrowRight size={14} aria-hidden="true" className="transition-transform group-hover:translate-x-0.5" />
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </Section>
+
+      <Section
+        id="shsat-practice"
+        tone="white"
+        eyebrow="SHSAT practice"
+        title="Practice SHSAT Math and ELA"
+        intro="Original practice questions with worked explanations, plus pacing and strategy for each section of the digital test."
+      >
+        <ul className="grid gap-px border border-line bg-line md:grid-cols-2">
+          {practiceGuides.map((resource) => (
+            <li key={resource.slug} className="bg-white">
+              <Link href={`/resources/${resource.slug}`} className="group flex h-full flex-col gap-3 p-6 transition-colors hover:bg-brand-soft md:p-8">
+                <p className="eyebrow blue">{resource.topic}</p>
+                <h3 className="text-balance text-xl font-extrabold leading-snug text-navy group-hover:text-brand">{resource.title}</h3>
+                <p className="text-pretty leading-relaxed text-subtle">{resource.cardDescription ?? resource.description}</p>
+                <span className="mt-auto inline-flex items-center gap-1 pt-2 text-xs font-extrabold uppercase tracking-wider text-brand">
+                  Start practicing <ArrowRight size={14} aria-hidden="true" className="transition-transform group-hover:translate-x-0.5" />
                 </span>
               </Link>
             </li>

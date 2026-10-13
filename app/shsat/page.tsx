@@ -184,9 +184,14 @@ export default function ShsatPage() {
               <li>Multi-step word problems and fill-in-the-blank questions</li>
               <li>Accurate calculation without a calculator</li>
             </ul>
-            <Link href="/resources/shsat-math-practice" className="text-link mt-6">
-              SHSAT Math practice <ArrowUpRight size={15} aria-hidden="true" />
-            </Link>
+            <div className="mt-6 flex flex-col items-start gap-3">
+              <Link href="/resources/shsat-math-practice" className="text-link">
+                SHSAT Math practice questions <ArrowUpRight size={15} aria-hidden="true" />
+              </Link>
+              <Link href="/resources/shsat-math-topics" className="text-link">
+                SHSAT Math topics checklist <ArrowUpRight size={15} aria-hidden="true" />
+              </Link>
+            </div>
           </article>
           <article className="border border-line p-6 md:p-8">
             <h3 className="text-xl font-extrabold text-navy">SHSAT ELA</h3>
@@ -198,7 +203,7 @@ export default function ShsatPage() {
               <li>Reading stamina and active annotation</li>
             </ul>
             <Link href="/resources/shsat-ela-practice" className="text-link mt-6">
-              SHSAT ELA practice <ArrowUpRight size={15} aria-hidden="true" />
+              SHSAT ELA practice: reading and grammar <ArrowUpRight size={15} aria-hidden="true" />
             </Link>
           </article>
         </div>

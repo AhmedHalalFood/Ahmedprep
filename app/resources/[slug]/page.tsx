@@ -11,7 +11,8 @@ import { Breadcrumbs, JsonLd } from "@/components/landing/primitives"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
 import { SITE_URL } from "@/lib/business"
-import { RESOURCES, getResource } from "@/lib/resources"
+import { RESOURCES, getResource, type ResourceBlock } from "@/lib/resources"
+import { PracticePassage, PracticeQuestions } from "@/components/resources/practice-questions"
 
 export function generateStaticParams() {
   return RESOURCES.map((r) => ({ slug: r.slug }))
@@ -85,11 +86,11 @@ export default async function ResourcePage({ params }: { params: Promise<{ slug:
               {resource.sections.map((section) => (
                 <section key={section.heading}>
                   <h2 className="text-2xl font-extrabold tracking-tight text-navy">{section.heading}</h2>
-                  <BlockContent body={section.body} list={section.list} />
+                  <BlockContent block={section} />
                   {section.subsections?.map((sub) => (
                     <div key={sub.heading} className="mt-6">
                       <h3 className="text-lg font-extrabold text-navy">{sub.heading}</h3>
-                      <BlockContent body={sub.body} list={sub.list} />
+                      <BlockContent block={sub} />
                     </div>
                   ))}
                 </section>
@@ -160,7 +161,7 @@ function formatDate(iso: string) {
   return new Date(`${iso}T12:00:00Z`).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" })
 }
 
-function BlockContent({ body, list }: { body: string[]; list?: string[] }) {
+function BlockContent({ block: { body, list, passage, passageTitle, questions } }: { block: ResourceBlock }) {
   return (
     <div className="mt-4 flex flex-col gap-4">
       {body.map((p) => (
@@ -177,6 +178,8 @@ function BlockContent({ body, list }: { body: string[]; list?: string[] }) {
           ))}
         </ul>
       )}
+      {passage && <PracticePassage title={passageTitle} paragraphs={passage} />}
+      {questions && <PracticeQuestions questions={questions} />}
     </div>
   )
 }

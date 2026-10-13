@@ -152,6 +152,7 @@ export const SHSAT_2026_GUIDES: Resource[] = [
             heading: "English Language Arts",
             body: [
               "The ELA section measures how well students read and revise written English. Expect questions on grammar, sentence structure, and the organization of short texts, along with reading comprehension questions based on informational and literary passages. On a screen, students scroll through passages instead of flipping pages, which makes active reading habits more important.",
+              `Try original Reading Comprehension and grammar questions in our [SHSAT ELA practice](/resources/shsat-ela-practice) guide.`,
             ],
           },
           {
@@ -324,7 +325,7 @@ export const SHSAT_2026_GUIDES: Resource[] = [
         heading: "How to build a Math review plan",
         body: [
           `Start by finding the gaps. A timed diagnostic shows which topics need rebuilding and which only need practice. AhmedPrep offers a [free SHSAT diagnostic](/free-diagnostic) at our Astoria location, and our [free Sunday SHSAT class](/free-sunday-classes) works through SHSAT Math and ELA problems live each week.`,
-          `For a broader view of how the test is structured, see [how the digital SHSAT works](/resources/digital-shsat-2026).`,
+          `To put these topics to work, try the original problems and worked explanations in our [SHSAT Math practice questions](/resources/shsat-math-practice). For a broader view of how the test is structured, see [how the digital SHSAT works](/resources/digital-shsat-2026).`,
         ],
       },
     ],
@@ -416,7 +417,7 @@ export const SHSAT_2026_GUIDES: Resource[] = [
         heading: "Getting expert feedback",
         body: [
           `Many students benefit from someone else reviewing their tests with them, because patterns are easier to see from the outside. At AhmedPrep in Astoria, Queens, our [SHSAT prep program](/shsat) includes timed practice exams with detailed review, and our [free SHSAT diagnostic](/free-diagnostic) gives families a clear starting point.`,
-          `If you are preparing for the 2026 test, see our guide to [SHSAT Math topics](/resources/shsat-math-topics) for a review checklist.`,
+          `If you are preparing for the 2026 test, see our guide to [SHSAT Math topics](/resources/shsat-math-topics) for a review checklist. Between full-length tests, targeted sets like our [SHSAT Math practice questions](/resources/shsat-math-practice) and [SHSAT ELA practice](/resources/shsat-ela-practice) help close the gaps each test reveals.`,
         ],
       },
     ],
