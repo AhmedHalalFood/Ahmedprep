@@ -12,12 +12,10 @@ export function ShareExperienceLink({ location, lead }: { location: string; lead
     <p className="text-sm leading-relaxed text-subtle">
       {lead}{" "}
       <TrackedLink
-        href={leaveReviewUrl}
+        href="/review"
         event={EVENTS.reviewLinkClick}
         eventProps={{ location }}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-1 font-semibold text-brand underline-offset-2 hover:underline"
+        className="inline-flex min-h-11 items-center gap-1 font-semibold text-brand underline-offset-2 hover:underline"
       >
         Share Your AhmedPrep Experience <ArrowUpRight size={14} aria-hidden="true" />
       </TrackedLink>
