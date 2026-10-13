@@ -1,9 +1,23 @@
 import { SHSAT_2026_GUIDES } from "./resources-shsat-2026"
+import { SHSAT_ELA_PRACTICE, SHSAT_MATH_PRACTICE } from "./resources-shsat-practice"
+
+export type PracticeQuestion = {
+  topic: string
+  prompt: string
+  /** Omit for fill-in-the-blank questions. */
+  choices?: string[]
+  answer: string
+  explanation: string[]
+}
 
 export type ResourceBlock = {
   heading: string
   body: string[]
   list?: string[]
+  /** Optional reading passage shown before the questions. */
+  passageTitle?: string
+  passage?: string[]
+  questions?: PracticeQuestion[]
 }
 
 export type ResourceSection = ResourceBlock & {
@@ -77,7 +91,7 @@ export const RESOURCES: Resource[] = [
         list: [
           "Diagnose: take a timed, realistic assessment and review every error.",
           "Rebuild foundations: close content gaps before drilling speed.",
-          "Practice by section: targeted Math and ELA sets with explanations.",
+          "Practice by section: targeted sets with explanations, such as our [SHSAT Math practice questions](/resources/shsat-math-practice) and [SHSAT ELA practice](/resources/shsat-ela-practice).",
           "Build stamina: full-length timed exams under test-day conditions.",
           "Refine strategy: pacing, subject order, and committing to an answer before advancing on the computer-adaptive test.",
         ],
@@ -95,7 +109,7 @@ export const RESOURCES: Resource[] = [
         heading: "Start with official material",
         body: [
           "The most realistic practice comes from the official digital practice tests and Student Readiness Tool on the NYC SHSAT Portal (nycshsat.myassessmentsupport.com), published for NYC Public Schools. Use these as benchmarks rather than everyday practice, because there are only a limited number of them.",
-          "Supplement with high-quality practice sets for skill building, and save the official exams for checkpoints at the start, middle, and end of preparation.",
+          "Supplement with high-quality practice sets for skill building, such as our [SHSAT Math](/resources/shsat-math-practice) and [SHSAT ELA](/resources/shsat-ela-practice) practice questions, and save the official exams for checkpoints at the start, middle, and end of preparation.",
         ],
       },
       {
@@ -136,109 +150,8 @@ export const RESOURCES: Resource[] = [
       },
     ],
   },
-  {
-    slug: "shsat-math-practice",
-    category: "SHSAT",
-    title: "SHSAT Math practice: topics and sample problems",
-    metaTitle: "SHSAT Math Practice Problems",
-    description: "The math topics the SHSAT emphasizes, with worked sample problems and the habits that prevent common mistakes.",
-    sections: [
-      {
-        heading: "What SHSAT Math covers",
-        body: ["The Math section draws on middle-school content, but questions often combine several ideas in one problem."],
-        list: [
-          "Number sense: fractions, decimals, percents, ratios, and rates.",
-          "Algebra: expressions, linear equations, inequalities, and systems.",
-          "Geometry: angles, area, perimeter, volume, and the Pythagorean theorem.",
-          "Probability, statistics, and data interpretation.",
-          "Multi-step word problems.",
-        ],
-      },
-      {
-        heading: "Sample problem: percent change",
-        body: [
-          "A jacket costs $80. It is discounted 25%, and then the sale price is discounted another 10%. What is the final price?",
-          "Solution: 25% off leaves 75% of $80, which is $60. Another 10% off leaves 90% of $60, which is $54. The final price is $54, not $52. Successive discounts do not simply add together.",
-        ],
-      },
-      {
-        heading: "Sample problem: ratios",
-        body: [
-          "The ratio of boys to girls in a club is 3:5. If there are 40 students, how many are girls?",
-          "Solution: The ratio has 3 + 5 = 8 parts, so each part is 40 ÷ 8 = 5 students. Girls make up 5 parts, or 25 students.",
-        ],
-      },
-      {
-        heading: "Sample problem: fill-in-the-blank",
-        body: [
-          "If 3x − 7 = 2x + 5, what is the value of x?",
-          "Solution: Subtract 2x from both sides to get x − 7 = 5, then add 7 to get x = 12. On fill-in-the-blank questions there are no answer choices to check against, so substitute the answer back before advancing: 3(12) − 7 = 29 and 2(12) + 5 = 29. On the computer-adaptive SHSAT you cannot return to a Math question once you move on.",
-        ],
-      },
-      {
-        heading: "Habits that raise math scores",
-        body: [],
-        list: [
-          "Write every step; mental math causes most careless errors without a calculator.",
-          "Re-read the question before choosing an answer to confirm what is being asked.",
-          "Estimate first so unreasonable answers stand out.",
-          "Don't get stuck: if a long problem stalls, eliminate choices, commit to the best answer, and advance. Math questions cannot be revisited.",
-          "Keep an error log and review it weekly.",
-        ],
-      },
-    ],
-  },
-  {
-    slug: "shsat-ela-practice",
-    category: "SHSAT",
-    title: "SHSAT ELA practice: Revising/Editing and Reading",
-    metaTitle: "SHSAT ELA Practice and Strategy",
-    description: "How the SHSAT ELA section is structured and practical strategies for grammar and reading comprehension questions.",
-    sections: [
-      {
-        heading: "Two parts of the ELA section",
-        body: [
-          "SHSAT ELA has 50 questions that combine Revising/Editing questions, which test grammar, punctuation, sentence structure, and the organization of a short text, with Reading Comprehension questions based on longer informational and literary passages.",
-          "On the Fall 2026 computer-adaptive test, standalone Revising/Editing questions cannot be revisited once the student advances. Questions tied to a passage can be reviewed and changed within that passage set, but only until that set is submitted.",
-        ],
-      },
-      {
-        heading: "Revising/Editing strategy",
-        body: ["These questions reward knowing a limited set of rules well."],
-        list: [
-          "Sentence boundaries: run-ons, fragments, and comma splices.",
-          "Punctuation: commas with clauses, semicolons, and colons.",
-          "Agreement: subject-verb and pronoun-antecedent.",
-          "Modifiers: placement of descriptive phrases.",
-          "Organization: transitions, sentence placement, and relevance to the paragraph's purpose.",
-        ],
-      },
-      {
-        heading: "Sample editing question",
-        body: [
-          "Which revision corrects the sentence? “The museum opened a new exhibit last week, it features artifacts from ancient Egypt.”",
-          "Answer: “The museum opened a new exhibit last week; it features artifacts from ancient Egypt.” The original joins two complete sentences with only a comma, which is a comma splice. A semicolon, a period, or a conjunction such as “and” fixes it.",
-        ],
-      },
-      {
-        heading: "Reading comprehension strategy",
-        body: [],
-        list: [
-          "Read actively: note the main idea of each paragraph in a few words.",
-          "Identify the author's purpose and point of view.",
-          "Answer from the text, not from outside knowledge.",
-          "Eliminate choices that are too extreme, too narrow, or not supported.",
-          "For evidence questions, find the exact lines that support your answer.",
-        ],
-      },
-      {
-        heading: "Build reading stamina",
-        body: [
-          "Strong readers perform better on the SHSAT. Daily reading of challenging nonfiction, such as science articles, history, and long-form journalism, builds vocabulary and the focus needed for a three-hour exam.",
-        ],
-      },
-    ],
-  },
+  SHSAT_MATH_PRACTICE,
+  SHSAT_ELA_PRACTICE,
   {
     slug: "digital-sat-guide",
     category: "Digital SAT",
