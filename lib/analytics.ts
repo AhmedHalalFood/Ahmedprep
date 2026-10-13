@@ -31,6 +31,9 @@ export const EVENTS = {
   teachingVideoPlay: "teaching_video_play",
   googleReviewClick: "google_review_click",
   studentLoginClick: "student_login_click",
+  weeklyPracticeView: "weekly_practice_view",
+  weeklyPracticeAnswerClick: "weekly_practice_answer_click",
+  weeklyPracticeSundayCta: "weekly_practice_sunday_cta",
 } as const
 
 export type EventName = (typeof EVENTS)[keyof typeof EVENTS]

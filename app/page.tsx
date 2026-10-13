@@ -10,6 +10,7 @@ import { ToolsResources } from "@/components/landing/tools-resources"
 import { WhyFamilies } from "@/components/landing/why-families"
 import { ThisSundayStrip } from "@/components/sunday-classes/this-sunday-strip"
 import { TrackedLink } from "@/components/tracked-link"
+import { WeeklyPracticeCard } from "@/components/weekly-practice/weekly-practice-card"
 import { EVENTS } from "@/lib/analytics"
 import { BUSINESS } from "@/lib/business"
 import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
@@ -160,6 +161,8 @@ export default function Home() {
       <ResultsPreview />
 
       <ThisSundayStrip location="home" />
+
+      <WeeklyPracticeCard location="home" />
 
       <WhyFamilies />
 

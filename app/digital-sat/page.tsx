@@ -165,6 +165,9 @@ export default function DigitalSatPage() {
             </Link>
           </article>
         </div>
+        <Link href="/weekly-practice" className="text-link mt-8">
+          Try this week&apos;s free Digital SAT &amp; SHSAT practice question <ArrowUpRight size={15} aria-hidden="true" />
+        </Link>
       </Section>
 
       <Section

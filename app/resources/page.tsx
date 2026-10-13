@@ -88,6 +88,9 @@ export default function ResourcesPage() {
             </li>
           ))}
         </ul>
+        <Link href="/weekly-practice" className="text-link mt-8">
+          AhmedPrep Weekly Practice: a new SHSAT or Digital SAT question each week <ArrowUpRight size={15} aria-hidden="true" />
+        </Link>
       </Section>
 
       {groups.map((group, i) => (
