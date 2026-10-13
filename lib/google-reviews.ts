@@ -1,15 +1,11 @@
 /**
- * Verified Google review-writing link (https://g.page/r/.../review or
- * https://search.google.com/local/writereview?placeid=...). Set NEXT_PUBLIC_GOOGLE_REVIEW_URL.
+ * Verified AhmedPrep Google Business Profile review-writing link.
  * Never substitute a Google Maps search URL.
  */
-export const GOOGLE_REVIEW_URL = (process.env.NEXT_PUBLIC_GOOGLE_REVIEW_URL ?? "").trim()
+export const GOOGLE_REVIEW_URL = "https://g.page/r/CZa1mHAKJA8BEBM/review"
 
-/** True only for a real https review-writing URL. */
-export const HAS_REVIEW_URL = /^https:\/\//i.test(GOOGLE_REVIEW_URL)
-
-/** Where every review CTA points: the verified Google form, or the /review fallback page while unset. */
-export const REVIEW_HREF = HAS_REVIEW_URL ? GOOGLE_REVIEW_URL : "/review"
+/** Where every review CTA points. */
+export const REVIEW_HREF = GOOGLE_REVIEW_URL
 
 /** Public Google Business Profile URL. Set NEXT_PUBLIC_GOOGLE_PROFILE_URL. */
 export const GOOGLE_PROFILE_URL = (process.env.NEXT_PUBLIC_GOOGLE_PROFILE_URL ?? "").trim()
@@ -32,8 +28,7 @@ export const GOOGLE_REVIEWS_CONFIG = {
   reviewCount: null as number | null,
   /** Empty until NEXT_PUBLIC_GOOGLE_PROFILE_URL is set; the "Read reviews" link is hidden while empty. */
   readMoreUrl: GOOGLE_PROFILE_URL,
-  /** Null until NEXT_PUBLIC_GOOGLE_REVIEW_URL is set. All write-a-review CTAs point to /review, which redirects here. */
-  leaveReviewUrl: (GOOGLE_REVIEW_URL || null) as string | null,
+  leaveReviewUrl: GOOGLE_REVIEW_URL as string | null,
 }
 
 export const GOOGLE_REVIEWS: GoogleReview[] = []
