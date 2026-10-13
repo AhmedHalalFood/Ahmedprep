@@ -2,15 +2,34 @@ export const WEEKLY_PRACTICE_PATH = "/weekly-practice"
 
 export type WeeklyPracticeTest = "SHSAT" | "Digital SAT"
 
+export type PracticeChallenge = {
+  question: string
+  choices: string[]
+  correctAnswer: string
+}
+
 export type WeeklyPracticeQuestion = {
   testType: WeeklyPracticeTest
   topic: string
+  /** Display label, e.g. "SHSAT • Reading Comprehension". Defaults to test type and topic. */
+  label?: string
+  /** Card heading, e.g. "SHSAT Question of the Week". */
+  heading?: string
+  /** Optional sentence or passage shown above the question. */
+  stem?: string
   question: string
   /** Omit for grid-in / fill-in questions. */
   choices?: string[]
   correctAnswer: string
   explanation: string[]
   strategy: string
+  strategyPrompt?: string
+  strategyExample?: { expected: string; instead: string; conclusion: string }
+  challenge?: PracticeChallenge
+  /** Homepage teaser copy. Falls back to the question. */
+  teaser?: { heading: string; text: string }
+  /** Featured graphic in /public. Width and height are the intrinsic pixel size. */
+  image?: { src: string; alt: string; width: number; height: number }
   /** YYYY-MM-DD. A question goes live on this date (New York time) and stays current until a newer one publishes. */
   publishedDate: string
   relatedSundayClass: string
@@ -22,6 +41,44 @@ export type WeeklyPracticeQuestion = {
  * Entries with a future date are hidden until that date, so questions can be scheduled ahead.
  */
 export const WEEKLY_PRACTICE: WeeklyPracticeQuestion[] = [
+  {
+    testType: "SHSAT",
+    topic: "Reading Comprehension",
+    label: "SHSAT • Reading Comprehension",
+    heading: "SHSAT Question of the Week",
+    stem: "Although Maya had practiced the speech many times, she hesitated before stepping onto the stage.",
+    question: "What does the word “although” show?",
+    choices: [
+      "She forgot her speech.",
+      "She was confident.",
+      "Her hesitation contrasts with how much she practiced.",
+      "She decided not to speak.",
+    ],
+    correctAnswer: "Her hesitation contrasts with how much she practiced.",
+    explanation: [
+      "The word “although” signals a contrast between two ideas. Maya practiced the speech many times, so we might expect her to feel prepared and confident. However, she still hesitated before going on stage. That contrast is exactly what “although” communicates.",
+    ],
+    strategy:
+      "When you see transition words such as although, however, but, yet, even though or despite, look for two ideas that contrast with each other.",
+    strategyPrompt: "Ask yourself: “What did I expect to happen, and what happened instead?”",
+    strategyExample: {
+      expected: "Maya practiced many times, so she should feel confident.",
+      instead: "She hesitated.",
+      conclusion: "That leads directly to Choice C.",
+    },
+    challenge: {
+      question: "Which word also signals contrast?",
+      choices: ["Therefore", "However", "Because", "For example"],
+      correctAnswer: "However",
+    },
+    teaser: {
+      heading: "SHSAT Reading Question of the Week",
+      text: "Can you identify what “although” is doing in this sentence?",
+    },
+    publishedDate: "2026-10-13",
+    relatedSundayClass: "Free SHSAT class: reading strategies and common reading traps",
+    ctaUrl: "/free-sunday-classes?class=shsat#rsvp",
+  },
   {
     testType: "SHSAT",
     topic: "Ratios and proportions",
