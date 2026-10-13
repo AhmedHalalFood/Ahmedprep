@@ -34,6 +34,7 @@ export const EVENTS = {
   weeklyPracticeView: "weekly_practice_view",
   weeklyPracticeAnswerClick: "weekly_practice_answer_click",
   weeklyPracticeSundayCta: "weekly_practice_sunday_cta",
+  weeklyPracticeDiagnosticCta: "weekly_practice_diagnostic_cta",
 } as const
 
 export type EventName = (typeof EVENTS)[keyof typeof EVENTS]
