@@ -2,7 +2,6 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { ReviewLink } from "@/components/review-link"
 import { BUSINESS } from "@/lib/business"
-import { HAS_REVIEW_URL } from "@/lib/google-reviews"
 
 export const metadata: Metadata = {
   title: "Share Your AhmedPrep Experience",
@@ -19,23 +18,15 @@ export default function ReviewPage() {
           <h1 id="review-title" className="mt-3 text-balance text-3xl font-extrabold leading-tight tracking-tight text-navy md:text-4xl">
             Share Your AhmedPrep Experience
           </h1>
-          {HAS_REVIEW_URL ? (
-            <>
-              <p className="mt-4 text-lg leading-relaxed text-ink">
-                Thank you for choosing AhmedPrep. If you&rsquo;d like to share your experience, we&rsquo;d be grateful for your feedback on Google.
-              </p>
-              <div className="mt-8">
-                <ReviewLink location="review_page" className="button button-gold min-h-12">
-                  Leave AhmedPrep a Google Review
-                </ReviewLink>
-                <p className="mt-3 text-sm text-subtle">Opens Google in a new tab.</p>
-              </div>
-            </>
-          ) : (
-            <p className="mt-4 text-lg leading-relaxed text-ink">
-              Our Google review link is coming soon. Thank you for wanting to share your experience!
-            </p>
-          )}
+          <p className="mt-4 text-lg leading-relaxed text-ink">
+            Thank you for choosing AhmedPrep. If you&rsquo;d like to share your experience, we&rsquo;d be grateful for your feedback on Google.
+          </p>
+          <div className="mt-8">
+            <ReviewLink location="review_page" className="button button-gold min-h-12">
+              Leave AhmedPrep a Google Review
+            </ReviewLink>
+            <p className="mt-3 text-sm text-subtle">Opens Google in a new tab.</p>
+          </div>
           <div className="mt-8 flex flex-col items-start gap-1 border-t border-line pt-6">
             <Link href="/" className="inline-flex min-h-11 items-center font-semibold text-brand underline-offset-2 hover:underline">
               Back to home
