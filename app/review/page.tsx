@@ -22,7 +22,7 @@ export default function ReviewPage() {
           {HAS_REVIEW_URL ? (
             <>
               <p className="mt-4 text-lg leading-relaxed text-ink">
-                If AhmedPrep has helped your family, we&apos;d appreciate hearing about your experience.
+                Thank you for choosing AhmedPrep. If you&rsquo;d like to share your experience, we&rsquo;d be grateful for your feedback on Google.
               </p>
               <div className="mt-8">
                 <ReviewLink location="review_page" className="button button-gold min-h-12">
