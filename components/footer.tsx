@@ -1,5 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
+import { ReviewLink } from "@/components/review-link"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
 import { ADDRESS_LINE_1, ADDRESS_LINE_2, BUSINESS, MAPS_URL, NOT_AFFILIATED_NOTE } from "@/lib/business"
@@ -52,14 +53,9 @@ export function Footer() {
             <Link href="/about">About</Link>
             <Link href="/contact">Contact</Link>
             <Link href="/referral">Referral</Link>
-            <TrackedLink
-              href="/review"
-              event={EVENTS.reviewLinkClick}
-              eventProps={{ location: "footer" }}
-              className="inline-flex min-h-11 items-center"
-            >
+            <ReviewLink location="footer" className="inline-flex min-h-11 items-center">
               <span aria-hidden="true">★</span>&nbsp;Leave a Google Review
-            </TrackedLink>
+            </ReviewLink>
           </div>
         </div>
       </div>

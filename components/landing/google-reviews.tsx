@@ -1,7 +1,6 @@
 import { Star } from "lucide-react"
 import { Section } from "@/components/landing/primitives"
-import { TrackedLink } from "@/components/tracked-link"
-import { EVENTS } from "@/lib/analytics"
+import { ReviewLink } from "@/components/review-link"
 import { GOOGLE_REVIEWS, GOOGLE_REVIEWS_CONFIG } from "@/lib/google-reviews"
 
 function Stars({ rating }: { rating: number }) {
@@ -17,14 +16,9 @@ function Stars({ rating }: { rating: number }) {
 function ReviewLinks({ profileUrl, className = "flex flex-col items-start gap-1" }: { profileUrl: string; className?: string }) {
   return (
     <div className={className}>
-      <TrackedLink
-        href="/review"
-        event={EVENTS.reviewLinkClick}
-        eventProps={{ location: "reviews_section" }}
-        className="button button-gold min-h-12"
-      >
+      <ReviewLink location="reviews_section" className="button button-gold min-h-12">
         <span aria-hidden="true">★</span> Write a Google Review
-      </TrackedLink>
+      </ReviewLink>
       {profileUrl && (
         <a
           href={profileUrl}
