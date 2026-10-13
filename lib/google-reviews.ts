@@ -5,6 +5,12 @@
  */
 export const GOOGLE_REVIEW_URL = (process.env.NEXT_PUBLIC_GOOGLE_REVIEW_URL ?? "").trim()
 
+/** True only for a real https review-writing URL. */
+export const HAS_REVIEW_URL = /^https:\/\//i.test(GOOGLE_REVIEW_URL)
+
+/** Where every review CTA points: the verified Google form, or the /review fallback page while unset. */
+export const REVIEW_HREF = HAS_REVIEW_URL ? GOOGLE_REVIEW_URL : "/review"
+
 /** Public Google Business Profile URL. Set NEXT_PUBLIC_GOOGLE_PROFILE_URL. */
 export const GOOGLE_PROFILE_URL = (process.env.NEXT_PUBLIC_GOOGLE_PROFILE_URL ?? "").trim()
 

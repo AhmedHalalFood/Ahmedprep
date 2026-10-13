@@ -29,7 +29,7 @@ export const EVENTS = {
   readinessQuizCompleted: "readiness_quiz_complete",
   satGoalPlanCreated: "sat_goal_plan_create",
   teachingVideoPlay: "teaching_video_play",
-  reviewLinkClick: "review_link_click",
+  googleReviewClick: "google_review_click",
   studentLoginClick: "student_login_click",
 } as const
 
