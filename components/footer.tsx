@@ -52,6 +52,14 @@ export function Footer() {
             <Link href="/about">About</Link>
             <Link href="/contact">Contact</Link>
             <Link href="/referral">Referral</Link>
+            <TrackedLink
+              href="/review"
+              event={EVENTS.reviewLinkClick}
+              eventProps={{ location: "footer" }}
+              className="inline-flex min-h-11 items-center"
+            >
+              <span aria-hidden="true">★</span>&nbsp;Leave a Google Review
+            </TrackedLink>
           </div>
         </div>
       </div>

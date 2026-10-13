@@ -1,5 +1,7 @@
-import { ArrowUpRight, Star } from "lucide-react"
+import { Star } from "lucide-react"
 import { Section } from "@/components/landing/primitives"
+import { TrackedLink } from "@/components/tracked-link"
+import { EVENTS } from "@/lib/analytics"
 import { GOOGLE_REVIEWS, GOOGLE_REVIEWS_CONFIG } from "@/lib/google-reviews"
 
 function Stars({ rating }: { rating: number }) {
@@ -12,28 +14,25 @@ function Stars({ rating }: { rating: number }) {
   )
 }
 
-function ReviewLinks({
-  readMoreUrl,
-  leaveReviewUrl,
-  className = "flex flex-wrap gap-3",
-}: {
-  readMoreUrl: string
-  leaveReviewUrl: string | null
-  className?: string
-}) {
+function ReviewLinks({ profileUrl, className = "flex flex-col items-start gap-1" }: { profileUrl: string; className?: string }) {
   return (
     <div className={className}>
-      <a href={readMoreUrl} target="_blank" rel="noopener noreferrer" className="button button-gold">
-        Read reviews on Google <ArrowUpRight size={16} aria-hidden="true" />
-      </a>
-      {leaveReviewUrl && (
+      <TrackedLink
+        href="/review"
+        event={EVENTS.reviewLinkClick}
+        eventProps={{ location: "reviews_section" }}
+        className="button button-gold min-h-12"
+      >
+        <span aria-hidden="true">★</span> Write a Google Review
+      </TrackedLink>
+      {profileUrl && (
         <a
-          href={leaveReviewUrl}
+          href={profileUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex min-h-12 items-center gap-2 border border-navy/25 px-5 text-xs font-extrabold uppercase tracking-wider text-navy transition-colors hover:bg-navy/5"
+          className="inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-brand underline-offset-2 hover:underline"
         >
-          Leave a review <ArrowUpRight size={16} aria-hidden="true" />
+          Read AhmedPrep reviews on Google <span aria-hidden="true">→</span>
         </a>
       )}
     </div>
@@ -41,7 +40,7 @@ function ReviewLinks({
 }
 
 export function GoogleReviews() {
-  const { rating, reviewCount, readMoreUrl, leaveReviewUrl } = GOOGLE_REVIEWS_CONFIG
+  const { rating, reviewCount, readMoreUrl } = GOOGLE_REVIEWS_CONFIG
 
   if (GOOGLE_REVIEWS.length === 0) {
     return (
@@ -50,20 +49,24 @@ export function GoogleReviews() {
           <div className="flex flex-col gap-1">
             <p className="eyebrow blue">Google reviews</p>
             <h2 id="reviews-heading" className="text-xl font-extrabold text-navy text-balance">
-              What AhmedPrep families say
+              Share Your AhmedPrep Experience
             </h2>
             <p className="text-sm leading-relaxed text-subtle">
-              {leaveReviewUrl ? "Read parent and student reviews, or share your own experience." : "Read parent and student reviews on Google."}
+              If AhmedPrep has helped your family, we&apos;d appreciate hearing about your experience.
             </p>
           </div>
-          <ReviewLinks readMoreUrl={readMoreUrl} leaveReviewUrl={leaveReviewUrl} />
+          <ReviewLinks profileUrl={readMoreUrl} />
         </div>
       </section>
     )
   }
 
   return (
-    <Section id="reviews" tone="warm" eyebrow="Google reviews" title="What AhmedPrep families say">
+    <Section id="reviews" tone="warm" eyebrow="Google reviews" title="Share Your AhmedPrep Experience">
+      <p className="mb-8 max-w-2xl leading-relaxed text-subtle">
+        If AhmedPrep has helped your family, we&apos;d appreciate hearing about your experience.
+      </p>
+
       {rating !== null && (
         <div className="mb-8 flex flex-wrap items-center gap-4">
           <span className="text-4xl font-extrabold text-navy">{rating.toFixed(1)}</span>
@@ -74,27 +77,20 @@ export function GoogleReviews() {
         </div>
       )}
 
-      {GOOGLE_REVIEWS.length > 0 ? (
-        <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {GOOGLE_REVIEWS.map((review) => (
-            <li key={review.id} className="flex flex-col gap-4 border border-line bg-white p-6">
-              <Stars rating={review.rating} />
-              <p className="leading-relaxed text-ink">&ldquo;{review.text}&rdquo;</p>
-              <p className="mt-auto text-sm">
-                <span className="font-bold text-navy">{review.author}</span>
-                <span className="text-subtle"> · {review.date} on Google</span>
-              </p>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className="max-w-2xl leading-relaxed text-subtle">
-          Read what parents and students have shared about AhmedPrep on our Google Business Profile, and tell other families about your
-          experience.
-        </p>
-      )}
+      <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {GOOGLE_REVIEWS.map((review) => (
+          <li key={review.id} className="flex flex-col gap-4 border border-line bg-white p-6">
+            <Stars rating={review.rating} />
+            <p className="leading-relaxed text-ink">&ldquo;{review.text}&rdquo;</p>
+            <p className="mt-auto text-sm">
+              <span className="font-bold text-navy">{review.author}</span>
+              <span className="text-subtle"> · {review.date} on Google</span>
+            </p>
+          </li>
+        ))}
+      </ul>
 
-      <ReviewLinks readMoreUrl={readMoreUrl} leaveReviewUrl={leaveReviewUrl} className="mt-8 flex flex-wrap gap-4" />
+      <ReviewLinks profileUrl={readMoreUrl} className="mt-8 flex flex-col items-start gap-1" />
     </Section>
   )
 }

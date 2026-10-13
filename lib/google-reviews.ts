@@ -1,4 +1,12 @@
-import { MAPS_URL } from "@/lib/business"
+/**
+ * Verified Google review-writing link (https://g.page/r/.../review or
+ * https://search.google.com/local/writereview?placeid=...). Set NEXT_PUBLIC_GOOGLE_REVIEW_URL.
+ * Never substitute a Google Maps search URL.
+ */
+export const GOOGLE_REVIEW_URL = (process.env.NEXT_PUBLIC_GOOGLE_REVIEW_URL ?? "").trim()
+
+/** Public Google Business Profile URL. Set NEXT_PUBLIC_GOOGLE_PROFILE_URL. */
+export const GOOGLE_PROFILE_URL = (process.env.NEXT_PUBLIC_GOOGLE_PROFILE_URL ?? "").trim()
 
 export type GoogleReview = {
   id: string
@@ -16,13 +24,10 @@ export type GoogleReview = {
 export const GOOGLE_REVIEWS_CONFIG = {
   rating: null as number | null,
   reviewCount: null as number | null,
-  /** Replace with the Google Business Profile reviews link once available. */
-  readMoreUrl: MAPS_URL,
-  /**
-   * Paste the verified "Ask for reviews" link from Google Business Profile (https://g.page/r/.../review).
-   * While this is null, every "Leave a review" / "Share your experience" link stays hidden.
-   */
-  leaveReviewUrl: null as string | null,
+  /** Empty until NEXT_PUBLIC_GOOGLE_PROFILE_URL is set; the "Read reviews" link is hidden while empty. */
+  readMoreUrl: GOOGLE_PROFILE_URL,
+  /** Null until NEXT_PUBLIC_GOOGLE_REVIEW_URL is set. All write-a-review CTAs point to /review, which redirects here. */
+  leaveReviewUrl: (GOOGLE_REVIEW_URL || null) as string | null,
 }
 
 export const GOOGLE_REVIEWS: GoogleReview[] = []
