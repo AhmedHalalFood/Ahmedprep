@@ -91,13 +91,19 @@ function Explanation({ q }: { q: WeeklyPracticeQuestion }) {
   )
 }
 
-function Meta({ q }: { q: WeeklyPracticeQuestion }) {
+function Meta({ q, showDate = true }: { q: WeeklyPracticeQuestion; showDate?: boolean }) {
   return (
     <p className="text-xs font-extrabold uppercase tracking-wider text-brand">
-      {q.label ?? `${q.testType} · ${q.topic}`} <span className="text-subtle">· </span>
-      <time dateTime={q.publishedDate} className="text-subtle">
-        {formatPracticeDate(q.publishedDate)}
-      </time>
+      {q.label ?? `${q.testType} · ${q.topic}`}
+      {showDate && (
+        <>
+          {" "}
+          <span className="text-subtle">· </span>
+          <time dateTime={q.publishedDate} className="text-subtle">
+            {formatPracticeDate(q.publishedDate)}
+          </time>
+        </>
+      )}
     </p>
   )
 }
@@ -243,7 +249,7 @@ export default function WeeklyPracticePage() {
             <ol className="flex flex-col gap-5">
               {previous.map((q) => (
                 <li key={q.publishedDate} className="border border-line bg-white p-5 md:p-6">
-                  <Meta q={q} />
+                  <Meta q={q} showDate={false} />
                   {q.stem && <p className="mt-2 leading-relaxed text-ink">{q.stem}</p>}
                   <p className="mt-2 font-semibold leading-relaxed text-navy">{q.question}</p>
                   <Choices choices={q.choices} />
