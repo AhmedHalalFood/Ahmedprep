@@ -208,6 +208,9 @@ export default function ShsatPage() {
             <Link href="/weekly-practice" className="text-link mt-3">
               Free weekly SHSAT practice question <ArrowUpRight size={15} aria-hidden="true" />
             </Link>
+            <Link href="/shsat-practice-tests" className="text-link mt-3">
+              Free SHSAT practice tests: official digital tests and AhmedPrep practice <ArrowUpRight size={15} aria-hidden="true" />
+            </Link>
           </article>
         </div>
       </Section>

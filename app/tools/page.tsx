@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
 import { Breadcrumbs, JsonLd } from "@/components/landing/primitives"
 import { ToolHero } from "@/components/tools/tool-hero"
@@ -47,6 +48,11 @@ export default function ToolsPage() {
             </li>
           ))}
         </ul>
+        <div className="container mt-8">
+          <Link href="/shsat-practice-tests" className="text-link">
+            Looking for full-length tests? See free SHSAT practice tests <ArrowUpRight size={15} aria-hidden="true" />
+          </Link>
+        </div>
       </section>
     </>
   )

@@ -267,6 +267,10 @@ export default function WeeklyPracticePage() {
               Want a full set?{" "}
               <Link href="/resources" className="font-bold text-brand underline-offset-4 hover:underline">
                 Browse free SHSAT and Digital SAT practice guides
+              </Link>{" "}
+              or{" "}
+              <Link href="/shsat-practice-tests" className="font-bold text-brand underline-offset-4 hover:underline">
+                explore free SHSAT practice tests
               </Link>
               .
             </p>
