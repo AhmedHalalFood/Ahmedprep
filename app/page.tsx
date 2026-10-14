@@ -68,6 +68,10 @@ export default function Home() {
             SHSAT & Digital SAT Prep <em>in Astoria, Queens</em>
           </h1>
           <p className="hero-copy">
+            In-person tutoring in Astoria plus live online SHSAT preparation for students across New York City and Digital SAT
+            preparation for students across NYC and Long Island.
+          </p>
+          <p className="hero-copy">
             Personalized preparation that helps NYC students build confidence, strengthen skills, and prepare for competitive exams.
           </p>
           <div className="hero-actions">
@@ -111,6 +115,10 @@ export default function Home() {
           </div>
           <p className="hero-trust">
             SHSAT Preparation <span aria-hidden="true">•</span> Digital SAT Preparation
+          </p>
+          <p className="hero-trust">
+            Astoria <span aria-hidden="true">•</span> Queens <span aria-hidden="true">•</span> NYC-Wide Online{" "}
+            <span aria-hidden="true">•</span> Digital SAT Across NYC &amp; Long Island
           </p>
         </div>
       </section>
