@@ -108,6 +108,7 @@ export default function DigitalSatPage() {
         location="digital_sat"
         eyebrow="Digital SAT Prep · Astoria, Queens"
         title="Digital SAT Prep in Astoria, Queens: Build a Personalized Score Plan"
+        serviceArea="In-person Digital SAT prep in Astoria and live online tutoring for students throughout New York City and Long Island."
         intro="Start with a free diagnostic. We'll analyze your score by section and skill and build a plan around the gains that matter most."
         benefitsTitle="Every Digital SAT student receives"
         benefits={benefits}

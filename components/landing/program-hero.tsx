@@ -12,10 +12,12 @@ export function ProgramHero({
   ctaLabel,
   ctaEvent,
   location,
+  serviceArea,
 }: {
   eyebrow: string
   title: string
   intro: string
+  serviceArea?: string
   benefitsTitle: string
   benefits: string[]
   ctaLabel: string
@@ -33,6 +35,9 @@ export function ProgramHero({
           >
             {title}
           </h1>
+          {serviceArea ? (
+            <p className="max-w-xl text-pretty text-base font-bold leading-relaxed text-navy">{serviceArea}</p>
+          ) : null}
           <p className="max-w-xl text-pretty text-lg leading-relaxed text-subtle">{intro}</p>
           <div className="flex flex-wrap items-center gap-4">
             <TrackedLink href="#diagnostic" event={ctaEvent} eventProps={{ location: `${location}_hero` }} className="button button-gold button-lg">

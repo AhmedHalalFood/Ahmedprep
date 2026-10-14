@@ -119,6 +119,7 @@ export default function ShsatPage() {
         location="shsat"
         eyebrow="SHSAT Prep · Astoria, Queens"
         title="SHSAT Prep in Astoria, Queens: Start With a Free Diagnostic"
+        serviceArea="In-person SHSAT prep in Astoria and live online instruction for eligible students across Queens, Brooklyn, Manhattan, the Bronx and Staten Island."
         intro="Your child receives a full SHSAT-style assessment, a breakdown of strengths and weaknesses, and a personalized plan for improvement."
         benefitsTitle="Every SHSAT student receives"
         benefits={benefits}

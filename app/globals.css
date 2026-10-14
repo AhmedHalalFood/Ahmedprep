@@ -369,9 +369,15 @@ h3 {
   text-transform: uppercase;
 }
 
-.hero-trust span {
+  .hero-trust span {
   color: var(--gold-deep, #9a7418);
-}
+  }
+
+  .hero-trust + .hero-trust {
+  margin-top: 8px;
+  padding-top: 0;
+  border-top: 0;
+  }
 
 .gold-action {
   display: inline-flex;
