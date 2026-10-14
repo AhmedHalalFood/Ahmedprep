@@ -17,6 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/programs", priority: 0.8 },
     { path: "/results", priority: 0.7 },
     { path: "/resources", priority: 0.7 },
+    { path: "/shsat-practice-tests", priority: 0.7 },
     { path: "/tools", priority: 0.7 },
     ...FREE_TOOLS.map((t) => ({ path: toolPath(t.slug), priority: 0.6 })),
     { path: "/about", priority: 0.6 },

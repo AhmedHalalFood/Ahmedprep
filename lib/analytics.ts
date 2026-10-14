@@ -35,6 +35,13 @@ export const EVENTS = {
   weeklyPracticeAnswerClick: "weekly_practice_answer_click",
   weeklyPracticeSundayCta: "weekly_practice_sunday_cta",
   weeklyPracticeDiagnosticCta: "weekly_practice_diagnostic_cta",
+  practiceLibraryView: "shsat_practice_library_view",
+  officialShsatTestClick: "official_shsat_test_click",
+  shsatMathPracticeClick: "shsat_math_practice_click",
+  shsatElaPracticeClick: "shsat_ela_practice_click",
+  weeklyPracticeClick: "weekly_practice_click",
+  practiceDiagnosticCta: "practice_diagnostic_cta",
+  practiceSundayCta: "practice_sunday_cta",
 } as const
 
 export type EventName = (typeof EVENTS)[keyof typeof EVENTS]

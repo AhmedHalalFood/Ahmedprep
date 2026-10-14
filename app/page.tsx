@@ -8,6 +8,7 @@ import { ProgramsPreview } from "@/components/landing/programs-preview"
 import { ResultsPreview } from "@/components/landing/results-preview"
 import { ToolsResources } from "@/components/landing/tools-resources"
 import { WhyFamilies } from "@/components/landing/why-families"
+import { PracticeLibraryCard } from "@/components/practice-tests/practice-library-card"
 import { ThisSundayStrip } from "@/components/sunday-classes/this-sunday-strip"
 import { TrackedLink } from "@/components/tracked-link"
 import { WeeklyPracticeCard } from "@/components/weekly-practice/weekly-practice-card"
@@ -163,6 +164,7 @@ export default function Home() {
       <ThisSundayStrip location="home" />
 
       <WeeklyPracticeCard location="home" />
+      <PracticeLibraryCard />
 
       <WhyFamilies />
 
