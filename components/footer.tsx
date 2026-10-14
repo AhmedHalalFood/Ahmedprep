@@ -21,7 +21,7 @@ export function Footer() {
             />
             <small>ASTORIA · QUEENS</small>
           </Link>
-          <p>SHSAT and Digital SAT preparation for students across New York City.</p>
+          <p>SHSAT preparation for students across NYC and Digital SAT preparation across NYC &amp; Long Island.</p>
           <address className="footer-nap not-italic">
             <strong>{BUSINESS.name}</strong>
             <a href={MAPS_URL} target="_blank" rel="noopener noreferrer">
