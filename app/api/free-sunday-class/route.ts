@@ -10,6 +10,7 @@ import {
   withDbRetry,
 } from "@/lib/sunday-registrations"
 import { buildSundayConfirmation } from "@/lib/sunday-confirmation"
+import { RSVP_MESSAGES } from "@/lib/rsvp-response"
 import {
   FREE_CLASS,
   FREE_CLASS_GRADES,
@@ -57,7 +58,7 @@ export async function POST(request: Request) {
     !classMatchesProgram(session, data.classType) ||
     data.consent !== "yes"
   ) {
-    return fail(400, "Please complete all required fields.")
+    return rsvpFail(400, "invalid", RSVP_MESSAGES.invalid)
   }
 
   const program = data.classType as RsvpProgram
@@ -99,7 +100,11 @@ export async function POST(request: Request) {
     }))
     if (claim.kind === "duplicate") {
       console.warn(`[${SCOPE}] Duplicate RSVP for ${session.isoDate}; original registration kept, no emails sent`)
-      return NextResponse.json({ success: true, duplicate: true, confirmation: claim.confirmation })
+      // 409 (not 200/success) so the form shows "already registered" instead of treating it as a new seat.
+      return NextResponse.json(
+        { success: false, duplicate: true, code: "duplicate", error: RSVP_MESSAGES.duplicate, message: RSVP_MESSAGES.duplicate },
+        { status: 409 },
+      )
     }
     registrationId = claim.id
   } catch (error) {
@@ -119,12 +124,12 @@ export async function POST(request: Request) {
       ].join("\n"),
       idempotencyKey: `${SCOPE}-unsaved/${fingerprint}`,
     })
-    return fail(503, "Your registration could not be saved. Please try again in a few minutes.")
+    return rsvpFail(503, "db_unavailable", RSVP_MESSAGES.notSaved)
   }
 
   const resendLink = createResendLink(new URL(request.url).origin, registrationId)
 
-  return deliverLead({
+  const delivered = await deliverLead({
     dedupeKey,
     scope: SCOPE,
     fromLocalPart: "classes",
@@ -151,4 +156,12 @@ export async function POST(request: Request) {
       }
     },
   })
+
+  // The row is already saved at this point, so a failed email must not tell the parent to start over.
+  if (!delivered.ok) return rsvpFail(delivered.status, "email_failed", RSVP_MESSAGES.savedEmailFailed)
+  return delivered
+}
+
+function rsvpFail(status: number, code: string, message: string) {
+  return NextResponse.json({ success: false, code, error: message, message }, { status })
 }

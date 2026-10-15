@@ -53,6 +53,7 @@ export function useLeadForm<T extends Record<string, string>>({
     }
 
     setStatus("submitting")
+    setServerResult(null)
     try {
       const response = await fetch(endpoint, {
         method: "POST",
@@ -64,8 +65,9 @@ export function useLeadForm<T extends Record<string, string>>({
         }),
       })
       const result = await response.json().catch(() => null)
+      // Kept on failure too, so forms can show the server's reason (e.g. a duplicate registration) instead of a generic error.
+      setServerResult({ ...(result ?? {}), httpStatus: response.status })
       if (!response.ok || result?.success !== true) throw new Error("Delivery not confirmed")
-      setServerResult(result)
       setStatus("success")
       onSuccess?.(data)
       setData(initial)

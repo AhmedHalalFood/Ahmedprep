@@ -1,6 +1,7 @@
 "use client"
 
-import { ArrowUpRight, CheckCircle2 } from "lucide-react"
+import { ArrowUpRight, CheckCircle2, Info } from "lucide-react"
+import { interpretRsvpResponse } from "@/lib/rsvp-response"
 import { Honeypot, RequiredNote, SelectField, SubmitButton, TextField } from "@/components/forms/fields"
 import { useLeadForm } from "@/components/forms/use-lead-form"
 import { TrackedLink } from "@/components/tracked-link"
@@ -72,6 +73,9 @@ export function FreeClassRsvpForm({
     onStart: () => trackEvent(EVENTS.sundayClassRsvpStarted, eventParams(initial)),
     onSuccess: (submitted) => trackEvent(EVENTS.sundayClassRsvpSubmitted, eventParams(submitted)),
   })
+
+  const outcome =
+    status === "error" ? interpretRsvpResponse(Number(serverResult?.httpStatus ?? 0), serverResult) : null
 
   const field = (key: keyof RsvpData) => ({
     id: `${location}-${key}`,
@@ -200,19 +204,40 @@ export function FreeClassRsvpForm({
         )}
       </div>
 
-      {status === "error" && (
-        <p role="alert" className="border-l-4 border-error bg-error-soft px-4 py-3 text-sm text-error">
-          We couldn&apos;t complete your registration. Please try again, or call{" "}
-          <a href={BUSINESS.phoneHref} className="font-semibold underline">
-            {BUSINESS.phoneDisplay}
-          </a>
-          .
-        </p>
-      )}
-
       <SubmitButton submitting={status === "submitting"}>
         Reserve My Free Seat <ArrowUpRight size={17} aria-hidden="true" />
       </SubmitButton>
+
+      {/* Live regions stay mounted so screen readers announce the notice when it appears. */}
+      <div id={`${location}-rsvp-status`} role="status" aria-live="polite" aria-atomic="true">
+        {outcome?.kind === "duplicate" && (
+          <div className="flex items-start gap-3 border-l-4 border-brand bg-brand-soft px-4 py-3 text-sm leading-relaxed text-navy">
+            <Info size={20} aria-hidden="true" className="mt-0.5 shrink-0 text-brand" />
+            <div>
+              <p className="font-extrabold">{outcome.title}</p>
+              <p className="mt-1">{outcome.message}</p>
+              <p className="mt-1 text-subtle">
+                {"Can\u2019t find it? Call or text us at "}
+                <a href={BUSINESS.phoneHref} className="font-semibold text-navy underline underline-offset-2">
+                  {BUSINESS.phoneDisplay}
+                </a>
+                .
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+      <div role="alert" aria-atomic="true">
+        {outcome?.kind === "error" && (
+          <p className="border-l-4 border-error bg-error-soft px-4 py-3 text-sm leading-relaxed text-error">
+            {outcome.message} Need help? Call{" "}
+            <a href={BUSINESS.phoneHref} className="font-semibold underline">
+              {BUSINESS.phoneDisplay}
+            </a>
+            .
+          </p>
+        )}
+      </div>
       <p className="text-xs leading-relaxed text-subtle">
         <strong className="font-bold text-navy">No cost • Live instruction • RSVP required.</strong> The live class link is never posted
         publicly. It is sent only to registered families.
