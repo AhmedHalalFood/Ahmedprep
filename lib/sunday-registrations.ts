@@ -108,6 +108,14 @@ export async function markAdminFailed(id: number, error: string) {
     .where(eq(sundayClassRegistrations.id, id))
 }
 
+/** A short, log-safe reason. Missing table/column errors point at the migration that fixes them. */
+export function describeDbError(error: unknown) {
+  const cause = (error as { cause?: unknown })?.cause ?? error
+  const code = (cause as { code?: string })?.code
+  if (code === "42P01" || code === "42703") return `database schema is missing or out of date (${code}); run pnpm db:migrate`
+  return cause instanceof Error ? cause.message : String(cause)
+}
+
 /** Retries once after a short pause, which covers a cold-starting or briefly unreachable database. */
 export async function withDbRetry<T>(operation: () => Promise<T>): Promise<T> {
   try {

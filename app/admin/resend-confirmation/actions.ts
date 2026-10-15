@@ -4,7 +4,13 @@ import { verifyResendToken } from "@/lib/admin-links"
 import { getClassByDate, type RsvpProgram } from "@/lib/free-class"
 import { sendConfirmationEmail } from "@/lib/lead-delivery"
 import { buildSundayConfirmation } from "@/lib/sunday-confirmation"
-import { claimResendAttempt, getRegistration, setConfirmationStatus } from "@/lib/sunday-registrations"
+import {
+  claimResendAttempt,
+  describeDbError,
+  getRegistration,
+  setConfirmationStatus,
+  withDbRetry,
+} from "@/lib/sunday-registrations"
 
 export type ResendState = { status: "idle" | "sent" | "error"; message: string }
 
@@ -12,18 +18,28 @@ export async function resendConfirmation(_prev: ResendState, formData: FormData)
   const id = verifyResendToken(formData.get("id"), formData.get("exp"), formData.get("sig"))
   if (!id) return { status: "error", message: "This link is invalid or has expired." }
 
-  const registration = await getRegistration(id)
-  const session = registration && getClassByDate(registration.classDate)
-  if (!registration || !session) return { status: "error", message: "Registration not found." }
-
-  const attempt = await claimResendAttempt(id)
+  let registration: Awaited<ReturnType<typeof getRegistration>>
+  let attempt: number | null
+  try {
+    registration = await getRegistration(id)
+    if (!registration || !getClassByDate(registration.classDate)) return { status: "error", message: "Registration not found." }
+    attempt = await claimResendAttempt(id)
+  } catch (error) {
+    console.error("[confirmation-resend] Database unavailable:", describeDbError(error))
+    return { status: "error", message: "The registration database is unavailable. Nothing was sent; please try again later." }
+  }
   if (attempt === null) {
     return { status: "error", message: "A resend was just attempted. Please wait two minutes before trying again." }
   }
 
+  const session = getClassByDate(registration.classDate)!
   const { confirmation } = buildSundayConfirmation(session, registration.program as RsvpProgram, registration)
   const result = await sendConfirmationEmail(confirmation, "classes", `free-sunday-class-resend/${id}/${attempt}`)
-  await setConfirmationStatus(id, result.ok ? "sent" : "failed", result.ok ? null : `resend: ${result.error}`)
+  try {
+    await withDbRetry(() => setConfirmationStatus(id, result.ok ? "sent" : "failed", result.ok ? null : `resend: ${result.error}`))
+  } catch (error) {
+    console.error("[confirmation-resend] Email result could not be recorded:", describeDbError(error))
+  }
 
   return result.ok
     ? { status: "sent", message: `Confirmation resent to ${registration.parentEmail}.` }

@@ -3,6 +3,7 @@ import { NextResponse } from "next/server"
 import { createResendLink } from "@/lib/admin-links"
 import {
   claimRegistration,
+  describeDbError,
   markAdminFailed,
   markAdminNotified,
   setConfirmationStatus,
@@ -17,7 +18,7 @@ import {
   findUpcomingClass,
   type RsvpProgram,
 } from "@/lib/free-class"
-import { EMAIL_PATTERN, clean, deliverLead, fail, hasPhoneDigits, readBody, screenSubmission } from "@/lib/lead-delivery"
+import { EMAIL_PATTERN, clean, deliverLead, fail, hasPhoneDigits, readBody, screenSubmission, sendAdminAlert } from "@/lib/lead-delivery"
 
 const GRADES = new Set(FREE_CLASS_GRADES)
 const PROGRAMS = new Set<string>(RSVP_PROGRAMS.map((p) => p.value))
@@ -64,14 +65,28 @@ export async function POST(request: Request) {
   if (!hasZoom) console.warn(`[${SCOPE}] No valid Zoom URL configured for ${program}; confirmation sent without access details`)
 
   const dedupeKey = [data.parentEmail, data.studentName, session.isoDate, program]
+  const fingerprint = createHash("sha256").update(dedupeKey.map((v) => v.trim().toLowerCase()).join("|")).digest("hex")
+
+  const rows: [string, string][] = [
+    ["Class", `${classTitle}, live online`],
+    ["Topic", session.topic],
+    ["Class date", session.label],
+    ["Class time", FREE_CLASS.timeLabel],
+    ["Student Name", data.studentName],
+    ["Grade", data.studentGrade],
+    ["Parent/Guardian Name", data.parentName],
+    ["Parent Email", data.parentEmail],
+    ["Phone Number", data.parentPhone],
+    ["Current School", data.currentSchool || "Not provided"],
+  ]
 
   // Resend's idempotency only covers 24 hours, so the stored registration is what blocks later repeats.
-  // If the database is still unreachable after one retry, the RSVP goes through (Resend's 24-hour protection still
-  // applies) and AhmedPrep's notification is flagged so the registration can be added by hand.
-  let registrationId: number | null = null
+  // A registration is only confirmed once it is saved: if the database is still unreachable after one retry, the
+  // parent is told to try again, no confirmation is sent, and AhmedPrep gets an alert so the lead is not lost.
+  let registrationId: number
   try {
     const claim = await withDbRetry(() => claimRegistration({
-      dedupeKey: createHash("sha256").update(dedupeKey.map((v) => v.trim().toLowerCase()).join("|")).digest("hex"),
+      dedupeKey: fingerprint,
       classDate: session.isoDate,
       program,
       studentName: data.studentName,
@@ -88,30 +103,36 @@ export async function POST(request: Request) {
     }
     registrationId = claim.id
   } catch (error) {
-    console.error(`[${SCOPE}] Could not record registration:`, error instanceof Error ? error.message : error)
+    const reason = describeDbError(error)
+    console.error(`[${SCOPE}] Registration NOT saved, parent asked to retry: ${reason}`)
+    await sendAdminAlert({
+      scope: SCOPE,
+      fromLocalPart: "classes",
+      replyTo: data.parentEmail,
+      subject: `ACTION NEEDED: Sunday ${programLabel} RSVP could not be saved (${data.studentName}, ${session.shortLabel})`,
+      text: [
+        `A parent tried to register, but the registration database was unavailable (${reason}).`,
+        "The parent was shown an error and asked to try again. No confirmation email was sent.",
+        "If a normal RSVP notification for this student arrives later, no action is needed. Otherwise, please contact the parent.",
+        "",
+        ...rows.map(([label, value]) => `${label}: ${value}`),
+      ].join("\n"),
+      idempotencyKey: `${SCOPE}-unsaved/${fingerprint}`,
+    })
+    return fail(503, "Your registration could not be saved. Please try again in a few minutes.")
   }
 
-  const saved = registrationId !== null
-  const resendLink = saved ? createResendLink(new URL(request.url).origin, registrationId as number) : null
+  const resendLink = createResendLink(new URL(request.url).origin, registrationId)
 
-  const response = await deliverLead({
+  return deliverLead({
     dedupeKey,
     scope: SCOPE,
     fromLocalPart: "classes",
-    heading: `New Free Sunday Class RSVP (${programLabel})${saved ? "" : " - NOT SAVED IN DATABASE"}`,
-    subject: `${saved ? "" : "[NOT SAVED] "}Free Sunday ${programLabel} RSVP: ${data.studentName} (${session.shortLabel})`,
+    heading: `New Free Sunday Class RSVP (${programLabel})`,
+    subject: `Free Sunday ${programLabel} RSVP: ${data.studentName} (${session.shortLabel})`,
     replyTo: data.parentEmail,
     rows: [
-      ["Class", `${classTitle}, live online`],
-      ["Topic", session.topic],
-      ["Class date", session.label],
-      ["Class time", FREE_CLASS.timeLabel],
-      ["Student Name", data.studentName],
-      ["Grade", data.studentGrade],
-      ["Parent/Guardian Name", data.parentName],
-      ["Parent Email", data.parentEmail],
-      ["Phone Number", data.parentPhone],
-      ["Current School", data.currentSchool || "Not provided"],
+      ...rows,
       ["Class communications", "Agreed to receive registration information, live class access, and reminders for this class"],
       [
         "Live class access",
@@ -119,30 +140,15 @@ export async function POST(request: Request) {
           ? "Sent automatically in the parent's confirmation email."
           : "NOT SENT. No Zoom URL is configured. Please email the live class link to the parent.",
       ],
-      ...(saved
-        ? []
-        : ([
-            [
-              "Database record",
-              "NOT SAVED. The registration database was unreachable. Please add this registration manually; duplicate protection beyond 24 hours does not apply to it.",
-            ],
-          ] as [string, string][])),
     ],
     confirmation,
-    failureAlertNote: resendLink
-      ? `To resend the confirmation once the problem is fixed, open this private link (valid 30 days, do not forward):\n${resendLink}`
-      : undefined,
-    onDelivery: saved
-      ? async (event) => {
-          const id = registrationId as number
-          if (event.stage === "admin") {
-            await withDbRetry(() => (event.ok ? markAdminNotified(id) : markAdminFailed(id, event.error)))
-          } else {
-            await withDbRetry(() => setConfirmationStatus(id, event.status, event.error ?? null))
-          }
-        }
-      : undefined,
+    failureAlertNote: `To resend the confirmation once the problem is fixed, open this private link (valid 30 days, do not forward):\n${resendLink}`,
+    onDelivery: async (event) => {
+      if (event.stage === "admin") {
+        await withDbRetry(() => (event.ok ? markAdminNotified(registrationId) : markAdminFailed(registrationId, event.error)))
+      } else {
+        await withDbRetry(() => setConfirmationStatus(registrationId, event.status, event.error ?? null))
+      }
+    },
   })
-
-  return response
 }

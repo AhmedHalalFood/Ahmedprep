@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { verifyResendToken } from "@/lib/admin-links"
 import { CLASS_TYPES, getClassByDate, type RsvpProgram } from "@/lib/free-class"
-import { getRegistration } from "@/lib/sunday-registrations"
+import { describeDbError, getRegistration } from "@/lib/sunday-registrations"
 import { ResendForm } from "./resend-form"
 
 export const metadata: Metadata = {
@@ -20,14 +20,27 @@ export default async function ResendConfirmationPage({ searchParams }: Props) {
   const sig = first(params.sig)
 
   const registrationId = verifyResendToken(id, exp, sig)
-  const registration = registrationId ? await getRegistration(registrationId) : null
+  let registration: Awaited<ReturnType<typeof getRegistration>> | null = null
+  let dbError = false
+  if (registrationId) {
+    try {
+      registration = await getRegistration(registrationId)
+    } catch (error) {
+      dbError = true
+      console.error("[confirmation-resend] Could not load registration:", describeDbError(error))
+    }
+  }
   const session = registration ? getClassByDate(registration.classDate) : undefined
 
   return (
     <main className="flex min-h-svh items-center justify-center bg-background px-4 py-12">
       <div className="flex w-full max-w-md flex-col gap-6 rounded-lg border border-border bg-card p-6 text-card-foreground shadow-sm">
         <h1 className="font-serif text-2xl font-semibold text-balance">Resend class confirmation</h1>
-        {!registration || !session ? (
+        {dbError ? (
+          <p className="leading-relaxed text-muted-foreground">
+            The registration database is unavailable right now. Please try this link again in a few minutes.
+          </p>
+        ) : !registration || !session ? (
           <p className="leading-relaxed text-muted-foreground">
             This link is invalid, has expired, or the registration no longer exists.
           </p>

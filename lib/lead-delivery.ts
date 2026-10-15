@@ -244,6 +244,43 @@ ${allRows
   return NextResponse.json({ success: true, duplicate, confirmation: confirmationStatus })
 }
 
+/** Sends a standalone alert to AhmedPrep. The idempotency key keeps a repeated failure from alerting twice. */
+export async function sendAdminAlert({
+  scope,
+  fromLocalPart,
+  subject,
+  text,
+  replyTo,
+  idempotencyKey,
+}: {
+  scope: string
+  fromLocalPart: string
+  subject: string
+  text: string
+  replyTo: string
+  idempotencyKey: string
+}) {
+  const apiKey = process.env.RESEND_API_KEY
+  const domain = process.env.RESEND_EMAIL_DOMAIN
+  if (!apiKey || !domain) return false
+  const testMode = isTestAddress(replyTo)
+  const { error } = await new Resend(apiKey).emails.send(
+    {
+      from: `AhmedPrep Website <${fromLocalPart}@${domain}>`,
+      to: [testMode ? "delivered@resend.dev" : RECIPIENT],
+      replyTo,
+      subject: `${testMode ? "[TEST] " : ""}${subject}`,
+      text,
+    },
+    { idempotencyKey },
+  )
+  if (error && !DUPLICATE_ERRORS.has(error.name)) {
+    console.error(`[${scope}] Admin alert failed:`, error.name, error.message)
+    return false
+  }
+  return true
+}
+
 /** Sends only the parent confirmation (used by the admin resend). The caller supplies a per-attempt idempotency key. */
 export async function sendConfirmationEmail(confirmation: Confirmation, fromLocalPart: string, idempotencyKey: string) {
   const apiKey = process.env.RESEND_API_KEY
