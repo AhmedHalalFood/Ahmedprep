@@ -164,15 +164,3 @@ export function findUpcomingClass(isoDate: string | undefined, count = 4, now = 
 export function classMatchesProgram(c: SundayClass, program: string) {
   return c.type === "workshop" || c.type === program
 }
-
-/**
- * Zoom access details, read only on the server so they never reach the browser.
- * The recurring meeting comes from SUNDAY_CLASS_ZOOM_URL. The older FREE_CLASS_ZOOM_URL* variables remain as fallbacks.
- */
-export function getZoomAccess(program: RsvpProgram) {
-  const suffix = program === "shsat" ? "SHSAT" : "DIGITAL_SAT"
-  const pick = (key: string) => process.env[`${key}_${suffix}`]?.trim() || process.env[key]?.trim() || ""
-  const url = process.env.SUNDAY_CLASS_ZOOM_URL?.trim() || pick("FREE_CLASS_ZOOM_URL")
-  if (!url || !/^https:\/\//i.test(url)) return null
-  return { url, meetingId: pick("FREE_CLASS_ZOOM_MEETING_ID"), passcode: pick("FREE_CLASS_ZOOM_PASSCODE") }
-}
