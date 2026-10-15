@@ -160,19 +160,16 @@ export function findUpcomingClass(isoDate: string | undefined, count = 4, now = 
   return getUpcomingClasses(count, now).find((c) => c.isoDate === isoDate)
 }
 
+/** Rebuilds the class for any stored Sunday date (past or future), e.g. to resend a confirmation. */
+export function getClassByDate(isoDate: string) {
+  if (!ISO_DATE.test(isoDate)) return undefined
+  const [year, month, day] = isoDate.split("-").map(Number)
+  const classDay = new Date(Date.UTC(year, month - 1, day, 12))
+  if (classDay.getUTCDay() !== 0 || classDay.toISOString().slice(0, 10) !== isoDate) return undefined
+  return buildClass(classDay)
+}
+
 /** Workshops are open to both programs; regular classes only match their own program. */
 export function classMatchesProgram(c: SundayClass, program: string) {
   return c.type === "workshop" || c.type === program
-}
-
-/**
- * Zoom access details, read only on the server so they never reach the browser.
- * A program-specific link (FREE_CLASS_ZOOM_URL_SHSAT / FREE_CLASS_ZOOM_URL_DIGITAL_SAT) wins over the shared FREE_CLASS_ZOOM_URL.
- */
-export function getZoomAccess(program: RsvpProgram) {
-  const suffix = program === "shsat" ? "SHSAT" : "DIGITAL_SAT"
-  const pick = (key: string) => process.env[`${key}_${suffix}`]?.trim() || process.env[key]?.trim() || ""
-  const url = pick("FREE_CLASS_ZOOM_URL")
-  if (!url || !/^https:\/\//i.test(url)) return null
-  return { url, meetingId: pick("FREE_CLASS_ZOOM_MEETING_ID"), passcode: pick("FREE_CLASS_ZOOM_PASSCODE") }
 }

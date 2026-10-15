@@ -21,6 +21,7 @@ export function useLeadForm<T extends Record<string, string>>({
   const [data, setData] = useState<T>(initial)
   const [errors, setErrors] = useState<Errors<T>>({})
   const [status, setStatus] = useState<Status>("idle")
+  const [serverResult, setServerResult] = useState<Record<string, unknown> | null>(null)
   const formRef = useRef<HTMLFormElement>(null)
   const honeypotRef = useRef<HTMLInputElement>(null)
   const startedAtRef = useRef(0)
@@ -64,6 +65,7 @@ export function useLeadForm<T extends Record<string, string>>({
       })
       const result = await response.json().catch(() => null)
       if (!response.ok || result?.success !== true) throw new Error("Delivery not confirmed")
+      setServerResult(result)
       setStatus("success")
       onSuccess?.(data)
       setData(initial)
@@ -73,5 +75,5 @@ export function useLeadForm<T extends Record<string, string>>({
     }
   }
 
-  return { data, errors, status, setStatus, update, submit, formRef, honeypotRef }
+  return { data, errors, status, serverResult, setStatus, update, submit, formRef, honeypotRef }
 }

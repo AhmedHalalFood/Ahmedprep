@@ -1,15 +1,24 @@
-import { ADDRESS_LINE_1, ADDRESS_LINE_2, BUSINESS } from "@/lib/business"
+import { createHash } from "node:crypto"
+import { NextResponse } from "next/server"
+import { createResendLink } from "@/lib/admin-links"
 import {
-  CLASS_TYPES,
+  claimRegistration,
+  describeDbError,
+  markAdminFailed,
+  markAdminNotified,
+  setConfirmationStatus,
+  withDbRetry,
+} from "@/lib/sunday-registrations"
+import { buildSundayConfirmation } from "@/lib/sunday-confirmation"
+import {
   FREE_CLASS,
   FREE_CLASS_GRADES,
   RSVP_PROGRAMS,
   classMatchesProgram,
   findUpcomingClass,
-  getZoomAccess,
   type RsvpProgram,
 } from "@/lib/free-class"
-import { EMAIL_PATTERN, clean, deliverLead, fail, hasPhoneDigits, readBody, screenSubmission } from "@/lib/lead-delivery"
+import { EMAIL_PATTERN, clean, deliverLead, fail, hasPhoneDigits, readBody, screenSubmission, sendAdminAlert } from "@/lib/lead-delivery"
 
 const GRADES = new Set(FREE_CLASS_GRADES)
 const PROGRAMS = new Set<string>(RSVP_PROGRAMS.map((p) => p.value))
@@ -52,63 +61,94 @@ export async function POST(request: Request) {
   }
 
   const program = data.classType as RsvpProgram
-  const programLabel = CLASS_TYPES[program].label
-  const classTitle = session.type === "workshop" ? `${session.title} (${programLabel} family)` : session.title
-  const zoom = getZoomAccess(program)
-  if (!zoom) console.warn(`[${SCOPE}] No Zoom URL configured for ${program}; confirmation sent without access details`)
+  const { confirmation, classTitle, programLabel, hasZoom } = buildSundayConfirmation(session, program, data)
+  if (!hasZoom) console.warn(`[${SCOPE}] No valid Zoom URL configured for ${program}; confirmation sent without access details`)
 
-  const zoomParagraph = zoom
-    ? [
-        "Live class access information",
-        `Join link: ${zoom.url}`,
-        zoom.meetingId && `Meeting ID: ${zoom.meetingId}`,
-        zoom.passcode && `Passcode: ${zoom.passcode}`,
-      ]
-        .filter(Boolean)
-        .join("\n")
-    : "Live class access information\nAhmedPrep will email the live class link to this address before the session begins."
+  const dedupeKey = [data.parentEmail, data.studentName, session.isoDate, program]
+  const fingerprint = createHash("sha256").update(dedupeKey.map((v) => v.trim().toLowerCase()).join("|")).digest("hex")
 
-  const heading = "Your free class seat is reserved"
+  const rows: [string, string][] = [
+    ["Class", `${classTitle}, live online`],
+    ["Topic", session.topic],
+    ["Class date", session.label],
+    ["Class time", FREE_CLASS.timeLabel],
+    ["Student Name", data.studentName],
+    ["Grade", data.studentGrade],
+    ["Parent/Guardian Name", data.parentName],
+    ["Parent Email", data.parentEmail],
+    ["Phone Number", data.parentPhone],
+    ["Current School", data.currentSchool || "Not provided"],
+  ]
+
+  // Resend's idempotency only covers 24 hours, so the stored registration is what blocks later repeats.
+  // A registration is only confirmed once it is saved: if the database is still unreachable after one retry, the
+  // parent is told to try again, no confirmation is sent, and AhmedPrep gets an alert so the lead is not lost.
+  let registrationId: number
+  try {
+    const claim = await withDbRetry(() => claimRegistration({
+      dedupeKey: fingerprint,
+      classDate: session.isoDate,
+      program,
+      studentName: data.studentName,
+      studentGrade: data.studentGrade,
+      parentName: data.parentName,
+      parentEmail: data.parentEmail,
+      parentPhone: data.parentPhone,
+      currentSchool: data.currentSchool || null,
+      topic: session.topic,
+    }))
+    if (claim.kind === "duplicate") {
+      console.warn(`[${SCOPE}] Duplicate RSVP for ${session.isoDate}; original registration kept, no emails sent`)
+      return NextResponse.json({ success: true, duplicate: true, confirmation: claim.confirmation })
+    }
+    registrationId = claim.id
+  } catch (error) {
+    const reason = describeDbError(error)
+    console.error(`[${SCOPE}] Registration NOT saved, parent asked to retry: ${reason}`)
+    await sendAdminAlert({
+      scope: SCOPE,
+      fromLocalPart: "classes",
+      replyTo: data.parentEmail,
+      subject: `ACTION NEEDED: Sunday ${programLabel} RSVP could not be saved (${data.studentName}, ${session.shortLabel})`,
+      text: [
+        `A parent tried to register, but the registration database was unavailable (${reason}).`,
+        "The parent was shown an error and asked to try again. No confirmation email was sent.",
+        "If a normal RSVP notification for this student arrives later, no action is needed. Otherwise, please contact the parent.",
+        "",
+        ...rows.map(([label, value]) => `${label}: ${value}`),
+      ].join("\n"),
+      idempotencyKey: `${SCOPE}-unsaved/${fingerprint}`,
+    })
+    return fail(503, "Your registration could not be saved. Please try again in a few minutes.")
+  }
+
+  const resendLink = createResendLink(new URL(request.url).origin, registrationId)
 
   return deliverLead({
+    dedupeKey,
     scope: SCOPE,
     fromLocalPart: "classes",
     heading: `New Free Sunday Class RSVP (${programLabel})`,
     subject: `Free Sunday ${programLabel} RSVP: ${data.studentName} (${session.shortLabel})`,
     replyTo: data.parentEmail,
     rows: [
-      ["Class", `${classTitle}, live online`],
-      ["Topic", session.topic],
-      ["Class date", session.label],
-      ["Class time", FREE_CLASS.timeLabel],
-      ["Student Name", data.studentName],
-      ["Grade", data.studentGrade],
-      ["Parent/Guardian Name", data.parentName],
-      ["Parent Email", data.parentEmail],
-      ["Phone Number", data.parentPhone],
-      ["Current School", data.currentSchool || "Not provided"],
+      ...rows,
       ["Class communications", "Agreed to receive registration information, live class access, and reminders for this class"],
       [
         "Live class access",
-        zoom
+        hasZoom
           ? "Sent automatically in the parent's confirmation email."
           : "NOT SENT. No Zoom URL is configured. Please email the live class link to the parent.",
       ],
     ],
-    confirmation: {
-      to: data.parentEmail,
-      subject: `${heading}: ${session.title}, ${session.shortLabel}`,
-      heading,
-      paragraphs: [
-        `Hi ${data.parentName},`,
-        `Your free class seat is reserved for ${data.studentName}. Here are the class details:`,
-        `Class: ${classTitle}\nTopic: ${session.topic}\nDate: ${session.label}\nTime: ${FREE_CLASS.timeLabel}\nFormat: Live Online\nInstructor: ${FREE_CLASS.instructor}, ${FREE_CLASS.instructorRole}`,
-        zoomParagraph,
-        "This access information is for your family only. Please do not share it publicly. Please have a pencil and scratch paper ready for practice questions.",
-        `AhmedPrep\n${ADDRESS_LINE_1}\n${ADDRESS_LINE_2}\nCall or text: ${BUSINESS.phoneDisplay}\nEmail: ${BUSINESS.email}`,
-        "Questions? Simply reply to this email.",
-      ],
-      link: zoom ? { label: "Join the Live Class", href: zoom.url, afterParagraph: 3 } : undefined,
+    confirmation,
+    failureAlertNote: `To resend the confirmation once the problem is fixed, open this private link (valid 30 days, do not forward):\n${resendLink}`,
+    onDelivery: async (event) => {
+      if (event.stage === "admin") {
+        await withDbRetry(() => (event.ok ? markAdminNotified(registrationId) : markAdminFailed(registrationId, event.error)))
+      } else {
+        await withDbRetry(() => setConfirmationStatus(registrationId, event.status, event.error ?? null))
+      }
     },
   })
 }
