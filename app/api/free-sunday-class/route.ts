@@ -1,4 +1,7 @@
+import { createHash } from "node:crypto"
+import { NextResponse } from "next/server"
 import { ADDRESS_LINE_1, ADDRESS_LINE_2, BUSINESS } from "@/lib/business"
+import { claimRegistration, markRegistrationDelivered } from "@/lib/sunday-registrations"
 import {
   CLASS_TYPES,
   FREE_CLASS,
@@ -9,7 +12,7 @@ import {
   type RsvpProgram,
 } from "@/lib/free-class"
 import { getZoomAccess } from "@/lib/zoom-access"
-import { EMAIL_PATTERN, clean, deliverLead, fail, hasPhoneDigits, readBody, screenSubmission } from "@/lib/lead-delivery"
+import { EMAIL_PATTERN, clean, deliverLead, type ConfirmationStatus, fail, hasPhoneDigits, readBody, screenSubmission } from "@/lib/lead-delivery"
 
 const GRADES = new Set(FREE_CLASS_GRADES)
 const PROGRAMS = new Set<string>(RSVP_PROGRAMS.map((p) => p.value))
@@ -69,9 +72,35 @@ export async function POST(request: Request) {
     : "Live class access information\nAhmedPrep will email the live class link to this address before the session begins."
 
   const heading = "Your free class seat is reserved"
+  const dedupeKey = [data.parentEmail, data.studentName, session.isoDate, program]
 
-  return deliverLead({
-    dedupeKey: [data.parentEmail, data.studentName, session.isoDate, program],
+  // Resend's idempotency only covers 24 hours, so the stored registration is what blocks later repeats.
+  // If the database is unreachable the RSVP still goes through, with Resend's 24-hour protection as the fallback.
+  let registrationId: number | null = null
+  try {
+    const claim = await claimRegistration({
+      dedupeKey: createHash("sha256").update(dedupeKey.map((v) => v.trim().toLowerCase()).join("|")).digest("hex"),
+      classDate: session.isoDate,
+      program,
+      studentName: data.studentName,
+      studentGrade: data.studentGrade,
+      parentName: data.parentName,
+      parentEmail: data.parentEmail,
+      parentPhone: data.parentPhone,
+      currentSchool: data.currentSchool || null,
+      topic: session.topic,
+    })
+    if (claim.kind === "duplicate") {
+      console.warn(`[${SCOPE}] Duplicate RSVP for ${session.isoDate}; original registration kept, no emails sent`)
+      return NextResponse.json({ success: true, duplicate: true, confirmation: claim.confirmation })
+    }
+    registrationId = claim.id
+  } catch (error) {
+    console.error(`[${SCOPE}] Could not record registration:`, error instanceof Error ? error.message : error)
+  }
+
+  const response = await deliverLead({
+    dedupeKey,
     scope: SCOPE,
     fromLocalPart: "classes",
     heading: `New Free Sunday Class RSVP (${programLabel})`,
@@ -112,4 +141,15 @@ export async function POST(request: Request) {
       link: zoom ? { label: "Join the Live Class", href: zoom.url, afterParagraph: 3 } : undefined,
     },
   })
+
+  if (registrationId !== null && response.ok) {
+    try {
+      const result = (await response.clone().json()) as { confirmation: ConfirmationStatus }
+      await markRegistrationDelivered(registrationId, result.confirmation)
+    } catch (error) {
+      console.error(`[${SCOPE}] Could not mark registration delivered:`, error instanceof Error ? error.message : error)
+    }
+  }
+
+  return response
 }
