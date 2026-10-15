@@ -1,7 +1,13 @@
 import { createHash } from "node:crypto"
 import { NextResponse } from "next/server"
 import { createResendLink } from "@/lib/admin-links"
-import { claimRegistration, markRegistrationDelivered } from "@/lib/sunday-registrations"
+import {
+  claimRegistration,
+  markAdminFailed,
+  markAdminNotified,
+  setConfirmationStatus,
+  withDbRetry,
+} from "@/lib/sunday-registrations"
 import { buildSundayConfirmation } from "@/lib/sunday-confirmation"
 import {
   FREE_CLASS,
@@ -11,7 +17,7 @@ import {
   findUpcomingClass,
   type RsvpProgram,
 } from "@/lib/free-class"
-import { EMAIL_PATTERN, clean, deliverLead, type ConfirmationStatus, fail, hasPhoneDigits, readBody, screenSubmission } from "@/lib/lead-delivery"
+import { EMAIL_PATTERN, clean, deliverLead, fail, hasPhoneDigits, readBody, screenSubmission } from "@/lib/lead-delivery"
 
 const GRADES = new Set(FREE_CLASS_GRADES)
 const PROGRAMS = new Set<string>(RSVP_PROGRAMS.map((p) => p.value))
@@ -60,10 +66,11 @@ export async function POST(request: Request) {
   const dedupeKey = [data.parentEmail, data.studentName, session.isoDate, program]
 
   // Resend's idempotency only covers 24 hours, so the stored registration is what blocks later repeats.
-  // If the database is unreachable the RSVP still goes through, with Resend's 24-hour protection as the fallback.
+  // If the database is still unreachable after one retry, the RSVP goes through (Resend's 24-hour protection still
+  // applies) and AhmedPrep's notification is flagged so the registration can be added by hand.
   let registrationId: number | null = null
   try {
-    const claim = await claimRegistration({
+    const claim = await withDbRetry(() => claimRegistration({
       dedupeKey: createHash("sha256").update(dedupeKey.map((v) => v.trim().toLowerCase()).join("|")).digest("hex"),
       classDate: session.isoDate,
       program,
@@ -74,7 +81,7 @@ export async function POST(request: Request) {
       parentPhone: data.parentPhone,
       currentSchool: data.currentSchool || null,
       topic: session.topic,
-    })
+    }))
     if (claim.kind === "duplicate") {
       console.warn(`[${SCOPE}] Duplicate RSVP for ${session.isoDate}; original registration kept, no emails sent`)
       return NextResponse.json({ success: true, duplicate: true, confirmation: claim.confirmation })
@@ -84,14 +91,15 @@ export async function POST(request: Request) {
     console.error(`[${SCOPE}] Could not record registration:`, error instanceof Error ? error.message : error)
   }
 
-  const resendLink = registrationId !== null ? createResendLink(new URL(request.url).origin, registrationId) : null
+  const saved = registrationId !== null
+  const resendLink = saved ? createResendLink(new URL(request.url).origin, registrationId as number) : null
 
   const response = await deliverLead({
     dedupeKey,
     scope: SCOPE,
     fromLocalPart: "classes",
-    heading: `New Free Sunday Class RSVP (${programLabel})`,
-    subject: `Free Sunday ${programLabel} RSVP: ${data.studentName} (${session.shortLabel})`,
+    heading: `New Free Sunday Class RSVP (${programLabel})${saved ? "" : " - NOT SAVED IN DATABASE"}`,
+    subject: `${saved ? "" : "[NOT SAVED] "}Free Sunday ${programLabel} RSVP: ${data.studentName} (${session.shortLabel})`,
     replyTo: data.parentEmail,
     rows: [
       ["Class", `${classTitle}, live online`],
@@ -111,21 +119,30 @@ export async function POST(request: Request) {
           ? "Sent automatically in the parent's confirmation email."
           : "NOT SENT. No Zoom URL is configured. Please email the live class link to the parent.",
       ],
+      ...(saved
+        ? []
+        : ([
+            [
+              "Database record",
+              "NOT SAVED. The registration database was unreachable. Please add this registration manually; duplicate protection beyond 24 hours does not apply to it.",
+            ],
+          ] as [string, string][])),
     ],
     confirmation,
     failureAlertNote: resendLink
       ? `To resend the confirmation once the problem is fixed, open this private link (valid 30 days, do not forward):\n${resendLink}`
       : undefined,
+    onDelivery: saved
+      ? async (event) => {
+          const id = registrationId as number
+          if (event.stage === "admin") {
+            await withDbRetry(() => (event.ok ? markAdminNotified(id) : markAdminFailed(id, event.error)))
+          } else {
+            await withDbRetry(() => setConfirmationStatus(id, event.status, event.error ?? null))
+          }
+        }
+      : undefined,
   })
-
-  if (registrationId !== null && response.ok) {
-    try {
-      const result = (await response.clone().json()) as { confirmation: ConfirmationStatus }
-      await markRegistrationDelivered(registrationId, result.confirmation)
-    } catch (error) {
-      console.error(`[${SCOPE}] Could not mark registration delivered:`, error instanceof Error ? error.message : error)
-    }
-  }
 
   return response
 }

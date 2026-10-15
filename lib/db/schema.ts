@@ -17,6 +17,7 @@ export const sundayClassRegistrations = pgTable("sunday_class_registrations", {
   duplicateAttempts: integer("duplicate_attempts").notNull().default(0),
   confirmationResentAt: timestamp("confirmation_resent_at", { withTimezone: true }),
   confirmationResendCount: integer("confirmation_resend_count").notNull().default(0),
+  lastDeliveryError: text("last_delivery_error"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 })

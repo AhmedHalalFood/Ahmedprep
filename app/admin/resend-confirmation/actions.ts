@@ -23,7 +23,7 @@ export async function resendConfirmation(_prev: ResendState, formData: FormData)
 
   const { confirmation } = buildSundayConfirmation(session, registration.program as RsvpProgram, registration)
   const result = await sendConfirmationEmail(confirmation, "classes", `free-sunday-class-resend/${id}/${attempt}`)
-  await setConfirmationStatus(id, result.ok ? "sent" : "failed")
+  await setConfirmationStatus(id, result.ok ? "sent" : "failed", result.ok ? null : `resend: ${result.error}`)
 
   return result.ok
     ? { status: "sent", message: `Confirmation resent to ${registration.parentEmail}.` }

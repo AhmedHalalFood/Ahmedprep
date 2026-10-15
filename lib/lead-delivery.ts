@@ -97,9 +97,19 @@ type LeadEmail = {
   dedupeKey?: string[]
   /** Extra admin-only text added to the "confirmation not delivered" alert, e.g. a signed resend link. */
   failureAlertNote?: string
+  /**
+   * Called after each delivery stage so the caller can record it immediately. Errors thrown here are logged and
+   * never block or repeat delivery.
+   */
+  onDelivery?: (event: DeliveryEvent) => Promise<void>
 }
 
 export type ConfirmationStatus = "sent" | "failed" | "not_requested"
+
+export type DeliveryEvent =
+  | { stage: "admin"; ok: true }
+  | { stage: "admin"; ok: false; error: string }
+  | { stage: "confirmation"; status: ConfirmationStatus; error?: string }
 
 // Resend rejects a reused idempotency key with these codes, meaning the original request already went through or is in flight.
 const DUPLICATE_ERRORS = new Set(["invalid_idempotent_request", "concurrent_idempotent_requests"])
@@ -117,11 +127,22 @@ export async function deliverLead({
   confirmation,
   dedupeKey,
   failureAlertNote,
+  onDelivery,
 }: LeadEmail) {
+  const record = async (event: DeliveryEvent) => {
+    if (!onDelivery) return
+    try {
+      await onDelivery(event)
+    } catch (err) {
+      console.error(`[${scope}] Could not record ${event.stage} delivery:`, err instanceof Error ? err.message : err)
+    }
+  }
+
   const apiKey = process.env.RESEND_API_KEY
   const domain = process.env.RESEND_EMAIL_DOMAIN
   if (!apiKey || !domain) {
     console.error(`[${scope}] Email delivery is not configured: RESEND_API_KEY or RESEND_EMAIL_DOMAIN is missing`)
+    await record({ stage: "admin", ok: false, error: "email_not_configured" })
     return fail(500, "Delivery unavailable.")
   }
 
@@ -168,10 +189,13 @@ ${allRows
     console.warn(`[${scope}] Duplicate submission; AhmedPrep already has this registration`)
   } else if (error || !sent?.id) {
     console.error(`[${scope}] Resend delivery failed:`, error?.name, error?.message)
+    await record({ stage: "admin", ok: false, error: error?.name ?? "no_message_id" })
     return fail(502, "Delivery failed.")
   } else {
     console.log(`[${scope}] Delivered${testMode ? " (test mode)" : ""}, Resend id:`, sent.id)
   }
+  // Recorded before the confirmation is attempted, so a later failure can never cause AhmedPrep to be notified twice.
+  await record({ stage: "admin", ok: true })
 
   let confirmationStatus: ConfirmationStatus = "not_requested"
 
@@ -208,6 +232,13 @@ ${allRows
         console.error(`[${scope}] Confirmation failure alert also failed:`, alertError.name)
       }
     }
+    await record({
+      stage: "confirmation",
+      status: confirmationStatus,
+      error: confirmationStatus === "failed" ? `confirmation: ${confirmError?.name ?? "unknown error"}` : undefined,
+    })
+  } else {
+    await record({ stage: "confirmation", status: "not_requested" })
   }
 
   return NextResponse.json({ success: true, duplicate, confirmation: confirmationStatus })

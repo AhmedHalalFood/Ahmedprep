@@ -12,6 +12,7 @@ type NewRegistration = Omit<
   | "duplicateAttempts"
   | "confirmationResentAt"
   | "confirmationResendCount"
+  | "lastDeliveryError"
   | "createdAt"
   | "updatedAt"
 >
@@ -81,16 +82,38 @@ export async function claimResendAttempt(id: number) {
   return row?.attempt ?? null
 }
 
-export async function setConfirmationStatus(id: number, confirmation: ConfirmationStatus) {
+export async function setConfirmationStatus(id: number, confirmation: ConfirmationStatus, error: string | null = null) {
   await db
     .update(sundayClassRegistrations)
-    .set({ confirmationStatus: confirmation, updatedAt: sql`now()` })
+    .set({ confirmationStatus: confirmation, lastDeliveryError: error, updatedAt: sql`now()` })
     .where(eq(sundayClassRegistrations.id, id))
 }
 
-export async function markRegistrationDelivered(id: number, confirmation: ConfirmationStatus) {
+/** Keeps the first notification time, so a retried request never moves it. */
+export async function markAdminNotified(id: number) {
   await db
     .update(sundayClassRegistrations)
-    .set({ adminNotifiedAt: sql`now()`, confirmationStatus: confirmation, updatedAt: sql`now()` })
+    .set({
+      adminNotifiedAt: sql`coalesce(${sundayClassRegistrations.adminNotifiedAt}, now())`,
+      lastDeliveryError: null,
+      updatedAt: sql`now()`,
+    })
     .where(eq(sundayClassRegistrations.id, id))
+}
+
+export async function markAdminFailed(id: number, error: string) {
+  await db
+    .update(sundayClassRegistrations)
+    .set({ lastDeliveryError: `admin: ${error}`, updatedAt: sql`now()` })
+    .where(eq(sundayClassRegistrations.id, id))
+}
+
+/** Retries once after a short pause, which covers a cold-starting or briefly unreachable database. */
+export async function withDbRetry<T>(operation: () => Promise<T>): Promise<T> {
+  try {
+    return await operation()
+  } catch {
+    await new Promise((resolve) => setTimeout(resolve, 400))
+    return operation()
+  }
 }
