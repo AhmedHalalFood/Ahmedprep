@@ -69,8 +69,10 @@ export async function POST(request: Request) {
     : "Live class access information\nAhmedPrep will email the live class link to this address before the session begins."
 
   const heading = "Your free class seat is reserved"
+  const studentFirstName = data.studentName.split(/\s+/)[0]
 
   return deliverLead({
+    dedupeKey: [data.parentEmail, data.studentName, session.isoDate, program],
     scope: SCOPE,
     fromLocalPart: "classes",
     heading: `New Free Sunday Class RSVP (${programLabel})`,
@@ -101,8 +103,8 @@ export async function POST(request: Request) {
       heading,
       paragraphs: [
         `Hi ${data.parentName},`,
-        `Your free class seat is reserved for ${data.studentName}. Here are the class details:`,
-        `Class: ${classTitle}\nTopic: ${session.topic}\nDate: ${session.label}\nTime: ${FREE_CLASS.timeLabel}\nFormat: Live Online\nInstructor: ${FREE_CLASS.instructor}, ${FREE_CLASS.instructorRole}`,
+        `${studentFirstName}'s free Sunday class seat is reserved. Here are the class details:`,
+        `Student: ${studentFirstName}\nProgram: ${programLabel}\nClass: ${classTitle}\nTopic: ${session.topic}\nDate: ${session.label}\nTime: 4:00–5:00 PM Eastern\nFormat: Live on Zoom\nInstructor: ${FREE_CLASS.instructor}, ${FREE_CLASS.instructorRole}`,
         zoomParagraph,
         "This access information is for your family only. Please do not share it publicly. Please have a pencil and scratch paper ready for practice questions.",
         `AhmedPrep\n${ADDRESS_LINE_1}\n${ADDRESS_LINE_2}\nCall or text: ${BUSINESS.phoneDisplay}\nEmail: ${BUSINESS.email}`,

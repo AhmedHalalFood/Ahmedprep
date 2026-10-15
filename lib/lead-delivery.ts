@@ -63,10 +63,10 @@ type Confirmation = {
 
 function confirmationBody({ heading, paragraphs, link }: Confirmation) {
   const safeLink = link && /^https:\/\//i.test(link.href) ? link : undefined
-  const textParts = [heading, ...paragraphs]
+  const textParts = ["AhmedPrep.com", heading, ...paragraphs]
   const htmlParts = paragraphs.map((p) => `<p style="margin:0 0 14px;white-space:pre-wrap">${escapeHtml(p)}</p>`)
   if (safeLink) {
-    textParts.splice(safeLink.afterParagraph + 2, 0, `${safeLink.label}: ${safeLink.href}`)
+    textParts.splice(safeLink.afterParagraph + 3, 0, `${safeLink.label}: ${safeLink.href}`)
     htmlParts.splice(
       safeLink.afterParagraph + 1,
       0,
@@ -75,9 +75,11 @@ function confirmationBody({ heading, paragraphs, link }: Confirmation) {
   }
   return {
     text: textParts.join("\n\n"),
-    html: `<div style="font-family:Arial,sans-serif;color:#0b1d35;line-height:1.6;max-width:560px">
+    html: `<div style="font-family:Arial,sans-serif;color:#0b1d35;line-height:1.6;max-width:560px;border-top:4px solid #f2b31a">
+<p style="margin:0;padding:16px 0 4px;font-size:20px;font-weight:800;letter-spacing:-0.02em"><a href="https://ahmedprep.com" style="color:#0b1d35;text-decoration:none">AhmedPrep<span style="color:#1d4ed8">.com</span></a></p>
 <h2 style="margin:0 0 16px">${escapeHtml(heading)}</h2>
 ${htmlParts.join("\n")}
+<p style="margin:24px 0 0;padding-top:12px;border-top:1px solid #e5e7eb;font-size:12px;color:#5b6474">AhmedPrep.com · SHSAT &amp; Digital SAT Prep</p>
 </div>`,
   }
 }
@@ -91,9 +93,19 @@ type LeadEmail = {
   rows: [string, string][]
   /** Optional courtesy email to the submitter, sent only after AhmedPrep's notification succeeds. */
   confirmation?: Confirmation
+  /** Values that identify one registration. Repeat submissions with the same values are treated as duplicates. Defaults to all row values. */
+  dedupeKey?: string[]
 }
 
-export async function deliverLead({ scope, fromLocalPart, heading, subject, replyTo, rows, confirmation }: LeadEmail) {
+export type ConfirmationStatus = "sent" | "failed" | "not_requested"
+
+// Resend rejects a reused idempotency key with these codes, meaning the original request already went through or is in flight.
+const DUPLICATE_ERRORS = new Set(["invalid_idempotent_request", "concurrent_idempotent_requests"])
+
+// Resend's own test inboxes. Submissions from these never reach a real person, so the admin copy goes there too.
+const isTestAddress = (email: string) => /@resend\.dev$/i.test(email)
+
+export async function deliverLead({ scope, fromLocalPart, heading, subject, replyTo, rows, confirmation, dedupeKey }: LeadEmail) {
   const apiKey = process.env.RESEND_API_KEY
   const domain = process.env.RESEND_EMAIL_DOMAIN
   if (!apiKey || !domain) {
@@ -122,31 +134,38 @@ ${allRows
 
   // Identical submissions share a key, so Resend sends them only once.
   const fingerprint = createHash("sha256")
-    .update(rows.map(([, value]) => value.toLowerCase()).join("|"))
+    .update((dedupeKey ?? rows.map(([, value]) => value)).map((v) => v.trim().toLowerCase()).join("|"))
     .digest("hex")
 
+  const testMode = isTestAddress(replyTo)
   const resend = new Resend(apiKey)
   const { data: sent, error } = await resend.emails.send(
     {
       from: `AhmedPrep Website <${fromLocalPart}@${domain}>`,
-      to: [RECIPIENT],
+      to: [testMode ? "delivered@resend.dev" : RECIPIENT],
       replyTo,
-      subject,
+      subject: testMode ? `[TEST] ${subject}` : subject,
       text,
       html,
     },
     { idempotencyKey: `${scope}/${fingerprint}` },
   )
 
-  if (error || !sent?.id) {
+  const duplicate = Boolean(error && DUPLICATE_ERRORS.has(error.name))
+  if (duplicate) {
+    console.warn(`[${scope}] Duplicate submission; AhmedPrep already has this registration`)
+  } else if (error || !sent?.id) {
     console.error(`[${scope}] Resend delivery failed:`, error?.name, error?.message)
     return fail(502, "Delivery failed.")
+  } else {
+    console.log(`[${scope}] Delivered${testMode ? " (test mode)" : ""}, Resend id:`, sent.id)
   }
 
-  console.log(`[${scope}] Delivered, Resend id:`, sent.id)
+  let confirmationStatus: ConfirmationStatus = "not_requested"
 
   if (confirmation) {
-    // AhmedPrep already has the lead, so a failed courtesy email is logged rather than shown as a failed registration.
+    // AhmedPrep already has the lead, so a failed confirmation keeps the registration and is reported, not treated as a failed registration.
+    // The confirmation body is deterministic, so a repeat submission reuses the same key and Resend never sends it twice.
     const { data: confirmed, error: confirmError } = await resend.emails.send(
       {
         from: `AhmedPrep <${fromLocalPart}@${domain}>`,
@@ -157,12 +176,27 @@ ${allRows
       },
       { idempotencyKey: `${scope}-confirmation/${fingerprint}` },
     )
-    if (confirmError || !confirmed?.id) {
-      console.error(`[${scope}] Confirmation email failed:`, confirmError?.name, confirmError?.message)
+    if (confirmed?.id || (confirmError && DUPLICATE_ERRORS.has(confirmError.name))) {
+      confirmationStatus = "sent"
+      console.log(`[${scope}] Confirmation delivered, Resend id:`, confirmed?.id ?? "(already sent)")
     } else {
-      console.log(`[${scope}] Confirmation delivered, Resend id:`, confirmed.id)
+      confirmationStatus = "failed"
+      console.error(`[${scope}] Confirmation email failed:`, confirmError?.name, confirmError?.message)
+      const { error: alertError } = await resend.emails.send(
+        {
+          from: `AhmedPrep Website <${fromLocalPart}@${domain}>`,
+          to: [testMode ? "delivered@resend.dev" : RECIPIENT],
+          replyTo,
+          subject: `${testMode ? "[TEST] " : ""}ACTION NEEDED: confirmation email not delivered (${confirmation.to})`,
+          text: `The registration below was saved, but the automatic confirmation email to ${confirmation.to} could not be sent (${confirmError?.name ?? "unknown error"}). Please send the class details manually.\n\n${text}`,
+        },
+        { idempotencyKey: `${scope}-confirmation-alert/${fingerprint}` },
+      )
+      if (alertError && !DUPLICATE_ERRORS.has(alertError.name)) {
+        console.error(`[${scope}] Confirmation failure alert also failed:`, alertError.name)
+      }
     }
   }
 
-  return NextResponse.json({ success: true })
+  return NextResponse.json({ success: true, duplicate, confirmation: confirmationStatus })
 }

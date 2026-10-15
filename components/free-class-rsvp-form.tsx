@@ -65,7 +65,7 @@ export function FreeClassRsvpForm({
 
   const eventParams = (d: RsvpData) => ({ location, class_type: d.classType || "unselected", class_date: d.classDate || "unselected" })
 
-  const { data, errors, status, update, submit, formRef, honeypotRef } = useLeadForm({
+  const { data, errors, status, serverResult, update, submit, formRef, honeypotRef } = useLeadForm({
     endpoint: "/api/free-sunday-class",
     initial,
     validate,
@@ -104,10 +104,14 @@ export function FreeClassRsvpForm({
         <div>
           <p className="eyebrow blue">Seat reserved</p>
           <p className="mt-3 text-pretty text-xl font-extrabold leading-snug text-navy">
-            Your free class seat is reserved. We&apos;ll send the live class details to the email provided before the session.
-          </p>
-          <p className="mt-3 text-sm leading-relaxed text-subtle">
-            Don&apos;t see an email? Please check your spam folder, or call or text us at{" "}
+  {serverResult?.confirmation === "sent"
+  ? "Your free class seat is reserved. We\u2019ve emailed your confirmation and Zoom details to the address you provided."
+  : "Your free class seat is reserved. We couldn\u2019t send the confirmation email automatically, so our team will email your class details before the session."}
+  </p>
+  <p className="mt-3 text-sm leading-relaxed text-subtle">
+  {serverResult?.confirmation === "sent"
+  ? "Don\u2019t see an email in a few minutes? Please check your spam folder, or call or text us at "
+  : "Need the details sooner? Call or text us at "}
             <a href={BUSINESS.phoneHref} className="font-semibold text-navy underline underline-offset-2">
               {BUSINESS.phoneDisplay}
             </a>
