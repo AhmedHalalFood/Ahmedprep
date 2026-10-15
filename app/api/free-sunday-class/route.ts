@@ -1,9 +1,9 @@
 import { createHash } from "node:crypto"
 import { NextResponse } from "next/server"
-import { ADDRESS_LINE_1, ADDRESS_LINE_2, BUSINESS } from "@/lib/business"
+import { createResendLink } from "@/lib/admin-links"
 import { claimRegistration, markRegistrationDelivered } from "@/lib/sunday-registrations"
+import { buildSundayConfirmation } from "@/lib/sunday-confirmation"
 import {
-  CLASS_TYPES,
   FREE_CLASS,
   FREE_CLASS_GRADES,
   RSVP_PROGRAMS,
@@ -11,7 +11,6 @@ import {
   findUpcomingClass,
   type RsvpProgram,
 } from "@/lib/free-class"
-import { getZoomAccess } from "@/lib/zoom-access"
 import { EMAIL_PATTERN, clean, deliverLead, type ConfirmationStatus, fail, hasPhoneDigits, readBody, screenSubmission } from "@/lib/lead-delivery"
 
 const GRADES = new Set(FREE_CLASS_GRADES)
@@ -55,23 +54,9 @@ export async function POST(request: Request) {
   }
 
   const program = data.classType as RsvpProgram
-  const programLabel = CLASS_TYPES[program].label
-  const classTitle = session.type === "workshop" ? `${session.title} (${programLabel} family)` : session.title
-  const zoom = getZoomAccess(program)
-  if (!zoom) console.warn(`[${SCOPE}] No Zoom URL configured for ${program}; confirmation sent without access details`)
+  const { confirmation, classTitle, programLabel, hasZoom } = buildSundayConfirmation(session, program, data)
+  if (!hasZoom) console.warn(`[${SCOPE}] No valid Zoom URL configured for ${program}; confirmation sent without access details`)
 
-  const zoomParagraph = zoom
-    ? [
-        "Live class access information",
-        `Join link: ${zoom.url}`,
-        zoom.meetingId && `Meeting ID: ${zoom.meetingId}`,
-        zoom.passcode && `Passcode: ${zoom.passcode}`,
-      ]
-        .filter(Boolean)
-        .join("\n")
-    : "Live class access information\nAhmedPrep will email the live class link to this address before the session begins."
-
-  const heading = "Your free class seat is reserved"
   const dedupeKey = [data.parentEmail, data.studentName, session.isoDate, program]
 
   // Resend's idempotency only covers 24 hours, so the stored registration is what blocks later repeats.
@@ -99,6 +84,8 @@ export async function POST(request: Request) {
     console.error(`[${SCOPE}] Could not record registration:`, error instanceof Error ? error.message : error)
   }
 
+  const resendLink = registrationId !== null ? createResendLink(new URL(request.url).origin, registrationId) : null
+
   const response = await deliverLead({
     dedupeKey,
     scope: SCOPE,
@@ -120,26 +107,15 @@ export async function POST(request: Request) {
       ["Class communications", "Agreed to receive registration information, live class access, and reminders for this class"],
       [
         "Live class access",
-        zoom
+        hasZoom
           ? "Sent automatically in the parent's confirmation email."
           : "NOT SENT. No Zoom URL is configured. Please email the live class link to the parent.",
       ],
     ],
-    confirmation: {
-      to: data.parentEmail,
-      subject: `${heading}: ${session.title}, ${session.shortLabel}`,
-      heading,
-      paragraphs: [
-        `Hi ${data.parentName},`,
-        `A free Sunday class seat is reserved for ${data.studentName}. Here are the class details:`,
-        `Student: ${data.studentName}\nProgram: ${programLabel}\nClass: ${classTitle}\nTopic: ${session.topic}\nDate: ${session.label}\nTime: 4:00–5:00 PM Eastern\nFormat: Live on Zoom\nInstructor: ${FREE_CLASS.instructor}, ${FREE_CLASS.instructorRole}`,
-        zoomParagraph,
-        "This access information is for your family only. Please do not share it publicly. Please have a pencil and scratch paper ready for practice questions.",
-        `AhmedPrep\n${ADDRESS_LINE_1}\n${ADDRESS_LINE_2}\nCall or text: ${BUSINESS.phoneDisplay}\nEmail: ${BUSINESS.email}`,
-        "Questions? Simply reply to this email.",
-      ],
-      link: zoom ? { label: "Join the Live Class", href: zoom.url, afterParagraph: 3 } : undefined,
-    },
+    confirmation,
+    failureAlertNote: resendLink
+      ? `To resend the confirmation once the problem is fixed, open this private link (valid 30 days, do not forward):\n${resendLink}`
+      : undefined,
   })
 
   if (registrationId !== null && response.ok) {

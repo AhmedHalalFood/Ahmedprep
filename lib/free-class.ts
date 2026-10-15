@@ -160,6 +160,15 @@ export function findUpcomingClass(isoDate: string | undefined, count = 4, now = 
   return getUpcomingClasses(count, now).find((c) => c.isoDate === isoDate)
 }
 
+/** Rebuilds the class for any stored Sunday date (past or future), e.g. to resend a confirmation. */
+export function getClassByDate(isoDate: string) {
+  if (!ISO_DATE.test(isoDate)) return undefined
+  const [year, month, day] = isoDate.split("-").map(Number)
+  const classDay = new Date(Date.UTC(year, month - 1, day, 12))
+  if (classDay.getUTCDay() !== 0 || classDay.toISOString().slice(0, 10) !== isoDate) return undefined
+  return buildClass(classDay)
+}
+
 /** Workshops are open to both programs; regular classes only match their own program. */
 export function classMatchesProgram(c: SundayClass, program: string) {
   return c.type === "workshop" || c.type === program

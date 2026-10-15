@@ -52,7 +52,7 @@ export function screenSubmission(request: Request, body: Record<string, unknown>
   return null
 }
 
-type Confirmation = {
+export type Confirmation = {
   to: string
   subject: string
   heading: string
@@ -95,6 +95,8 @@ type LeadEmail = {
   confirmation?: Confirmation
   /** Values that identify one registration. Repeat submissions with the same values are treated as duplicates. Defaults to all row values. */
   dedupeKey?: string[]
+  /** Extra admin-only text added to the "confirmation not delivered" alert, e.g. a signed resend link. */
+  failureAlertNote?: string
 }
 
 export type ConfirmationStatus = "sent" | "failed" | "not_requested"
@@ -105,7 +107,17 @@ const DUPLICATE_ERRORS = new Set(["invalid_idempotent_request", "concurrent_idem
 // Resend's own test inboxes. Submissions from these never reach a real person, so the admin copy goes there too.
 const isTestAddress = (email: string) => /@resend\.dev$/i.test(email)
 
-export async function deliverLead({ scope, fromLocalPart, heading, subject, replyTo, rows, confirmation, dedupeKey }: LeadEmail) {
+export async function deliverLead({
+  scope,
+  fromLocalPart,
+  heading,
+  subject,
+  replyTo,
+  rows,
+  confirmation,
+  dedupeKey,
+  failureAlertNote,
+}: LeadEmail) {
   const apiKey = process.env.RESEND_API_KEY
   const domain = process.env.RESEND_EMAIL_DOMAIN
   if (!apiKey || !domain) {
@@ -188,7 +200,7 @@ ${allRows
           to: [testMode ? "delivered@resend.dev" : RECIPIENT],
           replyTo,
           subject: `${testMode ? "[TEST] " : ""}ACTION NEEDED: confirmation email not delivered (${confirmation.to})`,
-          text: `The registration below was saved, but the automatic confirmation email to ${confirmation.to} could not be sent (${confirmError?.name ?? "unknown error"}). Please send the class details manually.\n\n${text}`,
+          text: `The registration below was saved, but the automatic confirmation email to ${confirmation.to} could not be sent (${confirmError?.name ?? "unknown error"}). ${failureAlertNote ? `\n\n${failureAlertNote}` : " Please send the class details manually."}\n\n${text}`,
         },
         { idempotencyKey: `${scope}-confirmation-alert/${fingerprint}` },
       )
@@ -199,4 +211,25 @@ ${allRows
   }
 
   return NextResponse.json({ success: true, duplicate, confirmation: confirmationStatus })
+}
+
+/** Sends only the parent confirmation (used by the admin resend). The caller supplies a per-attempt idempotency key. */
+export async function sendConfirmationEmail(confirmation: Confirmation, fromLocalPart: string, idempotencyKey: string) {
+  const apiKey = process.env.RESEND_API_KEY
+  const domain = process.env.RESEND_EMAIL_DOMAIN
+  if (!apiKey || !domain) return { ok: false as const, error: "Email delivery is not configured." }
+  const { data, error } = await new Resend(apiKey).emails.send(
+    {
+      from: `AhmedPrep <${fromLocalPart}@${domain}>`,
+      to: [confirmation.to],
+      replyTo: RECIPIENT,
+      subject: confirmation.subject,
+      ...confirmationBody(confirmation),
+    },
+    { idempotencyKey },
+  )
+  if (data?.id) return { ok: true as const, id: data.id }
+  if (error && DUPLICATE_ERRORS.has(error.name)) return { ok: true as const, id: null }
+  console.error("[confirmation-resend] Resend failed:", error?.name, error?.message)
+  return { ok: false as const, error: error?.name ?? "unknown error" }
 }
