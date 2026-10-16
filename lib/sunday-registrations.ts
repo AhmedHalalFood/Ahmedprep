@@ -1,6 +1,6 @@
 import "server-only"
 import { and, eq, isNull, lt, or, sql } from "drizzle-orm"
-import { db } from "@/lib/db"
+import { getDb } from "@/lib/db"
 import { sundayClassRegistrations } from "@/lib/db/schema"
 import type { ConfirmationStatus } from "@/lib/lead-delivery"
 
@@ -27,7 +27,7 @@ export type RegistrationClaim =
  * A repeat never overwrites the original row; it only bumps duplicate_attempts.
  */
 export async function claimRegistration(registration: NewRegistration): Promise<RegistrationClaim> {
-  const [row] = await db
+  const [row] = await getDb()
     .insert(sundayClassRegistrations)
     .values(registration)
     .onConflictDoUpdate({
@@ -56,7 +56,7 @@ export async function claimRegistration(registration: NewRegistration): Promise<
 export const PARENT_RESEND_LIMIT = 5
 
 export async function getRegistration(id: number) {
-  const [row] = await db.select().from(sundayClassRegistrations).where(eq(sundayClassRegistrations.id, id)).limit(1)
+  const [row] = await getDb().select().from(sundayClassRegistrations).where(eq(sundayClassRegistrations.id, id)).limit(1)
   return row ?? null
 }
 
@@ -66,7 +66,7 @@ export async function getRegistration(id: number) {
  * Never inserts a registration.
  */
 export async function claimResendAttempt(id: number, maxAttempts?: number) {
-  const [row] = await db
+  const [row] = await getDb()
     .update(sundayClassRegistrations)
     .set({
       confirmationResendCount: sql`${sundayClassRegistrations.confirmationResendCount} + 1`,
@@ -88,7 +88,7 @@ export async function claimResendAttempt(id: number, maxAttempts?: number) {
 }
 
 export async function setConfirmationStatus(id: number, confirmation: ConfirmationStatus, error: string | null = null) {
-  await db
+  await getDb()
     .update(sundayClassRegistrations)
     .set({ confirmationStatus: confirmation, lastDeliveryError: error, updatedAt: sql`now()` })
     .where(eq(sundayClassRegistrations.id, id))
@@ -96,7 +96,7 @@ export async function setConfirmationStatus(id: number, confirmation: Confirmati
 
 /** Keeps the first notification time, so a retried request never moves it. */
 export async function markAdminNotified(id: number) {
-  await db
+  await getDb()
     .update(sundayClassRegistrations)
     .set({
       adminNotifiedAt: sql`coalesce(${sundayClassRegistrations.adminNotifiedAt}, now())`,
@@ -107,7 +107,7 @@ export async function markAdminNotified(id: number) {
 }
 
 export async function markAdminFailed(id: number, error: string) {
-  await db
+  await getDb()
     .update(sundayClassRegistrations)
     .set({ lastDeliveryError: `admin: ${error}`, updatedAt: sql`now()` })
     .where(eq(sundayClassRegistrations.id, id))
@@ -117,6 +117,7 @@ export async function markAdminFailed(id: number, error: string) {
 export function describeDbError(error: unknown) {
   const cause = (error as { cause?: unknown })?.cause ?? error
   const code = (cause as { code?: string })?.code
+  if (code === "DB_CONFIG_INVALID") return `database is not configured: ${(cause as Error).message}`
   if (code === "42P01" || code === "42703") return `database schema is missing or out of date (${code}); run pnpm db:migrate`
   return cause instanceof Error ? cause.message : String(cause)
 }
