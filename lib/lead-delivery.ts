@@ -117,6 +117,22 @@ const DUPLICATE_ERRORS = new Set(["invalid_idempotent_request", "concurrent_idem
 // Resend's own test inboxes. Submissions from these never reach a real person, so the admin copy goes there too.
 const isTestAddress = (email: string) => /@resend\.dev$/i.test(email)
 
+/**
+ * Preview and development deployments must never email real parents or the AhmedPrep inbox, so every message is
+ * redirected to EMAIL_TEST_RECIPIENT (Resend's sink when unset). Production ignores it, so a stray value can't hijack live mail.
+ */
+function sandboxInbox() {
+  const env = process.env.VERCEL_ENV
+  if (env !== "preview" && env !== "development") return ""
+  return process.env.EMAIL_TEST_RECIPIENT?.trim() || "delivered@resend.dev"
+}
+
+export function addressEmail(to: string, subject: string) {
+  const inbox = sandboxInbox()
+  if (!inbox) return { to: [to], subject }
+  return { to: [inbox], subject: subject.startsWith("[TEST] ") ? subject : `[TEST] ${subject}` }
+}
+
 export async function deliverLead({
   scope,
   fromLocalPart,
@@ -175,9 +191,8 @@ ${allRows
   const { data: sent, error } = await resend.emails.send(
     {
       from: `AhmedPrep Website <${fromLocalPart}@${domain}>`,
-      to: [testMode ? "delivered@resend.dev" : RECIPIENT],
+      ...addressEmail(testMode ? "delivered@resend.dev" : RECIPIENT, testMode ? `[TEST] ${subject}` : subject),
       replyTo,
-      subject: testMode ? `[TEST] ${subject}` : subject,
       text,
       html,
     },
@@ -205,9 +220,8 @@ ${allRows
     const { data: confirmed, error: confirmError } = await resend.emails.send(
       {
         from: `AhmedPrep <${fromLocalPart}@${domain}>`,
-        to: [confirmation.to],
+        ...addressEmail(confirmation.to, confirmation.subject),
         replyTo: RECIPIENT,
-        subject: confirmation.subject,
         ...confirmationBody(confirmation),
       },
       { idempotencyKey: `${scope}-confirmation/${fingerprint}` },
@@ -221,9 +235,11 @@ ${allRows
       const { error: alertError } = await resend.emails.send(
         {
           from: `AhmedPrep Website <${fromLocalPart}@${domain}>`,
-          to: [testMode ? "delivered@resend.dev" : RECIPIENT],
+          ...addressEmail(
+            testMode ? "delivered@resend.dev" : RECIPIENT,
+            `${testMode ? "[TEST] " : ""}ACTION NEEDED: confirmation email not delivered (${confirmation.to})`,
+          ),
           replyTo,
-          subject: `${testMode ? "[TEST] " : ""}ACTION NEEDED: confirmation email not delivered (${confirmation.to})`,
           text: `The registration below was saved, but the automatic confirmation email to ${confirmation.to} could not be sent (${confirmError?.name ?? "unknown error"}). ${failureAlertNote ? `\n\n${failureAlertNote}` : " Please send the class details manually."}\n\n${text}`,
         },
         { idempotencyKey: `${scope}-confirmation-alert/${fingerprint}` },
@@ -267,9 +283,8 @@ export async function sendAdminAlert({
   const { error } = await new Resend(apiKey).emails.send(
     {
       from: `AhmedPrep Website <${fromLocalPart}@${domain}>`,
-      to: [testMode ? "delivered@resend.dev" : RECIPIENT],
+      ...addressEmail(testMode ? "delivered@resend.dev" : RECIPIENT, `${testMode ? "[TEST] " : ""}${subject}`),
       replyTo,
-      subject: `${testMode ? "[TEST] " : ""}${subject}`,
       text,
     },
     { idempotencyKey },
@@ -289,9 +304,8 @@ export async function sendConfirmationEmail(confirmation: Confirmation, fromLoca
   const { data, error } = await new Resend(apiKey).emails.send(
     {
       from: `AhmedPrep <${fromLocalPart}@${domain}>`,
-      to: [confirmation.to],
+      ...addressEmail(confirmation.to, confirmation.subject),
       replyTo: RECIPIENT,
-      subject: confirmation.subject,
       ...confirmationBody(confirmation),
     },
     { idempotencyKey },
