@@ -39,13 +39,18 @@ export function screenSubmission(request: Request, body: Record<string, unknown>
     console.warn(`[${scope}] Rejected likely spam submission`)
     return fail(400, "Invalid request.")
   }
+  return rateLimit(request, scope)
+}
+
+/** Per-IP limiter (best-effort, per instance). Returns a 429 response when exceeded. */
+export function rateLimit(request: Request, scope: string, { max, windowMs } = RATE_LIMIT) {
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown"
   const key = `${scope}:${ip}`
   const now = Date.now()
-  const hits = (recentByKey.get(key) ?? []).filter((t) => now - t < RATE_LIMIT.windowMs)
+  const hits = (recentByKey.get(key) ?? []).filter((t) => now - t < windowMs)
   hits.push(now)
   recentByKey.set(key, hits)
-  if (hits.length > RATE_LIMIT.max) {
+  if (hits.length > max) {
     console.warn(`[${scope}] Rate limit exceeded`)
     return fail(429, "Too many requests.")
   }
@@ -133,6 +138,78 @@ export function addressEmail(to: string, subject: string) {
   return { to: [inbox], subject: subject.startsWith("[TEST] ") ? subject : `[TEST] ${subject}` }
 }
 
+function leadBody(heading: string, rows: [string, string][]) {
+  const submittedAt = new Date().toLocaleString("en-US", {
+    timeZone: "America/New_York",
+    dateStyle: "full",
+    timeStyle: "short",
+  })
+  const allRows: [string, string][] = [...rows, ["Date/time submitted", `${submittedAt} (New York time)`]]
+  const text = allRows.map(([label, value]) => `${label}: ${value}`).join("\n")
+  const html = `<div style="font-family:Arial,sans-serif;color:#0b1d35">
+<h2 style="margin:0 0 16px">${escapeHtml(heading)}</h2>
+<table cellpadding="8" style="border-collapse:collapse">
+${allRows
+  .map(
+    ([label, value]) =>
+      `<tr><td style="border-bottom:1px solid #e5e7eb;font-weight:bold;vertical-align:top;white-space:nowrap">${escapeHtml(label)}</td><td style="border-bottom:1px solid #e5e7eb;white-space:pre-wrap">${escapeHtml(value)}</td></tr>`,
+  )
+  .join("\n")}
+</table></div>`
+  return { text, html }
+}
+
+export type SendResult = { ok: true; id: string | null } | { ok: false; error: string }
+
+/**
+ * Sends only AhmedPrep's notification for a saved lead. Unlike deliverLead it never touches the parent confirmation,
+ * so callers can send the two independently. `id` is null when Resend reports the same key was already accepted.
+ */
+export async function sendAdminNotification({
+  scope,
+  fromLocalPart,
+  heading,
+  subject,
+  replyTo,
+  rows,
+  idempotencyKey,
+}: {
+  scope: string
+  fromLocalPart: string
+  heading: string
+  subject: string
+  replyTo: string
+  rows: [string, string][]
+  idempotencyKey: string
+}): Promise<SendResult> {
+  const apiKey = process.env.RESEND_API_KEY
+  const domain = process.env.RESEND_EMAIL_DOMAIN
+  if (!apiKey || !domain) {
+    console.error(`[${scope}] Admin notification not sent: RESEND_API_KEY or RESEND_EMAIL_DOMAIN is missing`)
+    return { ok: false, error: "email_not_configured" }
+  }
+  const testMode = isTestAddress(replyTo)
+  const { data, error } = await new Resend(apiKey).emails.send(
+    {
+      from: `AhmedPrep Website <${fromLocalPart}@${domain}>`,
+      ...addressEmail(testMode ? "delivered@resend.dev" : RECIPIENT, testMode ? `[TEST] ${subject}` : subject),
+      replyTo,
+      ...leadBody(heading, rows),
+    },
+    { idempotencyKey },
+  )
+  if (data?.id) {
+    console.log(`[${scope}] Admin notification accepted by Resend, id:`, data.id)
+    return { ok: true, id: data.id }
+  }
+  if (error && DUPLICATE_ERRORS.has(error.name)) {
+    console.warn(`[${scope}] Admin notification already accepted earlier (idempotent repeat)`)
+    return { ok: true, id: null }
+  }
+  console.error(`[${scope}] Admin notification failed:`, error?.name, error?.message)
+  return { ok: false, error: error?.name ?? "no_message_id" }
+}
+
 export async function deliverLead({
   scope,
   fromLocalPart,
@@ -162,24 +239,7 @@ export async function deliverLead({
     return fail(500, "Delivery unavailable.")
   }
 
-  const submittedAt = new Date().toLocaleString("en-US", {
-    timeZone: "America/New_York",
-    dateStyle: "full",
-    timeStyle: "short",
-  })
-  const allRows: [string, string][] = [...rows, ["Date/time submitted", `${submittedAt} (New York time)`]]
-
-  const text = allRows.map(([label, value]) => `${label}: ${value}`).join("\n")
-  const html = `<div style="font-family:Arial,sans-serif;color:#0b1d35">
-<h2 style="margin:0 0 16px">${escapeHtml(heading)}</h2>
-<table cellpadding="8" style="border-collapse:collapse">
-${allRows
-  .map(
-    ([label, value]) =>
-      `<tr><td style="border-bottom:1px solid #e5e7eb;font-weight:bold;vertical-align:top;white-space:nowrap">${escapeHtml(label)}</td><td style="border-bottom:1px solid #e5e7eb;white-space:pre-wrap">${escapeHtml(value)}</td></tr>`,
-  )
-  .join("\n")}
-</table></div>`
+  const { text, html } = leadBody(heading, rows)
 
   // Identical submissions share a key, so Resend sends them only once.
   const fingerprint = createHash("sha256")
@@ -296,11 +356,21 @@ export async function sendAdminAlert({
   return true
 }
 
-/** Sends only the parent confirmation (used by the admin resend). The caller supplies a per-attempt idempotency key. */
-export async function sendConfirmationEmail(confirmation: Confirmation, fromLocalPart: string, idempotencyKey: string) {
+/**
+ * Sends only the parent confirmation. `ok` means Resend accepted the message for delivery, not that it reached the inbox.
+ * The caller supplies the idempotency key (per registration for the first send, per attempt for resends).
+ */
+export async function sendConfirmationEmail(
+  confirmation: Confirmation,
+  fromLocalPart: string,
+  idempotencyKey: string,
+): Promise<SendResult> {
   const apiKey = process.env.RESEND_API_KEY
   const domain = process.env.RESEND_EMAIL_DOMAIN
-  if (!apiKey || !domain) return { ok: false as const, error: "Email delivery is not configured." }
+  if (!apiKey || !domain) {
+    console.error("[confirmation] Not sent: RESEND_API_KEY or RESEND_EMAIL_DOMAIN is missing")
+    return { ok: false as const, error: "email_not_configured" }
+  }
   const { data, error } = await new Resend(apiKey).emails.send(
     {
       from: `AhmedPrep <${fromLocalPart}@${domain}>`,
@@ -310,8 +380,11 @@ export async function sendConfirmationEmail(confirmation: Confirmation, fromLoca
     },
     { idempotencyKey },
   )
-  if (data?.id) return { ok: true as const, id: data.id }
+  if (data?.id) {
+    console.log("[confirmation] Accepted by Resend, id:", data.id)
+    return { ok: true as const, id: data.id }
+  }
   if (error && DUPLICATE_ERRORS.has(error.name)) return { ok: true as const, id: null }
-  console.error("[confirmation-resend] Resend failed:", error?.name, error?.message)
+  console.error("[confirmation] Resend failed:", error?.name, error?.message)
   return { ok: false as const, error: error?.name ?? "unknown error" }
 }

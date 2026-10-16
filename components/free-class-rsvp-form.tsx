@@ -5,6 +5,7 @@ import { interpretRsvpResponse } from "@/lib/rsvp-response"
 import { Honeypot, RequiredNote, SelectField, SubmitButton, TextField } from "@/components/forms/fields"
 import { useLeadForm } from "@/components/forms/use-lead-form"
 import { TrackedLink } from "@/components/tracked-link"
+import { ResendConfirmationButton } from "@/components/resend-confirmation-button"
 import { EVENTS, trackEvent } from "@/lib/analytics"
 import { BUSINESS } from "@/lib/business"
 import { FREE_CLASS_GRADES, RSVP_PROGRAMS, classMatchesProgram, type SundayClass } from "@/lib/free-class"
@@ -102,6 +103,7 @@ export function FreeClassRsvpForm({
   }
 
   if (status === "success") {
+    const resendToken = typeof serverResult?.resendToken === "string" ? serverResult.resendToken : null
     return (
       <div role="status" className="flex flex-col gap-5 border border-line border-t-4 border-t-gold bg-white p-6 sm:p-9">
         <CheckCircle2 size={32} aria-hidden="true" className="text-brand" />
@@ -121,6 +123,14 @@ export function FreeClassRsvpForm({
             </a>
             .
           </p>
+          {resendToken && (
+            <div className="mt-4">
+              <ResendConfirmationButton
+                token={resendToken}
+                label={serverResult?.confirmation === "sent" ? "Resend confirmation email" : "Try sending the email again"}
+              />
+            </div>
+          )}
         </div>
         <div className="border-t border-line pt-5">
           <p className="font-bold text-navy">Want to know where your student stands?</p>
@@ -223,6 +233,11 @@ export function FreeClassRsvpForm({
                 </a>
                 .
               </p>
+              {outcome.resendToken && (
+                <div className="mt-3">
+                  <ResendConfirmationButton token={outcome.resendToken} />
+                </div>
+              )}
             </div>
           </div>
         )}
