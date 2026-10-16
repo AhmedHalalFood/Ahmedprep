@@ -1,9 +1,11 @@
 "use client"
 
-import { ArrowUpRight, CheckCircle2 } from "lucide-react"
+import { ArrowUpRight, CheckCircle2, Info } from "lucide-react"
+import { interpretRsvpResponse } from "@/lib/rsvp-response"
 import { Honeypot, RequiredNote, SelectField, SubmitButton, TextField } from "@/components/forms/fields"
 import { useLeadForm } from "@/components/forms/use-lead-form"
 import { TrackedLink } from "@/components/tracked-link"
+import { ResendConfirmationButton } from "@/components/resend-confirmation-button"
 import { EVENTS, trackEvent } from "@/lib/analytics"
 import { BUSINESS } from "@/lib/business"
 import { FREE_CLASS_GRADES, RSVP_PROGRAMS, classMatchesProgram, type SundayClass } from "@/lib/free-class"
@@ -73,6 +75,9 @@ export function FreeClassRsvpForm({
     onSuccess: (submitted) => trackEvent(EVENTS.sundayClassRsvpSubmitted, eventParams(submitted)),
   })
 
+  const outcome =
+    status === "error" ? interpretRsvpResponse(Number(serverResult?.httpStatus ?? 0), serverResult) : null
+
   const field = (key: keyof RsvpData) => ({
     id: `${location}-${key}`,
     name: key,
@@ -98,6 +103,7 @@ export function FreeClassRsvpForm({
   }
 
   if (status === "success") {
+    const resendToken = typeof serverResult?.resendToken === "string" ? serverResult.resendToken : null
     return (
       <div role="status" className="flex flex-col gap-5 border border-line border-t-4 border-t-gold bg-white p-6 sm:p-9">
         <CheckCircle2 size={32} aria-hidden="true" className="text-brand" />
@@ -117,6 +123,14 @@ export function FreeClassRsvpForm({
             </a>
             .
           </p>
+          {resendToken && (
+            <div className="mt-4">
+              <ResendConfirmationButton
+                token={resendToken}
+                label={serverResult?.confirmation === "sent" ? "Resend confirmation email" : "Try sending the email again"}
+              />
+            </div>
+          )}
         </div>
         <div className="border-t border-line pt-5">
           <p className="font-bold text-navy">Want to know where your student stands?</p>
@@ -200,19 +214,45 @@ export function FreeClassRsvpForm({
         )}
       </div>
 
-      {status === "error" && (
-        <p role="alert" className="border-l-4 border-error bg-error-soft px-4 py-3 text-sm text-error">
-          We couldn&apos;t complete your registration. Please try again, or call{" "}
-          <a href={BUSINESS.phoneHref} className="font-semibold underline">
-            {BUSINESS.phoneDisplay}
-          </a>
-          .
-        </p>
-      )}
-
       <SubmitButton submitting={status === "submitting"}>
         Reserve My Free Seat <ArrowUpRight size={17} aria-hidden="true" />
       </SubmitButton>
+
+      {/* Live regions stay mounted so screen readers announce the notice when it appears. */}
+      <div id={`${location}-rsvp-status`} role="status" aria-live="polite" aria-atomic="true">
+        {outcome?.kind === "duplicate" && (
+          <div className="flex items-start gap-3 border-l-4 border-brand bg-brand-soft px-4 py-3 text-sm leading-relaxed text-navy">
+            <Info size={20} aria-hidden="true" className="mt-0.5 shrink-0 text-brand" />
+            <div>
+              <p className="font-extrabold">{outcome.title}</p>
+              <p className="mt-1">{outcome.message}</p>
+              <p className="mt-1 text-subtle">
+                {"Can\u2019t find it? Call or text us at "}
+                <a href={BUSINESS.phoneHref} className="font-semibold text-navy underline underline-offset-2">
+                  {BUSINESS.phoneDisplay}
+                </a>
+                .
+              </p>
+              {outcome.resendToken && (
+                <div className="mt-3">
+                  <ResendConfirmationButton token={outcome.resendToken} />
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+      <div role="alert" aria-atomic="true">
+        {outcome?.kind === "error" && (
+          <p className="border-l-4 border-error bg-error-soft px-4 py-3 text-sm leading-relaxed text-error">
+            {outcome.message} Need help? Call{" "}
+            <a href={BUSINESS.phoneHref} className="font-semibold underline">
+              {BUSINESS.phoneDisplay}
+            </a>
+            .
+          </p>
+        )}
+      </div>
       <p className="text-xs leading-relaxed text-subtle">
         <strong className="font-bold text-navy">No cost • Live instruction • RSVP required.</strong> The live class link is never posted
         publicly. It is sent only to registered families.

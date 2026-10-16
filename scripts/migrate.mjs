@@ -1,22 +1,34 @@
 // Applies pending SQL files from db/migrations in name order, all in one transaction.
-//   pnpm db:migrate          apply pending migrations
-//   pnpm db:migrate:check    apply them inside a transaction, report, then roll back (changes nothing)
+//   pnpm db:migrate --confirm-host=<host>          apply pending migrations
+//   pnpm db:migrate:check --confirm-host=<host>    apply them inside a transaction, report, then roll back
+// Uses DATABASE_URL_UNPOOLED only. Prints the target and refuses to connect until --confirm-host matches it exactly.
 import { createHash } from "node:crypto"
 import { readdir, readFile } from "node:fs/promises"
 import path from "node:path"
 import pg from "pg"
+import {
+  assertHostConfirmed,
+  describeTarget,
+  parseMigrationArgs,
+  resolveMigrationTarget,
+} from "../lib/db/connection-config.mjs"
 
-const dryRun = process.argv.includes("--dry-run")
-const connectionString = process.env.DATABASE_URL_UNPOOLED || process.env.DATABASE_URL
-if (!connectionString) {
-  console.error("DATABASE_URL is not set.")
+const { dryRun, confirmHost } = parseMigrationArgs(process.argv.slice(2))
+
+let target
+try {
+  target = resolveMigrationTarget(process.env)
+  console.log(describeTarget(target, dryRun))
+  assertHostConfirmed(target, confirmHost)
+} catch (error) {
+  console.error(error instanceof Error ? error.message : error)
   process.exit(1)
 }
 
 const dir = path.join(process.cwd(), "db", "migrations")
 const files = (await readdir(dir)).filter((f) => f.endsWith(".sql")).sort()
 
-const client = new pg.Client({ connectionString })
+const client = new pg.Client({ connectionString: target.connectionString })
 await client.connect()
 
 try {

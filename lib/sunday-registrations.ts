@@ -1,6 +1,6 @@
 import "server-only"
 import { and, eq, isNull, lt, or, sql } from "drizzle-orm"
-import { db } from "@/lib/db"
+import { getDb } from "@/lib/db"
 import { sundayClassRegistrations } from "@/lib/db/schema"
 import type { ConfirmationStatus } from "@/lib/lead-delivery"
 
@@ -18,15 +18,16 @@ type NewRegistration = Omit<
 >
 
 export type RegistrationClaim =
-  | { kind: "new" | "retry"; id: number }
-  | { kind: "duplicate"; confirmation: ConfirmationStatus }
+  | { kind: "new"; id: number }
+  | { kind: "existing"; id: number; adminNotified: boolean; confirmation: "sent" | "failed" | "pending" }
 
 /**
- * Records the RSVP, or finds the one already stored for the same parent, student, class date, and program.
+ * Records the RSVP, or finds the one already stored for the same parent email, student, and session. The unique
+ * dedupe_key makes this a single atomic statement, so simultaneous submissions still produce exactly one row.
  * A repeat never overwrites the original row; it only bumps duplicate_attempts.
  */
 export async function claimRegistration(registration: NewRegistration): Promise<RegistrationClaim> {
-  const [row] = await db
+  const [row] = await getDb()
     .insert(sundayClassRegistrations)
     .values(registration)
     .onConflictDoUpdate({
@@ -44,25 +45,28 @@ export async function claimRegistration(registration: NewRegistration): Promise<
     })
 
   if (row.inserted) return { kind: "new", id: row.id }
-  // A previous attempt was stored but AhmedPrep was never notified, so let this one deliver it.
-  if (!row.adminNotifiedAt) return { kind: "retry", id: row.id }
   return {
-    kind: "duplicate",
-    confirmation: row.confirmationStatus === "sent" || row.confirmationStatus === "failed" ? row.confirmationStatus : "not_requested",
+    kind: "existing",
+    id: row.id,
+    adminNotified: Boolean(row.adminNotifiedAt),
+    confirmation: row.confirmationStatus === "sent" || row.confirmationStatus === "failed" ? row.confirmationStatus : "pending",
   }
 }
 
+export const PARENT_RESEND_LIMIT = 5
+
 export async function getRegistration(id: number) {
-  const [row] = await db.select().from(sundayClassRegistrations).where(eq(sundayClassRegistrations.id, id)).limit(1)
+  const [row] = await getDb().select().from(sundayClassRegistrations).where(eq(sundayClassRegistrations.id, id)).limit(1)
   return row ?? null
 }
 
 /**
  * Atomically reserves one resend attempt. Returns the attempt number, or null if another resend ran in the last
- * two minutes (so a double click or a refreshed form never sends twice). Never inserts a registration.
+ * two minutes (so a double click or a refreshed form never sends twice) or `maxAttempts` was reached.
+ * Never inserts a registration.
  */
-export async function claimResendAttempt(id: number) {
-  const [row] = await db
+export async function claimResendAttempt(id: number, maxAttempts?: number) {
+  const [row] = await getDb()
     .update(sundayClassRegistrations)
     .set({
       confirmationResendCount: sql`${sundayClassRegistrations.confirmationResendCount} + 1`,
@@ -72,6 +76,7 @@ export async function claimResendAttempt(id: number) {
     .where(
       and(
         eq(sundayClassRegistrations.id, id),
+        maxAttempts === undefined ? undefined : lt(sundayClassRegistrations.confirmationResendCount, maxAttempts),
         or(
           isNull(sundayClassRegistrations.confirmationResentAt),
           lt(sundayClassRegistrations.confirmationResentAt, sql`now() - interval '2 minutes'`),
@@ -83,7 +88,7 @@ export async function claimResendAttempt(id: number) {
 }
 
 export async function setConfirmationStatus(id: number, confirmation: ConfirmationStatus, error: string | null = null) {
-  await db
+  await getDb()
     .update(sundayClassRegistrations)
     .set({ confirmationStatus: confirmation, lastDeliveryError: error, updatedAt: sql`now()` })
     .where(eq(sundayClassRegistrations.id, id))
@@ -91,7 +96,7 @@ export async function setConfirmationStatus(id: number, confirmation: Confirmati
 
 /** Keeps the first notification time, so a retried request never moves it. */
 export async function markAdminNotified(id: number) {
-  await db
+  await getDb()
     .update(sundayClassRegistrations)
     .set({
       adminNotifiedAt: sql`coalesce(${sundayClassRegistrations.adminNotifiedAt}, now())`,
@@ -102,7 +107,7 @@ export async function markAdminNotified(id: number) {
 }
 
 export async function markAdminFailed(id: number, error: string) {
-  await db
+  await getDb()
     .update(sundayClassRegistrations)
     .set({ lastDeliveryError: `admin: ${error}`, updatedAt: sql`now()` })
     .where(eq(sundayClassRegistrations.id, id))
@@ -112,6 +117,7 @@ export async function markAdminFailed(id: number, error: string) {
 export function describeDbError(error: unknown) {
   const cause = (error as { cause?: unknown })?.cause ?? error
   const code = (cause as { code?: string })?.code
+  if (code === "DB_CONFIG_INVALID") return `database is not configured: ${(cause as Error).message}`
   if (code === "42P01" || code === "42703") return `database schema is missing or out of date (${code}); run pnpm db:migrate`
   return cause instanceof Error ? cause.message : String(cause)
 }

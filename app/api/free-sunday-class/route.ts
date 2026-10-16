@@ -1,6 +1,5 @@
-import { createHash } from "node:crypto"
 import { NextResponse } from "next/server"
-import { createResendLink } from "@/lib/admin-links"
+import { createParentResendToken, createResendLink } from "@/lib/admin-links"
 import {
   claimRegistration,
   describeDbError,
@@ -10,6 +9,8 @@ import {
   withDbRetry,
 } from "@/lib/sunday-registrations"
 import { buildSundayConfirmation } from "@/lib/sunday-confirmation"
+import { RSVP_MESSAGES, duplicateMessage } from "@/lib/rsvp-response"
+import { registrationKey, sessionId } from "@/lib/rsvp-identity"
 import {
   FREE_CLASS,
   FREE_CLASS_GRADES,
@@ -18,7 +19,17 @@ import {
   findUpcomingClass,
   type RsvpProgram,
 } from "@/lib/free-class"
-import { EMAIL_PATTERN, clean, deliverLead, fail, hasPhoneDigits, readBody, screenSubmission, sendAdminAlert } from "@/lib/lead-delivery"
+import {
+  EMAIL_PATTERN,
+  clean,
+  fail,
+  hasPhoneDigits,
+  readBody,
+  screenSubmission,
+  sendAdminAlert,
+  sendAdminNotification,
+  sendConfirmationEmail,
+} from "@/lib/lead-delivery"
 
 const GRADES = new Set(FREE_CLASS_GRADES)
 const PROGRAMS = new Set<string>(RSVP_PROGRAMS.map((p) => p.value))
@@ -57,15 +68,20 @@ export async function POST(request: Request) {
     !classMatchesProgram(session, data.classType) ||
     data.consent !== "yes"
   ) {
-    return fail(400, "Please complete all required fields.")
+    return rsvpFail(400, "invalid", RSVP_MESSAGES.invalid)
   }
 
   const program = data.classType as RsvpProgram
+  const session_id = sessionId(session.isoDate, program)
   const { confirmation, classTitle, programLabel, hasZoom } = buildSundayConfirmation(session, program, data)
   if (!hasZoom) console.warn(`[${SCOPE}] No valid Zoom URL configured for ${program}; confirmation sent without access details`)
 
-  const dedupeKey = [data.parentEmail, data.studentName, session.isoDate, program]
-  const fingerprint = createHash("sha256").update(dedupeKey.map((v) => v.trim().toLowerCase()).join("|")).digest("hex")
+  const fingerprint = registrationKey({
+    parentEmail: data.parentEmail,
+    studentName: data.studentName,
+    isoDate: session.isoDate,
+    program,
+  })
 
   const rows: [string, string][] = [
     ["Class", `${classTitle}, live online`],
@@ -79,32 +95,50 @@ export async function POST(request: Request) {
     ["Phone Number", data.parentPhone],
     ["Current School", data.currentSchool || "Not provided"],
   ]
+  const adminRows: [string, string][] = [
+    ...rows,
+    ["Class communications", "Agreed to receive registration information, live class access, and reminders for this class"],
+    [
+      "Live class access",
+      hasZoom
+        ? "Sent automatically in the parent's confirmation email."
+        : "NOT SENT. No Zoom URL is configured. Please email the live class link to the parent.",
+    ],
+  ]
+  const notifyAdmin = () =>
+    sendAdminNotification({
+      scope: SCOPE,
+      fromLocalPart: "classes",
+      heading: `New Free Sunday Class RSVP (${programLabel})`,
+      subject: `Free Sunday ${programLabel} RSVP: ${data.studentName} (${session.shortLabel})`,
+      replyTo: data.parentEmail,
+      rows: adminRows,
+      // Same key on every attempt for this registration, so AhmedPrep is never notified twice within Resend's 24h window.
+      idempotencyKey: `${SCOPE}/${fingerprint}`,
+    })
 
-  // Resend's idempotency only covers 24 hours, so the stored registration is what blocks later repeats.
+  // The stored registration (unique dedupe_key) is what blocks repeats; Resend idempotency only covers 24 hours.
   // A registration is only confirmed once it is saved: if the database is still unreachable after one retry, the
   // parent is told to try again, no confirmation is sent, and AhmedPrep gets an alert so the lead is not lost.
-  let registrationId: number
+  let claim: Awaited<ReturnType<typeof claimRegistration>>
   try {
-    const claim = await withDbRetry(() => claimRegistration({
-      dedupeKey: fingerprint,
-      classDate: session.isoDate,
-      program,
-      studentName: data.studentName,
-      studentGrade: data.studentGrade,
-      parentName: data.parentName,
-      parentEmail: data.parentEmail,
-      parentPhone: data.parentPhone,
-      currentSchool: data.currentSchool || null,
-      topic: session.topic,
-    }))
-    if (claim.kind === "duplicate") {
-      console.warn(`[${SCOPE}] Duplicate RSVP for ${session.isoDate}; original registration kept, no emails sent`)
-      return NextResponse.json({ success: true, duplicate: true, confirmation: claim.confirmation })
-    }
-    registrationId = claim.id
+    claim = await withDbRetry(() =>
+      claimRegistration({
+        dedupeKey: fingerprint,
+        classDate: session.isoDate,
+        program,
+        studentName: data.studentName,
+        studentGrade: data.studentGrade,
+        parentName: data.parentName,
+        parentEmail: data.parentEmail,
+        parentPhone: data.parentPhone,
+        currentSchool: data.currentSchool || null,
+        topic: session.topic,
+      }),
+    )
   } catch (error) {
     const reason = describeDbError(error)
-    console.error(`[${SCOPE}] Registration NOT saved, parent asked to retry: ${reason}`)
+    console.error(`[${SCOPE}] Registration NOT saved for ${session_id}, parent asked to retry: ${reason}`)
     await sendAdminAlert({
       scope: SCOPE,
       fromLocalPart: "classes",
@@ -119,36 +153,81 @@ export async function POST(request: Request) {
       ].join("\n"),
       idempotencyKey: `${SCOPE}-unsaved/${fingerprint}`,
     })
-    return fail(503, "Your registration could not be saved. Please try again in a few minutes.")
+    return rsvpFail(503, "db_unavailable", RSVP_MESSAGES.notSaved)
   }
 
-  const resendLink = createResendLink(new URL(request.url).origin, registrationId)
+  const registrationId = claim.id
+  const resendToken = createParentResendToken(registrationId)
 
-  return deliverLead({
-    dedupeKey,
-    scope: SCOPE,
-    fromLocalPart: "classes",
-    heading: `New Free Sunday Class RSVP (${programLabel})`,
-    subject: `Free Sunday ${programLabel} RSVP: ${data.studentName} (${session.shortLabel})`,
-    replyTo: data.parentEmail,
-    rows: [
-      ...rows,
-      ["Class communications", "Agreed to receive registration information, live class access, and reminders for this class"],
-      [
-        "Live class access",
-        hasZoom
-          ? "Sent automatically in the parent's confirmation email."
-          : "NOT SENT. No Zoom URL is configured. Please email the live class link to the parent.",
-      ],
-    ],
-    confirmation,
-    failureAlertNote: `To resend the confirmation once the problem is fixed, open this private link (valid 30 days, do not forward):\n${resendLink}`,
-    onDelivery: async (event) => {
-      if (event.stage === "admin") {
-        await withDbRetry(() => (event.ok ? markAdminNotified(registrationId) : markAdminFailed(registrationId, event.error)))
-      } else {
-        await withDbRetry(() => setConfirmationStatus(registrationId, event.status, event.error ?? null))
-      }
-    },
-  })
+  if (claim.kind === "existing") {
+    // Never a new row, never a new seat, never an automatic second confirmation (the original request may still be
+    // sending it). If AhmedPrep's notification never went out, retry just that; Resend's idempotency key prevents a repeat.
+    console.warn(`[${SCOPE}] Duplicate RSVP for ${session_id} (registration ${registrationId}); no new registration created`)
+    if (!claim.adminNotified) await recordAdmin(registrationId, await notifyAdmin())
+    return NextResponse.json(
+      {
+        success: false,
+        duplicate: true,
+        code: "duplicate",
+        program,
+        confirmation: claim.confirmation,
+        resendToken,
+        error: duplicateMessage(program),
+        message: duplicateMessage(program),
+      },
+      { status: 409 },
+    )
+  }
+
+  // AhmedPrep's notification and the parent's confirmation are independent: a failure of one never blocks the other.
+  const [admin, parent] = await Promise.all([
+    notifyAdmin(),
+    sendConfirmationEmail(confirmation, "classes", `${SCOPE}-confirmation/${fingerprint}`),
+  ])
+  await recordAdmin(registrationId, admin)
+  await record(`confirmation status for ${registrationId}`, () =>
+    setConfirmationStatus(registrationId, parent.ok ? "sent" : "failed", parent.ok ? null : `confirmation: ${parent.error}`),
+  )
+
+  if (!parent.ok) {
+    const resendLink = createResendLink(new URL(request.url).origin, registrationId)
+    await sendAdminAlert({
+      scope: SCOPE,
+      fromLocalPart: "classes",
+      replyTo: data.parentEmail,
+      subject: `ACTION NEEDED: confirmation email not delivered (${data.parentEmail})`,
+      text: [
+        `The registration below was saved, but the confirmation email to ${data.parentEmail} could not be sent (${parent.error}).`,
+        "The parent was shown a retry button.",
+        resendLink
+          ? `To resend it yourself, open this private link (valid 30 days, do not forward):\n${resendLink}`
+          : "Please send the class details manually.",
+        "",
+        ...rows.map(([label, value]) => `${label}: ${value}`),
+      ].join("\n"),
+      idempotencyKey: `${SCOPE}-confirmation-alert/${fingerprint}`,
+    })
+  }
+
+  console.log(
+    `[${SCOPE}] Registration ${registrationId} saved for ${session_id}; admin=${admin.ok ? "accepted" : "failed"}, confirmation=${parent.ok ? "accepted" : "failed"}`,
+  )
+  return NextResponse.json({ success: true, confirmation: parent.ok ? "sent" : "failed", resendToken })
+}
+
+async function recordAdmin(id: number, result: Awaited<ReturnType<typeof sendAdminNotification>>) {
+  await record(`admin status for ${id}`, () => (result.ok ? markAdminNotified(id) : markAdminFailed(id, result.error)))
+}
+
+/** Email results are recorded best-effort: the registration already exists, so a failed write must not fail the request. */
+async function record(what: string, write: () => Promise<void>) {
+  try {
+    await withDbRetry(write)
+  } catch (error) {
+    console.error(`[${SCOPE}] Could not record ${what}:`, describeDbError(error))
+  }
+}
+
+function rsvpFail(status: number, code: string, message: string) {
+  return NextResponse.json({ success: false, code, error: message, message }, { status })
 }
