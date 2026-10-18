@@ -10,9 +10,9 @@ import { BUSINESS, NOT_AFFILIATED_NOTE, SITE_URL } from "@/lib/business"
 import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 import { INTENSIVE_NAME, INTENSIVE_PATH } from "@/lib/shsat-intensive"
 
-const TITLE = "2026 SHSAT Final Intensive | 60 Hours | Ahmed Prep NYC"
+const TITLE = "2026 SHSAT Final Intensive | Late Enrollment Open | Ahmed Prep NYC"
 const DESCRIPTION =
-  "5-week SHSAT intensive in Astoria, Queens. 20 live classes, 60 hours of Math, ELA, timed practice and strategy for $1,000. Oct. 12-Nov. 12."
+  "SHSAT Final Intensive classes in progress in Astoria, Queens. Late enrollment open with prorated tuition: 48 remaining hours for $800 from Oct. 19."
 const PAGE_URL = absoluteUrl(INTENSIVE_PATH)
 
 export const metadata: Metadata = {
@@ -38,12 +38,16 @@ const faqs: FaqItem[] = [
     a: "Classes meet Monday through Thursday, 6:00 PM to 9:00 PM, from October 12 to November 12, 2026: 20 classes and 60 hours of live instruction in total.",
   },
   {
-    q: "How much does the Intensive cost?",
-    a: "The complete program is $1,000, about $16.67 per live instructional hour. Families can pay in full or in 2 payments of $500.",
+    q: "Can my child still join now that classes have started?",
+    a: "Yes. Late enrollment is open with prorated tuition. Students beginning October 19 receive the 48 remaining instructional hours for $800.",
   },
   {
-    q: "How do I reserve a seat?",
-    a: "Use the Reserve My Child\u2019s Seat form on this page, call 347-479-5020, or send us a text. We\u2019ll follow up to confirm enrollment and payment details.",
+    q: "How is late-enrollment tuition calculated?",
+    a: "Tuition is based on the actual instructional hours remaining, at $50 per 3-hour class. Starting the week of October 19 is $800, October 26 is $600, November 2 is $400, and November 9 is $200. For students joining midweek, tuition is calculated using the remaining scheduled sessions. The original tuition for the full 60-hour program was $1,000.",
+  },
+  {
+    q: "How do I join the remaining classes?",
+    a: "Use the Join Remaining Classes form on this page, call 347-479-5020, or send us a text. We\u2019ll follow up to confirm enrollment and your prorated tuition.",
   },
 ]
 
@@ -83,7 +87,8 @@ const eventSchema = {
   offers: {
     "@type": "Offer",
     url: PAGE_URL,
-    price: 1000,
+    name: "Late enrollment from October 19 (48 remaining instructional hours)",
+    price: 800,
     priceCurrency: "USD",
     availability: "https://schema.org/InStock",
   },

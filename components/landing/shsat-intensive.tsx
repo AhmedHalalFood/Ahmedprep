@@ -1,6 +1,17 @@
 import { ArrowUpRight, CalendarDays, Check, Clock, MessageSquare, Phone } from "lucide-react"
-import { INTENSIVE_PATH } from "@/lib/shsat-intensive"
+import {
+  HOURS_PER_CLASS,
+  INTENSIVE_ENROLL_ANCHOR,
+  INTENSIVE_PATH,
+  ORIGINAL_HOURS,
+  ORIGINAL_TUITION,
+  PRORATED_SCHEDULE,
+  TUITION_PER_CLASS,
+  formatClassDate,
+  formatUsd,
+} from "@/lib/shsat-intensive"
 import { ReserveSeatDialog } from "@/components/landing/reserve-seat-dialog"
+import { TuitionCalculator } from "@/components/landing/tuition-calculator"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
 import { BUSINESS } from "@/lib/business"
@@ -9,7 +20,7 @@ const stats = [
   { value: "5", label: "Weeks" },
   { value: "20", label: "Live Classes" },
   { value: "60", label: "Hours of Instruction" },
-  { value: "$1,000", label: "Complete Program" },
+  { value: "$800", label: "Late Enrollment From Oct. 19" },
 ]
 
 const benefits = [
@@ -79,17 +90,15 @@ export function ShsatIntensive({ variant = "home" }: { variant?: "home" | "page"
             >
               <dt className="order-2 text-xs font-bold uppercase tracking-widest text-white/70">{stat.label}</dt>
               <dd className="order-1 m-0 text-4xl font-extrabold leading-none tracking-tight text-gold md:text-5xl">{stat.value}</dd>
-              {stat.value === "$1,000" && (
+              {stat.value === "$800" && (
                 <>
                   <dd className="order-3 m-0 text-sm font-semibold text-white/85">
-                    60 live hours <span className="text-white/40" aria-hidden="true">•</span> approximately $16.67 per hour
+                    48 remaining hours <span className="text-white/40" aria-hidden="true">•</span> prorated
                   </dd>
                   <dd className="order-4 m-0 mt-2 border-t border-white/15 pt-3 text-xs leading-relaxed text-white/65">
-                    <span className="font-bold uppercase tracking-widest text-white/80">Payment options</span>
+                    <span className="font-bold uppercase tracking-widest text-white/80">Original tuition</span>
                     <br />
-                    $1,000 paid in full
-                    <br />
-                    or 2 payments of $500
+                    <s>$1,000</s> for 60 hours
                   </dd>
                 </>
               )}
@@ -109,7 +118,7 @@ export function ShsatIntensive({ variant = "home" }: { variant?: "home" | "page"
           </p>
           <p className="flex items-center gap-2 font-semibold">
             <Clock size={18} className="text-gold" aria-hidden="true" />
-            6:00 PM – 9:00 PM
+            6:00 PM – 9:00 PM Eastern
           </p>
         </div>
 
@@ -131,20 +140,56 @@ export function ShsatIntensive({ variant = "home" }: { variant?: "home" | "page"
           </ul>
         </div>
 
-        <div id="shsat-intensive-enroll" className="mt-10 grid scroll-mt-4 border border-white/20 md:mt-14 lg:grid-cols-[1.35fr_0.65fr]">
+        <div id={INTENSIVE_ENROLL_ANCHOR} className="mt-10 grid scroll-mt-4 border border-white/20 md:mt-14 lg:grid-cols-[1.35fr_0.65fr]">
           <div className="flex flex-col gap-5 p-5 md:gap-6 md:p-10">
-            <p className="max-w-2xl text-pretty text-lg font-semibold leading-relaxed text-white md:text-xl">
-              For <span className="text-gold">$1,000</span>, students receive 60 hours of focused live SHSAT instruction over five weeks,
-              including Math, ELA, timed practice, strategy, error review, and pacing preparation.
+            <div className="flex flex-col gap-2">
+              <p className="eyebrow gold">Late enrollment open | Prorated tuition</p>
+              <h3 className="text-balance text-2xl font-extrabold tracking-tight md:text-3xl">Join the remaining classes</h3>
+              <p className="max-w-2xl text-pretty text-lg font-semibold leading-relaxed text-white md:text-xl">
+                For students beginning October 19: <span className="text-gold">48 remaining instructional hours for $800.</span>
+              </p>
+            </div>
+
+            <table className="w-full border-collapse text-left">
+              <caption className="sr-only">Prorated tuition schedule by start week</caption>
+              <thead>
+                <tr className="border-b border-white/30 text-xs font-bold uppercase tracking-widest text-white/70">
+                  <th scope="col" className="py-2 pr-3 font-bold">
+                    Start week
+                  </th>
+                  <th scope="col" className="py-2 pr-3 font-bold">
+                    Hours left
+                  </th>
+                  <th scope="col" className="py-2 text-right font-bold">
+                    Tuition
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {PRORATED_SCHEDULE.map((row) => (
+                  <tr key={row.start} className="border-b border-white/15">
+                    <th scope="row" className="py-3 pr-3 font-semibold text-white">
+                      {formatClassDate(row.start, "long").split(", ")[1]}
+                    </th>
+                    <td className="py-3 pr-3 text-white/85">{row.hours} hours</td>
+                    <td className="py-3 text-right text-lg font-extrabold text-gold">{formatUsd(row.tuition)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <p className="max-w-2xl text-pretty leading-relaxed text-white/80">
+              {`Tuition is based on the actual instructional hours remaining: ${formatUsd(TUITION_PER_CLASS)} per ${HOURS_PER_CLASS}-hour class (about $16.67 per hour). For students joining midweek, tuition is calculated using the remaining scheduled sessions.`}
             </p>
-            <ul className="m-0 flex list-none flex-col gap-2 border-l-2 border-gold p-0 pl-4 text-white/85">
-              <li className="font-semibold">About $16.67 per live instructional hour</li>
-              <li>
-                <span className="font-semibold">Payment option:</span> $1,000 in full or 2 payments of $500
-              </li>
-            </ul>
+
+            <TuitionCalculator />
+
+            <p className="text-sm leading-relaxed text-white/65">
+              Original tuition: <s>{formatUsd(ORIGINAL_TUITION)}</s> for the full {ORIGINAL_HOURS}-hour program.
+            </p>
+
             <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-              <ReserveSeatDialog />
+              <ReserveSeatDialog location="shsat_intensive_enroll" />
               <TrackedLink
                 href={BUSINESS.phoneHref}
                 event={EVENTS.phoneClick}
@@ -173,7 +218,7 @@ export function ShsatIntensive({ variant = "home" }: { variant?: "home" | "page"
             <p className="font-semibold text-white">School-Day SHSAT: November 18, 2026</p>
             <p className="flex items-center gap-2 text-sm text-white/75">
               <span className="size-1.5 shrink-0 bg-gold" aria-hidden="true" />
-              Limited enrollment for the Final Intensive
+              Late enrollment open for the remaining classes
             </p>
           </aside>
         </div>

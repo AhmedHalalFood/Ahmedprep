@@ -6,7 +6,7 @@ import { Honeypot, RequiredNote, SelectField, SubmitButton, TextAreaField, TextF
 import { useLeadForm } from "@/components/forms/use-lead-form"
 import { EVENTS, trackEvent } from "@/lib/analytics"
 import { BUSINESS } from "@/lib/business"
-import { INTENSIVE_NAME, PAYMENT_OPTIONS } from "@/lib/shsat-intensive"
+import { INTENSIVE_NAME, LATE_START_DATES, PAYMENT_OPTIONS, START_DATE_UNSURE, startOptionLabel } from "@/lib/shsat-intensive"
 
 type SeatData = {
   parentName: string
@@ -15,6 +15,7 @@ type SeatData = {
   phone: string
   email: string
   currentSchool: string
+  startDate: string
   paymentOption: string
   message: string
 }
@@ -30,8 +31,16 @@ const initial: SeatData = {
   phone: "",
   email: "",
   currentSchool: "",
+  startDate: "",
   paymentOption: "",
   message: "",
+}
+
+// This component only renders on the client (ssr: false), so filtering by today's date is hydration-safe.
+function upcomingStartOptions() {
+  const today = new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York" }).format(new Date())
+  const upcoming = LATE_START_DATES.filter((date) => date >= today)
+  return [...(upcoming.length ? upcoming : LATE_START_DATES).map(startOptionLabel), START_DATE_UNSURE]
 }
 
 function validate(d: SeatData) {
@@ -44,6 +53,7 @@ function validate(d: SeatData) {
   if (!d.email.trim()) errors.email = "Please enter an email address."
   else if (!EMAIL_PATTERN.test(d.email.trim())) errors.email = "Please enter a valid email address."
   if (!d.currentSchool.trim()) errors.currentSchool = "Please enter the student's current school."
+  if (!d.startDate) errors.startDate = "Please choose a start date."
   if (!d.paymentOption) errors.paymentOption = "Please choose a payment option."
   return errors
 }
@@ -97,6 +107,13 @@ function ReserveSeatForm() {
         <TextField label="Email Address" type="email" inputMode="email" autoComplete="email" required {...field("email")} />
       </div>
       <SelectField
+        label="First Class Your Child Will Attend"
+        required
+        placeholder="Select a start date"
+        options={upcomingStartOptions()}
+        {...field("startDate")}
+      />
+      <SelectField
         label="Preferred Payment Option"
         required
         placeholder="Select a payment option"
@@ -116,7 +133,7 @@ function ReserveSeatForm() {
       )}
 
       <SubmitButton submitting={status === "submitting"}>
-        {"Reserve My Child\u2019s Seat"} <ArrowRight size={17} aria-hidden="true" />
+        Join Remaining Classes <ArrowRight size={17} aria-hidden="true" />
       </SubmitButton>
       <p className="text-xs leading-relaxed text-subtle">
         Submitting this form does not charge you. We will call or email to confirm enrollment and payment details.
@@ -139,7 +156,7 @@ export default function ReserveSeatDialogContent({
           <p className="eyebrow blue">Enrollment inquiry</p>
           <DialogTitle className="text-2xl font-extrabold tracking-tight text-navy">{INTENSIVE_NAME}</DialogTitle>
           <DialogDescription className="leading-relaxed text-subtle">
-            Oct. 12 – Nov. 12, 2026 · Mon–Thu, 6:00–9:00 PM · $1,000 or 2 payments of $500
+            Classes in progress · Mon–Thu, 6:00–9:00 PM Eastern · Prorated tuition: $50 per remaining 3-hour class ($800 from Oct. 19)
           </DialogDescription>
         </DialogHeader>
         <ReserveSeatForm />

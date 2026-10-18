@@ -87,9 +87,9 @@ export const PROGRAMS: Program[] = [
     audience: "Students in the final weeks before an official test.",
     format: "Live classes with timed practice and strategy review.",
     benefits: ["Concentrated practice before test day", "Full-length timed sections", "Final strategy review"],
-    schedule: "2026 SHSAT Final Intensive: 20 live classes, Oct. 12–Nov. 12, 2026",
-    price: "$1,000",
-    priceNote: "For 60 live hours (20 classes) in the 2026 SHSAT Final Intensive. Pay in full or in 2 payments of $500.",
+    schedule: "2026 SHSAT Final Intensive: classes in progress, Oct. 12–Nov. 12, 2026 · Late enrollment open",
+    price: "$800",
+    priceNote: "Prorated tuition for 48 remaining hours when starting Oct. 19, based on hours remaining. Original tuition: $1,000 for 60 hours.",
     cta: { label: "View the 2026 Intensive", href: INTENSIVE_PATH },
   },
 ]
