@@ -130,9 +130,9 @@ export default function ShsatPage() {
       <aside aria-label="2026 SHSAT Final Intensive" className="border-y-4 border-gold bg-academic text-white">
         <div className="container flex flex-col gap-4 py-6 md:flex-row md:items-center md:justify-between md:gap-8">
           <div className="flex flex-col gap-1">
-            <p className="eyebrow gold">Now enrolling</p>
+            <p className="eyebrow gold">Classes in progress · Late enrollment open</p>
             <p className="text-lg font-extrabold leading-snug md:text-xl">
-              60 hours of live SHSAT prep · 20 classes · Oct. 12–Nov. 12, 2026 · $1,000
+              Prorated tuition: 48 remaining hours for $800 from Oct. 19 · Mon–Thu, 6:00–9:00 PM Eastern
             </p>
           </div>
           <TrackedLink

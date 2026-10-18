@@ -33,7 +33,7 @@ export function ReserveSeatDialog({
       trigger
     ) : (
       <button type="button" className="button button-gold button-lg uppercase">
-        {"Reserve My Child\u2019s Seat"} <ArrowRight size={17} aria-hidden="true" />
+        Join Remaining Classes <ArrowRight size={17} aria-hidden="true" />
       </button>
     )
 

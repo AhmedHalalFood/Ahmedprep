@@ -7,7 +7,7 @@ import { INTENSIVE_NAME } from "@/lib/shsat-intensive"
 
 const details = [
   { icon: CalendarDays, text: "October 12\u2013November 12, 2026" },
-  { icon: Clock, text: "Monday\u2013Thursday \u2022 6:00 PM\u20139:00 PM" },
+  { icon: Clock, text: "Monday\u2013Thursday | 6:00\u20139:00 PM Eastern" },
   { icon: MapPin, text: "Astoria, Queens, New York" },
 ]
 
@@ -15,13 +15,21 @@ export function IntensiveHero() {
   return (
     <section aria-labelledby="intensive-title" className="border-b-4 border-gold bg-navy pb-10 pt-10 text-white md:pb-16 md:pt-16">
       <div className="container flex flex-col gap-6 md:gap-8">
-        <p className="eyebrow gold">Now enrolling · Limited enrollment</p>
+        <p className="eyebrow gold">SHSAT Final Intensive | Classes in progress</p>
         <h1 id="intensive-title" className="max-w-4xl text-balance text-4xl font-extrabold leading-tight tracking-tight md:text-6xl md:leading-none">
           {INTENSIVE_NAME}
         </h1>
-        <p className="text-pretty text-xl font-extrabold leading-snug text-gold md:text-3xl">
-          {"60 Hours of Live SHSAT Prep \u2022 20 Classes \u2022 $1,000"}
-        </p>
+        <div className="flex flex-col gap-2">
+          <p className="text-pretty text-xl font-extrabold uppercase leading-snug text-gold md:text-3xl">
+            {"Late Enrollment Open | Prorated Tuition"}
+          </p>
+          <p className="text-pretty text-lg font-semibold leading-snug text-white md:text-xl">
+            For students beginning October 19: <span className="text-gold">48 remaining instructional hours for $800.</span>
+          </p>
+          <p className="text-sm leading-relaxed text-white/70">
+            Original tuition: <s className="text-white/60">$1,000</s> for the full 60-hour program.
+          </p>
+        </div>
         <ul className="m-0 flex list-none flex-col gap-3 p-0 md:flex-row md:flex-wrap md:gap-x-8">
           {details.map(({ icon: Icon, text }) => (
             <li key={text} className="flex items-center gap-2 font-semibold text-white/90">
