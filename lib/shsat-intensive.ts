@@ -55,4 +55,11 @@ export function startOptionLabel(iso: string) {
 
 export const START_DATE_UNSURE = "Not sure yet"
 
-export const START_DATE_OPTIONS = [...LATE_START_DATES.map(startOptionLabel), START_DATE_UNSURE]
+export function todayInNewYork(now = new Date()) {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York" }).format(now)
+}
+
+/** Start dates that have not passed yet (New York time), plus the "not sure" option. */
+export function upcomingStartOptions(today = todayInNewYork()) {
+  return [...LATE_START_DATES.filter((date) => date >= today).map(startOptionLabel), START_DATE_UNSURE]
+}

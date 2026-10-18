@@ -1,12 +1,13 @@
 "use client"
 
+import { useState } from "react"
 import { ArrowRight } from "lucide-react"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Honeypot, RequiredNote, SelectField, SubmitButton, TextAreaField, TextField } from "@/components/forms/fields"
 import { useLeadForm } from "@/components/forms/use-lead-form"
 import { EVENTS, trackEvent } from "@/lib/analytics"
 import { BUSINESS } from "@/lib/business"
-import { INTENSIVE_NAME, LATE_START_DATES, PAYMENT_OPTIONS, START_DATE_UNSURE, startOptionLabel } from "@/lib/shsat-intensive"
+import { INTENSIVE_NAME, PAYMENT_OPTIONS, START_DATE_UNSURE, upcomingStartOptions } from "@/lib/shsat-intensive"
 
 type SeatData = {
   parentName: string
@@ -36,12 +37,6 @@ const initial: SeatData = {
   message: "",
 }
 
-// This component only renders on the client (ssr: false), so filtering by today's date is hydration-safe.
-function upcomingStartOptions() {
-  const today = new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York" }).format(new Date())
-  const upcoming = LATE_START_DATES.filter((date) => date >= today)
-  return [...(upcoming.length ? upcoming : LATE_START_DATES).map(startOptionLabel), START_DATE_UNSURE]
-}
 
 function validate(d: SeatData) {
   const errors: Partial<Record<keyof SeatData, string>> = {}
@@ -59,12 +54,15 @@ function validate(d: SeatData) {
 }
 
 function ReserveSeatForm() {
+  const [submitted, setSubmitted] = useState<SeatData | null>(null)
   const { data, errors, status, update, submit, formRef, honeypotRef } = useLeadForm({
     endpoint: "/api/shsat-intensive",
     initial,
     validate,
-    onSuccess: () =>
-      trackEvent(EVENTS.shsatIntensiveLead, { location: LOCATION, program: INTENSIVE_NAME, lead_stage: "inquiry_submit" }),
+    onSuccess: (sent) => {
+      setSubmitted(sent)
+      trackEvent(EVENTS.shsatIntensiveLead, { location: LOCATION, program: INTENSIVE_NAME, lead_stage: "inquiry_submit" })
+    },
   })
 
   const field = (key: keyof SeatData) => ({
@@ -82,6 +80,20 @@ function ReserveSeatForm() {
         <p className="mt-3 text-lg font-extrabold leading-snug text-navy">
           {"Thank you. We received your request for the 2026 SHSAT Final Intensive and will contact you shortly to confirm your child\u2019s seat."}
         </p>
+        <dl className="mt-4 flex flex-col gap-2 border-l-4 border-brand bg-brand-soft px-4 py-3 text-sm text-navy">
+          <div className="flex flex-col">
+            <dt className="font-bold">First class / prorated tuition</dt>
+            <dd>
+              {submitted?.startDate === START_DATE_UNSURE
+                ? "Not sure yet. We will help you choose a start date ($50 per remaining class)."
+                : submitted?.startDate}
+            </dd>
+          </div>
+          <div className="flex flex-col">
+            <dt className="font-bold">Payment option</dt>
+            <dd>{submitted?.paymentOption}</dd>
+          </div>
+        </dl>
       </div>
     )
   }
