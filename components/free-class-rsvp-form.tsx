@@ -97,6 +97,29 @@ export function FreeClassRsvpForm({
     if (selected && selected.type !== "workshop") update("classType", selected.type)
   }
 
+  if (status === "success" && serverResult?.status === "duplicate") {
+    return (
+      <div role="status" className="flex flex-col gap-5 border border-line border-t-4 border-t-gold bg-white p-6 sm:p-9">
+        <CheckCircle2 size={32} aria-hidden="true" className="text-brand" />
+        <div>
+          <p className="eyebrow blue">Already registered</p>
+          <h3 className="mt-3 text-pretty text-xl font-extrabold leading-snug text-navy">You&apos;re Already Registered!</h3>
+          <p className="mt-3 text-pretty leading-relaxed text-ink">
+            Your student&apos;s seat for this Sunday class is already reserved, so there&apos;s no need to register again. Please check
+            your email for your confirmation and Zoom joining details.
+          </p>
+          <p className="mt-3 text-sm leading-relaxed text-subtle">
+            Can&apos;t find the email? Check your spam folder, or call or text us at{" "}
+            <a href={BUSINESS.phoneHref} className="font-semibold text-navy underline underline-offset-2">
+              {BUSINESS.phoneDisplay}
+            </a>
+            .
+          </p>
+        </div>
+      </div>
+    )
+  }
+
   if (status === "success") {
     return (
       <div role="status" className="flex flex-col gap-5 border border-line border-t-4 border-t-gold bg-white p-6 sm:p-9">

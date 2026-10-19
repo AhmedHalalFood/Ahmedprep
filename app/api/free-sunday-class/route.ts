@@ -99,7 +99,7 @@ export async function POST(request: Request) {
     }))
     if (claim.kind === "duplicate") {
       console.warn(`[${SCOPE}] Duplicate RSVP for ${session.isoDate}; original registration kept, no emails sent`)
-      return NextResponse.json({ success: true, duplicate: true, confirmation: claim.confirmation })
+      return NextResponse.json({ success: true, status: "duplicate", duplicate: true, confirmation: claim.confirmation })
     }
     registrationId = claim.id
   } catch (error) {
@@ -124,7 +124,7 @@ export async function POST(request: Request) {
 
   const resendLink = createResendLink(new URL(request.url).origin, registrationId)
 
-  return deliverLead({
+  const delivered = await deliverLead({
     dedupeKey,
     scope: SCOPE,
     fromLocalPart: "classes",
@@ -151,4 +151,9 @@ export async function POST(request: Request) {
       }
     },
   })
+
+  if (!delivered.ok) return delivered
+  // deliverLead's own `duplicate` flag only reflects Resend's 24-hour idempotency, so the registration status is set here.
+  const result = await delivered.json()
+  return NextResponse.json({ ...result, status: "registered", duplicate: false })
 }
