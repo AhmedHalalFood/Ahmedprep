@@ -1,4 +1,4 @@
-import { bigserial, date, integer, pgTable, text, timestamp } from "drizzle-orm/pg-core"
+import { bigint, bigserial, date, integer, pgTable, primaryKey, text, timestamp, unique } from "drizzle-orm/pg-core"
 
 export const sundayClassRegistrations = pgTable("sunday_class_registrations", {
   id: bigserial("id", { mode: "number" }).primaryKey(),
@@ -19,5 +19,56 @@ export const sundayClassRegistrations = pgTable("sunday_class_registrations", {
   confirmationResendCount: integer("confirmation_resend_count").notNull().default(0),
   lastDeliveryError: text("last_delivery_error"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+})
+
+export const classZoomLinks = pgTable(
+  "class_zoom_links",
+  {
+    classDate: date("class_date").notNull(),
+    program: text("program").notNull(),
+    zoomUrl: text("zoom_url").notNull(),
+    meetingId: text("meeting_id"),
+    passcode: text("passcode"),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [primaryKey({ columns: [t.classDate, t.program] })],
+)
+
+export const sundayReminderDeliveries = pgTable(
+  "sunday_reminder_deliveries",
+  {
+    id: bigserial("id", { mode: "number" }).primaryKey(),
+    registrationId: bigint("registration_id", { mode: "number" })
+      .notNull()
+      .references(() => sundayClassRegistrations.id),
+    slot: text("slot").notNull(),
+    mode: text("mode").notNull(),
+    status: text("status").notNull(),
+    attempts: integer("attempts").notNull().default(1),
+    idempotencyKey: text("idempotency_key").notNull(),
+    recipient: text("recipient").notNull(),
+    trigger: text("trigger").notNull(),
+    resendId: text("resend_id"),
+    error: text("error"),
+    sentAt: timestamp("sent_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [unique("sunday_reminder_deliveries_once").on(t.registrationId, t.slot, t.mode)],
+)
+
+export const sundayReminderExclusions = pgTable("sunday_reminder_exclusions", {
+  registrationId: bigint("registration_id", { mode: "number" })
+    .primaryKey()
+    .references(() => sundayClassRegistrations.id),
+  reason: text("reason").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+})
+
+export const adminLoginAttempts = pgTable("admin_login_attempts", {
+  clientKey: text("client_key").primaryKey(),
+  failures: integer("failures").notNull().default(0),
+  lockedUntil: timestamp("locked_until", { withTimezone: true }),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 })

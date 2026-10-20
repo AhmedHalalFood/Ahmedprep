@@ -10,6 +10,7 @@ import {
   withDbRetry,
 } from "@/lib/sunday-registrations"
 import { buildSundayConfirmation } from "@/lib/sunday-confirmation"
+import { sendDueReminderForRegistration } from "@/lib/sunday-reminders"
 import {
   FREE_CLASS,
   FREE_CLASS_GRADES,
@@ -61,8 +62,7 @@ export async function POST(request: Request) {
   }
 
   const program = data.classType as RsvpProgram
-  const { confirmation, classTitle, programLabel, hasZoom } = buildSundayConfirmation(session, program, data)
-  if (!hasZoom) console.warn(`[${SCOPE}] No valid Zoom URL configured for ${program}; confirmation sent without access details`)
+  const { confirmation, classTitle, programLabel } = buildSundayConfirmation(session, program, data)
 
   const dedupeKey = [data.parentEmail, data.studentName, session.isoDate, program]
   const fingerprint = createHash("sha256").update(dedupeKey.map((v) => v.trim().toLowerCase()).join("|")).digest("hex")
@@ -134,12 +134,7 @@ export async function POST(request: Request) {
     rows: [
       ...rows,
       ["Class communications", "Agreed to receive registration information, live class access, and reminders for this class"],
-      [
-        "Live class access",
-        hasZoom
-          ? "Sent automatically in the parent's confirmation email."
-          : "NOT SENT. No Zoom URL is configured. Please email the live class link to the parent.",
-      ],
+      ["Live class access", "Zoom link is sent automatically by the class-day reminder emails (10:00 AM and 3:30 PM ET)."],
     ],
     confirmation,
     failureAlertNote: `To resend the confirmation once the problem is fixed, open this private link (valid 30 days, do not forward):\n${resendLink}`,
@@ -153,6 +148,16 @@ export async function POST(request: Request) {
   })
 
   if (!delivered.ok) return delivered
+
+  // A class-day registration after 10:00 AM ET has missed the scheduled reminder, so the one due now goes out
+  // immediately. A reminder problem never turns a saved registration into a failed one.
+  try {
+    const late = await sendDueReminderForRegistration(registrationId)
+    if (late) console.log(`[${SCOPE}] Late registration ${registrationId}: ${late.slot} reminder ${late.outcome}`)
+  } catch (error) {
+    console.error(`[${SCOPE}] Late reminder for registration ${registrationId} failed:`, error instanceof Error ? error.message : error)
+  }
+
   // deliverLead's own `duplicate` flag only reflects Resend's 24-hour idempotency, so the registration status is set here.
   const result = await delivered.json()
   return NextResponse.json({ ...result, status: "registered", duplicate: false })
