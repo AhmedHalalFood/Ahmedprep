@@ -1,4 +1,5 @@
-import { EMAIL_PATTERN, clean, deliverLead, fail, hasPhoneDigits, readBody, screenSubmission } from "@/lib/lead-delivery"
+import { EMAIL_PATTERN, clean, fail, hasPhoneDigits, readBody, screenSubmission } from "@/lib/lead-delivery"
+import { saveAndDeliverLead } from "@/lib/lead-storage"
 import { INTENSIVE_NAME, PAYMENT_OPTIONS, upcomingStartOptions } from "@/lib/shsat-intensive"
 
 export async function POST(request: Request) {
@@ -33,23 +34,35 @@ export async function POST(request: Request) {
     return fail(400, "Please complete all required fields.")
   }
 
-  return deliverLead({
-    scope: "shsat-intensive",
-    fromLocalPart: "consultations",
-    heading: `New Enrollment Inquiry: ${INTENSIVE_NAME}`,
-    subject: `${INTENSIVE_NAME} enrollment inquiry (${data.studentName})`,
-    replyTo: data.email,
-    rows: [
-      ["Inquiry", INTENSIVE_NAME],
-      ["Parent/Guardian Name", data.parentName],
-      ["Student Name", data.studentName],
-      ["Student Grade", data.studentGrade],
-      ["Phone", data.phone],
-      ["Email", data.email],
-      ["Current School", data.currentSchool],
-      ["First Class / Prorated Tuition", data.startDate],
-      ["Preferred Payment Option", data.paymentOption],
-      ["Message", data.message || "Not provided"],
-    ],
+  return saveAndDeliverLead({
+    formType: "shsat_intensive",
+    submissionId: body.submissionId,
+    record: {
+      contactName: data.parentName,
+      contactEmail: data.email,
+      contactPhone: data.phone,
+      studentName: data.studentName,
+      program: INTENSIVE_NAME,
+      payload: data,
+    },
+    email: {
+      scope: "shsat-intensive",
+      fromLocalPart: "consultations",
+      heading: `New Enrollment Inquiry: ${INTENSIVE_NAME}`,
+      subject: `${INTENSIVE_NAME} enrollment inquiry (${data.studentName})`,
+      replyTo: data.email,
+      rows: [
+        ["Inquiry", INTENSIVE_NAME],
+        ["Parent/Guardian Name", data.parentName],
+        ["Student Name", data.studentName],
+        ["Student Grade", data.studentGrade],
+        ["Phone", data.phone],
+        ["Email", data.email],
+        ["Current School", data.currentSchool],
+        ["First Class / Prorated Tuition", data.startDate],
+        ["Preferred Payment Option", data.paymentOption],
+        ["Message", data.message || "Not provided"],
+      ],
+    },
   })
 }

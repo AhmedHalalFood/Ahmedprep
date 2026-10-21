@@ -5,6 +5,11 @@ import { useEffect, useRef, useState, type FormEvent } from "react"
 type Status = "idle" | "submitting" | "success" | "error"
 type Errors<T> = Partial<Record<keyof T, string>>
 
+/** Empty when unavailable (non-secure context); the server then dedupes on the submitted content alone. */
+export function newSubmissionId() {
+  return typeof crypto !== "undefined" && typeof crypto.randomUUID === "function" ? crypto.randomUUID() : ""
+}
+
 export function useLeadForm<T extends Record<string, string>>({
   endpoint,
   initial,
@@ -26,6 +31,7 @@ export function useLeadForm<T extends Record<string, string>>({
   const honeypotRef = useRef<HTMLInputElement>(null)
   const startedAtRef = useRef(0)
   const touchedRef = useRef(false)
+  const submissionIdRef = useRef("")
 
   useEffect(() => {
     startedAtRef.current = Date.now()
@@ -53,18 +59,22 @@ export function useLeadForm<T extends Record<string, string>>({
     }
 
     setStatus("submitting")
+    // Kept across failed attempts so a retry is recognised as the same submission; cleared after success.
+    submissionIdRef.current ||= newSubmissionId()
     try {
       const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...data,
+          submissionId: submissionIdRef.current,
           website: honeypotRef.current?.value ?? "",
           elapsedMs: Date.now() - startedAtRef.current,
         }),
       })
       const result = await response.json().catch(() => null)
       if (!response.ok || result?.success !== true) throw new Error("Delivery not confirmed")
+      submissionIdRef.current = ""
       setServerResult(result)
       setStatus("success")
       onSuccess?.(data)
