@@ -87,7 +87,7 @@ export default function ShsatDatesPage() {
               Read the full SHSAT update <ArrowUpRight size={15} aria-hidden="true" />
             </Link>
             <Link href="/shsat-final-intensive-2026" className="text-link">
-              2026 SHSAT Final Intensive <ArrowUpRight size={15} aria-hidden="true" />
+              SHSAT Final Intensive 2026 <ArrowUpRight size={15} aria-hidden="true" />
             </Link>
             <Link href="/free-diagnostic" className="text-link">
               Book Free Diagnostic <ArrowUpRight size={15} aria-hidden="true" />

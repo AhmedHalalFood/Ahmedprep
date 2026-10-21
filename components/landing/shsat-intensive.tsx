@@ -1,27 +1,27 @@
-import { ArrowUpRight, CalendarDays, Check, Clock, MessageSquare, Phone } from "lucide-react"
+import { ArrowUpRight, CalendarDays, Check, Clock, MapPin } from "lucide-react"
 import {
+  CLASS_DATES,
+  CLASS_DAYS,
+  CLASS_TIME,
   HOURS_PER_CLASS,
   INTENSIVE_ENROLL_ANCHOR,
+  INTENSIVE_NAME,
   INTENSIVE_PATH,
+  ORIGINAL_DATES,
   ORIGINAL_HOURS,
   ORIGINAL_TUITION,
-  PRORATED_SCHEDULE,
+  PROGRAM_FORMAT,
   TUITION_PER_CLASS,
   formatClassDate,
   formatUsd,
+  remainingWeeks,
+  type EnrollmentSnapshot,
 } from "@/lib/shsat-intensive"
-import { ReserveSeatDialog } from "@/components/landing/reserve-seat-dialog"
+import { IntensiveCtas } from "@/components/landing/intensive-ctas"
+import { EnrollingTodaySummary } from "@/components/landing/intensive-facts"
 import { TuitionCalculator } from "@/components/landing/tuition-calculator"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
-import { BUSINESS } from "@/lib/business"
-
-const stats = [
-  { value: "5", label: "Weeks" },
-  { value: "20", label: "Live Classes" },
-  { value: "60", label: "Hours of Instruction" },
-  { value: "$800", label: "Late Enrollment From Oct. 19" },
-]
 
 const benefits = [
   "Intensive SHSAT Math instruction",
@@ -38,8 +38,15 @@ const benefits = [
   "Final test-day strategy and preparation",
 ]
 
-export function ShsatIntensive({ variant = "home" }: { variant?: "home" | "page" }) {
+export function ShsatIntensive({ variant = "home", snapshot }: { variant?: "home" | "page"; snapshot: EnrollmentSnapshot }) {
   const isHome = variant === "home"
+  const stats = [
+    { value: "5", label: "Weeks (original program)" },
+    { value: String(CLASS_DATES.length), label: "Scheduled classes" },
+    { value: String(ORIGINAL_HOURS), label: "Instructional hours" },
+    { value: formatUsd(ORIGINAL_TUITION), label: `Original tuition, ${ORIGINAL_HOURS} hours` },
+  ]
+  const weeks = remainingWeeks(snapshot.remainingDates)
   return (
     <section
       id="shsat-intensive"
@@ -56,7 +63,7 @@ export function ShsatIntensive({ variant = "home" }: { variant?: "home" | "page"
               id="shsat-intensive-title"
               className="mt-2 text-balance text-3xl font-extrabold leading-tight tracking-tight md:mt-3 md:text-5xl md:leading-none"
             >
-              2026 SHSAT Final 5-Week Intensive
+              {INTENSIVE_NAME}
             </h2>
             <p className="mt-3 text-lg font-bold leading-snug text-gold md:mt-4 md:text-2xl">The Final Push Before the 2026 SHSAT</p>
             <p className="mt-1 text-base font-semibold leading-snug text-white/85 md:mt-2 md:text-lg">
@@ -77,7 +84,7 @@ export function ShsatIntensive({ variant = "home" }: { variant?: "home" | "page"
             eventProps={{ location: "home_intensive_section" }}
             className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-gold underline-offset-4 hover:underline lg:col-start-2"
           >
-            Full details: 2026 SHSAT Final Intensive <ArrowUpRight size={15} aria-hidden="true" />
+            Full details: SHSAT Final Intensive 2026 <ArrowUpRight size={15} aria-hidden="true" />
           </TrackedLink>
         </div>
         )}
@@ -90,18 +97,6 @@ export function ShsatIntensive({ variant = "home" }: { variant?: "home" | "page"
             >
               <dt className="order-2 text-xs font-bold uppercase tracking-widest text-white/70">{stat.label}</dt>
               <dd className="order-1 m-0 text-4xl font-extrabold leading-none tracking-tight text-gold md:text-5xl">{stat.value}</dd>
-              {stat.value === "$800" && (
-                <>
-                  <dd className="order-3 m-0 text-sm font-semibold text-white/85">
-                    48 remaining hours <span className="text-white/40" aria-hidden="true">•</span> prorated
-                  </dd>
-                  <dd className="order-4 m-0 mt-2 border-t border-white/15 pt-3 text-xs leading-relaxed text-white/65">
-                    <span className="font-bold uppercase tracking-widest text-white/80">Original tuition</span>
-                    <br />
-                    <s>$1,000</s> for 60 hours
-                  </dd>
-                </>
-              )}
             </div>
           ))}
         </dl>
@@ -110,15 +105,19 @@ export function ShsatIntensive({ variant = "home" }: { variant?: "home" | "page"
           <p className="eyebrow gold shrink-0">Schedule</p>
           <p className="flex items-center gap-2 font-semibold">
             <CalendarDays size={18} className="text-gold" aria-hidden="true" />
-            October 12 – November 12, 2026
+            {ORIGINAL_DATES}
           </p>
           <p className="flex items-center gap-2 font-semibold">
             <CalendarDays size={18} className="text-gold" aria-hidden="true" />
-            Monday through Thursday
+            {CLASS_DAYS}
           </p>
           <p className="flex items-center gap-2 font-semibold">
             <Clock size={18} className="text-gold" aria-hidden="true" />
-            6:00 PM – 9:00 PM Eastern
+            {CLASS_TIME}
+          </p>
+          <p className="flex items-center gap-2 font-semibold">
+            <MapPin size={18} className="text-gold" aria-hidden="true" />
+            {PROGRAM_FORMAT}
           </p>
         </div>
 
@@ -143,72 +142,44 @@ export function ShsatIntensive({ variant = "home" }: { variant?: "home" | "page"
         <div id={INTENSIVE_ENROLL_ANCHOR} className="mt-10 grid scroll-mt-4 border border-white/20 md:mt-14 lg:grid-cols-[1.35fr_0.65fr]">
           <div className="flex flex-col gap-5 p-5 md:gap-6 md:p-10">
             <div className="flex flex-col gap-2">
-              <p className="eyebrow gold">Late enrollment open | Prorated tuition</p>
-              <h3 className="text-balance text-2xl font-extrabold tracking-tight md:text-3xl">Join the remaining classes</h3>
-              <p className="max-w-2xl text-pretty text-lg font-semibold leading-relaxed text-white md:text-xl">
-                For students beginning October 19: <span className="text-gold">48 remaining instructional hours for $800.</span>
+              <p className="eyebrow gold">Schedule and tuition</p>
+              <h3 className="text-balance text-2xl font-extrabold tracking-tight md:text-3xl">What you receive when you enroll today</h3>
+            </div>
+
+            <div className="border border-white/20">
+              <EnrollingTodaySummary snapshot={snapshot} />
+            </div>
+
+            {weeks.length > 0 && (
+              <div className="flex flex-col gap-3">
+                <h4 className="text-xs font-bold uppercase tracking-widest text-white/70">
+                  {`Remaining class dates (${CLASS_TIME})`}
+                </h4>
+                <ul className="m-0 flex list-none flex-col p-0">
+                  {weeks.map((week) => (
+                    <li key={week.start} className="flex flex-col gap-1 border-b border-white/15 py-3 sm:flex-row sm:gap-6">
+                      <span className="shrink-0 text-sm font-bold text-white/70 sm:w-36">
+                        {`Week of ${formatClassDate(week.start, "long").split(", ")[1]}`}
+                      </span>
+                      <span className="font-semibold text-white">
+                        {week.dates.map((date) => formatClassDate(date)).join(" \u00b7 ")}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <div className="flex flex-col gap-2">
+              <h4 className="text-xs font-bold uppercase tracking-widest text-white/70">How tuition is calculated</h4>
+              <p className="max-w-2xl text-pretty leading-relaxed text-white/80">
+                {`The original program is ${ORIGINAL_HOURS} instructional hours for ${formatUsd(ORIGINAL_TUITION)}, which is ${formatUsd(TUITION_PER_CLASS)} per ${HOURS_PER_CLASS}-hour class. Late-enrollment tuition is prorated: you pay ${formatUsd(TUITION_PER_CLASS)} for each scheduled class from your child\u2019s first class through November 12. Classes held before your child joins are not included, are not made up, and are not charged.`}
               </p>
             </div>
 
-            <table className="w-full border-collapse text-left">
-              <caption className="sr-only">Prorated tuition schedule by start week</caption>
-              <thead>
-                <tr className="border-b border-white/30 text-xs font-bold uppercase tracking-widest text-white/70">
-                  <th scope="col" className="py-2 pr-3 font-bold">
-                    Start week
-                  </th>
-                  <th scope="col" className="py-2 pr-3 font-bold">
-                    Hours left
-                  </th>
-                  <th scope="col" className="py-2 text-right font-bold">
-                    Tuition
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {PRORATED_SCHEDULE.map((row) => (
-                  <tr key={row.start} className="border-b border-white/15">
-                    <th scope="row" className="py-3 pr-3 font-semibold text-white">
-                      {formatClassDate(row.start, "long").split(", ")[1]}
-                    </th>
-                    <td className="py-3 pr-3 text-white/85">{row.hours} hours</td>
-                    <td className="py-3 text-right text-lg font-extrabold text-gold">{formatUsd(row.tuition)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            {snapshot.remainingDates.length > 1 && <TuitionCalculator dates={snapshot.remainingDates} />}
 
-            <p className="max-w-2xl text-pretty leading-relaxed text-white/80">
-              {`Tuition is based on the actual instructional hours remaining: ${formatUsd(TUITION_PER_CLASS)} per ${HOURS_PER_CLASS}-hour class (about $16.67 per hour). For students joining midweek, tuition is calculated using the remaining scheduled sessions.`}
-            </p>
-
-            <TuitionCalculator />
-
-            <p className="text-sm leading-relaxed text-white/65">
-              Original tuition: <s>{formatUsd(ORIGINAL_TUITION)}</s> for the full {ORIGINAL_HOURS}-hour program.
-            </p>
-
-            <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-              <ReserveSeatDialog location="shsat_intensive_enroll" />
-              <TrackedLink
-                href={BUSINESS.phoneHref}
-                event={EVENTS.phoneClick}
-                eventProps={{ location: "shsat_intensive" }}
-                className="button button-lg justify-center border border-white/40 uppercase text-white hover:border-gold hover:text-gold"
-              >
-                <Phone size={16} aria-hidden="true" />
-                Call to Enroll: 347-479-5020
-              </TrackedLink>
-              <TrackedLink
-                href={BUSINESS.smsHref}
-                event={EVENTS.textClick}
-                eventProps={{ location: "shsat_intensive" }}
-                className="inline-flex min-h-12 items-center justify-center gap-2 px-2 text-sm font-bold uppercase tracking-wider text-white/85 hover:text-gold"
-              >
-                <MessageSquare size={15} aria-hidden="true" />
-                Text us
-              </TrackedLink>
-            </div>
+            <IntensiveCtas location="shsat_intensive_enroll" showEnroll={snapshot.nextClass !== null} />
           </div>
           <aside
             aria-label="Key SHSAT dates"
@@ -218,7 +189,7 @@ export function ShsatIntensive({ variant = "home" }: { variant?: "home" | "page"
             <p className="font-semibold text-white">School-Day SHSAT: November 18, 2026</p>
             <p className="flex items-center gap-2 text-sm text-white/75">
               <span className="size-1.5 shrink-0 bg-gold" aria-hidden="true" />
-              Late enrollment open for the remaining classes
+              {`The Intensive\u2019s last class is ${formatClassDate(CLASS_DATES[CLASS_DATES.length - 1], "long")}`}
             </p>
           </aside>
         </div>

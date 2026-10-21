@@ -127,12 +127,12 @@ export default function ShsatPage() {
         ctaEvent={EVENTS.shsatCtaClick}
       />
 
-      <aside aria-label="2026 SHSAT Final Intensive" className="border-y-4 border-gold bg-academic text-white">
+      <aside aria-label="SHSAT Final Intensive 2026" className="border-y-4 border-gold bg-academic text-white">
         <div className="container flex flex-col gap-4 py-6 md:flex-row md:items-center md:justify-between md:gap-8">
           <div className="flex flex-col gap-1">
             <p className="eyebrow gold">Classes in progress · Late enrollment open</p>
             <p className="text-lg font-extrabold leading-snug md:text-xl">
-              Prorated tuition: 48 remaining hours for $800 from Oct. 19 · Mon–Thu, 6:00–9:00 PM Eastern
+              Mon–Thu, 6:00–9:00 PM Eastern through Nov. 12 · Prorated tuition: $50 per remaining 3-hour class
             </p>
           </div>
           <TrackedLink
@@ -141,7 +141,7 @@ export default function ShsatPage() {
             eventProps={{ location: "shsat_page_intensive_promo" }}
             className="button button-gold button-lg shrink-0 justify-center uppercase"
           >
-            2026 SHSAT Final Intensive <ArrowUpRight size={16} aria-hidden="true" />
+                          SHSAT Final Intensive 2026 <ArrowUpRight size={16} aria-hidden="true" />
           </TrackedLink>
         </div>
       </aside>

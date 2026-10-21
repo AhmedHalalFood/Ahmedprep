@@ -1,5 +1,5 @@
 import { EMAIL_PATTERN, clean, deliverLead, fail, hasPhoneDigits, readBody, screenSubmission } from "@/lib/lead-delivery"
-import { INTENSIVE_NAME, PAYMENT_OPTIONS, upcomingStartOptions } from "@/lib/shsat-intensive"
+import { INTENSIVE_NAME, PAYMENT_OPTIONS, acceptedStartOptions } from "@/lib/shsat-intensive"
 
 export async function POST(request: Request) {
   const body = await readBody(request)
@@ -27,7 +27,7 @@ export async function POST(request: Request) {
     !hasPhoneDigits(data.phone) ||
     !EMAIL_PATTERN.test(data.email) ||
     !data.currentSchool ||
-    !upcomingStartOptions().includes(data.startDate) ||
+    !acceptedStartOptions().includes(data.startDate) ||
     !(PAYMENT_OPTIONS as readonly string[]).includes(data.paymentOption)
   ) {
     return fail(400, "Please complete all required fields.")
