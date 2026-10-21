@@ -11,7 +11,7 @@ import { SuccessStories } from "@/components/landing/success-stories"
 import { ThisSundayStrip } from "@/components/sunday-classes/this-sunday-strip"
 import { TeachingVideos } from "@/components/videos/teaching-videos"
 import { TrackedLink } from "@/components/tracked-link"
-import { TuitionScheduleButton } from "@/components/landing/tuition-schedule-dialog"
+import { TuitionScheduleLink } from "@/components/landing/tuition-schedule-link"
 import { EVENTS } from "@/lib/analytics"
 import { NOT_AFFILIATED_NOTE, SITE_URL } from "@/lib/business"
 import { INTENSIVE_PATH } from "@/lib/shsat-intensive"
@@ -145,10 +145,7 @@ export default function ShsatPage() {
             >
               SHSAT Final Intensive 2026 <ArrowUpRight size={16} aria-hidden="true" />
             </TrackedLink>
-            <TuitionScheduleButton
-              location="shsat_page_intensive_promo"
-              className="button button-lg shrink-0 justify-center border-2 border-gold uppercase text-gold hover:bg-gold hover:text-navy"
-            />
+            <TuitionScheduleLink location="shsat_page_intensive_promo" className="button-lg shrink-0 justify-center" />
           </div>
         </div>
       </aside>

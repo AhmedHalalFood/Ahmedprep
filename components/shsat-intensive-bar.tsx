@@ -1,6 +1,6 @@
 import { ArrowRight } from "lucide-react"
 import { ReserveSeatDialog } from "@/components/landing/reserve-seat-dialog"
-import { TuitionScheduleButton } from "@/components/landing/tuition-schedule-dialog"
+import { TuitionScheduleLink } from "@/components/landing/tuition-schedule-link"
 
 export function ShsatIntensiveBar() {
   return (
@@ -42,18 +42,21 @@ export function ShsatIntensiveBar() {
             </span>
             Prorated Tuition
           </p>
-          <div className="flex flex-col items-center gap-2 sm:flex-row sm:gap-4">
+          <div className="flex w-full flex-col items-stretch gap-2.5 sm:w-auto sm:flex-row sm:items-center sm:gap-3">
             <ReserveSeatDialog
               location="shsat_intensive_bar"
               trigger={
-                <button type="button" className="button button-gold min-h-11 shrink-0 whitespace-nowrap uppercase">
+                <button
+                  type="button"
+                  className="button button-gold min-h-12 w-full shrink-0 whitespace-nowrap border-2 border-gold uppercase sm:w-auto"
+                >
                   Enroll in SHSAT Intensive <ArrowRight size={15} aria-hidden="true" />
                 </button>
               }
             />
-            <TuitionScheduleButton
+            <TuitionScheduleLink
               location="shsat_intensive_bar"
-              className="button min-h-11 shrink-0 whitespace-nowrap border-2 border-navy uppercase text-navy hover:bg-navy hover:text-cream"
+              className="min-h-12 w-full shrink-0 whitespace-nowrap sm:w-auto"
             />
           </div>
         </div>
