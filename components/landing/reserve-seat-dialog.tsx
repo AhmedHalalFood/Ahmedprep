@@ -33,7 +33,7 @@ export function ReserveSeatDialog({
       trigger
     ) : (
       <button type="button" className="button button-gold button-lg uppercase">
-        Join Remaining Classes <ArrowRight size={17} aria-hidden="true" />
+        Enroll in SHSAT Intensive <ArrowRight size={17} aria-hidden="true" />
       </button>
     )
 

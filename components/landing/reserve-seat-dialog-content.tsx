@@ -7,7 +7,24 @@ import { Honeypot, RequiredNote, SelectField, SubmitButton, TextAreaField, TextF
 import { useLeadForm } from "@/components/forms/use-lead-form"
 import { EVENTS, trackEvent } from "@/lib/analytics"
 import { BUSINESS } from "@/lib/business"
-import { INTENSIVE_NAME, PAYMENT_OPTIONS, START_DATE_UNSURE, upcomingStartOptions } from "@/lib/shsat-intensive"
+import {
+  PROGRAM_FORMAT,
+  classSession,
+  INTENSIVE_NAME,
+  PAYMENT_OPTIONS,
+  START_DATE_UNSURE,
+  TUITION_PER_CLASS,
+  enrollmentSnapshot,
+  formatClassDate,
+  formatUsd,
+  upcomingStartOptions,
+} from "@/lib/shsat-intensive"
+
+function dialogSummary() {
+  const snapshot = enrollmentSnapshot()
+  if (!snapshot.nextClass) return "All scheduled classes have been held."
+  return `Next class: ${formatClassDate(snapshot.nextClass, "long")}, ${classSession(snapshot.nextClass).label} · ${PROGRAM_FORMAT} · ${snapshot.classes} classes (${snapshot.hours} hours) remain · ${formatUsd(snapshot.tuition)} if your child starts at the next class`
+}
 
 type SeatData = {
   parentName: string
@@ -78,14 +95,14 @@ function ReserveSeatForm() {
       <div role="status" className="border-t-4 border-gold pt-5">
         <p className="eyebrow blue">Request received</p>
         <p className="mt-3 text-lg font-extrabold leading-snug text-navy">
-          {"Thank you. We received your request for the 2026 SHSAT Final Intensive and will contact you shortly to confirm your child\u2019s seat."}
+          {"Thank you. We received your request for the SHSAT Final Intensive 2026 and will contact you shortly to confirm your child\u2019s first class and prorated tuition."}
         </p>
         <dl className="mt-4 flex flex-col gap-2 border-l-4 border-brand bg-brand-soft px-4 py-3 text-sm text-navy">
           <div className="flex flex-col">
             <dt className="font-bold">First class / prorated tuition</dt>
             <dd>
               {submitted?.startDate === START_DATE_UNSURE
-                ? "Not sure yet. We will help you choose a start date ($50 per remaining class)."
+                ? `Not sure yet. We will help you choose a start date (${formatUsd(TUITION_PER_CLASS)} per remaining class).`
                 : submitted?.startDate}
             </dd>
           </div>
@@ -145,7 +162,7 @@ function ReserveSeatForm() {
       )}
 
       <SubmitButton submitting={status === "submitting"}>
-        Join Remaining Classes <ArrowRight size={17} aria-hidden="true" />
+        Enroll in SHSAT Intensive <ArrowRight size={17} aria-hidden="true" />
       </SubmitButton>
       <p className="text-xs leading-relaxed text-subtle">
         Submitting this form does not charge you. We will call or email to confirm enrollment and payment details.
@@ -168,7 +185,7 @@ export default function ReserveSeatDialogContent({
           <p className="eyebrow blue">Enrollment inquiry</p>
           <DialogTitle className="text-2xl font-extrabold tracking-tight text-navy">{INTENSIVE_NAME}</DialogTitle>
           <DialogDescription className="leading-relaxed text-subtle">
-            Classes in progress · Mon–Thu, 6:00–9:00 PM Eastern · Prorated tuition: $50 per remaining 3-hour class ($800 from Oct. 19)
+            {dialogSummary()}
           </DialogDescription>
         </DialogHeader>
         <ReserveSeatForm />

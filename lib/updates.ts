@@ -265,21 +265,21 @@ export const UPDATES: Update[] = [
     title: "AhmedPrep 2026 SHSAT Final 5-Week Intensive: October 12 to November 12",
     metaTitle: "AhmedPrep 2026 SHSAT Final Intensive Schedule | Astoria",
     description:
-      "AhmedPrep's in-person 2026 SHSAT Final 5-Week Intensive in Astoria runs Monday to Thursday, 6 to 9 PM, from October 12 to November 12, 2026.",
+      "AhmedPrep's in-person 2026 SHSAT Final 5-Week Intensive in Astoria runs Monday to Thursday from October 12 to November 12, 2026, meeting 5 to 8 PM beginning October 22.",
     summary:
       "Twenty live evening classes in Astoria, Monday to Thursday, timed to finish before the November SHSAT dates.",
     keyDates: [{ label: "Intensive begins", date: "2026-10-12" }],
     sourceId: "ahmedprep",
     datePublished: "2026-10-11",
-    dateModified: "2026-10-11",
+    dateModified: "2026-10-21",
     sections: [
       {
         heading: "Program schedule",
         list: [
-          "Monday to Thursday, 6:00 PM to 9:00 PM",
+          "Monday to Thursday, 5:00 PM to 8:00 PM Eastern beginning October 22 (classes through October 21 met 6:00 to 9:00 PM)",
           "October 12 to November 12, 2026",
           "20 live classes and 60 hours of SHSAT Math, ELA, timed practice, error review and pacing",
-          "In person at AhmedPrep in Astoria, Queens",
+          "In person only at AhmedPrep, 20-65 47th Street, Astoria, NY 11105",
         ],
       },
       {

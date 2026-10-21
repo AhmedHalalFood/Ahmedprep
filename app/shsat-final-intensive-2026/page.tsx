@@ -8,11 +8,26 @@ import { Breadcrumbs, JsonLd, Section } from "@/components/landing/primitives"
 import { ShsatIntensive } from "@/components/landing/shsat-intensive"
 import { BUSINESS, NOT_AFFILIATED_NOTE, SITE_URL } from "@/lib/business"
 import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
-import { INTENSIVE_NAME, INTENSIVE_PATH } from "@/lib/shsat-intensive"
+import {
+  CLASS_DATES,
+  HOURS_PER_CLASS,
+  INTENSIVE_NAME,
+  CLASS_SCHEDULE,
+  INTENSIVE_PATH,
+  ORIGINAL_HOURS,
+  ORIGINAL_TUITION,
+  TUITION_PER_CLASS,
+  enrollmentSnapshot,
+  formatClassDate,
+  formatUsd,
+  type EnrollmentSnapshot,
+} from "@/lib/shsat-intensive"
 
-const TITLE = "2026 SHSAT Final Intensive | Late Enrollment Open | Ahmed Prep NYC"
+export const revalidate = 300
+
+const TITLE = "SHSAT Final Intensive 2026 | Late Enrollment Open | Ahmed Prep NYC"
 const DESCRIPTION =
-  "SHSAT Final Intensive classes in progress in Astoria, Queens. Late enrollment open with prorated tuition: 48 remaining hours for $800 from Oct. 19."
+  "SHSAT Final Intensive classes in progress in Astoria, Queens. From Oct. 22: Mon–Thu 5–8 PM through Nov. 12, in person only. Late enrollment open: prorated tuition of $50 per remaining 3-hour class."
 const PAGE_URL = absoluteUrl(INTENSIVE_PATH)
 
 export const metadata: Metadata = {
@@ -24,9 +39,14 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION },
 }
 
-const faqs: FaqItem[] = [
+function lateEnrollmentAnswer(snapshot: EnrollmentSnapshot) {
+  if (!snapshot.nextClass) return "All scheduled classes have been held, so the Intensive is no longer accepting enrollments. Call or text us about year-round SHSAT tutoring."
+  return `Yes. Late enrollment is open. If your child starts at the next class, ${formatClassDate(snapshot.nextClass, "long")}, they attend the ${snapshot.classes} remaining classes (${snapshot.hours} instructional hours) for ${formatUsd(snapshot.tuition)}.`
+}
+
+const buildFaqs = (snapshot: EnrollmentSnapshot): FaqItem[] => [
   {
-    q: "Who is the 2026 SHSAT Final Intensive for?",
+    q: "Who is the SHSAT Final Intensive 2026 for?",
     a: "NYC students taking the SHSAT in November 2026 who want structured, focused preparation in the final five weeks before test day. Students should already be registered for the SHSAT through their school counselor.",
   },
   {
@@ -35,32 +55,32 @@ const faqs: FaqItem[] = [
   },
   {
     q: "What is the schedule?",
-    a: "Classes meet Monday through Thursday, 6:00 PM to 9:00 PM, from October 12 to November 12, 2026: 20 classes and 60 hours of live instruction in total.",
+    a: "Beginning Thursday, October 22, 2026, classes meet Monday through Thursday, 5:00 PM to 8:00 PM Eastern, in person only, through November 12, 2026. Classes from October 12 through October 21 met 6:00 PM to 9:00 PM. Every class is 3 hours: 20 classes and 60 hours of live instruction in total.",
   },
   {
     q: "Can my child still join now that classes have started?",
-    a: "Yes. Late enrollment is open with prorated tuition. Students beginning October 19 receive the 48 remaining instructional hours for $800.",
+    a: lateEnrollmentAnswer(snapshot),
   },
   {
     q: "How is late-enrollment tuition calculated?",
-    a: "Tuition is based on the actual instructional hours remaining, at $50 per 3-hour class. Starting the week of October 19 is $800, October 26 is $600, November 2 is $400, and November 9 is $200. For students joining midweek, tuition is calculated using the remaining scheduled sessions. The original tuition for the full 60-hour program was $1,000.",
+    a: `The original program is ${ORIGINAL_HOURS} instructional hours for ${formatUsd(ORIGINAL_TUITION)}, which is ${formatUsd(TUITION_PER_CLASS)} per ${HOURS_PER_CLASS}-hour class. Late-enrollment tuition is ${formatUsd(TUITION_PER_CLASS)} for each scheduled class from your child\u2019s first class through November 12. Classes held before your child joins are not included and are not charged.`,
   },
   {
-    q: "How do I join the remaining classes?",
-    a: "Use the Join Remaining Classes form on this page, call 347-479-5020, or send us a text. We\u2019ll follow up to confirm enrollment and your prorated tuition.",
+    q: "How do I enroll?",
+    a: "Use the Enroll in SHSAT Intensive form on this page, call 347-479-5020, or send us a text. We\u2019ll follow up to confirm your child\u2019s first class and prorated tuition.",
   },
 ]
 
-const eventSchema = {
+const buildEventSchema = (snapshot: EnrollmentSnapshot) => ({
   "@context": "https://schema.org",
   "@type": "EducationEvent",
   name: INTENSIVE_NAME,
   description:
-    "A 5-week, in-person SHSAT intensive course in Astoria, Queens: 20 live classes and 60 hours of SHSAT Math, ELA, timed practice, error review, pacing, and test-day strategy.",
+    `A 5-week, in-person SHSAT intensive course in Astoria, Queens: ${CLASS_DATES.length} live classes and ${ORIGINAL_HOURS} hours of SHSAT Math, ELA, timed practice, error review, pacing, and test-day strategy.`,
   url: PAGE_URL,
   image: [`${SITE_URL}/ahmedprep-hero.png`],
-  startDate: "2026-10-12T18:00:00-04:00",
-  endDate: "2026-11-12T21:00:00-05:00",
+  startDate: `${CLASS_SCHEDULE[0].date}T${CLASS_SCHEDULE[0].start}:00-04:00`,
+  endDate: `${CLASS_SCHEDULE[CLASS_SCHEDULE.length - 1].date}T${CLASS_SCHEDULE[CLASS_SCHEDULE.length - 1].end}:00-05:00`,
   eventStatus: "https://schema.org/EventScheduled",
   eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
   educationalLevel: "Middle school",
@@ -84,26 +104,29 @@ const eventSchema = {
     telephone: BUSINESS.phoneE164,
   },
   performer: { "@type": "Person", name: "Tariq Ahmed" },
-  offers: {
-    "@type": "Offer",
-    url: PAGE_URL,
-    name: "Late enrollment from October 19 (48 remaining instructional hours)",
-    price: 800,
-    priceCurrency: "USD",
-    availability: "https://schema.org/InStock",
-  },
-}
+  ...(snapshot.nextClass && {
+    offers: {
+      "@type": "Offer",
+      url: PAGE_URL,
+      name: `Late enrollment from ${formatClassDate(snapshot.nextClass, "long")} (${snapshot.classes} remaining classes, ${snapshot.hours} instructional hours)`,
+      price: snapshot.tuition,
+      priceCurrency: "USD",
+      availability: "https://schema.org/InStock",
+    },
+  }),
+})
 
 export default function ShsatFinalIntensivePage() {
+  const snapshot = enrollmentSnapshot()
   return (
     <>
       <Breadcrumbs
         items={[
           { label: "SHSAT Prep", href: "/shsat" },
-          { label: "2026 SHSAT Final Intensive", href: INTENSIVE_PATH },
+          { label: INTENSIVE_NAME, href: INTENSIVE_PATH },
         ]}
       />
-      <IntensiveHero />
+      <IntensiveHero snapshot={snapshot} />
 
       <Section
         id="overview"
@@ -142,7 +165,7 @@ export default function ShsatFinalIntensivePage() {
         </div>
       </Section>
 
-      <ShsatIntensive variant="page" />
+      <ShsatIntensive variant="page" snapshot={snapshot} />
 
       <Section
         id="why-ahmed-prep"
@@ -167,10 +190,10 @@ export default function ShsatFinalIntensivePage() {
         </div>
       </Section>
 
-      <Faq title="2026 SHSAT Final Intensive FAQ" items={faqs} />
+      <Faq title="SHSAT Final Intensive 2026 FAQ" items={buildFaqs(snapshot)} />
       <LocationSection location="shsat_intensive_page" />
       <p className="container py-6 text-xs leading-relaxed text-subtle">{NOT_AFFILIATED_NOTE}</p>
-      <JsonLd data={eventSchema} />
+      <JsonLd data={buildEventSchema(snapshot)} />
     </>
   )
 }
