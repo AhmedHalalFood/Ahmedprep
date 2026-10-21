@@ -28,7 +28,7 @@ export function ShsatIntensiveBar() {
             <span className="px-1.5 text-gold-deep" aria-hidden="true">
               |
             </span>
-            6:00–9:00 PM Eastern
+            5:00–8:00 PM Eastern
           </p>
         </div>
 

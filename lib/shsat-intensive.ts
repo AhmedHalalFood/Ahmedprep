@@ -10,10 +10,11 @@ export const HOURS_PER_CLASS = 3
 export const TUITION_PER_CLASS = 50
 export const ORIGINAL_TUITION = 1000
 export const ORIGINAL_HOURS = 60
-export const CLASS_START_TIME_ET = "18:00"
+export const CLASS_START_TIME_ET = "17:00"
+export const CLASS_END_TIME_ET = "20:00"
 export const ENROLLMENT_STATUS = "Late Enrollment Open \u2014 Join Classes in Progress"
 export const CLASS_DAYS = "Monday through Thursday"
-export const CLASS_TIME = "6:00 PM\u20139:00 PM Eastern"
+export const CLASS_TIME = "5:00 PM\u20138:00 PM Eastern"
 export const ORIGINAL_DATES = "October 12\u2013November 12, 2026"
 export const PROGRAM_FORMAT = "In person at our Astoria location"
 
@@ -45,7 +46,7 @@ function newYorkClock(now: Date) {
   return { date, time }
 }
 
-/** A class stops being joinable once it starts at 6:00 PM Eastern on its date. */
+/** A class stops being joinable once it starts at 5:00 PM Eastern on its date. */
 export function remainingClassDates(now = new Date()) {
   const { date: today, time } = newYorkClock(now)
   return CLASS_DATES.filter((date) => date > today || (date === today && time < CLASS_START_TIME_ET))
@@ -107,7 +108,7 @@ export function upcomingStartOptions(now = new Date()) {
 
 /**
  * Server-side acceptance list. Keeps today's class valid for the whole day so a parent who opened the
- * form shortly before 6:00 PM is not rejected on submit; staff confirm the actual first class.
+ * form shortly before 5:00 PM is not rejected on submit; staff confirm the actual first class.
  */
 export function acceptedStartOptions(now = new Date()) {
   const today = todayInNewYork(now)
