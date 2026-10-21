@@ -11,6 +11,8 @@ import {
   ORIGINAL_HOURS,
   ORIGINAL_TUITION,
   PROGRAM_FORMAT,
+  PROGRAM_LOCATION,
+  classSession,
   TUITION_PER_CLASS,
   formatClassDate,
   formatUsd,
@@ -113,11 +115,11 @@ export function ShsatIntensive({ variant = "home", snapshot }: { variant?: "home
           </p>
           <p className="flex items-center gap-2 font-semibold">
             <Clock size={18} className="text-gold" aria-hidden="true" />
-            {CLASS_TIME}
+            {`${CLASS_TIME} from Oct. 22`}
           </p>
           <p className="flex items-center gap-2 font-semibold">
             <MapPin size={18} className="text-gold" aria-hidden="true" />
-            {PROGRAM_FORMAT}
+            {`${PROGRAM_FORMAT} · ${PROGRAM_LOCATION}`}
           </p>
         </div>
 
@@ -162,7 +164,13 @@ export function ShsatIntensive({ variant = "home", snapshot }: { variant?: "home
                         {`Week of ${formatClassDate(week.start, "long").split(", ")[1]}`}
                       </span>
                       <span className="font-semibold text-white">
-                        {week.dates.map((date) => formatClassDate(date)).join(" \u00b7 ")}
+                        {week.dates
+                          .map((date) =>
+                            classSession(date).label === CLASS_TIME
+                              ? formatClassDate(date)
+                              : `${formatClassDate(date)} (${classSession(date).label})`,
+                          )
+                          .join(" \u00b7 ")}
                       </span>
                     </li>
                   ))}

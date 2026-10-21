@@ -12,8 +12,7 @@ import {
   CLASS_DATES,
   HOURS_PER_CLASS,
   INTENSIVE_NAME,
-  CLASS_END_TIME_ET,
-  CLASS_START_TIME_ET,
+  CLASS_SCHEDULE,
   INTENSIVE_PATH,
   ORIGINAL_HOURS,
   ORIGINAL_TUITION,
@@ -28,7 +27,7 @@ export const revalidate = 300
 
 const TITLE = "SHSAT Final Intensive 2026 | Late Enrollment Open | Ahmed Prep NYC"
 const DESCRIPTION =
-  "SHSAT Final Intensive classes in progress in Astoria, Queens, Mon–Thu 5–8 PM through Nov. 12. Late enrollment open: prorated tuition of $50 per remaining 3-hour class."
+  "SHSAT Final Intensive classes in progress in Astoria, Queens. From Oct. 22: Mon–Thu 5–8 PM through Nov. 12, in person only. Late enrollment open: prorated tuition of $50 per remaining 3-hour class."
 const PAGE_URL = absoluteUrl(INTENSIVE_PATH)
 
 export const metadata: Metadata = {
@@ -56,7 +55,7 @@ const buildFaqs = (snapshot: EnrollmentSnapshot): FaqItem[] => [
   },
   {
     q: "What is the schedule?",
-    a: "Classes meet Monday through Thursday, 5:00 PM to 8:00 PM Eastern, from October 12 to November 12, 2026: 20 classes and 60 hours of live instruction in total.",
+    a: "Beginning Thursday, October 22, 2026, classes meet Monday through Thursday, 5:00 PM to 8:00 PM Eastern, in person only, through November 12, 2026. Classes from October 12 through October 21 met 6:00 PM to 9:00 PM. Every class is 3 hours: 20 classes and 60 hours of live instruction in total.",
   },
   {
     q: "Can my child still join now that classes have started?",
@@ -80,8 +79,8 @@ const buildEventSchema = (snapshot: EnrollmentSnapshot) => ({
     `A 5-week, in-person SHSAT intensive course in Astoria, Queens: ${CLASS_DATES.length} live classes and ${ORIGINAL_HOURS} hours of SHSAT Math, ELA, timed practice, error review, pacing, and test-day strategy.`,
   url: PAGE_URL,
   image: [`${SITE_URL}/ahmedprep-hero.png`],
-  startDate: `2026-10-12T${CLASS_START_TIME_ET}:00-04:00`,
-  endDate: `2026-11-12T${CLASS_END_TIME_ET}:00-05:00`,
+  startDate: `${CLASS_SCHEDULE[0].date}T${CLASS_SCHEDULE[0].start}:00-04:00`,
+  endDate: `${CLASS_SCHEDULE[CLASS_SCHEDULE.length - 1].date}T${CLASS_SCHEDULE[CLASS_SCHEDULE.length - 1].end}:00-05:00`,
   eventStatus: "https://schema.org/EventScheduled",
   eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
   educationalLevel: "Middle school",

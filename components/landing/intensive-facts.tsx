@@ -8,6 +8,7 @@ import {
   ORIGINAL_HOURS,
   ORIGINAL_TUITION,
   PROGRAM_FORMAT,
+  SCHEDULE_CHANGE_NOTE,
   formatClassDate,
   formatUsd,
   type EnrollmentSnapshot,
@@ -20,7 +21,15 @@ export function IntensiveFacts({ snapshot }: { snapshot: EnrollmentSnapshot }) {
     { term: "Enrollment status", detail: snapshot.nextClass ? ENROLLMENT_STATUS : "Program completed" },
     { term: "Original program dates", detail: ORIGINAL_DATES },
     { term: "Class days", detail: CLASS_DAYS },
-    { term: "Class time", detail: CLASS_TIME },
+    {
+      term: "Class time",
+      detail: (
+        <>
+          {CLASS_TIME}
+          <span className="mt-1 block text-sm font-normal text-white/70">{SCHEDULE_CHANGE_NOTE}</span>
+        </>
+      ),
+    },
     { term: "Original program", detail: `${ORIGINAL_HOURS} instructional hours for ${formatUsd(ORIGINAL_TUITION)}` },
     { term: "Format", detail: PROGRAM_FORMAT },
     { term: "Address", detail: `${ADDRESS_LINE_1}, ${ADDRESS_LINE_2}` },

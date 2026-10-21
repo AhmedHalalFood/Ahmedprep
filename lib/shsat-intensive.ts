@@ -10,13 +10,25 @@ export const HOURS_PER_CLASS = 3
 export const TUITION_PER_CLASS = 50
 export const ORIGINAL_TUITION = 1000
 export const ORIGINAL_HOURS = 60
-export const CLASS_START_TIME_ET = "17:00"
-export const CLASS_END_TIME_ET = "20:00"
 export const ENROLLMENT_STATUS = "Late Enrollment Open \u2014 Join Classes in Progress"
 export const CLASS_DAYS = "Monday through Thursday"
-export const CLASS_TIME = "5:00 PM\u20138:00 PM Eastern"
 export const ORIGINAL_DATES = "October 12\u2013November 12, 2026"
-export const PROGRAM_FORMAT = "In person at our Astoria location"
+export const PROGRAM_FORMAT = "In person only"
+export const PROGRAM_LOCATION = "20-65 47th Street, Astoria, NY 11105"
+
+/** First class held at the new time. Classes before this date keep their original time in every record. */
+export const SCHEDULE_CHANGE_DATE = "2026-10-22"
+export const ORIGINAL_CLASS_TIME = "6:00 PM\u20139:00 PM Eastern"
+export const CLASS_TIME = "5:00 PM\u20138:00 PM Eastern"
+export const SCHEDULE_CHANGE_NOTE = "Beginning Thursday, October 22, 2026 (classes through October 21 met 6:00\u20139:00 PM)"
+
+const ORIGINAL_SESSION = { start: "18:00", end: "21:00", label: ORIGINAL_CLASS_TIME }
+const CURRENT_SESSION = { start: "17:00", end: "20:00", label: CLASS_TIME }
+
+/** Start/end (24h, Eastern) and label for the class held on a given date. Both schedules are exactly 3 hours. */
+export function classSession(date: string) {
+  return date < SCHEDULE_CHANGE_DATE ? ORIGINAL_SESSION : CURRENT_SESSION
+}
 
 const WEEK_STARTS = ["2026-10-12", "2026-10-19", "2026-10-26", "2026-11-02", "2026-11-09"]
 
@@ -46,11 +58,14 @@ function newYorkClock(now: Date) {
   return { date, time }
 }
 
-/** A class stops being joinable once it starts at 5:00 PM Eastern on its date. */
+/** A class stops being joinable once it starts (6:00 PM through Oct. 21, 5:00 PM from Oct. 22). */
 export function remainingClassDates(now = new Date()) {
   const { date: today, time } = newYorkClock(now)
-  return CLASS_DATES.filter((date) => date > today || (date === today && time < CLASS_START_TIME_ET))
+  return CLASS_DATES.filter((date) => date > today || (date === today && time < classSession(date).start))
 }
+
+/** Full calendar with the time each class was (or will be) held, for records and the schedule list. */
+export const CLASS_SCHEDULE = CLASS_DATES.map((date) => ({ date, ...classSession(date) }))
 
 export type EnrollmentSnapshot = {
   nextClass: string | null
@@ -108,7 +123,7 @@ export function upcomingStartOptions(now = new Date()) {
 
 /**
  * Server-side acceptance list. Keeps today's class valid for the whole day so a parent who opened the
- * form shortly before 5:00 PM is not rejected on submit; staff confirm the actual first class.
+ * form shortly before class time is not rejected on submit; staff confirm the actual first class.
  */
 export function acceptedStartOptions(now = new Date()) {
   const today = todayInNewYork(now)

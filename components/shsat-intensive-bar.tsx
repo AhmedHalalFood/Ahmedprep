@@ -28,7 +28,11 @@ export function ShsatIntensiveBar() {
             <span className="px-1.5 text-gold-deep" aria-hidden="true">
               |
             </span>
-            5:00–8:00 PM Eastern
+            5:00–8:00 PM Eastern from Oct. 22
+            <span className="px-1.5 text-gold-deep" aria-hidden="true">
+              |
+            </span>
+            In person only
           </p>
         </div>
 

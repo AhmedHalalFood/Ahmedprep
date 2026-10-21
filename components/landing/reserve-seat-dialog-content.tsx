@@ -8,7 +8,8 @@ import { useLeadForm } from "@/components/forms/use-lead-form"
 import { EVENTS, trackEvent } from "@/lib/analytics"
 import { BUSINESS } from "@/lib/business"
 import {
-  CLASS_TIME,
+  PROGRAM_FORMAT,
+  classSession,
   INTENSIVE_NAME,
   PAYMENT_OPTIONS,
   START_DATE_UNSURE,
@@ -22,7 +23,7 @@ import {
 function dialogSummary() {
   const snapshot = enrollmentSnapshot()
   if (!snapshot.nextClass) return "All scheduled classes have been held."
-  return `Next class: ${formatClassDate(snapshot.nextClass, "long")}, ${CLASS_TIME} · ${snapshot.classes} classes (${snapshot.hours} hours) remain · ${formatUsd(snapshot.tuition)} if your child starts at the next class`
+  return `Next class: ${formatClassDate(snapshot.nextClass, "long")}, ${classSession(snapshot.nextClass).label} · ${PROGRAM_FORMAT} · ${snapshot.classes} classes (${snapshot.hours} hours) remain · ${formatUsd(snapshot.tuition)} if your child starts at the next class`
 }
 
 type SeatData = {

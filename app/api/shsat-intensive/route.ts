@@ -1,5 +1,13 @@
 import { EMAIL_PATTERN, clean, deliverLead, fail, hasPhoneDigits, readBody, screenSubmission } from "@/lib/lead-delivery"
-import { INTENSIVE_NAME, PAYMENT_OPTIONS, acceptedStartOptions } from "@/lib/shsat-intensive"
+import {
+  CLASS_DAYS,
+  CLASS_TIME,
+  INTENSIVE_NAME,
+  PAYMENT_OPTIONS,
+  PROGRAM_FORMAT,
+  PROGRAM_LOCATION,
+  acceptedStartOptions,
+} from "@/lib/shsat-intensive"
 
 export async function POST(request: Request) {
   const body = await readBody(request)
@@ -48,6 +56,8 @@ export async function POST(request: Request) {
       ["Email", data.email],
       ["Current School", data.currentSchool],
       ["First Class / Prorated Tuition", data.startDate],
+      ["Class Schedule", `${CLASS_DAYS}, ${CLASS_TIME} (beginning Oct. 22, 2026)`],
+      ["Format / Location", `${PROGRAM_FORMAT}, ${PROGRAM_LOCATION}`],
       ["Preferred Payment Option", data.paymentOption],
       ["Message", data.message || "Not provided"],
     ],

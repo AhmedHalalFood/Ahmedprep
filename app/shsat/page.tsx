@@ -132,7 +132,7 @@ export default function ShsatPage() {
           <div className="flex flex-col gap-1">
             <p className="eyebrow gold">Classes in progress · Late enrollment open</p>
             <p className="text-lg font-extrabold leading-snug md:text-xl">
-              Mon–Thu, 5:00–8:00 PM Eastern through Nov. 12 · Prorated tuition: $50 per remaining 3-hour class
+              From Oct. 22: Mon–Thu, 5:00–8:00 PM Eastern, in person, through Nov. 12 · Prorated tuition: $50 per remaining 3-hour class
             </p>
           </div>
           <TrackedLink
