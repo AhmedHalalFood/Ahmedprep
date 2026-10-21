@@ -142,6 +142,8 @@ export async function POST(request: Request) {
       ],
     ],
     confirmation,
+    // The registration is already saved, so an email failure tells the parent it was received rather than showing an error.
+    persisted: { label: `sunday_class_registrations #${registrationId}` },
     failureAlertNote: `To resend the confirmation once the problem is fixed, open this private link (valid 30 days, do not forward):\n${resendLink}`,
     onDelivery: async (event) => {
       if (event.stage === "admin") {

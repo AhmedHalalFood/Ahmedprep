@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import { ArrowUpRight } from "lucide-react"
 import { ADDRESS_LINE_1, ADDRESS_LINE_2 } from "@/lib/business"
 import { EVENTS, trackEvent } from "@/lib/analytics"
+import { newSubmissionId } from "@/components/forms/use-lead-form"
 
 const LOCATION = "contact_section"
 const trackPhoneClick = () => trackEvent(EVENTS.phoneClick, { location: LOCATION })
@@ -48,6 +49,7 @@ export function Contact() {
   const honeypotRef = useRef<HTMLInputElement>(null)
   const startedAtRef = useRef(0)
   const trackedStartRef = useRef(false)
+  const submissionIdRef = useRef("")
 
   useEffect(() => {
     startedAtRef.current = Date.now()
@@ -75,18 +77,21 @@ export function Contact() {
     }
 
     setStatus("submitting")
+    submissionIdRef.current ||= newSubmissionId()
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...data,
+          submissionId: submissionIdRef.current,
           website: honeypotRef.current?.value ?? "",
           elapsedMs: Date.now() - startedAtRef.current,
         }),
       })
       const result = await response.json().catch(() => null)
       if (!response.ok || result?.success !== true) throw new Error("Delivery not confirmed")
+      submissionIdRef.current = ""
       setStatus("success")
       trackEvent(EVENTS.consultationSubmitted, { location: LOCATION, program: data.program })
       setData(initialData)

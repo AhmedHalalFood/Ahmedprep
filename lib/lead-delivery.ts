@@ -2,7 +2,7 @@ import { createHash } from "node:crypto"
 import { NextResponse } from "next/server"
 import { Resend } from "resend"
 
-// Shared by /api/diagnostic and /api/referral. Mirrors the proven /api/contact delivery path.
+// Shared email delivery for every lead form. Database storage for those forms lives in lib/lead-storage.ts.
 const RECIPIENT = "Tariq@ahmedprep.com"
 const MIN_FILL_MS = 1500
 const RATE_LIMIT = { windowMs: 10 * 60 * 1000, max: 5 }
@@ -84,7 +84,7 @@ ${htmlParts.join("\n")}
   }
 }
 
-type LeadEmail = {
+export type LeadEmail = {
   scope: string
   fromLocalPart: string
   heading: string
@@ -102,6 +102,11 @@ type LeadEmail = {
    * never block or repeat delivery.
    */
   onDelivery?: (event: DeliveryEvent) => Promise<void>
+  /**
+   * Set when the submission is already saved in the database. A failed notification then still reports success to
+   * the submitter (their request is safely stored) and AhmedPrep gets a separate alert instead.
+   */
+  persisted?: { label: string }
 }
 
 export type ConfirmationStatus = "sent" | "failed" | "not_requested"
@@ -128,7 +133,33 @@ export async function deliverLead({
   dedupeKey,
   failureAlertNote,
   onDelivery,
+  persisted,
 }: LeadEmail) {
+  const savedButNotNotified = async (reason: string, alertKey: string) => {
+    console.error(`[${scope}] ${persisted?.label} saved, but AhmedPrep was not notified (${reason}); submitter told it was received`)
+    const alerted = await sendAdminAlert({
+      scope,
+      fromLocalPart,
+      replyTo,
+      subject: `ACTION NEEDED: ${heading} saved, but the notification email failed`,
+      text: [
+        `A new submission was saved in the database as ${persisted?.label}, but the normal notification email could not be sent (${reason}).`,
+        confirmation
+          ? `The submitter was told their request was received and that their confirmation email may be delayed. No confirmation was sent to ${confirmation.to}. Please follow up with them.`
+          : "The submitter was told their request was received. Please follow up with them.",
+        ...(failureAlertNote ? ["", failureAlertNote] : []),
+        "",
+        ...rows.map(([label, value]) => `${label}: ${value}`),
+      ].join("\n"),
+      idempotencyKey: alertKey,
+    })
+    if (!alerted) console.error(`[${scope}] Alert for ${persisted?.label} also failed; the record is flagged as not notified`)
+    // Not attempted, so the record is flagged for follow-up instead of being left as pending.
+    const confirmationStatus: ConfirmationStatus = confirmation ? "failed" : "not_requested"
+    if (confirmation) await record({ stage: "confirmation", status: "failed", error: `confirmation: not attempted (${reason})` })
+    return NextResponse.json({ success: true, duplicate: false, saved: true, notified: false, confirmation: confirmationStatus })
+  }
+
   const record = async (event: DeliveryEvent) => {
     if (!onDelivery) return
     try {
@@ -143,6 +174,7 @@ export async function deliverLead({
   if (!apiKey || !domain) {
     console.error(`[${scope}] Email delivery is not configured: RESEND_API_KEY or RESEND_EMAIL_DOMAIN is missing`)
     await record({ stage: "admin", ok: false, error: "email_not_configured" })
+    if (persisted) return savedButNotNotified("email_not_configured", `${scope}-notify-failed/${persisted.label}`)
     return fail(500, "Delivery unavailable.")
   }
 
@@ -190,6 +222,7 @@ ${allRows
   } else if (error || !sent?.id) {
     console.error(`[${scope}] Resend delivery failed:`, error?.name, error?.message)
     await record({ stage: "admin", ok: false, error: error?.name ?? "no_message_id" })
+    if (persisted) return savedButNotNotified(error?.name ?? "no_message_id", `${scope}-notify-failed/${fingerprint}`)
     return fail(502, "Delivery failed.")
   } else {
     console.log(`[${scope}] Delivered${testMode ? " (test mode)" : ""}, Resend id:`, sent.id)
