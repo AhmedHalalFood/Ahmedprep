@@ -1,4 +1,5 @@
-import { EMAIL_PATTERN, clean, deliverLead, fail, hasPhoneDigits, readBody, screenSubmission } from "@/lib/lead-delivery"
+import { EMAIL_PATTERN, clean, fail, hasPhoneDigits, readBody, screenSubmission } from "@/lib/lead-delivery"
+import { saveAndDeliverLead } from "@/lib/lead-storage"
 import {
   CLASS_DAYS,
   CLASS_TIME,
@@ -81,38 +82,60 @@ export async function POST(request: Request) {
         `Tuition rate: ${formatUsd(TUITION_PER_CLASS)} per three-hour class remaining`,
       ]
 
-  return deliverLead({
-    scope: "shsat-intensive",
-    fromLocalPart: "consultations",
-    heading: `New Enrollment Inquiry: ${INTENSIVE_NAME}`,
-    subject: `${INTENSIVE_NAME} enrollment inquiry (${data.studentName})`,
-    replyTo: data.email,
-    rows: [
-      ["Inquiry", INTENSIVE_NAME],
-      ["Parent/Guardian Name", data.parentName],
-      ["Student Name", data.studentName],
-      ["Student Grade", data.studentGrade],
-      ["Phone", data.phone],
-      ["Email", data.email],
-      ["Current School", data.currentSchool],
-      ...tuitionRows,
-      ["Class Schedule", `${CLASS_DAYS}, ${CLASS_TIME} (beginning Oct. 22, 2026)`],
-      ["Format / Location", `${PROGRAM_FORMAT}, ${PROGRAM_LOCATION}`],
-      ["Preferred Payment Option", data.paymentOption],
-      ["Message", data.message || "Not provided"],
-    ],
-    confirmation: {
-      to: data.email,
-      subject: `We received your ${INTENSIVE_NAME} enrollment inquiry`,
-      heading: "Enrollment inquiry received",
-      paragraphs: [
-        `Hello ${data.parentName},`,
-        `Thank you for your enrollment inquiry for ${data.studentName} in the ${INTENSIVE_NAME}. This email confirms we received your inquiry. It is not a payment receipt or an enrollment confirmation. AhmedPrep will contact you to confirm enrollment and payment details.`,
-        detailLines.join("\n"),
-        `Schedule: ${CLASS_DAYS}, ${CLASS_TIME}. ${PROGRAM_FORMAT} at ${PROGRAM_LOCATION}.`,
-        `Preferred payment option: ${data.paymentOption}`,
-        "Questions? Simply reply to this email.",
+  // Stored with the submission so the dashboard shows exactly what the family was quoted.
+  const storedPayload: Record<string, string> = {
+    ...data,
+    firstClassDate: quote ? quote.date : "",
+    remainingClasses: quote ? String(quote.classes) : "",
+    instructionalHours: quote ? String(quote.hours) : "",
+    tuitionRateUsd: String(quote ? quote.rate : TUITION_PER_CLASS),
+    totalTuitionUsd: quote ? String(quote.tuition) : "",
+  }
+
+  return saveAndDeliverLead({
+    formType: "shsat_intensive",
+    submissionId: body.submissionId,
+    record: {
+      contactName: data.parentName,
+      contactEmail: data.email,
+      contactPhone: data.phone,
+      studentName: data.studentName,
+      program: INTENSIVE_NAME,
+      payload: storedPayload,
+    },
+    email: {
+      scope: "shsat-intensive",
+      fromLocalPart: "consultations",
+      heading: `New Enrollment Inquiry: ${INTENSIVE_NAME}`,
+      subject: `${INTENSIVE_NAME} enrollment inquiry (${data.studentName})`,
+      replyTo: data.email,
+      rows: [
+        ["Inquiry", INTENSIVE_NAME],
+        ["Parent/Guardian Name", data.parentName],
+        ["Student Name", data.studentName],
+        ["Student Grade", data.studentGrade],
+        ["Phone", data.phone],
+        ["Email", data.email],
+        ["Current School", data.currentSchool],
+        ...tuitionRows,
+        ["Class Schedule", `${CLASS_DAYS}, ${CLASS_TIME} (beginning Oct. 22, 2026)`],
+        ["Format / Location", `${PROGRAM_FORMAT}, ${PROGRAM_LOCATION}`],
+        ["Preferred Payment Option", data.paymentOption],
+        ["Message", data.message || "Not provided"],
       ],
+      confirmation: {
+        to: data.email,
+        subject: `We received your ${INTENSIVE_NAME} enrollment inquiry`,
+        heading: "Enrollment inquiry received",
+        paragraphs: [
+          `Hello ${data.parentName},`,
+          `Thank you for your enrollment inquiry for ${data.studentName} in the ${INTENSIVE_NAME}. This email confirms we received your inquiry. It is not a payment receipt or an enrollment confirmation. AhmedPrep will contact you to confirm enrollment and payment details.`,
+          detailLines.join("\n"),
+          `Schedule: ${CLASS_DAYS}, ${CLASS_TIME}. ${PROGRAM_FORMAT} at ${PROGRAM_LOCATION}.`,
+          `Preferred payment option: ${data.paymentOption}`,
+          "Questions? Simply reply to this email.",
+        ],
+      },
     },
   })
 }

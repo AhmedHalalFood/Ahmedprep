@@ -106,7 +106,7 @@ export function FreeClassRsvpForm({
           <p className="mt-3 text-pretty text-xl font-extrabold leading-snug text-navy">
   {serverResult?.confirmation === "sent"
   ? "Your free class seat is reserved. We\u2019ve emailed your confirmation and Zoom details to the address you provided."
-  : "Your free class seat is reserved. We couldn\u2019t send the confirmation email automatically, so our team will email your class details before the session."}
+  : "Your registration was received and your free class seat is reserved. Your confirmation email may be delayed, so our team will email your class details and Zoom link before the session."}
   </p>
   <p className="mt-3 text-sm leading-relaxed text-subtle">
   {serverResult?.confirmation === "sent"

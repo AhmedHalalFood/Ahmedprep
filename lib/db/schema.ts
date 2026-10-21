@@ -1,4 +1,26 @@
-import { bigserial, date, integer, pgTable, text, timestamp } from "drizzle-orm/pg-core"
+import { bigserial, date, integer, jsonb, pgTable, text, timestamp } from "drizzle-orm/pg-core"
+
+/** Mirrors db/migrations/0002_lead_submissions.sql. Written through lib/lead-storage.ts. */
+export const leadSubmissions = pgTable("lead_submissions", {
+  id: bigserial("id", { mode: "number" }).primaryKey(),
+  formType: text("form_type").notNull(),
+  idempotencyKey: text("idempotency_key").notNull().unique(),
+  contactName: text("contact_name").notNull(),
+  contactEmail: text("contact_email").notNull(),
+  contactPhone: text("contact_phone").notNull(),
+  studentName: text("student_name"),
+  program: text("program"),
+  payload: jsonb("payload").$type<Record<string, string>>().notNull(),
+  deliveryStatus: text("delivery_status").notNull().default("pending"),
+  adminNotifiedAt: timestamp("admin_notified_at", { withTimezone: true }),
+  deliveryAttempts: integer("delivery_attempts").notNull().default(0),
+  deliveryLease: text("delivery_lease"),
+  deliveryStartedAt: timestamp("delivery_started_at", { withTimezone: true }),
+  lastDeliveryError: text("last_delivery_error"),
+  duplicateAttempts: integer("duplicate_attempts").notNull().default(0),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+})
 
 export const sundayClassRegistrations = pgTable("sunday_class_registrations", {
   id: bigserial("id", { mode: "number" }).primaryKey(),
