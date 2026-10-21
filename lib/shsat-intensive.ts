@@ -110,6 +110,23 @@ export function startOptionLabel(iso: string) {
   return `${formatClassDate(iso)} · ${hours} hours · ${formatUsd(tuition)}`
 }
 
+export const SCHEDULE_STATEMENT =
+  "Monday\u2013Thursday, 5:00\u20138:00 PM Eastern, beginning October 22, 2026. In-person only at 20-65 47th Street, Astoria, NY 11105."
+
+export const TUITION_SCHEDULE_ID = "tuition-schedule"
+
+export type TuitionRow = { date: string; classes: number; hours: number; tuition: number }
+
+/** One row per class that can still be a first class. Held classes and non-class days never appear. */
+export function tuitionScheduleRows(remainingDates: string[]): TuitionRow[] {
+  return remainingDates.map((date) => ({ date, ...tuitionFrom(date) }))
+}
+
+/** Reverse of startOptionLabel, so the form can show totals for the selected option. */
+export function startDateFromOption(label: string) {
+  return CLASS_DATES.find((date) => startOptionLabel(date) === label) ?? null
+}
+
 export const START_DATE_UNSURE = "Not sure yet"
 
 export function todayInNewYork(now = new Date()) {

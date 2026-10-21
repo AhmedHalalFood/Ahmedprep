@@ -17,8 +17,24 @@ import {
   enrollmentSnapshot,
   formatClassDate,
   formatUsd,
+  remainingClassDates,
+  startDateFromOption,
+  startOptionLabel,
+  tuitionFrom,
   upcomingStartOptions,
 } from "@/lib/shsat-intensive"
+
+function SelectedStartSummary({ option }: { option: string }) {
+  const date = startDateFromOption(option)
+  if (!date) return null
+  const { classes, hours, tuition } = tuitionFrom(date)
+  return (
+    <p aria-live="polite" className="-mt-2 border-l-4 border-gold bg-cream px-4 py-3 text-sm font-semibold leading-relaxed text-navy">
+      {`Starting ${formatClassDate(date, "long")}: ${classes} remaining classes \u00b7 ${hours} instructional hours \u00b7 `}
+      <span className="font-extrabold">{`${formatUsd(tuition)} tuition`}</span>
+    </p>
+  )
+}
 
 function dialogSummary() {
   const snapshot = enrollmentSnapshot()
@@ -70,11 +86,16 @@ function validate(d: SeatData) {
   return errors
 }
 
-function ReserveSeatForm() {
+function ReserveSeatForm({ initialStartDate }: { initialStartDate?: string | null }) {
   const [submitted, setSubmitted] = useState<SeatData | null>(null)
+  const [startInitial] = useState<SeatData>(() =>
+    initialStartDate && remainingClassDates().includes(initialStartDate)
+      ? { ...initial, startDate: startOptionLabel(initialStartDate) }
+      : initial,
+  )
   const { data, errors, status, update, submit, formRef, honeypotRef } = useLeadForm({
     endpoint: "/api/shsat-intensive",
-    initial,
+    initial: startInitial,
     validate,
     onSuccess: (sent) => {
       setSubmitted(sent)
@@ -142,6 +163,7 @@ function ReserveSeatForm() {
         options={upcomingStartOptions()}
         {...field("startDate")}
       />
+      <SelectedStartSummary option={data.startDate} />
       <SelectField
         label="Preferred Payment Option"
         required
@@ -174,9 +196,11 @@ function ReserveSeatForm() {
 export default function ReserveSeatDialogContent({
   open,
   onOpenChange,
+  initialStartDate,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
+  initialStartDate?: string | null
 }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -188,7 +212,7 @@ export default function ReserveSeatDialogContent({
             {dialogSummary()}
           </DialogDescription>
         </DialogHeader>
-        <ReserveSeatForm />
+        <ReserveSeatForm initialStartDate={initialStartDate} />
       </DialogContent>
     </Dialog>
   )

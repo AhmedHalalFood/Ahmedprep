@@ -21,9 +21,11 @@ type TriggerProps = {
 export function ReserveSeatDialog({
   trigger,
   location = "shsat_intensive_reserve",
+  initialStartDate,
 }: {
   trigger?: ReactElement<TriggerProps>
   location?: string
+  initialStartDate?: string | null
 }) {
   const [mounted, setMounted] = useState(false)
   const [open, setOpen] = useState(false)
@@ -53,7 +55,7 @@ export function ReserveSeatDialog({
   return (
     <>
       {triggerWithHandlers}
-      {mounted && <ReserveSeatDialogContent open={open} onOpenChange={setOpen} />}
+      {mounted && <ReserveSeatDialogContent open={open} onOpenChange={setOpen} initialStartDate={initialStartDate} />}
     </>
   )
 }

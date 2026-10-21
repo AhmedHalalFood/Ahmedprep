@@ -21,7 +21,7 @@ import {
 } from "@/lib/shsat-intensive"
 import { IntensiveCtas } from "@/components/landing/intensive-ctas"
 import { EnrollingTodaySummary } from "@/components/landing/intensive-facts"
-import { TuitionCalculator } from "@/components/landing/tuition-calculator"
+import { TuitionScheduleSection } from "@/components/landing/tuition-schedule-section"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
 
@@ -185,7 +185,7 @@ export function ShsatIntensive({ variant = "home", snapshot }: { variant?: "home
               </p>
             </div>
 
-            {snapshot.remainingDates.length > 1 && <TuitionCalculator dates={snapshot.remainingDates} />}
+            <TuitionScheduleSection snapshot={snapshot} />
 
             <IntensiveCtas location="shsat_intensive_enroll" showEnroll={snapshot.nextClass !== null} />
           </div>
