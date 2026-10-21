@@ -11,6 +11,7 @@ import { SuccessStories } from "@/components/landing/success-stories"
 import { ThisSundayStrip } from "@/components/sunday-classes/this-sunday-strip"
 import { TeachingVideos } from "@/components/videos/teaching-videos"
 import { TrackedLink } from "@/components/tracked-link"
+import { TuitionScheduleButton } from "@/components/landing/tuition-schedule-dialog"
 import { EVENTS } from "@/lib/analytics"
 import { NOT_AFFILIATED_NOTE, SITE_URL } from "@/lib/business"
 import { INTENSIVE_PATH } from "@/lib/shsat-intensive"
@@ -135,14 +136,20 @@ export default function ShsatPage() {
               From Oct. 22: Mon–Thu, 5:00–8:00 PM Eastern, in person, through Nov. 12 · Prorated tuition: $50 per remaining 3-hour class
             </p>
           </div>
-          <TrackedLink
-            href={INTENSIVE_PATH}
-            event={EVENTS.shsatIntensiveClick}
-            eventProps={{ location: "shsat_page_intensive_promo" }}
-            className="button button-gold button-lg shrink-0 justify-center uppercase"
-          >
-                          SHSAT Final Intensive 2026 <ArrowUpRight size={16} aria-hidden="true" />
-          </TrackedLink>
+          <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
+            <TrackedLink
+              href={INTENSIVE_PATH}
+              event={EVENTS.shsatIntensiveClick}
+              eventProps={{ location: "shsat_page_intensive_promo" }}
+              className="button button-gold button-lg shrink-0 justify-center uppercase"
+            >
+              SHSAT Final Intensive 2026 <ArrowUpRight size={16} aria-hidden="true" />
+            </TrackedLink>
+            <TuitionScheduleButton
+              location="shsat_page_intensive_promo"
+              className="button button-lg shrink-0 justify-center border-2 border-gold uppercase text-gold hover:bg-gold hover:text-navy"
+            />
+          </div>
         </div>
       </aside>
 

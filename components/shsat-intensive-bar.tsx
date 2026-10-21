@@ -1,8 +1,6 @@
 import { ArrowRight } from "lucide-react"
 import { ReserveSeatDialog } from "@/components/landing/reserve-seat-dialog"
-import { TrackedLink } from "@/components/tracked-link"
-import { EVENTS } from "@/lib/analytics"
-import { INTENSIVE_ENROLL_ANCHOR, INTENSIVE_PATH } from "@/lib/shsat-intensive"
+import { TuitionScheduleButton } from "@/components/landing/tuition-schedule-dialog"
 
 export function ShsatIntensiveBar() {
   return (
@@ -53,14 +51,10 @@ export function ShsatIntensiveBar() {
                 </button>
               }
             />
-            <TrackedLink
-              href={`${INTENSIVE_PATH}#${INTENSIVE_ENROLL_ANCHOR}`}
-              event={EVENTS.shsatIntensiveClick}
-              eventProps={{ location: "shsat_intensive_bar" }}
-              className="inline-flex min-h-11 items-center text-sm font-bold text-navy underline underline-offset-4 hover:text-gold-deep"
-            >
-              Remaining dates &amp; prorated tuition
-            </TrackedLink>
+            <TuitionScheduleButton
+              location="shsat_intensive_bar"
+              className="button min-h-11 shrink-0 whitespace-nowrap border-2 border-navy uppercase text-navy hover:bg-navy hover:text-cream"
+            />
           </div>
         </div>
       </div>

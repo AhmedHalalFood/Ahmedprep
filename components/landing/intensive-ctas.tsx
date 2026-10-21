@@ -1,5 +1,6 @@
 import { Phone } from "lucide-react"
 import { ReserveSeatDialog } from "@/components/landing/reserve-seat-dialog"
+import { TuitionScheduleButton } from "@/components/landing/tuition-schedule-dialog"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
 import { BUSINESS } from "@/lib/business"
@@ -9,6 +10,12 @@ export function IntensiveCtas({ location, showEnroll = true }: { location: strin
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
       {showEnroll && <ReserveSeatDialog location={location} />}
+      {showEnroll && (
+        <TuitionScheduleButton
+          location={location}
+          className="button button-lg justify-center border-2 border-gold uppercase text-gold hover:bg-gold hover:text-navy"
+        />
+      )}
       <TrackedLink
         href={BUSINESS.phoneHref}
         event={EVENTS.phoneClick}
