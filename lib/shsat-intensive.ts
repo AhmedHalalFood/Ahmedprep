@@ -105,10 +105,6 @@ export function formatClassDate(iso: string, style: "short" | "long" = "short") 
   }).format(new Date(`${iso}T12:00:00Z`))
 }
 
-export function startOptionLabel(iso: string) {
-  const { hours, tuition } = tuitionFrom(iso)
-  return `${formatClassDate(iso)} · ${hours} hours · ${formatUsd(tuition)}`
-}
 
 export const SCHEDULE_STATEMENT =
   "Monday\u2013Thursday, 5:00\u20138:00 PM Eastern, beginning October 22, 2026. In-person only at 20-65 47th Street, Astoria, NY 11105."
@@ -122,27 +118,37 @@ export function tuitionScheduleRows(remainingDates: string[]): TuitionRow[] {
   return remainingDates.map((date) => ({ date, ...tuitionFrom(date) }))
 }
 
-/** Reverse of startOptionLabel, so the form can show totals for the selected option. */
-export function startDateFromOption(label: string) {
-  return CLASS_DATES.find((date) => startOptionLabel(date) === label) ?? null
-}
-
 export const START_DATE_UNSURE = "Not sure yet"
 
 export function todayInNewYork(now = new Date()) {
   return new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York" }).format(now)
 }
 
-/** Form choices: classes that have not started yet, plus the "not sure" option. */
+/** Dropdown label for a first-class choice: date and the time that class meets. No price, the summary shows it. */
+export function startDateLabel(iso: string) {
+  return `${formatClassDate(iso, "long")} \u00b7 ${classSession(iso).label}`
+}
+
+/** Form choices: classes that have not started yet (value is YYYY-MM-DD), plus the "not sure" option. */
 export function upcomingStartOptions(now = new Date()) {
-  return [...remainingClassDates(now).map(startOptionLabel), START_DATE_UNSURE]
+  return [
+    ...remainingClassDates(now).map((date) => ({ value: date, label: startDateLabel(date) })),
+    { value: START_DATE_UNSURE, label: START_DATE_UNSURE },
+  ]
 }
 
 /**
  * Server-side acceptance list. Keeps today's class valid for the whole day so a parent who opened the
  * form shortly before class time is not rejected on submit; staff confirm the actual first class.
  */
-export function acceptedStartOptions(now = new Date()) {
+export function acceptedStartDates(now = new Date()) {
   const today = todayInNewYork(now)
-  return [...CLASS_DATES.filter((date) => date >= today).map(startOptionLabel), START_DATE_UNSURE]
+  return CLASS_DATES.filter((date) => date >= today)
+}
+
+export type StartQuote = { date: string; classes: number; hours: number; rate: number; tuition: number }
+
+/** Tuition quote for a chosen first class, from the same calendar formula as the tuition schedule. */
+export function quoteFor(date: string): StartQuote {
+  return { date, rate: TUITION_PER_CLASS, ...tuitionFrom(date) }
 }

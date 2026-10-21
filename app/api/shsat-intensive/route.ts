@@ -6,7 +6,13 @@ import {
   PAYMENT_OPTIONS,
   PROGRAM_FORMAT,
   PROGRAM_LOCATION,
-  acceptedStartOptions,
+  START_DATE_UNSURE,
+  TUITION_PER_CLASS,
+  acceptedStartDates,
+  classSession,
+  formatClassDate,
+  formatUsd,
+  quoteFor,
 } from "@/lib/shsat-intensive"
 
 export async function POST(request: Request) {
@@ -35,11 +41,45 @@ export async function POST(request: Request) {
     !hasPhoneDigits(data.phone) ||
     !EMAIL_PATTERN.test(data.email) ||
     !data.currentSchool ||
-    !acceptedStartOptions().includes(data.startDate) ||
+    !data.startDate ||
     !(PAYMENT_OPTIONS as readonly string[]).includes(data.paymentOption)
   ) {
     return fail(400, "Please complete all required fields.")
   }
+
+  const unsure = data.startDate === START_DATE_UNSURE
+  if (!unsure && !acceptedStartDates().includes(data.startDate)) {
+    return fail(400, "That class date is no longer available. Please choose another first class.")
+  }
+
+  // Tuition is always recomputed from the class calendar here. Any price sent by the browser is ignored.
+  const quote = unsure ? null : quoteFor(data.startDate)
+  const firstClass = quote ? `${formatClassDate(quote.date, "long")}, 2026 (${classSession(quote.date).label})` : "Not sure yet"
+  const tuitionRows: [string, string][] = quote
+    ? [
+        ["First Class Your Child Will Attend", firstClass],
+        ["Remaining Classes (incl. first class)", String(quote.classes)],
+        ["Instructional Hours", String(quote.hours)],
+        ["Tuition Rate", `${formatUsd(quote.rate)} per three-hour class`],
+        ["Total Tuition", formatUsd(quote.tuition)],
+      ]
+    : [
+        ["First Class Your Child Will Attend", "Not sure yet (family needs help choosing)"],
+        ["Tuition Rate", `${formatUsd(TUITION_PER_CLASS)} per three-hour class`],
+      ]
+
+  const detailLines = quote
+    ? [
+        `First class: ${firstClass}`,
+        `Remaining classes (including the first class): ${quote.classes}`,
+        `Instructional hours: ${quote.hours}`,
+        `Tuition rate: ${formatUsd(quote.rate)} per three-hour class`,
+        `Total tuition: ${formatUsd(quote.tuition)}`,
+      ]
+    : [
+        "First class: Not sure yet. We will help you choose a start date.",
+        `Tuition rate: ${formatUsd(TUITION_PER_CLASS)} per three-hour class remaining`,
+      ]
 
   return deliverLead({
     scope: "shsat-intensive",
@@ -55,11 +95,24 @@ export async function POST(request: Request) {
       ["Phone", data.phone],
       ["Email", data.email],
       ["Current School", data.currentSchool],
-      ["First Class / Prorated Tuition", data.startDate],
+      ...tuitionRows,
       ["Class Schedule", `${CLASS_DAYS}, ${CLASS_TIME} (beginning Oct. 22, 2026)`],
       ["Format / Location", `${PROGRAM_FORMAT}, ${PROGRAM_LOCATION}`],
       ["Preferred Payment Option", data.paymentOption],
       ["Message", data.message || "Not provided"],
     ],
+    confirmation: {
+      to: data.email,
+      subject: `We received your ${INTENSIVE_NAME} enrollment inquiry`,
+      heading: "Enrollment inquiry received",
+      paragraphs: [
+        `Hello ${data.parentName},`,
+        `Thank you for your enrollment inquiry for ${data.studentName} in the ${INTENSIVE_NAME}. This email confirms we received your inquiry. It is not a payment receipt or an enrollment confirmation. AhmedPrep will contact you to confirm enrollment and payment details.`,
+        detailLines.join("\n"),
+        `Schedule: ${CLASS_DAYS}, ${CLASS_TIME}. ${PROGRAM_FORMAT} at ${PROGRAM_LOCATION}.`,
+        `Preferred payment option: ${data.paymentOption}`,
+        "Questions? Simply reply to this email.",
+      ],
+    },
   })
 }
