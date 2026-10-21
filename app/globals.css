@@ -201,6 +201,19 @@ h3 {
   background: #f0ca63;
 }
 
+.button-navy-outline {
+  border: 2px solid var(--navy);
+  background: #fff;
+  color: var(--navy);
+}
+
+.button-navy-outline:hover,
+.button-navy-outline:focus-visible {
+  background: var(--navy);
+  border-color: #fff;
+  color: #fff;
+}
+
 .mobile-menu-trigger {
   display: none;
 }

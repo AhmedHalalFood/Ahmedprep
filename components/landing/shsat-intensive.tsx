@@ -187,7 +187,11 @@ export function ShsatIntensive({ variant = "home", snapshot }: { variant?: "home
 
             <TuitionScheduleSection snapshot={snapshot} />
 
-            <IntensiveCtas location="shsat_intensive_enroll" showEnroll={snapshot.nextClass !== null} />
+            <IntensiveCtas
+              location="shsat_intensive_enroll"
+              showEnroll={snapshot.nextClass !== null}
+              showSchedule={false}
+            />
           </div>
           <aside
             aria-label="Key SHSAT dates"
