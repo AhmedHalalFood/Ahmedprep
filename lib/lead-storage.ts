@@ -15,6 +15,8 @@ type LeadRecord = {
   program?: string | null
   /** Every validated field, stored as submitted. */
   payload: Record<string, string>
+  /** SHSAT Intensive only, calculated by the server from the class calendar. */
+  intensive?: { firstClassDate: string; classes: number; hours: number; tuitionUsd: number } | null
 }
 
 type Claim = { kind: "deliver"; id: number } | { kind: "duplicate"; id: number }
@@ -50,8 +52,9 @@ async function claimLead(formType: LeadFormType, idempotencyKey: string, lease: 
   const { rows } = await pool.query<{ id: string; owns: boolean }>(
     `INSERT INTO lead_submissions
        (form_type, idempotency_key, contact_name, contact_email, contact_phone, student_name, program, payload,
-        delivery_lease, delivery_started_at, delivery_attempts)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8::jsonb, $9, now(), 1)
+        delivery_lease, delivery_started_at, delivery_attempts,
+        intensive_first_class_date, intensive_remaining_classes, intensive_remaining_hours, intensive_tuition_cents)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8::jsonb, $9, now(), 1, $10::date, $11, $12, $13)
      ON CONFLICT (idempotency_key) DO UPDATE SET
        duplicate_attempts = lead_submissions.duplicate_attempts
          + CASE WHEN lead_submissions.delivery_lease = EXCLUDED.delivery_lease THEN 0 ELSE 1 END,
@@ -83,6 +86,10 @@ async function claimLead(formType: LeadFormType, idempotencyKey: string, lease: 
       record.program || null,
       JSON.stringify(record.payload),
       lease,
+      record.intensive?.firstClassDate ?? null,
+      record.intensive?.classes ?? null,
+      record.intensive?.hours ?? null,
+      record.intensive ? Math.round(record.intensive.tuitionUsd * 100) : null,
     ],
   )
   const row = rows[0]

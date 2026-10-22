@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto"
 import { NextResponse } from "next/server"
 import { Resend } from "resend"
+import { pool } from "@/lib/db"
 
 // Shared email delivery for every lead form. Database storage for those forms lives in lib/lead-storage.ts.
 const RECIPIENT = "Tariq@ahmedprep.com"
@@ -10,7 +11,7 @@ const RATE_LIMIT = { windowMs: 10 * 60 * 1000, max: 5 }
 export const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 export const PROGRAMS = new Set(["SHSAT", "Digital SAT"])
 
-// Best-effort, per-instance limiter. Duplicate sends are also blocked by Resend idempotency keys.
+// Fallback limiter, used only if the shared one in Neon is unreachable. Duplicate sends are also blocked by Resend idempotency keys.
 const recentByKey = new Map<string, number[]>()
 
 export const clean = (value: unknown, max = 200) =>
@@ -32,8 +33,31 @@ export async function readBody(request: Request): Promise<Record<string, unknown
   }
 }
 
+function countInMemory(key: string) {
+  const now = Date.now()
+  const hits = (recentByKey.get(key) ?? []).filter((t) => now - t < RATE_LIMIT.windowMs)
+  hits.push(now)
+  recentByKey.set(key, hits)
+  return hits.length
+}
+
+/** Fixed-window counter shared by every server instance. The bucket stores a hash, never the raw IP address. */
+async function countShared(key: string) {
+  const { rows } = await pool.query<{ hits: number }>(
+    `INSERT INTO form_rate_limits (bucket, window_start, hits) VALUES ($1, now(), 1)
+     ON CONFLICT (bucket) DO UPDATE SET
+       hits = CASE WHEN form_rate_limits.window_start < now() - make_interval(secs => $2) THEN 1
+                   ELSE form_rate_limits.hits + 1 END,
+       window_start = CASE WHEN form_rate_limits.window_start < now() - make_interval(secs => $2) THEN now()
+                           ELSE form_rate_limits.window_start END
+     RETURNING hits`,
+    [createHash("sha256").update(key).digest("hex"), RATE_LIMIT.windowMs / 1000],
+  )
+  return rows[0].hits
+}
+
 /** Returns an error response if the submission looks like spam or exceeds the rate limit. */
-export function screenSubmission(request: Request, body: Record<string, unknown>, scope: string) {
+export async function screenSubmission(request: Request, body: Record<string, unknown>, scope: string) {
   const elapsed = Number(body.elapsedMs)
   if (clean(body.website) || !Number.isFinite(elapsed) || elapsed < MIN_FILL_MS) {
     console.warn(`[${scope}] Rejected likely spam submission`)
@@ -41,11 +65,15 @@ export function screenSubmission(request: Request, body: Record<string, unknown>
   }
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown"
   const key = `${scope}:${ip}`
-  const now = Date.now()
-  const hits = (recentByKey.get(key) ?? []).filter((t) => now - t < RATE_LIMIT.windowMs)
-  hits.push(now)
-  recentByKey.set(key, hits)
-  if (hits.length > RATE_LIMIT.max) {
+  let hits: number
+  try {
+    hits = await countShared(key)
+  } catch (error) {
+    // A database hiccup must never block a real parent, so fall back to this instance's own counter.
+    console.warn(`[${scope}] Shared rate limit unavailable, using in-memory limit:`, error instanceof Error ? error.message : error)
+    hits = countInMemory(key)
+  }
+  if (hits > RATE_LIMIT.max) {
     console.warn(`[${scope}] Rate limit exceeded`)
     return fail(429, "Too many requests.")
   }

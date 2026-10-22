@@ -6,7 +6,7 @@ export async function POST(request: Request) {
   if (!body) return fail(400, "Invalid request.")
 
   // Hidden honeypot field, implausibly fast submissions, and a per-IP rate limit.
-  const blocked = screenSubmission(request, body, "contact")
+  const blocked = await screenSubmission(request, body, "contact")
   if (blocked) return blocked
 
   const data = {

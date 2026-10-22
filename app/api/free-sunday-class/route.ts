@@ -28,7 +28,7 @@ export async function POST(request: Request) {
   const body = await readBody(request)
   if (!body) return fail(400, "Invalid request.")
 
-  const blocked = screenSubmission(request, body, SCOPE)
+  const blocked = await screenSubmission(request, body, SCOPE)
   if (blocked) return blocked
 
   const data = {

@@ -5,7 +5,7 @@ export async function POST(request: Request) {
   const body = await readBody(request)
   if (!body) return fail(400, "Invalid request.")
 
-  const blocked = screenSubmission(request, body, "referral")
+  const blocked = await screenSubmission(request, body, "referral")
   if (blocked) return blocked
 
   const data = {

@@ -20,7 +20,7 @@ export async function POST(request: Request) {
   const body = await readBody(request)
   if (!body) return fail(400, "Invalid request.")
 
-  const blocked = screenSubmission(request, body, "shsat-intensive")
+  const blocked = await screenSubmission(request, body, "shsat-intensive")
   if (blocked) return blocked
 
   const data = {
@@ -102,6 +102,9 @@ export async function POST(request: Request) {
       studentName: data.studentName,
       program: INTENSIVE_NAME,
       payload: storedPayload,
+      intensive: quote
+        ? { firstClassDate: quote.date, classes: quote.classes, hours: quote.hours, tuitionUsd: quote.tuition }
+        : null,
     },
     email: {
       scope: "shsat-intensive",
