@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto"
 
-const BASE = "http://localhost:3000"
+const BASE = process.env.BASE || "http://localhost:3000"
 const RUN = process.env.RUN_TAG || `t${Date.now().toString(36)}`
 const results = []
 let ipSeq = Math.floor(Math.random() * 200)
@@ -85,7 +85,7 @@ if (mode === "main") {
   }
 
   {
-    const ip = "203.0.113.77"
+    const ip = `203.0.113.${Math.floor(Math.random() * 250) + 1}`
     const statuses = []
     for (let i = 0; i < 6; i++) statuses.push((await post("/api/referral", { submissionId: randomUUID() }, ip)).status)
     check("rate limit: 6th request blocked", statuses.slice(0, 5).every((s) => s === 400) && statuses[5] === 429, statuses.join(","))
@@ -94,8 +94,8 @@ if (mode === "main") {
   {
     let done = false
     for (const classDate of ["2026-10-25", "2026-11-01", "2026-11-08"]) {
-      for (const classType of ["SHSAT", "Digital SAT"]) {
-        const body = { studentName: `TEST Sunday ${RUN}`, studentGrade: process.env.SUNDAY_GRADE || "7th Grade", parentName: "TEST Parent",
+      for (const classType of ["shsat", "digital_sat"]) {
+        const body = { studentName: `TEST Sunday ${RUN}`, studentGrade: process.env.SUNDAY_GRADE || "7th grade", parentName: "TEST Parent",
           parentEmail: email("sunday"), parentPhone: "212-555-0106", classType, classDate, currentSchool: "", consent: "yes" }
         const r = await post("/api/free-sunday-class", body)
         if (r.status === 400) continue
@@ -111,13 +111,22 @@ if (mode === "main") {
   }
 }
 
+if (mode === "ratelimit") {
+  const ip = `203.0.113.${Math.floor(Math.random() * 250) + 1}`
+  const statuses = []
+  for (let i = 0; i < 6; i++) statuses.push((await post("/api/referral", { submissionId: randomUUID() }, ip)).status)
+  check(`rate limit (${ip}): 6th request blocked`, statuses.slice(0, 5).every((s) => s === 400) && statuses[5] === 429, statuses.join(","))
+  const again = (await post("/api/referral", { submissionId: randomUUID() }, ip)).status
+  check("rate limit: block persists on next request", again === 429, String(again))
+}
+
 if (mode === "emailfail") {
   for (const key of ["diagnostic", "intensive"]) {
     const { path, body } = forms[key]()
     const r = await post(path, { ...body, studentName: `TEST EmailFail ${key} ${RUN}`, submissionId: randomUUID() })
     check(`${key} with email down: still saved, parent told success`, r.status === 200 && r.json?.success, `${r.status} ${JSON.stringify(r.json)}`)
   }
-  const body = { studentName: `TEST EmailFail Sunday ${RUN}`, studentGrade: process.env.SUNDAY_GRADE || "7th Grade", parentName: "TEST Parent",
+  const body = { studentName: `TEST EmailFail Sunday ${RUN}`, studentGrade: process.env.SUNDAY_GRADE || "7th grade", parentName: "TEST Parent",
     parentEmail: email("sundayfail"), parentPhone: "212-555-0107", classType: process.env.SUNDAY_TYPE, classDate: process.env.SUNDAY_DATE,
     currentSchool: "", consent: "yes" }
   const r = await post("/api/free-sunday-class", body)
