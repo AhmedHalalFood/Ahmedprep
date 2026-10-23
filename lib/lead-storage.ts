@@ -5,7 +5,8 @@ import { pool } from "@/lib/db"
 import { clean, deliverLead, fail, sendAdminAlert, type LeadEmail } from "@/lib/lead-delivery"
 import { describeDbError, withDbRetry } from "@/lib/sunday-registrations"
 
-export type LeadFormType = "diagnostic" | "contact" | "referral" | "shsat_intensive"
+// "enrollment_2027" requires db/migrations/0004_enrollment_2027_form_type.sql.
+export type LeadFormType = "diagnostic" | "contact" | "referral" | "shsat_intensive" | "enrollment_2027"
 
 type LeadRecord = {
   contactName: string

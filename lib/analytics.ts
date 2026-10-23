@@ -14,6 +14,7 @@ export const EVENTS = {
   textClick: "text_click",
   shsatIntensiveClick: "shsat_intensive_click",
   shsatIntensiveLead: "shsat_intensive_lead",
+  enrollment2027Lead: "enrollment_2027_lead",
   shsatCtaClick: "shsat_cta_click",
   digitalSatCtaClick: "digital_sat_cta_click",
   diagnosticCtaClick: "diagnostic_cta_click",

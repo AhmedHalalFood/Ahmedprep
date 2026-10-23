@@ -8,7 +8,7 @@ export const ENROLLMENT_2027 = {
   weeks: 12,
   hours: 72,
   maxClassSize: 10,
-  requestHref: "/contact#contact",
+  requestHref: "/enroll-2027",
   diagnosticHref: "#diagnostic",
   intensive2026Href: "/shsat-final-intensive-2026",
   tuition: {
@@ -52,3 +52,29 @@ export const ENROLLMENT_2027 = {
     { title: "Instructor accessibility", body: "Families can reach the instructor with questions between classes." },
   ],
 } as const
+
+export const ENROLLMENT_2027_NAME = "January 2027 Enrollment"
+export const SCHEDULE_UNSURE = "Not sure yet"
+export const GRADES_2027 = ["6th grade", "7th grade", "8th grade", "9th grade", "10th grade", "11th grade", "12th grade", "Other"]
+export const FOUNDING_INTEREST_OPTIONS = [
+  "Yes, please tell me if founding-family tuition is available",
+  "No, regular tuition is fine",
+  "Not sure yet",
+] as const
+
+export type Program2027 = (typeof ENROLLMENT_2027.programs)[number]
+
+export const programByName = (name: string): Program2027 | undefined =>
+  ENROLLMENT_2027.programs.find((p) => p.name === name)
+
+/** One readable line per group, e.g. "Weekday group: Monday & Wednesday, 5–8 PM ET". */
+export const scheduleLabel = (s: Program2027["schedules"][number]) => `${s.label}: ${s.days}, ${s.time}`
+
+/** The schedule choices valid for a program. The server accepts only these values. */
+export const scheduleOptionsFor = (programName: string): string[] => {
+  const program = programByName(programName)
+  return program ? [...program.schedules.map(scheduleLabel), SCHEDULE_UNSURE] : []
+}
+
+export const ENROLLMENT_DISCLAIMER =
+  "Submitting this form is an inquiry only. It does not guarantee a seat or reserve founding-family tuition, and no payment is taken. AhmedPrep will contact you to confirm availability, class dates, and tuition."
