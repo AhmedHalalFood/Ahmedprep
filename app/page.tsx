@@ -101,6 +101,20 @@ export default function Home() {
         </div>
       </section>
 
+      <aside aria-label="2026 SHSAT Final Intensive" className="border-b border-gold/40 bg-cream">
+        <p className="mx-auto w-[min(1180px,calc(100%-32px))] py-3 text-center text-sm leading-relaxed text-ink md:text-base">
+          Preparing for the November 2026 SHSAT?{" "}
+          <TrackedLink
+            href={ENROLLMENT_2027.intensive2026Href}
+            event={EVENTS.shsatIntensiveClick}
+            eventProps={{ location: "home_below_hero" }}
+            className="inline-flex min-h-11 items-center gap-1 font-bold text-navy underline underline-offset-4"
+          >
+            Explore our Final Intensive <ArrowUpRight size={15} aria-hidden="true" />
+          </TrackedLink>
+        </p>
+      </aside>
+
       <Enrollment2027 />
 
       <CampaignBanner />

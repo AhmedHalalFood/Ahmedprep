@@ -1,6 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
+import { HideOnHome } from "@/components/hide-on-home"
 import { MainNav } from "@/components/main-nav"
 import { MobileNav } from "@/components/mobile-nav"
 import { ShsatIntensiveBar } from "@/components/shsat-intensive-bar"
@@ -11,8 +12,10 @@ import { EVENTS } from "@/lib/analytics"
 export function Header() {
   return (
     <header className="site-header">
-      <ShsatIntensiveBar />
-      <TopContactBar />
+      <HideOnHome>
+        <ShsatIntensiveBar />
+        <TopContactBar />
+      </HideOnHome>
       <div className="topbar container">
         <Link href="/" className="brand" aria-label="AhmedPrep home">
           <Image
