@@ -1,8 +1,9 @@
 import type { Metadata } from "next"
 import Image from "next/image"
-import { ArrowUpRight, Check, MessageSquare, Phone } from "lucide-react"
+import { ArrowUpRight, MessageSquare, Phone } from "lucide-react"
 import { CampaignBanner } from "@/components/landing/campaign-banner"
 import { DiagnosticSection } from "@/components/landing/diagnostic-section"
+import { Enrollment2027 } from "@/components/landing/enrollment-2027"
 import { GoogleReviews } from "@/components/landing/google-reviews"
 import { ProgramsPreview } from "@/components/landing/programs-preview"
 import { ResultsPreview } from "@/components/landing/results-preview"
@@ -14,39 +15,19 @@ import { TrackedLink } from "@/components/tracked-link"
 import { WeeklyPracticeCard } from "@/components/weekly-practice/weekly-practice-card"
 import { EVENTS } from "@/lib/analytics"
 import { BUSINESS } from "@/lib/business"
+import { ENROLLMENT_2027 } from "@/lib/enrollment-2027"
 import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 
 export const metadata: Metadata = {
-  title: { absolute: "AhmedPrep | SHSAT & Digital SAT Prep in Astoria, Queens" },
+  title: { absolute: "AhmedPrep | January 2027 SHSAT & Digital SAT Enrollment in Astoria, Queens" },
   description:
-    "AhmedPrep provides SHSAT and Digital SAT preparation in Astoria, Queens and online, with personalized instruction, diagnostic testing, timed practice, and free weekly SHSAT classes.",
+    "January 2027 enrollment for SHSAT and Digital SAT Prep in Astoria, Queens: 12-week small-group programs with a maximum of 10 students, free diagnostics, and clear tuition.",
   alternates: { canonical: absoluteUrl("/") },
   openGraph: { ...baseOpenGraph, url: absoluteUrl("/") },
 }
 
 // Hourly so the "Next free Sunday class" card rolls over shortly after each Sunday class ends.
 export const revalidate = 3600
-
-const programs = [
-  {
-    title: "SHSAT Prep",
-    kicker: "Specialized High School admissions",
-    body: "Build confidence, master difficult concepts, and prepare strategically for NYC Specialized High School admissions.",
-    points: ["Diagnostic assessment", "Targeted Math and ELA practice", "Full-length testing and pacing"],
-    cta: "Free SHSAT Diagnostic",
-    href: "/shsat",
-    event: EVENTS.shsatCtaClick,
-  },
-  {
-    title: "Digital SAT Prep",
-    kicker: "Adaptive test preparation",
-    body: "Improve your score through targeted practice, adaptive testing strategies, and personalized feedback.",
-    points: ["Reading & Writing and Math", "Desmos and digital test strategy", "Practice testing and score analysis"],
-    cta: "Free SAT Diagnostic",
-    href: "/digital-sat",
-    event: EVENTS.digitalSatCtaClick,
-  },
-]
 
 export default function Home() {
   return (
@@ -63,33 +44,30 @@ export default function Home() {
           />
         </div>
         <div className="hero-panel">
-          <p className="eyebrow blue">Astoria, Queens · Serving students across NYC</p>
+          <p className="eyebrow blue">{ENROLLMENT_2027.eyebrow}</p>
           <h1 id="hero-title">
-            SHSAT & Digital SAT Prep <em>in Astoria, Queens</em>
+            Big Goals. Small Classes. <em>Real Progress.</em>
           </h1>
           <p className="hero-copy">
-            In-person tutoring in Astoria plus live online SHSAT preparation for students across New York City and Digital SAT
-            preparation for students across NYC and Long Island.
-          </p>
-          <p className="hero-copy">
-            Personalized preparation that helps NYC students build confidence, strengthen skills, and prepare for competitive exams.
+            Expert-led SHSAT and Digital SAT preparation in Astoria, Queens. Personalized instruction, measurable progress, and
+            affordable tuition.
           </p>
           <div className="hero-actions">
             <TrackedLink
-              href="#diagnostic"
-              event={EVENTS.diagnosticCtaClick}
-              eventProps={{ location: "home_hero" }}
+              href={ENROLLMENT_2027.requestHref}
+              event={EVENTS.programCtaClick}
+              eventProps={{ location: "home_hero", cta: "request_enrollment_info" }}
               className="button button-gold button-lg"
             >
-              Book a Free Diagnostic <ArrowUpRight size={17} aria-hidden="true" />
+              Request Enrollment Information <ArrowUpRight size={17} aria-hidden="true" />
             </TrackedLink>
             <TrackedLink
-              href="/shsat"
-              event={EVENTS.shsatCtaClick}
+              href={ENROLLMENT_2027.diagnosticHref}
+              event={EVENTS.diagnosticCtaClick}
               eventProps={{ location: "home_hero_secondary" }}
               className="button button-outline button-lg"
             >
-              Explore SHSAT Prep
+              Book a Free Diagnostic
             </TrackedLink>
           </div>
           <div className="hero-contact">
@@ -123,47 +101,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="programs" className="section programs-section" aria-labelledby="programs-title">
-        <div className="container">
-          <div className="section-heading">
-            <div>
-              <p className="eyebrow">Choose a program</p>
-              <h2 id="programs-title">
-                Two tests.
-                <br />
-                <span>Focused preparation.</span>
-              </h2>
-            </div>
-            <p>Every program starts with a free diagnostic, so students know exactly what to practice and why it matters.</p>
-          </div>
-          <div className="program-grid">
-            {programs.map((program) => (
-              <TrackedLink
-                key={program.title}
-                href={program.href}
-                event={program.event}
-                eventProps={{ location: "home_program_card" }}
-                className="program-card"
-              >
-                <p className="eyebrow blue">{program.kicker}</p>
-                <h3>{program.title}</h3>
-                <p className="program-body">{program.body}</p>
-                <ul>
-                  {program.points.map((point) => (
-                    <li key={point}>
-                      <Check size={15} aria-hidden="true" />
-                      {point}
-                    </li>
-                  ))}
-                </ul>
-                <span className="button button-gold button-lg program-cta">
-                  {program.cta} <ArrowUpRight size={16} aria-hidden="true" />
-                </span>
-              </TrackedLink>
-            ))}
-          </div>
-        </div>
-      </section>
+      <Enrollment2027 />
 
       <CampaignBanner />
 
