@@ -1,7 +1,7 @@
 import { ArrowUpRight, Check } from "lucide-react"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
-import { ENROLLMENT_2027 as E } from "@/lib/enrollment-2027"
+import { ENROLLMENT_2027 as E, startLabel } from "@/lib/enrollment-2027"
 
 export function Enrollment2027() {
   return (
@@ -46,11 +46,14 @@ export function Enrollment2027() {
                 <p className="text-xs font-bold uppercase tracking-widest text-navy">Choose a schedule</p>
                 <ul className="flex flex-col border-t border-line">
                   {program.schedules.map((s) => (
-                    <li key={s.label} className="flex flex-col gap-0.5 border-b border-line py-3 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
-                      <span className="text-sm font-semibold text-subtle">{s.label}</span>
-                      <span className="font-bold text-navy">
-                        {s.days} <span className="font-semibold text-subtle">· {s.time}</span>
-                      </span>
+                    <li key={s.label} className="flex flex-col gap-1 border-b border-line py-3">
+                      <div className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
+                        <span className="text-sm font-semibold text-subtle">{s.label}</span>
+                        <span className="font-bold text-navy">
+                          {s.days} <span className="font-semibold text-subtle">· {s.time}</span>
+                        </span>
+                      </div>
+                      <span className="text-sm font-semibold text-brand">{startLabel(s)}</span>
                     </li>
                   ))}
                 </ul>
@@ -89,7 +92,9 @@ export function Enrollment2027() {
                 </div>
               ))}
             </div>
-            <p className="text-sm leading-relaxed text-white/75">{E.tuition.founding.note}</p>
+            <p className="text-sm leading-relaxed text-white/75">
+              <span className="font-bold text-gold">Founding families save {E.tuition.founding.savings}.</span> {E.tuition.founding.note}
+            </p>
           </div>
 
           <div className="flex flex-col gap-4 border border-line bg-white p-6 md:p-8" aria-labelledby="included-2027-title">

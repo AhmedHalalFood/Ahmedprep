@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { Enrollment2027Form } from "@/components/enrollment-2027-form"
 import { Breadcrumbs } from "@/components/landing/primitives"
-import { ENROLLMENT_2027, scheduleLabel } from "@/lib/enrollment-2027"
+import { ENROLLMENT_2027, scheduleLabel, startLabel } from "@/lib/enrollment-2027"
 import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 
 const PATH = "/enroll-2027"
@@ -34,9 +34,12 @@ export default function Enroll2027Page() {
               {E.programs.map((p) => (
                 <div key={p.id} className="flex flex-col gap-1">
                   <h3 className="font-bold">{p.name}</h3>
-                  <ul className="flex flex-col gap-1 text-sm leading-relaxed text-subtle">
+                  <ul className="flex flex-col gap-2 text-sm leading-relaxed text-subtle">
                     {p.schedules.map((s) => (
-                      <li key={s.label}>{scheduleLabel(s)}</li>
+                      <li key={s.label} className="flex flex-col">
+                        <span>{scheduleLabel(s)}</span>
+                        <span className="font-semibold text-brand">{startLabel(s)}</span>
+                      </li>
                     ))}
                   </ul>
                 </div>
@@ -51,7 +54,7 @@ export default function Enroll2027Page() {
                 <span className="font-bold">{E.tuition.founding.label}:</span>{" "}
                 {`${E.tuition.founding.total} ${E.tuition.founding.installments}`}
               </p>
-              <p className="text-subtle">Founding-family tuition has limited availability.</p>
+              <p className="text-subtle">{`Founding families save ${E.tuition.founding.savings}. Founding-family tuition has limited availability.`}</p>
             </div>
           </div>
           <div className="flex-1 border border-line bg-white p-5 sm:p-8">
