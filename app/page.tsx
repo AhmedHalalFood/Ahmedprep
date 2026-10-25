@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Image from "next/image"
-import { ArrowUpRight, MessageSquare, Phone } from "lucide-react"
+import { ArrowUpRight, Sparkle } from "lucide-react"
 import { CampaignBanner } from "@/components/landing/campaign-banner"
 import { DiagnosticSection } from "@/components/landing/diagnostic-section"
 import { Enrollment2027 } from "@/components/landing/enrollment-2027"
@@ -14,7 +14,6 @@ import { ThisSundayStrip } from "@/components/sunday-classes/this-sunday-strip"
 import { TrackedLink } from "@/components/tracked-link"
 import { WeeklyPracticeCard } from "@/components/weekly-practice/weekly-practice-card"
 import { EVENTS } from "@/lib/analytics"
-import { BUSINESS } from "@/lib/business"
 import { ENROLLMENT_2027 } from "@/lib/enrollment-2027"
 import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 
@@ -44,60 +43,32 @@ export default function Home() {
           />
         </div>
         <div className="hero-panel">
-          <p className="eyebrow blue">{ENROLLMENT_2027.eyebrow}</p>
+          <p className="hero-announce">
+            <Sparkle className="hero-sparkle" size={13} fill="currentColor" strokeWidth={0} aria-hidden="true" />
+            New SHSAT &amp; Digital SAT Cohorts
+            <Sparkle className="hero-sparkle" size={13} fill="currentColor" strokeWidth={0} aria-hidden="true" />
+          </p>
           <h1 id="hero-title">
-            Big Goals. Small Classes. <em>Real Progress.</em>
+            <span className="hero-launch-date">January 2027</span>
+            <span className="hero-slogan">
+              <span className="hero-slogan-lead">Big Goals. Small Classes.</span>
+              <span className="hero-slogan-accent">Real Progress.</span>
+            </span>
           </h1>
-          <p className="hero-copy">
-            Expert-led SHSAT and Digital SAT preparation in Astoria, Queens. Personalized instruction, measurable progress, and
-            affordable tuition.
+          <p className="hero-support">
+            Personalized instruction <span aria-hidden="true">•</span> 12-week programs{" "}
+            <span aria-hidden="true">•</span> 72 instructional hours
           </p>
           <div className="hero-actions">
             <TrackedLink
               href={ENROLLMENT_2027.requestHref}
               event={EVENTS.programCtaClick}
               eventProps={{ location: "home_hero", cta: "request_enrollment_info" }}
-              className="button button-gold button-lg"
+              className="button button-lg hero-cta"
             >
-              Request Enrollment Information <ArrowUpRight size={17} aria-hidden="true" />
-            </TrackedLink>
-            <TrackedLink
-              href={ENROLLMENT_2027.diagnosticHref}
-              event={EVENTS.diagnosticCtaClick}
-              eventProps={{ location: "home_hero_secondary" }}
-              className="button button-outline button-lg"
-            >
-              Book a Free Diagnostic
+              Request Enrollment Information <ArrowUpRight size={18} aria-hidden="true" />
             </TrackedLink>
           </div>
-          <div className="hero-contact">
-            <span>Questions?</span>
-            <TrackedLink
-              href={BUSINESS.phoneHref}
-              event={EVENTS.phoneClick}
-              eventProps={{ location: "home_hero" }}
-              aria-label={`Call AhmedPrep at ${BUSINESS.phoneDisplay}`}
-            >
-              <Phone size={14} aria-hidden="true" />
-              Call {BUSINESS.phoneDisplay}
-            </TrackedLink>
-            <TrackedLink
-              href={BUSINESS.smsHref}
-              event={EVENTS.textClick}
-              eventProps={{ location: "home_hero" }}
-              aria-label={`Text AhmedPrep at ${BUSINESS.phoneDisplay}`}
-            >
-              <MessageSquare size={14} aria-hidden="true" />
-              Text us
-            </TrackedLink>
-          </div>
-          <p className="hero-trust">
-            SHSAT Preparation <span aria-hidden="true">•</span> Digital SAT Preparation
-          </p>
-          <p className="hero-trust">
-            Astoria <span aria-hidden="true">•</span> Queens <span aria-hidden="true">•</span> NYC-Wide Online{" "}
-            <span aria-hidden="true">•</span> Digital SAT Across NYC &amp; Long Island
-          </p>
         </div>
       </section>
 
