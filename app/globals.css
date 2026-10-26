@@ -402,6 +402,7 @@ h3 {
   background: var(--hero-cta-bg);
   color: var(--hero-cta-text);
   font-weight: 800;
+  text-transform: uppercase;
   box-shadow: 0 6px 18px rgba(16, 58, 98, 0.16);
   transition: background-color 0.2s, box-shadow 0.2s, transform 0.2s;
 }

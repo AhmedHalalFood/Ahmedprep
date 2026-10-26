@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Image from "next/image"
-import { ArrowUpRight, Sparkle } from "lucide-react"
+import { ArrowRight, ArrowUpRight, Sparkle } from "lucide-react"
 import { CampaignBanner } from "@/components/landing/campaign-banner"
 import { DiagnosticSection } from "@/components/landing/diagnostic-section"
 import { Enrollment2027 } from "@/components/landing/enrollment-2027"
@@ -66,7 +66,7 @@ export default function Home() {
               eventProps={{ location: "home_hero", cta: "request_enrollment_info" }}
               className="button button-lg hero-cta"
             >
-              Request Enrollment Information <ArrowUpRight size={18} aria-hidden="true" />
+              Request Enrollment Information <ArrowRight size={18} aria-hidden="true" />
             </TrackedLink>
           </div>
         </div>
