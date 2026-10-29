@@ -82,18 +82,18 @@ export function Enrollment2027() {
               </p>
             </div>
             <div className="flex flex-col border-t border-white/20">
-              {[E.tuition.regular, E.tuition.founding].map((t) => (
-                <div key={t.label} className="flex flex-col gap-1 border-b border-white/20 py-4 sm:flex-row sm:items-baseline sm:justify-between">
+              {[E.tuition.founding, E.tuition.early, E.tuition.regular].map((t) => (
+                <div key={t.label} className="flex flex-col gap-1 border-b border-white/20 py-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
                   <span className="font-semibold text-white/80">{t.label}</span>
-                  <span className="flex flex-col sm:items-end">
+                  <span className="flex flex-col sm:items-end sm:text-right">
                     <span className="text-2xl font-extrabold text-gold">{t.total}</span>
-                    <span className="text-sm text-white/75">{t.installments}</span>
+                    <span className="text-sm text-white/75">{t.summary}</span>
                   </span>
                 </div>
               ))}
             </div>
             <p className="text-sm leading-relaxed text-white/75">
-              <span className="font-bold text-gold">Founding families save {E.tuition.founding.savings}.</span> {E.tuition.founding.note}
+              <span className="font-bold text-gold">{E.tuition.rules}</span>
             </p>
           </div>
 

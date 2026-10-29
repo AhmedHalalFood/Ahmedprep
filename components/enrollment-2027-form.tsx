@@ -223,7 +223,7 @@ export function Enrollment2027Form() {
         required
         placeholder="Select an option"
         options={[...FOUNDING_INTEREST_OPTIONS]}
-        hint={`${ENROLLMENT_2027.tuition.founding.total} (${ENROLLMENT_2027.tuition.founding.installments}). Limited availability.`}
+        hint={`${ENROLLMENT_2027.tuition.founding.total}. ${ENROLLMENT_2027.tuition.founding.summary}`}
         {...field("foundingInterest")}
       />
 

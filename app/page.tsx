@@ -20,7 +20,7 @@ import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 export const metadata: Metadata = {
   title: { absolute: "AhmedPrep | January 2027 SHSAT & Digital SAT Enrollment in Astoria, Queens" },
   description:
-    "January 2027 enrollment for SHSAT and Digital SAT Prep in Astoria, Queens: 12-week small-group programs with a maximum of 10 students, free diagnostics, and clear tuition.",
+    "January 2027 enrollment for SHSAT and Digital SAT Prep in Astoria, Queens: 12-week small-group programs with a maximum of 12 students, free diagnostics, and clear tuition.",
   alternates: { canonical: absoluteUrl("/") },
   openGraph: { ...baseOpenGraph, url: absoluteUrl("/") },
 }

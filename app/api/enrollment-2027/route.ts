@@ -43,8 +43,8 @@ export async function POST(request: Request) {
     return fail(400, "Please complete all required fields.")
   }
 
-  const { regular, founding } = ENROLLMENT_2027.tuition
-  const tuitionLine = `${regular.label}: ${regular.total} (${regular.installments}). ${founding.label}: ${founding.total} (${founding.installments}), limited availability.`
+  const { founding, early, regular, rules } = ENROLLMENT_2027.tuition
+  const tuitionLine = [founding, early, regular].map((t) => `${t.label} ${t.total}: ${t.summary}`).join(" ") + ` ${rules}`
 
   return saveAndDeliverLead({
     formType: "enrollment_2027",
