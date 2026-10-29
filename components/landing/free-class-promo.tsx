@@ -25,7 +25,7 @@ export function FreeClassPromo() {
             <TrackedLink
               href={FREE_CLASS.path}
               event={EVENTS.sundayClassCtaClick}
-              eventProps={{ location: "home_promo", class_date: day.isoDate }}
+              eventProps={{ location: "home_promo", class_date: day?.isoDate ?? "pending" }}
               className="button button-outline"
             >
               See the Class Schedule <ArrowUpRight size={15} aria-hidden="true" />
@@ -33,6 +33,7 @@ export function FreeClassPromo() {
           </div>
         </div>
 
+        {day && (
         <div className="flex flex-col gap-4 border border-line border-t-4 border-t-gold bg-white p-5 sm:p-6">
           <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-gold-deep">Next free class · {day.shortLabel}</p>
           {day.sessions.map((s) => (
@@ -53,6 +54,7 @@ export function FreeClassPromo() {
             </div>
           ))}
         </div>
+        )}
       </div>
     </section>
   )

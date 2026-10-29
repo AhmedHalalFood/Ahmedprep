@@ -368,6 +368,7 @@ export default function ShsatPracticeTestsPage() {
         </div>
       </section>
 
+      {session && (
       <section aria-labelledby="sunday-title" className="bg-warm py-14">
         <div className="container">
           <div className="flex flex-col gap-4 border border-line bg-white p-6 md:flex-row md:items-center md:justify-between md:p-8">
@@ -390,6 +391,7 @@ export default function ShsatPracticeTestsPage() {
           </div>
         </div>
       </section>
+      )}
     </>
   )
 }

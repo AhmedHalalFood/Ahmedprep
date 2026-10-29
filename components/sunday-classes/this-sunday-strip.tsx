@@ -7,6 +7,7 @@ import { getNextClassDay, isTodayInNewYork, rsvpDayHref } from "@/lib/free-class
 /** Compact "next free class" banner. Pages using it should revalidate hourly so it rolls over after each class. */
 export function ThisSundayStrip({ location }: { location: string }) {
   const day = getNextClassDay()
+  if (!day) return null
   const first = day.sessions[0]
   const single = day.sessions.length === 1
   const headingId = `this-sunday-${location}`

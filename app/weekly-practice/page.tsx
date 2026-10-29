@@ -110,16 +110,41 @@ function Meta({ q, showDate = true }: { q: WeeklyPracticeQuestion; showDate?: bo
 
 function nextClassFor(q: WeeklyPracticeQuestion) {
   const type = PROGRAMS[q.testType].classType
-  const session = getUpcomingClasses(6).find((c) => c.type === type) ?? getNextClass()
-  const isThisSunday = session.isoDate === getNextClass().isoDate
+  const next = getNextClass()
+  const session = getUpcomingClasses(6).find((c) => c.type === type) ?? next
+  if (!session) return undefined
+  const isThisSunday = session.isoDate === next?.isoDate
   return { session, when: isThisSunday ? `this Sunday, ${session.compactLabel},` : `on Sunday, ${session.compactLabel},` }
+}
+
+function SundayClassCta({ q, tracking }: { q: WeeklyPracticeQuestion; tracking: { test_type: string; week: string } }) {
+  const next = nextClassFor(q)
+  if (!next) return null
+  const { session, when } = next
+  return (
+    <div className="flex flex-col gap-4 border border-line bg-white p-6 md:flex-row md:items-center md:justify-between md:p-8">
+      <div className="flex flex-col gap-2">
+        <h2 className="text-pretty text-xl font-extrabold leading-snug text-navy">Want More {q.testType} Practice?</h2>
+        <p className="leading-relaxed text-ink">
+          Join AhmedPrep&apos;s {CLASS_TYPES[session.type].title} {when} from {session.timeLabel}. Practice {q.testType}-style
+          questions, learn test-taking strategies and review common reading traps live.
+        </p>
+      </div>
+      <TrackedLink
+        href={rsvpHref(session)}
+        event={EVENTS.weeklyPracticeSundayCta}
+        eventProps={{ location: "weekly_practice", class_type: session.type, class_date: session.isoDate, ...tracking }}
+        className="button button-gold button-lg shrink-0 justify-center"
+      >
+        Reserve My Free Seat <ArrowUpRight size={17} aria-hidden="true" />
+      </TrackedLink>
+    </div>
+  )
 }
 
 function CurrentPractice({ q }: { q: WeeklyPracticeQuestion }) {
   const tracking = { test_type: q.testType, week: q.publishedDate }
   const program = PROGRAMS[q.testType]
-  const { session, when } = nextClassFor(q)
-  const classTitle = CLASS_TYPES[session.type].title
 
   return (
     <section aria-labelledby="current-practice-title" className="bg-warm py-14">
@@ -172,23 +197,7 @@ function CurrentPractice({ q }: { q: WeeklyPracticeQuestion }) {
           </article>
         )}
 
-        <div className="flex flex-col gap-4 border border-line bg-white p-6 md:flex-row md:items-center md:justify-between md:p-8">
-          <div className="flex flex-col gap-2">
-            <h2 className="text-pretty text-xl font-extrabold leading-snug text-navy">Want More {q.testType} Practice?</h2>
-            <p className="leading-relaxed text-ink">
-              Join AhmedPrep&apos;s {classTitle} {when} from {session.timeLabel}. Practice {q.testType}-style questions, learn
-              test-taking strategies and review common reading traps live.
-            </p>
-          </div>
-          <TrackedLink
-            href={rsvpHref(session)}
-            event={EVENTS.weeklyPracticeSundayCta}
-            eventProps={{ location: "weekly_practice", class_type: session.type, class_date: session.isoDate, ...tracking }}
-            className="button button-gold button-lg shrink-0 justify-center"
-          >
-            Reserve My Free Seat <ArrowUpRight size={17} aria-hidden="true" />
-          </TrackedLink>
-        </div>
+        <SundayClassCta q={q} tracking={tracking} />
 
         <div className="flex flex-col gap-4 border border-line bg-white p-6 md:flex-row md:items-center md:justify-between md:p-8">
           <div className="flex flex-col gap-2">

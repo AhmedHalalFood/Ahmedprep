@@ -5,7 +5,7 @@ import { FreeClassRsvpForm } from "@/components/free-class-rsvp-form"
 import { Faq, type FaqItem } from "@/components/landing/faq"
 import { Breadcrumbs, JsonLd } from "@/components/landing/primitives"
 import { SundayClassViewTracker } from "@/components/sunday-classes/sunday-class-view-tracker"
-import { ThisSundayCard } from "@/components/sunday-classes/this-sunday-card"
+import { NextDatePendingCard, ThisSundayCard } from "@/components/sunday-classes/this-sunday-card"
 import { UpcomingClasses } from "@/components/sunday-classes/upcoming-classes"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
@@ -29,7 +29,7 @@ const title = "Free SHSAT & Digital SAT Classes Online | AhmedPrep"
 export function generateMetadata(): Metadata {
   const description =
     scheduleSummary().schedule === "weekly_2026"
-      ? "Free live online Sunday SHSAT and Digital SAT classes from AhmedPrep, Sundays 4–5 PM ET. From January 10, 2027: every other Sunday, SHSAT 6:00–6:45 PM ET and Digital SAT 7:00–7:45 PM ET. RSVP required."
+      ? "Free live online Sunday SHSAT and Digital SAT classes from AhmedPrep, Sundays 4–5 PM ET. Beginning in January 2027: every other Sunday, SHSAT 6:00–6:45 PM ET and Digital SAT 7:00–7:45 PM ET. RSVP required."
       : "Free live online SHSAT and Digital SAT classes from AhmedPrep, every other Sunday: SHSAT 6:00–6:45 PM ET, Digital SAT 7:00–7:45 PM ET. RSVP required."
   return {
     title: { absolute: title },
@@ -52,22 +52,22 @@ const expectations = [
 
 const SCHEDULE_FAQ_2026: FaqItem = {
   q: "How does the schedule work?",
-  a: "Through December 27, 2026, one class meets every Sunday from 4:00–5:00 PM ET. The 1st and 3rd Sundays are SHSAT, the 2nd and 4th are Digital SAT, and a 5th Sunday is a special workshop. Starting January 10, 2027, classes meet every other Sunday: SHSAT 6:00–6:45 PM ET, then Digital SAT 7:00–7:45 PM ET.",
+  a: "Through December 27, 2026, one class meets every Sunday from 4:00–5:00 PM ET. The 1st and 3rd Sundays are SHSAT, the 2nd and 4th are Digital SAT, and a 5th Sunday is a special workshop. Beginning in January 2027, classes meet every other Sunday: SHSAT 6:00–6:45 PM ET, then Digital SAT 7:00–7:45 PM ET. The first January date will be announced soon.",
 }
 const SCHEDULE_FAQ_2027: FaqItem = {
   q: "How does the schedule work?",
-  a: "Classes meet every other Sunday, starting January 10, 2027. Each class Sunday has two sessions: SHSAT from 6:00–6:45 PM ET, then Digital SAT from 7:00–7:45 PM ET.",
+  a: "Beginning in January 2027, classes meet every other Sunday. Each class Sunday has two sessions: SHSAT from 6:00–6:45 PM ET, then Digital SAT from 7:00–7:45 PM ET. Seats are subject to registration and available capacity.",
 }
 
 const faqs = (scheduleFaq: FaqItem): FaqItem[] => [
   {
     q: "Are the Sunday classes really free?",
-    a: "Yes. Every Sunday class is free. RSVP is required so we can send the live class access information, and registering does not commit you to any paid program.",
+    a: "Yes. Every Sunday class is free, subject to registration and available capacity. RSVP is required so we can send the live class access information, and registering does not commit you to any paid program.",
   },
   scheduleFaq,
   {
     q: "Can my student attend both classes on the same Sunday?",
-    a: "Yes. On the 2027 schedule, RSVP separately for the SHSAT class and the Digital SAT class. Each session counts on its own toward the two free sessions per student.",
+    a: "Yes. On the 2027 schedule, RSVP separately for the SHSAT class and the Digital SAT class.",
   },
   {
     q: "How do we get the class link?",
@@ -95,8 +95,8 @@ export default async function FreeSundayClassesPage({ searchParams }: { searchPa
   const params = await searchParams
   const days = getUpcomingSundays(4)
   const classes = days.flatMap((d) => d.sessions)
-  const nextDay = days[0]
-  const firstSession = nextDay.sessions[0]
+  const nextDay = days[0] as (typeof days)[number] | undefined
+  const firstSession = nextDay?.sessions[0]
   const summary = scheduleSummary()
   const pageUrl = absoluteUrl(FREE_CLASS.path)
 
@@ -111,7 +111,7 @@ export default async function FreeSundayClassesPage({ searchParams }: { searchPa
   return (
     <>
       <Breadcrumbs items={[{ label: "Free Sunday Classes", href: FREE_CLASS.path }]} />
-      <SundayClassViewTracker classType={firstSession.type} classDate={nextDay.isoDate} />
+      {nextDay && firstSession && <SundayClassViewTracker classType={firstSession.type} classDate={nextDay.isoDate} />}
 
       <section aria-labelledby="free-class-title" className="bg-academic py-10 text-white md:py-16">
         <div className="container grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-x-16 lg:gap-y-6">
@@ -126,7 +126,7 @@ export default async function FreeSundayClassesPage({ searchParams }: { searchPa
           </div>
 
           <div className="lg:row-span-2 lg:self-center">
-            <ThisSundayCard day={nextDay} />
+            {nextDay ? <ThisSundayCard day={nextDay} /> : <NextDatePendingCard />}
           </div>
 
           <div className="flex flex-col gap-6 lg:self-start">
@@ -141,18 +141,20 @@ export default async function FreeSundayClassesPage({ searchParams }: { searchPa
               </p>
             )}
             <div className="flex flex-wrap items-center gap-4">
-              <TrackedLink
-                href={rsvpDayHref(nextDay)}
-                event={EVENTS.sundayClassCtaClick}
-                eventProps={{
-                  location: "free_class_hero",
-                  class_type: nextDay.sessions.length === 1 ? firstSession.type : "both",
-                  class_date: nextDay.isoDate,
-                }}
-                className="button button-gold button-lg"
-              >
-                Reserve My Free Seat <ArrowUpRight size={17} aria-hidden="true" />
-              </TrackedLink>
+              {nextDay && firstSession && (
+                <TrackedLink
+                  href={rsvpDayHref(nextDay)}
+                  event={EVENTS.sundayClassCtaClick}
+                  eventProps={{
+                    location: "free_class_hero",
+                    class_type: nextDay.sessions.length === 1 ? firstSession.type : "both",
+                    class_date: nextDay.isoDate,
+                  }}
+                  className="button button-gold button-lg"
+                >
+                  Reserve My Free Seat <ArrowUpRight size={17} aria-hidden="true" />
+                </TrackedLink>
+              )}
               <CallTextLinks location="free_class_hero" tone="dark" />
             </div>
             <p className="text-sm font-semibold text-white/70">
@@ -163,7 +165,7 @@ export default async function FreeSundayClassesPage({ searchParams }: { searchPa
         </div>
       </section>
 
-      <UpcomingClasses days={days} />
+      {days.length > 0 && <UpcomingClasses days={days} />}
 
       <section aria-labelledby="expect-title" className="bg-white py-14 md:py-20">
         <div className="container flex flex-col gap-10">

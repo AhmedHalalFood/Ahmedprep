@@ -19,7 +19,7 @@ export function TopContactBar() {
           {scheduleSummary().schedule === "weekly_2026" ? (
             <span>
               Live SHSAT & Digital SAT Zoom Classes — Sundays 4:00–5:00 PM ET{" "}
-              <span className={styles.sep} aria-hidden="true">•</span> New schedule from Jan 10, 2027{" "}
+              <span className={styles.sep} aria-hidden="true">•</span> New schedule from January 2027{" "}
               <span className={styles.sep} aria-hidden="true">•</span> RSVP
             </span>
           ) : (

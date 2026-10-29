@@ -32,12 +32,13 @@ export const RSVP_PROGRAMS: { value: RsvpProgram; label: string }[] = [
  * Two schedules, chosen by class date (never by today's date), so every stored registration keeps the time it was
  * booked under:
  * - weekly_2026: every Sunday through Dec 27, 2026, one class 4:00–5:00 PM ET, program by the Sunday's place in the month.
- * - biweekly_2027: every other Sunday from Jan 10, 2027, SHSAT 6:00–6:45 PM ET then Digital SAT 7:00–7:45 PM ET.
- * Jan 3, 2027 and the off-weeks of the 2027 schedule have no class.
+ * - biweekly_2027: every other Sunday in January 2027 onward, SHSAT 6:00–6:45 PM ET then Digital SAT 7:00–7:45 PM ET.
+ * The first 2027 Sunday is not confirmed yet. While SCHEDULE_2027_FIRST_SUNDAY is null, no 2027 date is published or
+ * bookable; set it to the confirmed ISO date (a Sunday) to open the 2027 schedule.
  */
 export type ScheduleId = "weekly_2026" | "biweekly_2027"
 export const SCHEDULE_2026_LAST_SUNDAY = "2026-12-27"
-export const SCHEDULE_2027_FIRST_SUNDAY = "2027-01-10"
+export const SCHEDULE_2027_FIRST_SUNDAY: string | null = null
 const BIWEEKLY_INTERVAL_DAYS = 14
 
 type SessionTime = { start: number; end: number; label: string; short: string }
@@ -50,7 +51,7 @@ export const BIWEEKLY_2027_TIMES: Record<RsvpProgram, SessionTime> = {
 }
 
 export const SCHEDULE_2027_ANNOUNCEMENT =
-  "Starting Sunday, January 10, 2027, free classes meet every other Sunday: SHSAT 6:00–6:45 PM ET, then Digital SAT 7:00–7:45 PM ET. RSVP separately for each class, or for both."
+  "Beginning in January 2027, free classes meet every other Sunday: SHSAT 6:00–6:45 PM ET, then Digital SAT 7:00–7:45 PM ET. The first January date will be announced soon. RSVP separately for each class, or for both."
 
 /** One class session: a single program at a single time. Sundays on the 2027 schedule have two. */
 export type SundayClass = {
@@ -123,7 +124,7 @@ function newYorkOffset(date: Date) {
 
 export function scheduleForDate(isoDate: string): ScheduleId | null {
   if (isoDate <= SCHEDULE_2026_LAST_SUNDAY) return "weekly_2026"
-  if (isoDate < SCHEDULE_2027_FIRST_SUNDAY) return null
+  if (!SCHEDULE_2027_FIRST_SUNDAY || isoDate < SCHEDULE_2027_FIRST_SUNDAY) return null
   const days = Math.round((Date.parse(isoDate) - Date.parse(SCHEDULE_2027_FIRST_SUNDAY)) / DAY_MS)
   return days % BIWEEKLY_INTERVAL_DAYS === 0 ? "biweekly_2027" : null
 }
@@ -147,7 +148,7 @@ function weeklyTopicFor(type: ClassType, year: number, month: number, day: numbe
 
 /** 2027 topics advance one step per class Sunday, independently for each program. */
 function biweeklyTopicFor(type: RsvpProgram, isoDate: string) {
-  const n = Math.round((Date.parse(isoDate) - Date.parse(SCHEDULE_2027_FIRST_SUNDAY)) / DAY_MS / BIWEEKLY_INTERVAL_DAYS)
+  const n = Math.round((Date.parse(isoDate) - Date.parse(SCHEDULE_2027_FIRST_SUNDAY ?? isoDate)) / DAY_MS / BIWEEKLY_INTERVAL_DAYS)
   const list = type === "shsat" ? SHSAT_TOPICS : DIGITAL_SAT_TOPICS
   return list[n % list.length]
 }
@@ -208,7 +209,8 @@ export function getUpcomingSundays(count = 4, now = new Date()): ClassDay[] {
   const todayIso = `${ny.year}-${String(ny.month).padStart(2, "0")}-${String(ny.day).padStart(2, "0")}`
   const firstSunday = ny.day + ((7 - ny.weekday) % 7)
   const days: ClassDay[] = []
-  // Bounded search; at most every other Sunday is skipped, so this always finds `count` class days.
+  // Bounded search. Once the 2026 schedule ends and the 2027 start date is unconfirmed, this can return fewer than
+  // `count` days, or none.
   for (let week = 0; days.length < count && week < count * 2 + 8; week++) {
     // Noon UTC keeps the calendar date stable while adding days and formatting.
     const day = buildDay(new Date(Date.UTC(ny.year, ny.month - 1, firstSunday + week * 7, 12)))
@@ -227,11 +229,11 @@ export function getUpcomingClasses(dayCount = 4, now = new Date()): SundayClass[
   return getUpcomingSundays(dayCount, now).flatMap((d) => d.sessions)
 }
 
-export function getNextClass(now = new Date()) {
+export function getNextClass(now = new Date()): SundayClass | undefined {
   return getUpcomingClasses(1, now)[0]
 }
 
-export function getNextClassDay(now = new Date()) {
+export function getNextClassDay(now = new Date()): ClassDay | undefined {
   return getUpcomingSundays(1, now)[0]
 }
 
@@ -277,7 +279,7 @@ export function classMatchesProgram(c: SundayClass, program: string) {
 /** Site-wide wording for whichever schedule the next class Sunday is on. */
 export function scheduleSummary(now = new Date()) {
   const next = getNextClassDay(now)
-  if (next.schedule === "weekly_2026") {
+  if (next?.schedule === "weekly_2026") {
     return {
       schedule: next.schedule,
       cadence: "Every Sunday",
@@ -288,11 +290,11 @@ export function scheduleSummary(now = new Date()) {
     }
   }
   return {
-    schedule: next.schedule,
+    schedule: "biweekly_2027" as ScheduleId,
     cadence: "Every other Sunday",
     times: `SHSAT ${BIWEEKLY_2027_TIMES.shsat.label.replace(" ET", "")} · Digital SAT ${BIWEEKLY_2027_TIMES.digital_sat.label}`,
     timesShort: "SHSAT 6 PM · Digital SAT 7 PM ET",
     format: "SHSAT and Digital SAT are both taught on every class Sunday, one after the other",
-    upcomingChange: null,
+    upcomingChange: next ? null : "The first January 2027 class date will be announced soon.",
   }
 }
