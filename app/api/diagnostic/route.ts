@@ -1,9 +1,5 @@
 import { EMAIL_PATTERN, PROGRAMS, clean, fail, hasPhoneDigits, readBody, screenSubmission } from "@/lib/lead-delivery"
-import { NextResponse } from "next/server"
-import { createFreeAccessAdminLink } from "@/lib/admin-links"
-import { checkFreeAccess, flagForReview, reviewEmailRow } from "@/lib/free-access"
-import { limitMessage } from "@/lib/free-access-policy"
-import { leadIdempotencyKey, saveAndDeliverLead } from "@/lib/lead-storage"
+import { saveAndDeliverLead } from "@/lib/lead-storage"
 
 export async function POST(request: Request) {
   const body = await readBody(request)
@@ -38,27 +34,9 @@ export async function POST(request: Request) {
     return fail(400, "Please complete all required fields.")
   }
 
-  const applicant = { studentName: data.studentName, parentEmail: data.parentEmail, parentPhone: data.parentPhone }
-  const bookingKey = leadIdempotencyKey("diagnostic", clean(body.submissionId, 64), data)
-  const access = await checkFreeAccess("diagnostic", applicant, bookingKey)
-  if (access.enforced && access.decision.outcome === "block") {
-    console.warn(`[diagnostic] Free-diagnostic limit reached (${access.decision.reason}); request declined, nothing saved`)
-    return NextResponse.json({ success: false, limitReached: true, error: limitMessage("diagnostic", access.decision.reason) }, { status: 409 })
-  }
-  const accessRows: [string, string][] = []
-  if (access.enforced) {
-    accessRows.push(reviewEmailRow(access.decision))
-    const adminLink = createFreeAccessAdminLink(new URL(request.url).origin, data.parentEmail)
-    if (adminLink) accessRows.push(["Assessment & free-access record", adminLink])
-  }
-
   return saveAndDeliverLead({
     formType: "diagnostic",
     submissionId: body.submissionId,
-    onSaved:
-      access.enforced && access.decision.outcome === "review"
-        ? (id) => flagForReview("diagnostic", id, access.decision.relatedIds)
-        : undefined,
     record: {
       contactName: data.parentName,
       contactEmail: data.parentEmail,
@@ -84,7 +62,6 @@ export async function POST(request: Request) {
         ["Current Score", data.currentScore || "Not provided"],
         ["Target School or SAT Score", data.target || "Not provided"],
         ["Additional Notes", data.notes || "Not provided"],
-        ...accessRows,
       ],
     },
   })

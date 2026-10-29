@@ -22,32 +22,6 @@ export function createResendLink(origin: string, id: number, now = Date.now()) {
   return `${origin}${RESEND_PATH}?${params}`
 }
 
-export const FREE_ACCESS_ADMIN_PATH = "/admin/free-access"
-const ADMIN_LINK_LIFETIME_MS = 7 * 24 * 60 * 60 * 1000
-
-const signAdmin = (key: string, expires: number) =>
-  createHmac("sha256", key).update(`free-access-admin:${expires}`).digest("base64url")
-
-/** A 7-day link to the free-access admin page, included only in AhmedPrep's own notification emails. */
-export function createFreeAccessAdminLink(origin: string, query = "", now = Date.now()) {
-  const key = secret()
-  if (!key) return null
-  const expires = now + ADMIN_LINK_LIFETIME_MS
-  const params = new URLSearchParams({ exp: String(expires), sig: signAdmin(key, expires) })
-  if (query) params.set("q", query)
-  return `${origin}${FREE_ACCESS_ADMIN_PATH}?${params}`
-}
-
-export function verifyFreeAccessAdminToken(exp: unknown, sig: unknown, now = Date.now()) {
-  const key = secret()
-  if (!key || typeof exp !== "string" || typeof sig !== "string") return false
-  const expires = Number(exp)
-  if (!Number.isSafeInteger(expires) || expires < now) return false
-  const expected = Buffer.from(signAdmin(key, expires))
-  const given = Buffer.from(sig)
-  return expected.length === given.length && timingSafeEqual(expected, given)
-}
-
 /** Returns the registration id if the signature is valid and unexpired. */
 export function verifyResendToken(id: unknown, exp: unknown, sig: unknown, now = Date.now()) {
   const key = secret()
