@@ -24,21 +24,26 @@ export const TUITION_TIERS: TuitionTier[] = [
     id: "founding",
     name: "Founding-family tuition",
     amount: "$1,080",
-    condition: `Full payment. Ends ${FOUNDING_RULES.deadlineLabel}, or when a group's 5 founding seats are filled, whichever comes first.`,
+    condition: `Full payment by ${FOUNDING_RULES.deadlineLabel}, or until the first ${FOUNDING_RULES.seatsPerGroup} qualifying seats per group are filled, whichever comes first.`,
   },
   {
     id: "early",
-    name: "Early full payment",
+    name: "Early payment",
     amount: "$1,296",
-    condition: "Full payment received by December 26, 2026.",
+    condition: "Full payment by December 26, 2026.",
   },
   {
     id: "regular",
     name: "Regular tuition",
     amount: "$1,440",
-    condition: "Due January 5, 2027.",
+    condition: "Full payment due January 5, 2027.",
   },
 ]
+
+export const TUITION_STACKING_NOTE = "Discounts cannot be combined."
+
+/** Only Astoria is published. Jamaica stays unpublished while that location is under discussion. */
+export const PUBLISHED_LOCATION = "Astoria"
 
 export type DemoGroup = {
   id: string
