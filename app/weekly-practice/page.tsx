@@ -176,7 +176,7 @@ function CurrentPractice({ q }: { q: WeeklyPracticeQuestion }) {
           <div className="flex flex-col gap-2">
             <h2 className="text-pretty text-xl font-extrabold leading-snug text-navy">Want More {q.testType} Practice?</h2>
             <p className="leading-relaxed text-ink">
-              Join AhmedPrep&apos;s {classTitle} {when} from {FREE_CLASS.timeLabel}. Practice {q.testType}-style questions, learn
+              Join AhmedPrep&apos;s {classTitle} {when} from {session.timeLabel}. Practice {q.testType}-style questions, learn
               test-taking strategies and review common reading traps live.
             </p>
           </div>

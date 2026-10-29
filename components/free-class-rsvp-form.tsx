@@ -83,20 +83,30 @@ export function FreeClassRsvpForm({
     onChange: (v: string) => update(key, v),
   })
 
-  const dateOptions = classes
-    .filter((c) => !data.classType || classMatchesProgram(c, data.classType))
-    .map((c) => ({ value: c.isoDate, label: `${c.shortLabel} · ${c.typeLabel}: ${c.topic}` }))
+  const sessionsOn = (isoDate: string) => classes.filter((c) => c.isoDate === isoDate)
+
+  const dateOptions = data.classType
+    ? classes
+        .filter((c) => classMatchesProgram(c, data.classType))
+        .map((c) => ({ value: c.isoDate, label: `${c.shortLabel} · ${c.typeLabel} ${c.timeLabelShort}: ${c.topic}` }))
+    : [...new Set(classes.map((c) => c.isoDate))].map((isoDate) => {
+        const sessions = sessionsOn(isoDate)
+        return {
+          value: isoDate,
+          label: `${sessions[0].shortLabel} · ${sessions.map((s) => `${s.typeLabel} ${s.timeLabelShort}`).join(" + ")}`,
+        }
+      })
 
   const changeProgram = (program: string) => {
     update("classType", program)
-    const selected = classes.find((c) => c.isoDate === data.classDate)
-    if (selected && !classMatchesProgram(selected, program)) update("classDate", "")
+    const onDate = sessionsOn(data.classDate)
+    if (onDate.length && !onDate.some((c) => classMatchesProgram(c, program))) update("classDate", "")
   }
 
   const changeDate = (isoDate: string) => {
     update("classDate", isoDate)
-    const selected = classes.find((c) => c.isoDate === isoDate)
-    if (selected && selected.type !== "workshop") update("classType", selected.type)
+    const onDate = sessionsOn(isoDate)
+    if (onDate.length === 1 && onDate[0].type !== "workshop") update("classType", onDate[0].type)
   }
 
   if (status === "success") {

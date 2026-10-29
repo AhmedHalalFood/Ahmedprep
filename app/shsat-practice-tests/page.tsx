@@ -376,7 +376,7 @@ export default function ShsatPracticeTestsPage() {
                 Want to Review SHSAT Questions Live?
               </h2>
               <p className="leading-relaxed text-ink">
-                Next session: {CLASS_TYPES[session.type].title}, Sunday {session.compactLabel}, {FREE_CLASS.timeLabel}.
+                Next session: {CLASS_TYPES[session.type].title}, Sunday {session.compactLabel}, {session.timeLabel}.
               </p>
             </div>
             <TrackedLink

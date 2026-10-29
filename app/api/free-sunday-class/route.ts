@@ -12,14 +12,7 @@ import {
   withDbRetry,
 } from "@/lib/sunday-registrations"
 import { buildSundayConfirmation } from "@/lib/sunday-confirmation"
-import {
-  FREE_CLASS,
-  FREE_CLASS_GRADES,
-  RSVP_PROGRAMS,
-  classMatchesProgram,
-  findUpcomingClass,
-  type RsvpProgram,
-} from "@/lib/free-class"
+import { FREE_CLASS_GRADES, RSVP_PROGRAMS, findUpcomingSession, type RsvpProgram } from "@/lib/free-class"
 import { EMAIL_PATTERN, clean, deliverLead, fail, hasPhoneDigits, readBody, screenSubmission, sendAdminAlert } from "@/lib/lead-delivery"
 
 const GRADES = new Set(FREE_CLASS_GRADES)
@@ -45,8 +38,9 @@ export async function POST(request: Request) {
     consent: clean(body.consent, 10),
   }
 
-  // A class that started earlier today drops out of the list at 5 PM, so allow one extra week of lookahead.
-  const session = findUpcomingClass(data.classDate, 5)
+  // The session must exist on that date for that program (2026: one class per Sunday; 2027: SHSAT and Digital SAT).
+  // A session stays bookable until it ends; one extra class Sunday of lookahead covers a list that just rolled over.
+  const session = findUpcomingSession(data.classDate, data.classType, 5)
 
   if (
     !data.studentName ||
@@ -56,7 +50,6 @@ export async function POST(request: Request) {
     !hasPhoneDigits(data.parentPhone) ||
     !PROGRAMS.has(data.classType) ||
     !session ||
-    !classMatchesProgram(session, data.classType) ||
     data.consent !== "yes"
   ) {
     return fail(400, "Please complete all required fields.")
@@ -80,7 +73,7 @@ export async function POST(request: Request) {
     ["Class", `${classTitle}, live online`],
     ["Topic", session.topic],
     ["Class date", session.label],
-    ["Class time", FREE_CLASS.timeLabel],
+    ["Class time", session.timeLabel],
     ["Student Name", data.studentName],
     ["Grade", data.studentGrade],
     ["Parent/Guardian Name", data.parentName],

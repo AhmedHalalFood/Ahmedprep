@@ -9,7 +9,7 @@ export function ResourceNextSteps({ category }: { category: Resource["category"]
     isSat
       ? { href: "/digital-sat", label: "Digital SAT Prep at AhmedPrep", body: "Reading & Writing and Math preparation in Astoria, Queens and online." }
       : { href: "/shsat", label: "SHSAT Prep at AhmedPrep", body: "Math and ELA preparation for the computer-adaptive SHSAT." },
-    { href: FREE_CLASS.path, label: "Free Sunday Classes", body: `Live online every Sunday, ${FREE_CLASS.timeLabelShort}. SHSAT and Digital SAT alternate.` },
+    { href: FREE_CLASS.path, label: "Free Sunday Classes", body: "Free live online SHSAT and Digital SAT classes on Sundays. See upcoming dates and times." },
     { href: "/free-diagnostic", label: "Free Diagnostic", body: "Find out exactly which skills to practice first." },
     isSat
       ? { href: "/tools/digital-sat-score-planner", label: "Digital SAT Score Goal Planner", body: "Turn a practice score and a target into a study plan." }

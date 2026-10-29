@@ -27,12 +27,12 @@ export function buildSundayConfirmation(session: SundayClass, program: RsvpProgr
   const heading = "Your free class seat is reserved"
   const confirmation: Confirmation = {
     to: recipient.parentEmail,
-    subject: `${heading}: ${session.title}, ${session.shortLabel}`,
+    subject: `${heading}: ${session.title}, ${session.shortLabel}, ${session.timeLabelShort}`,
     heading,
     paragraphs: [
       `Hi ${recipient.parentName},`,
       `A free Sunday class seat is reserved for ${recipient.studentName}. Here are the class details:`,
-      `Student: ${recipient.studentName}\nProgram: ${programLabel}\nClass: ${classTitle}\nTopic: ${session.topic}\nDate: ${session.label}\nTime: 4:00–5:00 PM Eastern\nFormat: Live on Zoom\nInstructor: ${FREE_CLASS.instructor}, ${FREE_CLASS.instructorRole}`,
+      `Student: ${recipient.studentName}\nProgram: ${programLabel}\nClass: ${classTitle}\nTopic: ${session.topic}\nDate: ${session.label}\nTime: ${session.timeLabel.replace(" ET", " Eastern")}\nFormat: Live on Zoom\nInstructor: ${FREE_CLASS.instructor}, ${FREE_CLASS.instructorRole}`,
       zoomParagraph,
       "This access information is for your family only. Please do not share it publicly. Please have a pencil and scratch paper ready for practice questions.",
       `AhmedPrep\n${ADDRESS_LINE_1}\n${ADDRESS_LINE_2}\nCall or text: ${BUSINESS.phoneDisplay}\nEmail: ${BUSINESS.email}`,
