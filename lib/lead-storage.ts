@@ -124,10 +124,13 @@ export async function saveAndDeliverLead({
   submissionId,
   record,
   email,
+  onSaved,
 }: {
   formType: LeadFormType
   submissionId: unknown
   record: LeadRecord
+  /** Runs once for a newly saved (or re-delivered) row, before the notification is sent. */
+  onSaved?: (id: number) => Promise<void>
   email: Omit<LeadEmail, "dedupeKey" | "onDelivery" | "persisted">
 }) {
   const idempotencyKey = leadIdempotencyKey(formType, clean(submissionId, 64), record.payload)
@@ -160,6 +163,7 @@ export async function saveAndDeliverLead({
   }
 
   const leadId = claim.id
+  await onSaved?.(leadId)
   return deliverLead({
     ...email,
     // Ties Resend's own 24-hour idempotency to the stored row, a second guard against a double send.

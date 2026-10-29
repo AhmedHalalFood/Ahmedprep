@@ -1,6 +1,8 @@
 import { createHash } from "node:crypto"
 import { NextResponse } from "next/server"
-import { createResendLink } from "@/lib/admin-links"
+import { createFreeAccessAdminLink, createResendLink } from "@/lib/admin-links"
+import { checkFreeAccess, flagForReview, reviewEmailRow } from "@/lib/free-access"
+import { limitMessage } from "@/lib/free-access-policy"
 import {
   claimRegistration,
   describeDbError,
@@ -67,6 +69,13 @@ export async function POST(request: Request) {
   const dedupeKey = [data.parentEmail, data.studentName, session.isoDate, program]
   const fingerprint = createHash("sha256").update(dedupeKey.map((v) => v.trim().toLowerCase()).join("|")).digest("hex")
 
+  const applicant = { studentName: data.studentName, parentEmail: data.parentEmail, parentPhone: data.parentPhone }
+  const access = await checkFreeAccess("sunday_class", applicant, fingerprint)
+  if (access.enforced && access.decision.outcome === "block") {
+    console.warn(`[${SCOPE}] Free-class limit reached (${access.decision.reason}); booking declined, nothing saved`)
+    return NextResponse.json({ success: false, limitReached: true, error: limitMessage("sunday_class", access.decision.reason) }, { status: 409 })
+  }
+
   const rows: [string, string][] = [
     ["Class", `${classTitle}, live online`],
     ["Topic", session.topic],
@@ -122,7 +131,14 @@ export async function POST(request: Request) {
     return fail(503, "Your registration could not be saved. Please try again in a few minutes.")
   }
 
-  const resendLink = createResendLink(new URL(request.url).origin, registrationId)
+  const origin = new URL(request.url).origin
+  const resendLink = createResendLink(origin, registrationId)
+  if (access.enforced) {
+    if (access.decision.outcome === "review") await flagForReview("sunday_class", registrationId, access.decision.relatedIds)
+    rows.push(reviewEmailRow(access.decision))
+    const adminLink = createFreeAccessAdminLink(origin, data.parentEmail)
+    if (adminLink) rows.push(["Attendance & free-access record", adminLink])
+  }
 
   return deliverLead({
     dedupeKey,

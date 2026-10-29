@@ -6,6 +6,8 @@ import { Honeypot, ProgramRadios, RequiredNote, SelectField, SubmitButton, TextA
 import { useLeadForm } from "@/components/forms/use-lead-form"
 import { EVENTS, trackEvent } from "@/lib/analytics"
 import { BUSINESS } from "@/lib/business"
+import { LimitNotice } from "@/components/forms/limit-notice"
+import { FREE_ACCESS_POLICY_TEXT } from "@/lib/free-access-policy"
 
 export type Program = "SHSAT" | "Digital SAT"
 
@@ -58,7 +60,7 @@ export function DiagnosticForm({ defaultProgram = "", location }: { defaultProgr
     notes: "",
   }
 
-  const { data, errors, status, update, submit, formRef, honeypotRef } = useLeadForm({
+  const { data, errors, status, limitMessage, update, submit, formRef, honeypotRef } = useLeadForm({
     endpoint: "/api/diagnostic",
     initial,
     validate,
@@ -122,7 +124,8 @@ export function DiagnosticForm({ defaultProgram = "", location }: { defaultProgr
       </div>
       <TextAreaField label="Additional Notes" placeholder="Scheduling preferences, learning needs, or questions for us." {...field("notes")} />
 
-      {status === "error" && (
+      {status === "error" && limitMessage && <LimitNotice message={limitMessage} />}
+      {status === "error" && !limitMessage && (
         <p role="alert" className="border-l-4 border-error bg-error-soft px-4 py-3 text-sm text-error">
           We couldn&apos;t send your request. Please try again, or call{" "}
           <a href={BUSINESS.phoneHref} className="font-semibold underline">
@@ -138,6 +141,7 @@ export function DiagnosticForm({ defaultProgram = "", location }: { defaultProgr
       <p className="text-xs leading-relaxed text-subtle">
         No cost and no obligation. We use your information only to schedule the diagnostic and follow up about AhmedPrep programs.
       </p>
+      <p className="text-xs leading-relaxed text-subtle">{FREE_ACCESS_POLICY_TEXT}</p>
     </form>
   )
 }

@@ -2,7 +2,9 @@
 
 import { ArrowUpRight, CheckCircle2 } from "lucide-react"
 import { Honeypot, RequiredNote, SelectField, SubmitButton, TextField } from "@/components/forms/fields"
+import { LimitNotice } from "@/components/forms/limit-notice"
 import { useLeadForm } from "@/components/forms/use-lead-form"
+import { FREE_ACCESS_POLICY_TEXT } from "@/lib/free-access-policy"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS, trackEvent } from "@/lib/analytics"
 import { BUSINESS } from "@/lib/business"
@@ -65,7 +67,7 @@ export function FreeClassRsvpForm({
 
   const eventParams = (d: RsvpData) => ({ location, class_type: d.classType || "unselected", class_date: d.classDate || "unselected" })
 
-  const { data, errors, status, serverResult, update, submit, formRef, honeypotRef } = useLeadForm({
+  const { data, errors, status, serverResult, limitMessage, update, submit, formRef, honeypotRef } = useLeadForm({
     endpoint: "/api/free-sunday-class",
     initial,
     validate,
@@ -200,7 +202,8 @@ export function FreeClassRsvpForm({
         )}
       </div>
 
-      {status === "error" && (
+      {status === "error" && limitMessage && <LimitNotice message={limitMessage} />}
+      {status === "error" && !limitMessage && (
         <p role="alert" className="border-l-4 border-error bg-error-soft px-4 py-3 text-sm text-error">
           We couldn&apos;t complete your registration. Please try again, or call{" "}
           <a href={BUSINESS.phoneHref} className="font-semibold underline">
@@ -217,6 +220,7 @@ export function FreeClassRsvpForm({
         <strong className="font-bold text-navy">No cost • Live instruction • RSVP required.</strong> The live class link is never posted
         publicly. It is sent only to registered families.
       </p>
+      <p className="text-xs leading-relaxed text-subtle">{FREE_ACCESS_POLICY_TEXT}</p>
     </form>
   )
 }
