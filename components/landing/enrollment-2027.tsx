@@ -93,7 +93,7 @@ export function Enrollment2027() {
               ))}
             </div>
             <p className="text-sm leading-relaxed text-white/75">
-              <span className="font-bold text-gold">{E.tuition.rules}</span>
+              <span className="font-bold text-gold">{E.tuition.rules}</span> {E.tuition.seatNote}
             </p>
           </div>
 

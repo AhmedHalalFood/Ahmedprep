@@ -38,7 +38,7 @@ export function ProgramStep({ value, onChange }: { value: ProgramId | null; onCh
         <OptionCard key={p.id} name="program" value={p.id} checked={value === p.id} onSelect={() => onChange(p.id)}>
           <span className="text-lg font-extrabold text-navy">{p.name}</span>
           <span className="text-pretty text-sm leading-relaxed text-subtle">{p.summary}</span>
-          <span className="text-sm font-semibold text-ink">12 weeks · 72 hours · up to 10 students</span>
+          <span className="text-sm font-semibold text-ink">12 weeks · 72 hours · up to 12 students</span>
         </OptionCard>
       ))}
     </fieldset>

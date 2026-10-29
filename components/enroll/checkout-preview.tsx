@@ -44,8 +44,8 @@ export function CheckoutPreview({
 }) {
   const [simulated, setSimulated] = useState(false)
   const option = PAYMENT_OPTIONS[payment]
-  const dueToday = option.amountCents
-  const isInstallments = payment === "regular-installments"
+  const totalCents = option.amountCents
+  const savingsCents = TUITION.regularCents - totalCents
 
   return (
     <div className="flex flex-col gap-5">
@@ -80,28 +80,28 @@ export function CheckoutPreview({
       </dl>
 
       <div className="flex flex-col gap-2 bg-navy p-4 text-primary-foreground">
-        {payment === "founding-full" && (
-          <div className="flex justify-between gap-3 text-sm">
-            <span>Founding-family savings</span>
-            <span className="font-bold tabular-nums text-gold">{`−${formatUsd(TUITION.savingsCents)}`}</span>
-          </div>
-        )}
-        {isInstallments && (
-          <div className="flex justify-between gap-3 text-sm">
-            <span>Tuition total</span>
-            <span className="tabular-nums">{formatUsd(TUITION.regularCents)}</span>
-          </div>
+        {savingsCents > 0 && (
+          <>
+            <div className="flex justify-between gap-3 text-sm">
+              <span>Regular tuition</span>
+              <span className="tabular-nums">{formatUsd(TUITION.regularCents)}</span>
+            </div>
+            <div className="flex justify-between gap-3 text-sm">
+              <span>{payment === "founding-full" ? "Founding-Family savings" : "Early payment savings (10%)"}</span>
+              <span className="font-bold tabular-nums text-gold">{`−${formatUsd(savingsCents)}`}</span>
+            </div>
+          </>
         )}
         <div className="flex items-baseline justify-between gap-3">
-          <span className="font-bold">{isInstallments ? "First installment" : "Total due"}</span>
-          <span className="text-2xl font-extrabold tabular-nums">{formatUsd(dueToday)}</span>
+          <span className="font-bold">Total due (full payment)</span>
+          <span className="text-2xl font-extrabold tabular-nums">{formatUsd(totalCents)}</span>
         </div>
-        {isInstallments && (
-          <p className="text-sm leading-relaxed text-brand-soft">
-            Two more payments of $480 follow on a schedule AhmedPrep will confirm before any charge.
-          </p>
-        )}
+        <p className="text-sm leading-relaxed text-brand-soft">{option.detail}</p>
       </div>
+
+      <p className="text-sm leading-relaxed text-subtle">
+        Discounts cannot be combined. No installment plans. Enrollment is subject to available seats.
+      </p>
 
       <button
         type="button"

@@ -21,7 +21,7 @@ export default function EnrollPage() {
             <h1 className="text-balance text-3xl font-extrabold tracking-tight sm:text-4xl">Enroll your student</h1>
             <p className="text-pretty leading-relaxed text-subtle">
               Five short steps: choose a program and class, add your details, pick a tuition option, and review
-              everything before payment. Small classes of no more than 10 students.
+              everything before payment. Small classes of no more than 12 students.
             </p>
           </header>
           <EnrollmentFlow />

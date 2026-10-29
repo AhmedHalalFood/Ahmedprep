@@ -30,7 +30,17 @@ export function TuitionOptions() {
               <h3 className={`text-sm font-extrabold uppercase tracking-wider ${tier.featured ? "text-gold" : "text-brand"}`}>
                 {tier.label}
               </h3>
-              <p className="text-4xl font-extrabold leading-none">{tier.total}</p>
+              <p className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                <span className="text-4xl font-extrabold leading-none">{tier.total}</span>
+                {tier.savingsLabel && (
+                  <span
+                    className={`px-2 py-1 text-sm font-extrabold uppercase tracking-wide ${tier.featured ? "bg-gold text-navy" : "bg-brand-soft text-navy"}`}
+                  >
+                    <span className="sr-only">{"— "}</span>
+                    {tier.savingsLabel}
+                  </span>
+                )}
+              </p>
             </div>
             <ul className="flex flex-col gap-2 text-sm leading-relaxed">
               {tier.points.map((point) => (
@@ -44,7 +54,10 @@ export function TuitionOptions() {
         ))}
       </ul>
 
-      <p className="border-l-4 border-gold bg-cream px-4 py-3 text-sm font-bold leading-relaxed text-navy">{E.tuition.rules}</p>
+      <div className="flex flex-col gap-1 border-l-4 border-gold bg-cream px-4 py-3 text-sm leading-relaxed text-navy">
+        <p className="font-bold">{E.tuition.rules}</p>
+        <p>{E.tuition.seatNote}</p>
+      </div>
     </section>
   )
 }
