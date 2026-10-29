@@ -52,9 +52,15 @@ export default async function ResendConfirmationPage({ searchParams }: Props) {
               <dt className="text-muted-foreground">Parent</dt>
               <dd className="break-all">{registration.parentEmail}</dd>
               <dt className="text-muted-foreground">Program</dt>
-              <dd>{CLASS_TYPES[registration.program as RsvpProgram]?.label ?? registration.program}</dd>
+              <dd>
+                {session.type === "workshop"
+                  ? (CLASS_TYPES[registration.program as RsvpProgram]?.label ?? registration.program)
+                  : session.typeLabel}
+              </dd>
               <dt className="text-muted-foreground">Class</dt>
-              <dd>{session.label}, {session.timeLabel.replace(" ET", " Eastern")}</dd>
+              <dd>
+                {session.title}, {session.label}, {session.timeLabel.replace(" ET", " Eastern")}
+              </dd>
               <dt className="text-muted-foreground">Last status</dt>
               <dd className="capitalize">{registration.confirmationStatus ?? "unknown"}</dd>
             </dl>

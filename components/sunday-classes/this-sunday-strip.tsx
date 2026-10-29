@@ -24,7 +24,7 @@ export function ThisSundayStrip({ location }: { location: string }) {
             ))}
           </div>
           <p className="text-pretty text-xl font-extrabold leading-snug text-navy">
-            {single ? `Free ${first.typeLabel} class: ${first.topic}` : "Free SHSAT & Digital SAT classes, back to back"}
+            {single ? `Free ${first.typeLabel} class: ${first.topic}` : "Free SHSAT Math & Digital SAT Math classes, back to back"}
           </p>
           <ul className="flex flex-wrap gap-x-5 gap-y-1.5 text-sm font-semibold text-ink">
             <li className="flex items-center gap-1.5">

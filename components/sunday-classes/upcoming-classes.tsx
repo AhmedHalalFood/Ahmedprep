@@ -10,8 +10,8 @@ const WEEKLY_2026_LEGEND = [
   ["5th Sunday, when a month has one", "Special Workshop / Diagnostic / Parent Q&A"],
 ]
 const BIWEEKLY_2027_LEGEND = [
-  ["6:00–6:45 PM ET", "SHSAT"],
-  ["7:00–7:45 PM ET", "Digital SAT"],
+  ["6:00–6:45 PM ET", "Free SHSAT Math Class"],
+  ["7:00–7:45 PM ET", "Free Digital SAT Math Class"],
 ]
 
 export function UpcomingClasses({ days }: { days: ClassDay[] }) {
@@ -31,7 +31,7 @@ export function UpcomingClasses({ days }: { days: ClassDay[] }) {
             <p className="mt-3 text-pretty leading-relaxed text-subtle">
               {has2026
                 ? "Through December 27, 2026, one class meets every Sunday from 4:00–5:00 PM ET, live online."
-                : "Classes meet every other Sunday, live online. Each Sunday has an SHSAT class and a Digital SAT class; RSVP for one or both."}
+                : "Free Math classes meet every other Sunday, live online. Each Sunday has an SHSAT Math class and a Digital SAT Math class; RSVP for one or both."}
             </p>
             {has2026 && <p className="mt-3 text-pretty font-semibold leading-relaxed text-navy">{SCHEDULE_2027_ANNOUNCEMENT}</p>}
           </div>

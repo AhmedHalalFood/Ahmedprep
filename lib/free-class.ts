@@ -1,4 +1,10 @@
-import { DIGITAL_SAT_TOPICS, SHSAT_TOPICS, WORKSHOP_TOPICS } from "@/lib/sunday-class-topics"
+import {
+  DIGITAL_SAT_MATH_TOPICS,
+  DIGITAL_SAT_TOPICS,
+  SHSAT_MATH_TOPICS,
+  SHSAT_TOPICS,
+  WORKSHOP_TOPICS,
+} from "@/lib/sunday-class-topics"
 
 export const FREE_CLASS = {
   path: "/free-sunday-classes",
@@ -22,6 +28,23 @@ export const CLASS_TYPES: Record<ClassType, { label: string; title: string; focu
   },
   workshop: { label: "Special Workshop", title: "Free Special Workshop", focus: "Diagnostic, Strategy & Parent Q&A" },
 }
+
+/** The 2027 free program is Math only; 2026 sessions keep CLASS_TYPES so historical classes read as they were booked. */
+export const CLASS_TYPES_2027: Record<RsvpProgram, { label: string; title: string; focus: string }> = {
+  shsat: {
+    label: "SHSAT Math",
+    title: "Free SHSAT Math Class",
+    focus: "SHSAT Math: word problems, algebra, geometry & pacing",
+  },
+  digital_sat: {
+    label: "Digital SAT Math",
+    title: "Free Digital SAT Math Class",
+    focus: "Digital SAT Math: algebra, advanced math, Desmos & pacing",
+  },
+}
+
+export const PAID_PROGRAMS_NOTE =
+  "Our paid SHSAT and Digital SAT programs continue to include both Math and ELA / Reading & Writing."
 
 export const RSVP_PROGRAMS: { value: RsvpProgram; label: string }[] = [
   { value: "shsat", label: "SHSAT" },
@@ -51,7 +74,7 @@ export const BIWEEKLY_2027_TIMES: Record<RsvpProgram, SessionTime> = {
 }
 
 export const SCHEDULE_2027_ANNOUNCEMENT =
-  "Beginning in January 2027, free classes meet every other Sunday: SHSAT 6:00–6:45 PM ET, then Digital SAT 7:00–7:45 PM ET. The first January date will be announced soon. RSVP separately for each class, or for both."
+  "Beginning in January 2027, free Sunday classes focus on Math and meet every other Sunday: Free SHSAT Math Class 6:00–6:45 PM ET, then Free Digital SAT Math Class 7:00–7:45 PM ET. The first January date will be announced soon. RSVP separately for each class, or for both."
 
 /** One class session: a single program at a single time. Sundays on the 2027 schedule have two. */
 export type SundayClass = {
@@ -149,7 +172,7 @@ function weeklyTopicFor(type: ClassType, year: number, month: number, day: numbe
 /** 2027 topics advance one step per class Sunday, independently for each program. */
 function biweeklyTopicFor(type: RsvpProgram, isoDate: string) {
   const n = Math.round((Date.parse(isoDate) - Date.parse(SCHEDULE_2027_FIRST_SUNDAY ?? isoDate)) / DAY_MS / BIWEEKLY_INTERVAL_DAYS)
-  const list = type === "shsat" ? SHSAT_TOPICS : DIGITAL_SAT_TOPICS
+  const list = type === "shsat" ? SHSAT_MATH_TOPICS : DIGITAL_SAT_MATH_TOPICS
   return list[n % list.length]
 }
 
@@ -168,14 +191,16 @@ function buildDay(classDay: Date): ClassDay | undefined {
   const offset = newYorkOffset(new Date(`${isoDate}T20:00:00Z`))
   const clock = (minutes: number) => `${String(Math.floor(minutes / 60)).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}`
 
-  const session = (type: ClassType, time: SessionTime, topic: string): SundayClass => ({
+  const session = (type: ClassType, time: SessionTime, topic: string): SundayClass => {
+    const meta = schedule === "biweekly_2027" && type !== "workshop" ? CLASS_TYPES_2027[type] : CLASS_TYPES[type]
+    return {
     id: `${isoDate}-${type}`,
     isoDate,
     schedule,
     type,
-    typeLabel: CLASS_TYPES[type].label,
-    title: CLASS_TYPES[type].title,
-    focus: CLASS_TYPES[type].focus,
+    typeLabel: meta.label,
+    title: meta.title,
+    focus: meta.focus,
     topic,
     startDate: `${isoDate}T${clock(time.start)}:00${offset}`,
     endDate: `${isoDate}T${clock(time.end)}:00${offset}`,
@@ -184,7 +209,8 @@ function buildDay(classDay: Date): ClassDay | undefined {
     timeLabel: time.label,
     timeLabelShort: time.short,
     ...labels,
-  })
+    }
+  }
 
   if (schedule === "weekly_2026") {
     const day = classDay.getUTCDate()
@@ -292,9 +318,9 @@ export function scheduleSummary(now = new Date()) {
   return {
     schedule: "biweekly_2027" as ScheduleId,
     cadence: "Every other Sunday",
-    times: `SHSAT ${BIWEEKLY_2027_TIMES.shsat.label.replace(" ET", "")} · Digital SAT ${BIWEEKLY_2027_TIMES.digital_sat.label}`,
-    timesShort: "SHSAT 6 PM · Digital SAT 7 PM ET",
-    format: "SHSAT and Digital SAT are both taught on every class Sunday, one after the other",
+    times: `SHSAT Math ${BIWEEKLY_2027_TIMES.shsat.label.replace(" ET", "")} · Digital SAT Math ${BIWEEKLY_2027_TIMES.digital_sat.label}`,
+    timesShort: "SHSAT Math 6 PM · Digital SAT Math 7 PM ET",
+    format: "Free SHSAT Math and Digital SAT Math classes are both taught on every class Sunday, one after the other",
     upcomingChange: next ? null : "The first January 2027 class date will be announced soon.",
   }
 }

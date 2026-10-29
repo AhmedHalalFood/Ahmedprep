@@ -16,7 +16,8 @@ export function NextDatePendingCard() {
         First class date announced soon
       </h2>
       <p className="text-pretty leading-relaxed text-subtle">
-        Every other Sunday: SHSAT 6:00–6:45 PM ET, then Digital SAT 7:00–7:45 PM ET. RSVP opens once the first date is confirmed.
+        Every other Sunday: Free SHSAT Math Class 6:00–6:45 PM ET, then Free Digital SAT Math Class 7:00–7:45 PM ET. RSVP opens
+        once the first date is confirmed.
       </p>
     </article>
   )
@@ -36,7 +37,7 @@ export function ThisSundayCard({ day }: { day: ClassDay }) {
       </div>
       <div>
         <h2 id="this-sunday-title" className="text-balance text-2xl font-extrabold leading-tight text-navy sm:text-3xl">
-          {single ? single.title : "Free SHSAT & Digital SAT Classes"}
+          {single ? single.title : "Free SHSAT Math & Digital SAT Math Classes"}
         </h2>
         {single && <p className="mt-1 font-semibold text-brand">{single.focus}</p>}
       </div>

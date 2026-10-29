@@ -12,6 +12,7 @@ import { EVENTS } from "@/lib/analytics"
 import { BUSINESS, SITE_URL } from "@/lib/business"
 import {
   FREE_CLASS,
+  PAID_PROGRAMS_NOTE,
   RSVP_PROGRAMS,
   classMatchesProgram,
   findUpcomingSunday,
@@ -29,8 +30,8 @@ const title = "Free SHSAT & Digital SAT Classes Online | AhmedPrep"
 export function generateMetadata(): Metadata {
   const description =
     scheduleSummary().schedule === "weekly_2026"
-      ? "Free live online Sunday SHSAT and Digital SAT classes from AhmedPrep, Sundays 4–5 PM ET. Beginning in January 2027: every other Sunday, SHSAT 6:00–6:45 PM ET and Digital SAT 7:00–7:45 PM ET. RSVP required."
-      : "Free live online SHSAT and Digital SAT classes from AhmedPrep, every other Sunday: SHSAT 6:00–6:45 PM ET, Digital SAT 7:00–7:45 PM ET. RSVP required."
+      ? "Free live online Sunday SHSAT and Digital SAT classes from AhmedPrep, Sundays 4–5 PM ET. Beginning in January 2027: free Math classes every other Sunday, SHSAT Math 6:00–6:45 PM ET and Digital SAT Math 7:00–7:45 PM ET. RSVP required."
+      : "Free live online SHSAT Math and Digital SAT Math classes from AhmedPrep, every other Sunday: SHSAT Math 6:00–6:45 PM ET, Digital SAT Math 7:00–7:45 PM ET. RSVP required."
   return {
     title: { absolute: title },
     description,
@@ -41,10 +42,12 @@ export function generateMetadata(): Metadata {
   }
 }
 
-const expectations = [
+const expectationsFor = (mathOnly: boolean) => [
   { icon: BookOpenCheck, title: "Live instruction from AhmedPrep", body: "A real lesson taught in real time, not a recording." },
   { icon: PencilLine, title: "Guided exam-style questions", body: "Students work through test-style problems step by step with the instructor." },
-  { icon: Calculator, title: "Math and reading/writing strategies", body: "Methods for the question types that cost students the most points." },
+  mathOnly
+    ? { icon: Calculator, title: "Focused Math strategies", body: "Methods for the Math question types that cost students the most points." }
+    : { icon: Calculator, title: "Math and reading/writing strategies", body: "Methods for the question types that cost students the most points." },
   { icon: Timer, title: "Timed practice", body: "Short timed sets that build pacing and focus under real test conditions." },
   { icon: MessageCircleQuestion, title: "Question-and-answer time", body: "Students ask questions while the material is still fresh." },
   { icon: Zap, title: "Practical preparation", body: "Strategies students can use immediately on homework and practice tests." },
@@ -52,11 +55,15 @@ const expectations = [
 
 const SCHEDULE_FAQ_2026: FaqItem = {
   q: "How does the schedule work?",
-  a: "Through December 27, 2026, one class meets every Sunday from 4:00–5:00 PM ET. The 1st and 3rd Sundays are SHSAT, the 2nd and 4th are Digital SAT, and a 5th Sunday is a special workshop. Beginning in January 2027, classes meet every other Sunday: SHSAT 6:00–6:45 PM ET, then Digital SAT 7:00–7:45 PM ET. The first January date will be announced soon.",
+  a: "Through December 27, 2026, one class meets every Sunday from 4:00–5:00 PM ET. The 1st and 3rd Sundays are SHSAT, the 2nd and 4th are Digital SAT, and a 5th Sunday is a special workshop. Beginning in January 2027, free classes focus on Math and meet every other Sunday: Free SHSAT Math Class 6:00–6:45 PM ET, then Free Digital SAT Math Class 7:00–7:45 PM ET. The first January date will be announced soon.",
 }
 const SCHEDULE_FAQ_2027: FaqItem = {
   q: "How does the schedule work?",
-  a: "Beginning in January 2027, classes meet every other Sunday. Each class Sunday has two sessions: SHSAT from 6:00–6:45 PM ET, then Digital SAT from 7:00–7:45 PM ET. Seats are subject to registration and available capacity.",
+  a: "Beginning in January 2027, free Math classes meet every other Sunday. Each class Sunday has two sessions: the Free SHSAT Math Class from 6:00–6:45 PM ET, then the Free Digital SAT Math Class from 7:00–7:45 PM ET. Seats are subject to registration and available capacity.",
+}
+const SUBJECTS_FAQ: FaqItem = {
+  q: "Do the free classes cover ELA or Reading & Writing?",
+  a: `Through December 27, 2026, free classes cover a mix of Math and ELA / Reading & Writing topics. Beginning in January 2027, both free Sunday classes focus exclusively on Math. ${PAID_PROGRAMS_NOTE}`,
 }
 
 const faqs = (scheduleFaq: FaqItem): FaqItem[] => [
@@ -65,9 +72,10 @@ const faqs = (scheduleFaq: FaqItem): FaqItem[] => [
     a: "Yes. Every Sunday class is free, subject to registration and available capacity. RSVP is required so we can send the live class access information, and registering does not commit you to any paid program.",
   },
   scheduleFaq,
+  SUBJECTS_FAQ,
   {
     q: "Can my student attend both classes on the same Sunday?",
-    a: "Yes. On the 2027 schedule, RSVP separately for the SHSAT class and the Digital SAT class.",
+    a: "Yes. On the 2027 schedule, RSVP separately for the Free SHSAT Math Class and the Free Digital SAT Math Class.",
   },
   {
     q: "How do we get the class link?",
@@ -133,8 +141,9 @@ export default async function FreeSundayClassesPage({ searchParams }: { searchPa
             <p className="max-w-xl text-pretty text-lg leading-relaxed text-white/80">
               {summary.schedule === "weekly_2026"
                 ? "Join AhmedPrep on Sundays for live online test preparation. SHSAT and Digital SAT classes alternate weekly, giving students focused instruction, guided practice, and practical test-taking strategies at no cost."
-                : "Join AhmedPrep every other Sunday for live online test preparation: a 45-minute SHSAT class, then a 45-minute Digital SAT class. Students get focused instruction, guided practice, and practical test-taking strategies at no cost."}
+                : "Join AhmedPrep every other Sunday for free live online Math preparation: a 45-minute SHSAT Math class, then a 45-minute Digital SAT Math class. Students get focused instruction, guided practice, and practical test-taking strategies at no cost."}
             </p>
+            <p className="max-w-xl text-pretty text-sm leading-relaxed text-white/70">{PAID_PROGRAMS_NOTE}</p>
             {summary.upcomingChange && (
               <p className="max-w-xl border-l-4 border-gold pl-4 text-pretty text-sm font-semibold leading-relaxed text-white">
                 {summary.upcomingChange}
@@ -180,7 +189,7 @@ export default async function FreeSundayClassesPage({ searchParams }: { searchPa
             </p>
           </div>
           <ul className="grid gap-px border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
-            {expectations.map(({ icon: Icon, title, body }) => (
+            {expectationsFor(summary.schedule === "biweekly_2027").map(({ icon: Icon, title, body }) => (
               <li key={title} className="flex flex-col gap-3 bg-white p-6">
                 <Icon size={22} aria-hidden="true" className="text-brand" />
                 <h3 className="font-extrabold text-navy">{title}</h3>
@@ -229,7 +238,7 @@ export default async function FreeSundayClassesPage({ searchParams }: { searchPa
             <p className="text-pretty leading-relaxed text-subtle">
               Choose SHSAT or Digital SAT and pick a Sunday. The live class access information is sent privately to the email you provide.
               {summary.schedule === "biweekly_2027" || days.some((d) => d.sessions.length > 1)
-                ? " To attend both classes on the same Sunday, submit one RSVP for each."
+                ? " Both 2027 classes are free Math classes: SHSAT Math at 6:00 PM ET and Digital SAT Math at 7:00 PM ET. To attend both on the same Sunday, submit one RSVP for each."
                 : ""}
             </p>
             <div className="border-t border-line pt-5">

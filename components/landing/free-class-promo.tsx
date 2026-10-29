@@ -2,7 +2,7 @@ import { ArrowUpRight } from "lucide-react"
 import { ClassTypeBadge } from "@/components/sunday-classes/class-type-badge"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
-import { FREE_CLASS, getNextClassDay, rsvpHref, scheduleSummary } from "@/lib/free-class"
+import { FREE_CLASS, PAID_PROGRAMS_NOTE, getNextClassDay, rsvpHref, scheduleSummary } from "@/lib/free-class"
 
 /** Compact homepage band for the free Sunday series; intentionally quieter than the paid intensive above it. */
 export function FreeClassPromo() {
@@ -14,13 +14,16 @@ export function FreeClassPromo() {
         <div className="flex flex-col gap-3">
           <p className="eyebrow blue">Free live Sunday test prep</p>
           <h2 id="free-class-promo-title" className="text-balance text-2xl font-extrabold leading-tight tracking-tight text-navy md:text-3xl">
-            {summary.schedule === "weekly_2026" ? "SHSAT & Digital SAT Classes Alternate Weekly" : "SHSAT & Digital SAT Classes Every Other Sunday"}
+            {summary.schedule === "weekly_2026"
+              ? "SHSAT & Digital SAT Classes Alternate Weekly"
+              : "Free SHSAT Math & Digital SAT Math Classes Every Other Sunday"}
           </h2>
           <p className="text-sm font-bold uppercase tracking-wider text-subtle">
             {summary.cadence} <span aria-hidden="true">•</span> {summary.times} <span aria-hidden="true">•</span> Live Online{" "}
             <span aria-hidden="true">•</span> RSVP Required
           </p>
           {summary.upcomingChange && <p className="text-pretty text-sm font-semibold leading-relaxed text-navy">{summary.upcomingChange}</p>}
+          <p className="text-pretty text-sm leading-relaxed text-subtle">{PAID_PROGRAMS_NOTE}</p>
           <div className="mt-2">
             <TrackedLink
               href={FREE_CLASS.path}

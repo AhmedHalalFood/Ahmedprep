@@ -28,4 +28,23 @@ export const DIGITAL_SAT_TOPICS = [
   "Pacing & Bluebook Strategy",
 ]
 
+/** 2027 schedule (every other Sunday, Math only). Each list advances one topic per class Sunday. */
+export const SHSAT_MATH_TOPICS = [
+  "SHSAT Math Word Problems",
+  "Ratios, Rates & Percents",
+  "Algebra: Equations & Inequalities",
+  "Geometry & Measurement",
+  "Probability & Data",
+  "Timed SHSAT Math Mini-Test & Pacing",
+]
+
+export const DIGITAL_SAT_MATH_TOPICS = [
+  "Desmos for Digital SAT Math",
+  "Linear Equations & Systems",
+  "Advanced Algebra: Quadratics & Functions",
+  "Problem Solving & Data Analysis",
+  "Geometry & Trigonometry",
+  "Timed Digital SAT Math Mini-Test & Pacing",
+]
+
 export const WORKSHOP_TOPICS = ["Parent Q&A: SHSAT & SAT Planning", "Diagnostic Mini-Test & Review", "Test-Day Strategy Workshop"]

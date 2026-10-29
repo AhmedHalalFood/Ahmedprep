@@ -1,7 +1,7 @@
 import "server-only"
 
 import { ADDRESS_LINE_1, ADDRESS_LINE_2, BUSINESS } from "@/lib/business"
-import { CLASS_TYPES, FREE_CLASS, type RsvpProgram, type SundayClass } from "@/lib/free-class"
+import { CLASS_TYPES, FREE_CLASS, PAID_PROGRAMS_NOTE, type RsvpProgram, type SundayClass } from "@/lib/free-class"
 import type { Confirmation } from "@/lib/lead-delivery"
 import { getZoomAccess } from "@/lib/zoom-access"
 
@@ -9,7 +9,8 @@ type Recipient = { parentName: string; parentEmail: string; studentName: string 
 
 /** The parent's private confirmation email. Shared by the RSVP route and the admin resend so both send identical content. */
 export function buildSundayConfirmation(session: SundayClass, program: RsvpProgram, recipient: Recipient) {
-  const programLabel = CLASS_TYPES[program].label
+  const programLabel = session.type === "workshop" ? CLASS_TYPES[program].label : session.typeLabel
+  const isMath2027 = session.schedule === "biweekly_2027"
   const classTitle = session.type === "workshop" ? `${session.title} (${programLabel} family)` : session.title
   const zoom = getZoomAccess(program)
 
@@ -35,6 +36,9 @@ export function buildSundayConfirmation(session: SundayClass, program: RsvpProgr
       `Student: ${recipient.studentName}\nProgram: ${programLabel}\nClass: ${classTitle}\nTopic: ${session.topic}\nDate: ${session.label}\nTime: ${session.timeLabel.replace(" ET", " Eastern")}\nFormat: Live on Zoom\nInstructor: ${FREE_CLASS.instructor}, ${FREE_CLASS.instructorRole}`,
       zoomParagraph,
       "This access information is for your family only. Please do not share it publicly. Please have a pencil and scratch paper ready for practice questions.",
+      ...(isMath2027
+        ? [`This free Sunday class focuses on Math. ${PAID_PROGRAMS_NOTE} Students may RSVP for both free Math classes on the same Sunday.`]
+        : []),
       `AhmedPrep\n${ADDRESS_LINE_1}\n${ADDRESS_LINE_2}\nCall or text: ${BUSINESS.phoneDisplay}\nEmail: ${BUSINESS.email}`,
       "Questions? Simply reply to this email.",
     ],
