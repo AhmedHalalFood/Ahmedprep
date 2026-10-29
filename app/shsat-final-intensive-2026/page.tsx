@@ -1,6 +1,9 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { redirect } from "next/navigation"
 import { ArrowUpRight } from "lucide-react"
+import { ENROLLMENT_2027 } from "@/lib/enrollment-2027"
+import { intensivePromoActive } from "@/lib/intensive-promo"
 import { Faq, type FaqItem } from "@/components/landing/faq"
 import { IntensiveHero } from "@/components/landing/intensive-hero"
 import { LocationSection } from "@/components/landing/location-section"
@@ -116,7 +119,8 @@ const buildEventSchema = (snapshot: EnrollmentSnapshot) => ({
   }),
 })
 
-export default function ShsatFinalIntensivePage() {
+export default async function ShsatFinalIntensivePage() {
+  if (!(await intensivePromoActive())) redirect(ENROLLMENT_2027.requestHref)
   const snapshot = enrollmentSnapshot()
   return (
     <>

@@ -3,7 +3,7 @@ import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
 import { ENROLLMENT_2027 as E, startLabel } from "@/lib/enrollment-2027"
 
-export function Enrollment2027() {
+export function Enrollment2027({ showIntensive }: { showIntensive: boolean }) {
   return (
     <section id="programs" className="scroll-mt-4 bg-warm py-16 md:py-20" aria-labelledby="enrollment-title">
       <div className="container flex flex-col gap-10">
@@ -135,17 +135,19 @@ export function Enrollment2027() {
               Book a Free Diagnostic
             </TrackedLink>
           </div>
-          <p className="text-sm leading-relaxed text-subtle">
-            Preparing for this year&apos;s SHSAT?{" "}
-            <TrackedLink
-              href={E.intensive2026Href}
-              event={EVENTS.shsatIntensiveClick}
-              eventProps={{ location: "home_enrollment_2027" }}
-              className="font-bold text-brand underline underline-offset-4"
-            >
-              See the 2026 SHSAT Final Intensive
-            </TrackedLink>
-          </p>
+          {showIntensive && (
+            <p className="text-sm leading-relaxed text-subtle">
+              Preparing for this year&apos;s SHSAT?{" "}
+              <TrackedLink
+                href={E.intensive2026Href}
+                event={EVENTS.shsatIntensiveClick}
+                eventProps={{ location: "home_enrollment_2027" }}
+                className="font-bold text-brand underline underline-offset-4"
+              >
+                See the 2026 SHSAT Final Intensive
+              </TrackedLink>
+            </p>
+          )}
         </div>
       </div>
     </section>

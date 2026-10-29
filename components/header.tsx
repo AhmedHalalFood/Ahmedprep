@@ -8,12 +8,14 @@ import { ShsatIntensiveBar } from "@/components/shsat-intensive-bar"
 import { TopContactBar } from "@/components/top-contact-bar"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
+import { intensivePromoActive } from "@/lib/intensive-promo"
 
-export function Header() {
+export async function Header() {
+  const showIntensive = await intensivePromoActive()
   return (
     <header className="site-header">
       <HideOnHome>
-        <ShsatIntensiveBar />
+        {showIntensive && <ShsatIntensiveBar />}
         <TopContactBar />
       </HideOnHome>
       <div className="topbar container">
@@ -44,11 +46,11 @@ export function Header() {
             Book Free Diagnostic <ArrowUpRight size={16} aria-hidden="true" />
           </TrackedLink>
         </div>
-        <MobileNav />
+        <MobileNav showIntensive={showIntensive} />
       </div>
       <div className="site-nav-bar">
         <div className="container nav-inner">
-          <MainNav />
+          <MainNav showIntensive={showIntensive} />
           <span className="nav-note">20-65 47th Street, Astoria</span>
         </div>
       </div>

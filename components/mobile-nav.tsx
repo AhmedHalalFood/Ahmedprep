@@ -11,7 +11,7 @@ const MobileNavSheet = dynamic(loadSheet, { ssr: false })
 
 const PRELOAD_EVENTS = ["pointerdown", "touchstart", "keydown", "scroll"] as const
 
-export function MobileNav() {
+export function MobileNav({ showIntensive }: { showIntensive: boolean }) {
   const [mounted, setMounted] = useState(false)
   const [open, setOpen] = useState(false)
   const triggerRef = useRef<HTMLButtonElement>(null)
@@ -46,6 +46,7 @@ export function MobileNav() {
       {mounted && (
         <MobileNavSheet
           open={open}
+          showIntensive={showIntensive}
           onOpenChange={setOpen}
           onCloseAutoFocus={(event) => {
             event.preventDefault()

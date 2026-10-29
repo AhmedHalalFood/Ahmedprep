@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next"
 import { SITE_URL } from "@/lib/business"
 import { RESOURCES } from "@/lib/resources"
-import { INTENSIVE_PATH } from "@/lib/shsat-intensive"
+import { INTENSIVE_PATH, isIntensivePromoActive } from "@/lib/shsat-intensive"
 import { FREE_TOOLS, toolPath } from "@/lib/tools"
 import { UPDATES, latestUpdateModified } from "@/lib/updates"
 import { WEEKLY_PRACTICE_PATH, getCurrentPractice } from "@/lib/weekly-practice"
@@ -10,7 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const pages: { path: string; priority: number }[] = [
     { path: "/", priority: 1 },
     { path: "/shsat", priority: 0.9 },
-    { path: INTENSIVE_PATH, priority: 0.9 },
+    ...(isIntensivePromoActive() ? [{ path: INTENSIVE_PATH, priority: 0.9 }] : []),
     { path: "/enroll-2027", priority: 0.9 },
     { path: "/digital-sat", priority: 0.9 },
     { path: "/free-sunday-classes", priority: 0.8 },

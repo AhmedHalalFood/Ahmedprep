@@ -15,6 +15,7 @@ import { TrackedLink } from "@/components/tracked-link"
 import { WeeklyPracticeCard } from "@/components/weekly-practice/weekly-practice-card"
 import { EVENTS } from "@/lib/analytics"
 import { ENROLLMENT_2027 } from "@/lib/enrollment-2027"
+import { intensivePromoActive } from "@/lib/intensive-promo"
 import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 
 export const metadata: Metadata = {
@@ -28,7 +29,8 @@ export const metadata: Metadata = {
 // Hourly so the "Next free Sunday class" card rolls over shortly after each Sunday class ends.
 export const revalidate = 3600
 
-export default function Home() {
+export default async function Home() {
+  const showIntensive = await intensivePromoActive()
   return (
     <>
       <section id="top" className="hero-section" aria-labelledby="hero-title">
@@ -72,21 +74,23 @@ export default function Home() {
         </div>
       </section>
 
-      <aside aria-label="2026 SHSAT Final Intensive" className="border-b border-gold/40 bg-cream">
-        <p className="mx-auto w-[min(1180px,calc(100%-32px))] py-3 text-center text-sm leading-relaxed text-ink md:text-base">
-          Preparing for the November 2026 SHSAT?{" "}
-          <TrackedLink
-            href={ENROLLMENT_2027.intensive2026Href}
-            event={EVENTS.shsatIntensiveClick}
-            eventProps={{ location: "home_below_hero" }}
-            className="inline-flex min-h-11 items-center gap-1 font-bold text-navy underline underline-offset-4"
-          >
-            Explore our Final Intensive <ArrowUpRight size={15} aria-hidden="true" />
-          </TrackedLink>
-        </p>
-      </aside>
+      {showIntensive && (
+        <aside aria-label="2026 SHSAT Final Intensive" className="border-b border-gold/40 bg-cream">
+          <p className="mx-auto w-[min(1180px,calc(100%-32px))] py-3 text-center text-sm leading-relaxed text-ink md:text-base">
+            Preparing for the November 2026 SHSAT?{" "}
+            <TrackedLink
+              href={ENROLLMENT_2027.intensive2026Href}
+              event={EVENTS.shsatIntensiveClick}
+              eventProps={{ location: "home_below_hero" }}
+              className="inline-flex min-h-11 items-center gap-1 font-bold text-navy underline underline-offset-4"
+            >
+              Explore our Final Intensive <ArrowUpRight size={15} aria-hidden="true" />
+            </TrackedLink>
+          </p>
+        </aside>
+      )}
 
-      <Enrollment2027 />
+      <Enrollment2027 showIntensive={showIntensive} />
 
       <CampaignBanner />
 
@@ -101,7 +105,7 @@ export default function Home() {
 
       <ToolsResources />
 
-      <ProgramsPreview />
+      <ProgramsPreview showIntensive={showIntensive} />
 
       <GoogleReviews />
 

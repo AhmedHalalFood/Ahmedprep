@@ -1,9 +1,9 @@
 import { ArrowUpRight } from "lucide-react"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
-import { PROGRAMS } from "@/lib/programs"
+import { visiblePrograms } from "@/lib/programs"
 
-export function ProgramsPreview() {
+export function ProgramsPreview({ showIntensive }: { showIntensive: boolean }) {
   return (
     <section id="programs-pricing" aria-labelledby="programs-pricing-title" className="bg-white py-16 md:py-20">
       <div className="container flex flex-col gap-8">
@@ -19,7 +19,7 @@ export function ProgramsPreview() {
           </TrackedLink>
         </div>
         <ul className="grid border-t border-line sm:grid-cols-2 lg:grid-cols-3">
-          {PROGRAMS.map((program) => (
+          {visiblePrograms(showIntensive).map((program) => (
             <li key={program.id} className="border-b border-line">
               <TrackedLink
                 href={`/programs#${program.id}`}

@@ -13,10 +13,15 @@ import {
   classSession,
   formatClassDate,
   formatUsd,
+  isIntensivePromoActive,
   quoteFor,
 } from "@/lib/shsat-intensive"
 
 export async function POST(request: Request) {
+  if (!isIntensivePromoActive()) {
+    return fail(410, `Enrollment for the ${INTENSIVE_NAME} has closed. Please call or text 347-479-5020 about our January 2027 programs.`)
+  }
+
   const body = await readBody(request)
   if (!body) return fail(400, "Invalid request.")
 

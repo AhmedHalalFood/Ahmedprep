@@ -94,6 +94,11 @@ export const PROGRAMS: Program[] = [
   },
 ]
 
+/** Program list with the 2026 Intensive card removed once its promotion has ended. */
+export function visiblePrograms(showIntensive: boolean) {
+  return showIntensive ? PROGRAMS : PROGRAMS.filter((p) => p.id !== "intensive")
+}
+
 export function getProgram(id: ProgramId) {
   return PROGRAMS.find((p) => p.id === id)
 }

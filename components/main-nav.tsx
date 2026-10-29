@@ -5,7 +5,11 @@ import { usePathname } from "next/navigation"
 import { INTENSIVE_PATH } from "@/lib/shsat-intensive"
 import { STUDENT_PORTAL_URL } from "@/lib/student-portal"
 
-export const NAV_LINKS = [
+export function navLinks(showIntensive: boolean) {
+  return showIntensive ? NAV_LINKS : NAV_LINKS.filter((link) => link.href !== INTENSIVE_PATH)
+}
+
+const NAV_LINKS = [
   { label: "Home", href: "/" },
   { label: "SHSAT Prep", href: "/shsat" },
   { label: "2026 SHSAT Intensive", href: INTENSIVE_PATH },
@@ -21,11 +25,11 @@ export function isNavActive(pathname: string, href: string) {
   return href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`)
 }
 
-export function MainNav() {
+export function MainNav({ showIntensive }: { showIntensive: boolean }) {
   const pathname = usePathname()
   return (
     <nav aria-label="Main navigation">
-      {NAV_LINKS.map((link) => {
+      {navLinks(showIntensive).map((link) => {
         const active = isNavActive(pathname, link.href)
         return (
           <Link key={link.href} href={link.href} aria-current={active ? "page" : undefined} className={active ? "is-active" : undefined}>
