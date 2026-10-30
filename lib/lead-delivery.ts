@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto"
 import { NextResponse } from "next/server"
-import { Resend } from "resend"
+import { EMAIL_SENDER, createEmailClient } from "@/lib/email-sender"
 
 // Shared email delivery for every lead form. Database storage for those forms lives in lib/lead-storage.ts.
 const RECIPIENT = "Tariq@ahmedprep.com"
@@ -203,10 +203,10 @@ ${allRows
     .digest("hex")
 
   const testMode = isTestAddress(replyTo)
-  const resend = new Resend(apiKey)
+  const resend = createEmailClient(apiKey)
   const { data: sent, error } = await resend.emails.send(
     {
-      from: `AhmedPrep Website <${fromLocalPart}@${domain}>`,
+      from: EMAIL_SENDER,
       to: [testMode ? "delivered@resend.dev" : RECIPIENT],
       replyTo,
       subject: testMode ? `[TEST] ${subject}` : subject,
@@ -237,7 +237,7 @@ ${allRows
     // The confirmation body is deterministic, so a repeat submission reuses the same key and Resend never sends it twice.
     const { data: confirmed, error: confirmError } = await resend.emails.send(
       {
-        from: `AhmedPrep <${fromLocalPart}@${domain}>`,
+        from: EMAIL_SENDER,
         to: [confirmation.to],
         replyTo: RECIPIENT,
         subject: confirmation.subject,
@@ -253,7 +253,7 @@ ${allRows
       console.error(`[${scope}] Confirmation email failed:`, confirmError?.name, confirmError?.message)
       const { error: alertError } = await resend.emails.send(
         {
-          from: `AhmedPrep Website <${fromLocalPart}@${domain}>`,
+          from: EMAIL_SENDER,
           to: [testMode ? "delivered@resend.dev" : RECIPIENT],
           replyTo,
           subject: `${testMode ? "[TEST] " : ""}ACTION NEEDED: confirmation email not delivered (${confirmation.to})`,
@@ -297,9 +297,9 @@ export async function sendAdminAlert({
   const domain = process.env.RESEND_EMAIL_DOMAIN
   if (!apiKey || !domain) return false
   const testMode = isTestAddress(replyTo)
-  const { error } = await new Resend(apiKey).emails.send(
+  const { error } = await createEmailClient(apiKey).emails.send(
     {
-      from: `AhmedPrep Website <${fromLocalPart}@${domain}>`,
+      from: EMAIL_SENDER,
       to: [testMode ? "delivered@resend.dev" : RECIPIENT],
       replyTo,
       subject: `${testMode ? "[TEST] " : ""}${subject}`,
@@ -319,9 +319,9 @@ export async function sendConfirmationEmail(confirmation: Confirmation, fromLoca
   const apiKey = process.env.RESEND_API_KEY
   const domain = process.env.RESEND_EMAIL_DOMAIN
   if (!apiKey || !domain) return { ok: false as const, error: "Email delivery is not configured." }
-  const { data, error } = await new Resend(apiKey).emails.send(
+  const { data, error } = await createEmailClient(apiKey).emails.send(
     {
-      from: `AhmedPrep <${fromLocalPart}@${domain}>`,
+      from: EMAIL_SENDER,
       to: [confirmation.to],
       replyTo: RECIPIENT,
       subject: confirmation.subject,
