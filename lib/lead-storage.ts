@@ -17,7 +17,11 @@ type LeadRecord = {
   payload: Record<string, string>
 }
 
-type Claim = { kind: "deliver"; id: number } | { kind: "duplicate"; id: number }
+/** `fresh` is false when the row was first saved more than NEW_SUBMISSION_SECONDS ago (an older request being retried). */
+type Claim = { kind: "deliver"; id: number; fresh: boolean } | { kind: "duplicate"; id: number }
+
+// A retry of a row saved longer ago than this is treated as an older request, not a new submission.
+const NEW_SUBMISSION_SECONDS = 15 * 60
 
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 // Long enough to cover a slow Resend call; after this a stalled attempt can be taken over by a retry.
@@ -47,7 +51,7 @@ export function leadIdempotencyKey(formType: LeadFormType, submissionId: string,
  * database retry) is recognised as the same request.
  */
 async function claimLead(formType: LeadFormType, idempotencyKey: string, lease: string, record: LeadRecord): Promise<Claim> {
-  const { rows } = await pool.query<{ id: string; owns: boolean }>(
+  const { rows } = await pool.query<{ id: string; owns: boolean; fresh: boolean }>(
     `INSERT INTO lead_submissions
        (form_type, idempotency_key, contact_name, contact_email, contact_phone, student_name, program, payload,
         delivery_lease, delivery_started_at, delivery_attempts)
@@ -72,7 +76,8 @@ async function claimLead(formType: LeadFormType, idempotencyKey: string, lease: 
                       OR lead_submissions.delivery_started_at < now() - make_interval(secs => ${LEASE_SECONDS}))
                 THEN EXCLUDED.delivery_lease ELSE lead_submissions.delivery_lease END,
        updated_at = now()
-     RETURNING id, (admin_notified_at IS NULL AND delivery_lease = $9) AS owns`,
+     RETURNING id, (admin_notified_at IS NULL AND delivery_lease = $9) AS owns,
+       (created_at > now() - make_interval(secs => ${NEW_SUBMISSION_SECONDS})) AS fresh`,
     [
       formType,
       idempotencyKey,
@@ -86,7 +91,7 @@ async function claimLead(formType: LeadFormType, idempotencyKey: string, lease: 
     ],
   )
   const row = rows[0]
-  return { kind: row.owns ? "deliver" : "duplicate", id: Number(row.id) }
+  return row.owns ? { kind: "deliver", id: Number(row.id), fresh: Boolean(row.fresh) } : { kind: "duplicate", id: Number(row.id) }
 }
 
 /** Keeps the first notification time, so a retried request never moves it. */
@@ -123,11 +128,14 @@ export async function saveAndDeliverLead({
   submissionId,
   record,
   email,
+  confirmNewSubmissionsOnly = false,
 }: {
   formType: LeadFormType
   submissionId: unknown
   record: LeadRecord
   email: Omit<LeadEmail, "dedupeKey" | "onDelivery" | "persisted">
+  /** When true, the submitter confirmation is skipped for rows first saved before this request (older requests). */
+  confirmNewSubmissionsOnly?: boolean
 }) {
   const idempotencyKey = leadIdempotencyKey(formType, clean(submissionId, 64), record.payload)
   const lease = randomUUID()
@@ -159,8 +167,13 @@ export async function saveAndDeliverLead({
   }
 
   const leadId = claim.id
+  const skipConfirmation = confirmNewSubmissionsOnly && !claim.fresh && Boolean(email.confirmation)
+  if (skipConfirmation) {
+    console.warn(`[${email.scope}] Lead #${leadId} is an older request; notifying AhmedPrep without a submitter confirmation`)
+  }
   return deliverLead({
     ...email,
+    confirmation: skipConfirmation ? undefined : email.confirmation,
     // Ties Resend's own 24-hour idempotency to the stored row, a second guard against a double send.
     dedupeKey: [idempotencyKey],
     persisted: { label: `lead_submissions #${leadId}` },

@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint .",
     "db:migrate": "node scripts/migrate.mjs",
-    "db:migrate:check": "node scripts/migrate.mjs --dry-run"
+    "db:migrate:check": "node scripts/migrate.mjs --dry-run",
+    "test": "vitest run"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
@@ -74,6 +75,7 @@
     "postcss": "^8.5",
     "tailwindcss": "^4.2.0",
     "tw-animate-css": "1.3.3",
-    "typescript": "5.7.3"
+    "typescript": "5.7.3",
+    "vitest": "^5.0.5"
   }
 }

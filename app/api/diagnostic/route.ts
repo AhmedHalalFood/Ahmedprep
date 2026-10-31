@@ -1,4 +1,5 @@
 import { EMAIL_PATTERN, PROGRAMS, clean, fail, hasPhoneDigits, readBody, screenSubmission } from "@/lib/lead-delivery"
+import { diagnosticConfirmation } from "@/lib/diagnostic-confirmation"
 import { saveAndDeliverLead } from "@/lib/lead-storage"
 
 export async function POST(request: Request) {
@@ -37,6 +38,7 @@ export async function POST(request: Request) {
   return saveAndDeliverLead({
     formType: "diagnostic",
     submissionId: body.submissionId,
+    confirmNewSubmissionsOnly: true,
     record: {
       contactName: data.parentName,
       contactEmail: data.parentEmail,
@@ -63,6 +65,7 @@ export async function POST(request: Request) {
         ["Target School or SAT Score", data.target || "Not provided"],
         ["Additional Notes", data.notes || "Not provided"],
       ],
+      confirmation: diagnosticConfirmation(data),
     },
   })
 }
