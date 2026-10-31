@@ -57,6 +57,8 @@ export type Confirmation = {
   subject: string
   heading: string
   paragraphs: string[]
+  /** Full sender, e.g. "AhmedPrep <noreply@ahmedprep.com>". Defaults to the form's own address on RESEND_EMAIL_DOMAIN. */
+  from?: string
   /** Optional button inserted after the paragraph at `afterParagraph`. Only https links are rendered. */
   link?: { label: string; href: string; afterParagraph: number }
 }
@@ -237,7 +239,7 @@ ${allRows
     // The confirmation body is deterministic, so a repeat submission reuses the same key and Resend never sends it twice.
     const { data: confirmed, error: confirmError } = await resend.emails.send(
       {
-        from: `AhmedPrep <${fromLocalPart}@${domain}>`,
+        from: confirmation.from ?? `AhmedPrep <${fromLocalPart}@${domain}>`,
         to: [confirmation.to],
         replyTo: RECIPIENT,
         subject: confirmation.subject,
@@ -321,7 +323,7 @@ export async function sendConfirmationEmail(confirmation: Confirmation, fromLoca
   if (!apiKey || !domain) return { ok: false as const, error: "Email delivery is not configured." }
   const { data, error } = await new Resend(apiKey).emails.send(
     {
-      from: `AhmedPrep <${fromLocalPart}@${domain}>`,
+      from: confirmation.from ?? `AhmedPrep <${fromLocalPart}@${domain}>`,
       to: [confirmation.to],
       replyTo: RECIPIENT,
       subject: confirmation.subject,
