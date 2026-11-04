@@ -49,7 +49,7 @@ export const ENROLLMENT_2027 = {
   },
   steps: [
     { title: "Submit a free enrollment inquiry", body: "Tell us about your child and the class you prefer. It takes about two minutes." },
-    { title: "We confirm your seat and send payment instructions", body: "AhmedPrep contacts you to confirm availability, class dates, and tuition." },
+    { title: "We confirm availability and send payment instructions.", body: "AhmedPrep contacts you to confirm availability, class dates, and tuition." },
     { title: "Enrollment is confirmed after full payment", body: "Your seat is confirmed once full payment is verified and accepted." },
   ],
   programs: [
