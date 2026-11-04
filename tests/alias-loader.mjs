@@ -13,6 +13,8 @@ registerHooks({
       const file = [".ts", ".tsx", "/index.ts"].map((ext) => base + ext).find(existsSync)
       if (file) return next(pathToFileURL(file).href, context)
     }
+    // Next.js ships "next/server" without an exports map, so plain Node ESM needs the explicit file.
+    if (specifier === "next/server") return next("next/server.js", context)
     return next(specifier, context)
   },
 })
