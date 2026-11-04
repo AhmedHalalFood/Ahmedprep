@@ -14,7 +14,7 @@ const PATH = "/enroll-2027"
 export const metadata: Metadata = {
   title: "January 2027 SHSAT & Digital SAT Enrollment",
   description:
-    "Enroll in AhmedPrep's January 2027 SHSAT and Digital SAT programs in Astoria: 12 weeks, 72 instructional hours, and no more than 12 students per class.",
+    "Enroll in AhmedPrep's January 2027 SHSAT and Digital SAT programs in Astoria: 12 weeks, 72 scheduled hours including breaks, and no more than 12 students per class.",
   alternates: { canonical: absoluteUrl(PATH) },
   openGraph: { ...baseOpenGraph, url: absoluteUrl(PATH) },
 }
@@ -23,7 +23,7 @@ export default function Enroll2027Page() {
   const E = ENROLLMENT_2027
   const facts = [
     { term: "Programs", value: "SHSAT & Digital SAT" },
-    { term: "Length", value: `${E.weeks} weeks · ${E.hours} hours` },
+    { term: "Length", value: `${E.weeks} weeks · ${E.hoursLabel}` },
     { term: "Class size", value: `Max ${E.maxClassSize} students` },
   ]
 

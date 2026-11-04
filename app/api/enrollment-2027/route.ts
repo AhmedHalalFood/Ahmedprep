@@ -84,7 +84,7 @@ export async function POST(request: Request) {
           `Thank you for your interest in ${program.name} for ${data.studentName}. This email confirms we received your inquiry for AhmedPrep's January 2027 program.`,
           ENROLLMENT_DISCLAIMER,
           `Program: ${program.name}\nPreferred schedule: ${data.schedule}\nFounding-family tuition interest: ${data.foundingInterest}`,
-          `Program details: ${ENROLLMENT_2027.weeks} weeks, ${ENROLLMENT_2027.hours} instructional hours, no more than ${ENROLLMENT_2027.maxClassSize} students per class. ${tuitionLine}`,
+          `Program details: ${ENROLLMENT_2027.weeks} weeks, ${ENROLLMENT_2027.hoursLabel}, no more than ${ENROLLMENT_2027.maxClassSize} students per class. ${tuitionLine}`,
           "Questions? Simply reply to this email.",
         ],
       },

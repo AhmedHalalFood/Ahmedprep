@@ -30,13 +30,13 @@ export const TUITION_TIERS: TuitionTier[] = [
     id: "early",
     name: "Early payment",
     amount: "$1,296",
-    condition: "Full payment by December 26, 2026.",
+    condition: "Full payment by December 20, 2026, at 11:59:59 PM ET.",
   },
   {
     id: "regular",
     name: "Regular tuition",
     amount: "$1,440",
-    condition: "Full payment due January 5, 2027.",
+    condition: "Full payment required before the student’s first scheduled class.",
   },
 ]
 

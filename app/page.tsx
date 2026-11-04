@@ -59,7 +59,7 @@ export default async function Home() {
           </h1>
           <p className="hero-support">
             Personalized instruction <span aria-hidden="true">•</span> 12-week programs{" "}
-            <span aria-hidden="true">•</span> 72 instructional hours
+            <span aria-hidden="true">•</span> 72 scheduled hours, including breaks
           </p>
           <div className="hero-actions">
             <TrackedLink

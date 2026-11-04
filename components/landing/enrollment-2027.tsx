@@ -18,7 +18,7 @@ export function Enrollment2027({ showIntensive }: { showIntensive: boolean }) {
         <dl className="grid grid-cols-2 border-y border-line md:grid-cols-4">
           {[
             { term: "Program length", value: `${E.weeks} weeks` },
-            { term: "Instruction", value: `${E.hours} hours per group` },
+            { term: "Schedule", value: E.hoursLabel },
             { term: "Class size", value: `Max ${E.maxClassSize} students` },
             { term: "Diagnostic", value: "Free" },
           ].map((fact, i) => (
@@ -78,7 +78,7 @@ export function Enrollment2027({ showIntensive }: { showIntensive: boolean }) {
                 Clear, affordable tuition
               </h3>
               <p className="text-pretty leading-relaxed text-white/75">
-                Tuition covers the full {E.weeks}-week program ({E.hours} hours of instruction). The same tuition applies to SHSAT and Digital SAT Prep.
+                Tuition covers the full {E.weeks}-week program ({E.hoursLabel}). The same tuition applies to SHSAT and Digital SAT Prep.
               </p>
             </div>
             <div className="flex flex-col border-t border-white/20">

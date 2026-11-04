@@ -66,7 +66,7 @@ export const CLASSES: ClassOffering[] = [
     label: "SHSAT Weekends",
     days: "Saturday & Sunday",
     time: "10 AM–1 PM ET",
-    plannedStart: "Saturday, January 16, 2027",
+    plannedStart: "Saturday, January 9, 2027",
   },
   {
     id: "2027-01-dsat-weekday",
@@ -84,7 +84,7 @@ export const CLASSES: ClassOffering[] = [
     label: "Digital SAT Weekends",
     days: "Saturday & Sunday",
     time: "2–5 PM ET",
-    plannedStart: "Saturday, January 16, 2027",
+    plannedStart: "Saturday, January 9, 2027",
   },
 ]
 
@@ -106,12 +106,12 @@ export const FOUNDING_POLICY = {
 } as const
 
 export const EARLY_POLICY = {
-  /** December 26, 2026, 11:59:59 PM Eastern (EST, UTC−5). */
-  deadlineIso: "2026-12-27T04:59:59Z",
-  deadlineLabel: "December 26, 2026",
+  /** December 20, 2026, 11:59:59 PM Eastern (EST, UTC−5). */
+  deadlineIso: "2026-12-21T04:59:59Z",
+  deadlineLabel: "December 20, 2026",
 } as const
 
-export const REGULAR_DUE_LABEL = "January 5, 2027"
+export const REGULAR_DUE_LABEL = "before the student’s first scheduled class"
 
 export const PAYMENT_OPTIONS: Record<PaymentOption, { title: string; amountCents: number; detail: string }> = {
   "founding-full": {
@@ -122,12 +122,12 @@ export const PAYMENT_OPTIONS: Record<PaymentOption, { title: string; amountCents
   "early-full": {
     title: "Early Full Payment",
     amountCents: TUITION.earlyCents,
-    detail: `10% discount. Full payment of $1,296 must be received by ${EARLY_POLICY.deadlineLabel}.`,
+    detail: `10% discount. Full payment of $1,296 must be received by ${EARLY_POLICY.deadlineLabel}, at 11:59:59 PM ET.`,
   },
   "regular-full": {
     title: "Regular Tuition",
     amountCents: TUITION.regularCents,
-    detail: `Full payment of $1,440 must be received by ${REGULAR_DUE_LABEL}.`,
+    detail: `Full payment of $1,440 is required ${REGULAR_DUE_LABEL}.`,
   },
 }
 

@@ -93,7 +93,7 @@ export function TuitionStep({ value, onChange }: { value: PaymentOption | null; 
       </section>
 
       <div className="flex flex-col gap-1 border-l-4 border-gold bg-cream px-4 py-3 text-sm leading-relaxed text-navy">
-        <p className="font-bold">Discounts cannot be combined. No installment plans for any option.</p>
+        <p className="font-bold">Discounts cannot be combined. No installment plans for Winter 2027.</p>
         <p>{`Enrollment is subject to available seats (maximum ${MAX_CLASS_SIZE} students per class). An inquiry does not reserve a seat.`}</p>
         <p>No registration, materials, or processing fees.</p>
       </div>

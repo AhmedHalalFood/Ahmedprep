@@ -14,8 +14,8 @@ demonstration values only and is excluded from search engines.
 | A seat counts only when an admin approves **and** full payment is verified | Only `status = 'confirmed'` rows are counted |
 | Inquiries never reduce availability | Inquiries stay in `lead_submissions`; they are never counted |
 | Founding-family: max 5 per group, ends Dec 5, 2026 (whichever comes first) | Checked on the server at approval time, under a row lock |
-| $1,296 early full payment if paid in full by Dec 26, 2026 | Tier assigned by the server from the verified payment date |
-| $1,440 regular tuition due Jan 5, 2027 | Default tier |
+| $1,296 early full payment if paid in full by Dec 20, 2026, 11:59:59 PM ET | Tier assigned by the server from the verified payment date |
+| $1,440 regular tuition, paid in full before the student's first scheduled class | Default tier |
 | Discounts do not stack | One `tuition_tier` per enrollment; amount is looked up from the tier, never typed in |
 | Full group → waitlist | Waitlist entries in order; never counted as seats |
 
@@ -58,7 +58,7 @@ Production would follow only after separate approval.
      last seat;
    - re-counts confirmed seats and rejects the approval if the group is full (offering the waitlist instead);
    - assigns the tuition tier: founding only if before Dec 5, 2026 **and** fewer than 5 founding
-     seats are confirmed; otherwise early if paid in full by Dec 26, 2026; otherwise regular;
+     seats are confirmed; otherwise early if paid in full by Dec 20, 2026; otherwise regular;
    - sets `status = 'confirmed'` and writes an `admin_audit_log` entry.
 5. **Cancellation or refund** frees the seat; the next waitlist family can be offered it.
 

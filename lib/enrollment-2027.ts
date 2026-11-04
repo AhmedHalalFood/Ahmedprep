@@ -5,10 +5,11 @@
 export const ENROLLMENT_2027 = {
   eyebrow: "January 2027 Enrollment",
   launchNote:
-    "Planned start dates are shown below and will be confirmed once the final calendar is approved. Each group receives 72 hours of instruction over 12 weeks, with makeup classes for any cancellations.",
+    "Planned start dates are shown below and will be confirmed once the final calendar is approved. Each group meets for 72 scheduled hours, including breaks, over 12 weeks, with makeup classes for any cancellations.",
   datesStatus: "planned" as "planned" | "confirmed",
   weeks: 12,
   hours: 72,
+  hoursLabel: "72 scheduled hours, including breaks",
   maxClassSize: 12,
   location: "Astoria",
   requestHref: "/enroll-2027",
@@ -33,17 +34,17 @@ export const ENROLLMENT_2027 = {
       label: "Early Full Payment",
       total: "$1,296",
       savingsLabel: "10% off",
-      summary: "10% discount. Full payment must be received by December 26, 2026.",
-      points: ["10% discount ($144 off)", "Full payment must be received by December 26, 2026"],
+      summary: "10% discount. Full payment must be received by December 20, 2026, at 11:59:59 PM ET.",
+      points: ["10% discount ($144 off)", "Full payment must be received by December 20, 2026, at 11:59:59 PM ET"],
     },
     regular: {
       label: "Regular Tuition",
       total: "$1,440",
       savingsLabel: null,
-      summary: "Full payment must be received by January 5, 2027.",
-      points: ["Full payment must be received by January 5, 2027"],
+      summary: "Full payment is required before the student’s first scheduled class.",
+      points: ["Full payment is required before the student’s first scheduled class"],
     },
-    rules: "Discounts cannot be combined. No installment plans for any option.",
+    rules: "Discounts cannot be combined. No installment plans for Winter 2027.",
     seatNote: "Enrollment is subject to available seats. An inquiry does not reserve a seat.",
   },
   steps: [
@@ -60,7 +61,7 @@ export const ENROLLMENT_2027 = {
       href: "/shsat",
       schedules: [
         { label: "Weekday group", days: "Monday & Wednesday", time: "5:30–8:30 PM ET", start: "Monday, January 11, 2027" },
-        { label: "Weekend group", days: "Saturday & Sunday", time: "10 AM–1 PM ET", start: "Saturday, January 16, 2027" },
+        { label: "Weekend group", days: "Saturday & Sunday", time: "10 AM–1 PM ET", start: "Saturday, January 9, 2027" },
       ],
     },
     {
@@ -71,7 +72,7 @@ export const ENROLLMENT_2027 = {
       href: "/digital-sat",
       schedules: [
         { label: "Weekday group", days: "Tuesday & Thursday", time: "5:30–8:30 PM ET", start: "Tuesday, January 12, 2027" },
-        { label: "Weekend group", days: "Saturday & Sunday", time: "2–5 PM ET", start: "Saturday, January 16, 2027" },
+        { label: "Weekend group", days: "Saturday & Sunday", time: "2–5 PM ET", start: "Saturday, January 9, 2027" },
       ],
     },
   ],
@@ -80,7 +81,7 @@ export const ENROLLMENT_2027 = {
     { title: "Personalized feedback", body: "Specific notes on what each student should practice next." },
     { title: "Progress tracking", body: "Regular check-ins so families can see where skills are improving." },
     { title: "Small classes", body: "No more than 12 students in a class." },
-    { title: "Makeup classes", body: "If a class is cancelled, a makeup class is scheduled so every group still receives 72 hours." },
+    { title: "Makeup classes", body: "If a class is cancelled, a makeup class is scheduled so every group still receives the full 72 scheduled hours, including breaks." },
     { title: "Instructor accessibility", body: "Families can reach the instructor with questions between classes." },
   ],
 } as const
