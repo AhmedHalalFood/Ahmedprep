@@ -1,3 +1,4 @@
+import { ENROLLMENT_2027 } from "@/lib/enrollment-2027"
 import { FREE_CLASS } from "@/lib/free-class"
 import { INTENSIVE_PATH } from "@/lib/shsat-intensive"
 
@@ -20,6 +21,10 @@ export type Program = {
 
 const DIAGNOSTIC_CTA = { label: "Book Free Diagnostic", href: "/free-diagnostic" }
 const CONTACT_CTA = { label: "Contact AhmedPrep", href: "/contact" }
+
+const T = ENROLLMENT_2027.tuition
+export const JANUARY_2027_PRICE = `${T.regular.total} regular tuition (January 2027 small group)`
+export const JANUARY_2027_PRICE_NOTE = `12-week small-group program, ${ENROLLMENT_2027.hoursLabel}. Early full payment ${T.early.total} by December 20, 2026; founding-family ${T.founding.total} for the first 5 fully paid enrollments per class, by December 5, 2026. ${T.rules} Private tutoring is priced separately.`
 
 export const PROGRAMS: Program[] = [
   {
@@ -54,7 +59,8 @@ export const PROGRAMS: Program[] = [
     audience: "NYC students preparing for the SHSAT, typically in grades 7 and 8.",
     format: "Small-group and individual instruction in Astoria, Queens and online.",
     benefits: ["Diagnostic-based plan", "Targeted Math and ELA instruction", "Timed practice on the computer-adaptive format"],
-    price: null,
+    price: JANUARY_2027_PRICE,
+    priceNote: JANUARY_2027_PRICE_NOTE,
     cta: DIAGNOSTIC_CTA,
   },
   {
@@ -65,7 +71,8 @@ export const PROGRAMS: Program[] = [
     audience: "High school students preparing for the Digital SAT.",
     format: "Small-group and individual instruction in Astoria, Queens and online.",
     benefits: ["Starts from a baseline practice score", "Desmos and adaptive-test strategy", "Practice testing with score analysis"],
-    price: null,
+    price: JANUARY_2027_PRICE,
+    priceNote: JANUARY_2027_PRICE_NOTE,
     cta: DIAGNOSTIC_CTA,
   },
   {

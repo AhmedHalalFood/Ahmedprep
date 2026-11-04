@@ -8,7 +8,10 @@ const REASONS = [
   ["Structured homework", "Assignments follow each lesson and practice the exact skills that were taught."],
   ["Progress tracking", "Practice sections and full-length tests are reviewed so the plan can be adjusted as the student improves."],
   ["Parent communication", "Parents hear what was covered, what to practice next, and how the student is doing."],
-  ["Free weekly learning", "Free live Sunday classes alternate between SHSAT and Digital SAT topics, open to any student who RSVPs."],
+  [
+    "Free Sunday classes",
+    "Beginning January 2027, free live SHSAT and Digital SAT classes are both offered on the same every-other Sunday: SHSAT at 6:00–6:45 PM ET and Digital SAT at 7:00–7:45 PM ET. Open to any student who RSVPs.",
+  ],
 ] as const
 
 export function WhyFamilies() {
