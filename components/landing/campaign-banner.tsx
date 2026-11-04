@@ -1,9 +1,12 @@
 import { ArrowUpRight } from "lucide-react"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
+import { connection } from "next/server"
 import { getActiveCampaign } from "@/lib/campaigns"
 
-export function CampaignBanner() {
+export async function CampaignBanner() {
+  // Request-time so a cached render from before the end date is never served after it.
+  await connection()
   const campaign = getActiveCampaign()
   if (!campaign) return null
   const event = campaign.program === "Digital SAT" ? EVENTS.digitalSatCtaClick : campaign.program === "SHSAT" ? EVENTS.shsatCtaClick : EVENTS.diagnosticCtaClick

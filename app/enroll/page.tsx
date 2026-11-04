@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Breadcrumbs } from "@/components/landing/primitives"
 import { EnrollmentFlow } from "@/components/enroll/enrollment-flow"
+import { requireInternalPreview } from "@/lib/internal-routes-guard"
 
 export const metadata: Metadata = {
   title: "Enroll in SHSAT or Digital SAT Prep",
@@ -10,7 +11,8 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
-export default function EnrollPage() {
+export default async function EnrollPage() {
+  await requireInternalPreview()
   return (
     <>
       <Breadcrumbs items={[{ label: "Enroll", href: "/enroll" }]} />
