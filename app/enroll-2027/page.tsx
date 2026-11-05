@@ -4,12 +4,36 @@ import { ClassCards } from "@/components/enroll-2027/class-cards"
 import { EnrollmentSteps } from "@/components/enroll-2027/enrollment-steps"
 import { TuitionOptions } from "@/components/enroll-2027/tuition-options"
 import { Enrollment2027Form } from "@/components/enrollment-2027-form"
+import { Faq, type FaqItem } from "@/components/landing/faq"
 import { Breadcrumbs } from "@/components/landing/primitives"
 import { ADDRESS_LINE_1, ADDRESS_LINE_2 } from "@/lib/business"
 import { ENROLLMENT_2027 } from "@/lib/enrollment-2027"
 import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 
 const PATH = "/enroll-2027"
+
+const ATTENDANCE_FAQS: FaqItem[] = [
+  {
+    q: "Do classes continue during school holidays?",
+    a: "Yes. Classes normally continue during school and federal holidays unless AhmedPrep announces a closure.",
+  },
+  {
+    q: "What happens if AhmedPrep cancels a class?",
+    a: "We will arrange a makeup class or provide equivalent live instruction at no additional cost.",
+  },
+  {
+    q: "What if my child misses a class?",
+    a: "Parents may request missed assignments and available class materials. Individual makeup classes are not guaranteed.",
+  },
+  {
+    q: "What happens during severe weather?",
+    a: "Classes may move online or be rescheduled. Parents will receive instructions from AhmedPrep.",
+  },
+  {
+    q: "Will my child receive all 72 program hours?",
+    a: "Yes. Each program includes 72 scheduled hours, including breaks. Any class canceled by AhmedPrep will be made up through an additional session or equivalent live instruction.",
+  },
+]
 
 export const metadata: Metadata = {
   title: "January 2027 SHSAT & Digital SAT Enrollment",
@@ -92,6 +116,8 @@ export default function Enroll2027Page() {
           </div>
         </div>
       </section>
+
+      <Faq id="attendance-faq" title="Class attendance and holidays" items={ATTENDANCE_FAQS} />
     </>
   )
 }
