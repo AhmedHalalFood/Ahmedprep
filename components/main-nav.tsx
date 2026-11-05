@@ -11,8 +11,8 @@ export function navLinks(showIntensive: boolean) {
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
-  { label: "Programs & Pricing", href: "/programs" },
-  { label: "January 2027 Enrollment", href: "/enroll-2027" },
+  { label: "Pricing", href: "/programs" },
+  { label: "Enroll 2027", href: "/enroll-2027" },
   { label: "SHSAT Prep", href: "/shsat" },
   { label: "2026 SHSAT Intensive", href: INTENSIVE_PATH },
   { label: "Digital SAT Prep", href: "/digital-sat" },
