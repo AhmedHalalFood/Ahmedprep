@@ -1,7 +1,7 @@
 "use server"
 
 import { verifyResendToken } from "@/lib/admin-links"
-import { getClassByDate, type RsvpProgram } from "@/lib/free-class"
+import { getSessionByDate, isPausedClassDate, type RsvpProgram } from "@/lib/free-class"
 import { sendConfirmationEmail } from "@/lib/lead-delivery"
 import { buildSundayConfirmation } from "@/lib/sunday-confirmation"
 import {
@@ -22,7 +22,10 @@ export async function resendConfirmation(_prev: ResendState, formData: FormData)
   let attempt: number | null
   try {
     registration = await getRegistration(id)
-    if (!registration || !getClassByDate(registration.classDate)) return { status: "error", message: "Registration not found." }
+    if (!registration || !getSessionByDate(registration.classDate, registration.program)) return { status: "error", message: "Registration not found." }
+    if (isPausedClassDate(registration.classDate)) {
+      return { status: "error", message: "This class was canceled during the Free Sunday pause. No confirmation was sent." }
+    }
     attempt = await claimResendAttempt(id)
   } catch (error) {
     console.error("[confirmation-resend] Database unavailable:", describeDbError(error))
@@ -32,7 +35,7 @@ export async function resendConfirmation(_prev: ResendState, formData: FormData)
     return { status: "error", message: "A resend was just attempted. Please wait two minutes before trying again." }
   }
 
-  const session = getClassByDate(registration.classDate)!
+  const session = getSessionByDate(registration.classDate, registration.program)!
   const { confirmation } = buildSundayConfirmation(session, registration.program as RsvpProgram, registration)
   const result = await sendConfirmationEmail(confirmation, "classes", `free-sunday-class-resend/${id}/${attempt}`)
   try {

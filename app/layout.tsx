@@ -7,6 +7,7 @@ import { GoogleAnalytics } from '@/components/google-analytics'
 import { Header } from '@/components/header'
 import { MobileCtaBar } from '@/components/mobile-cta-bar'
 import { BUSINESS, MAPS_URL, SITE_URL } from '@/lib/business'
+import { intensivePromoActive } from '@/lib/intensive-promo'
 import { baseOpenGraph } from '@/lib/seo'
 
 const organizationSchema = {
@@ -91,11 +92,12 @@ export const viewport: Viewport = {
   themeColor: '#08264a',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const showIntensive = await intensivePromoActive()
   return (
     <html lang="en" className="bg-background">
       <body className={`${inter.variable} ${playfair.variable} font-sans antialiased`}>
@@ -109,7 +111,7 @@ export default function RootLayout({
         <Header />
         <main id="main">{children}</main>
         <Footer />
-        <MobileCtaBar />
+        <MobileCtaBar showIntensive={showIntensive} />
         {process.env.NODE_ENV === 'production' && <Analytics />}
         <GoogleAnalytics />
       </body>

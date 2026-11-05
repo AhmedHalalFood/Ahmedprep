@@ -3,6 +3,7 @@ import Link from "next/link"
 import { ArrowUpRight, ExternalLink } from "lucide-react"
 import { Breadcrumbs, JsonLd } from "@/components/landing/primitives"
 import { ToolHero } from "@/components/tools/tool-hero"
+import { intensivePromoActive } from "@/lib/intensive-promo"
 import { OFFICIAL_DATES } from "@/lib/official-dates"
 import { getSource } from "@/lib/official-sources"
 import { absoluteUrl, baseOpenGraph, webPageSchema } from "@/lib/seo"
@@ -33,7 +34,8 @@ function countdownLabel(days: number, endDays: number) {
   return days === 1 ? "Tomorrow" : `${days} days left`
 }
 
-export default function ShsatDatesPage() {
+export default async function ShsatDatesPage() {
+  const showIntensive = await intensivePromoActive()
   const group = OFFICIAL_DATES.find((g) => g.title.includes("SHSAT"))!
   const source = getSource(group.sourceId)
   const today = todayInNewYork()
@@ -86,9 +88,11 @@ export default function ShsatDatesPage() {
             <Link href={`/updates/${group.updateSlug}`} className="text-link">
               Read the full SHSAT update <ArrowUpRight size={15} aria-hidden="true" />
             </Link>
-            <Link href="/shsat-final-intensive-2026" className="text-link">
-              SHSAT Final Intensive 2026 <ArrowUpRight size={15} aria-hidden="true" />
-            </Link>
+            {showIntensive && (
+              <Link href="/shsat-final-intensive-2026" className="text-link">
+                SHSAT Final Intensive 2026 <ArrowUpRight size={15} aria-hidden="true" />
+              </Link>
+            )}
             <Link href="/free-diagnostic" className="text-link">
               Book Free Diagnostic <ArrowUpRight size={15} aria-hidden="true" />
             </Link>

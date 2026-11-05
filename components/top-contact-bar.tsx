@@ -2,9 +2,11 @@ import { ArrowRight, MessageSquare, Phone } from "lucide-react"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
 import { BUSINESS } from "@/lib/business"
+import { scheduleSummary } from "@/lib/free-class"
 import styles from "./top-contact-bar.module.css"
 
 export function TopContactBar() {
+  const summary = scheduleSummary()
   return (
     <div className={`contact-strip ${styles.strip}`}>
       <div className={styles.inner}>
@@ -15,10 +17,25 @@ export function TopContactBar() {
           className={styles.announce}
         >
           <span className={styles.tag}>Free</span>
-          <span>
-            Live SHSAT & Digital SAT Classes <span className={styles.sep} aria-hidden="true">•</span> Sundays 4–5 PM ET{" "}
-            <span className={styles.sep} aria-hidden="true">•</span> RSVP
-          </span>
+          {summary.paused ? (
+            <span>
+              Free Sunday Zoom Classes Resume January 10, 2027{" "}
+              <span className={styles.sep} aria-hidden="true">•</span> RSVPs open December 13
+            </span>
+          ) : summary.schedule === "weekly_2026" ? (
+            <span>
+              Live SHSAT & Digital SAT Zoom Classes — Sundays 4:00–5:00 PM ET{" "}
+              <span className={styles.sep} aria-hidden="true">•</span> Free Math classes from January 2027{" "}
+              <span className={styles.sep} aria-hidden="true">•</span> RSVP
+            </span>
+          ) : (
+            <span>
+              Free SHSAT & Digital SAT Math Zoom Classes — Every Other Sunday{" "}
+              <span className={styles.sep} aria-hidden="true">•</span> SHSAT Math: 6:00–6:45 PM ET{" "}
+              <span className={styles.sep} aria-hidden="true">•</span> Digital SAT Math: 7:00–7:45 PM ET{" "}
+              <span className={styles.sep} aria-hidden="true">•</span> RSVP
+            </span>
+          )}
           <ArrowRight size={13} aria-hidden="true" />
         </TrackedLink>
         <div className={styles.contact}>

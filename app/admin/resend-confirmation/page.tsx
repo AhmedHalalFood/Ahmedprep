@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { verifyResendToken } from "@/lib/admin-links"
-import { CLASS_TYPES, getClassByDate, type RsvpProgram } from "@/lib/free-class"
+import { CLASS_TYPES, getSessionByDate, isPausedClassDate, type RsvpProgram } from "@/lib/free-class"
 import { describeDbError, getRegistration } from "@/lib/sunday-registrations"
 import { ResendForm } from "./resend-form"
 
@@ -30,7 +30,7 @@ export default async function ResendConfirmationPage({ searchParams }: Props) {
       console.error("[confirmation-resend] Could not load registration:", describeDbError(error))
     }
   }
-  const session = registration ? getClassByDate(registration.classDate) : undefined
+  const session = registration ? getSessionByDate(registration.classDate, registration.program) : undefined
 
   return (
     <main className="flex min-h-svh items-center justify-center bg-background px-4 py-12">
@@ -52,13 +52,26 @@ export default async function ResendConfirmationPage({ searchParams }: Props) {
               <dt className="text-muted-foreground">Parent</dt>
               <dd className="break-all">{registration.parentEmail}</dd>
               <dt className="text-muted-foreground">Program</dt>
-              <dd>{CLASS_TYPES[registration.program as RsvpProgram]?.label ?? registration.program}</dd>
+              <dd>
+                {session.type === "workshop"
+                  ? (CLASS_TYPES[registration.program as RsvpProgram]?.label ?? registration.program)
+                  : session.typeLabel}
+              </dd>
               <dt className="text-muted-foreground">Class</dt>
-              <dd>{session.label}, 4:00–5:00 PM Eastern</dd>
+              <dd>
+                {session.title}, {session.label}, {session.timeLabel.replace(" ET", " Eastern")}
+              </dd>
               <dt className="text-muted-foreground">Last status</dt>
               <dd className="capitalize">{registration.confirmationStatus ?? "unknown"}</dd>
             </dl>
-            <ResendForm id={id} exp={exp} sig={sig} />
+            {isPausedClassDate(registration.classDate) ? (
+              <p role="status" className="rounded-md border border-border bg-muted p-4 text-sm leading-relaxed text-muted-foreground">
+                This class was canceled during the Free Sunday pause, so confirmations can&apos;t be resent. The registration is kept
+                for your records.
+              </p>
+            ) : (
+              <ResendForm id={id} exp={exp} sig={sig} />
+            )}
           </>
         )}
       </div>

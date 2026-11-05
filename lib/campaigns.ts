@@ -1,6 +1,10 @@
+import { INTENSIVE_PROMO_ENDS_ON, todayInNewYork } from "@/lib/shsat-intensive"
+
 export type Campaign = {
   id: string
   enabled: boolean
+  /** First New York calendar day (YYYY-MM-DD) the banner is no longer shown, from 12:00 AM ET. */
+  endsOn?: string
   eyebrow: string
   title: string
   body: string
@@ -18,6 +22,7 @@ export const CAMPAIGNS: Campaign[] = [
   {
     id: "shsat-final-countdown",
     enabled: true,
+    endsOn: INTENSIVE_PROMO_ENDS_ON,
     eyebrow: "Seasonal program",
     title: "SHSAT Final Countdown",
     body: "November SHSAT preparation is underway. Get a diagnostic assessment and targeted final preparation before test day.",
@@ -69,6 +74,9 @@ export const CAMPAIGNS: Campaign[] = [
 
 export const ACTIVE_CAMPAIGN_ID: string | null = "shsat-final-countdown"
 
-export function getActiveCampaign() {
-  return CAMPAIGNS.find((c) => c.id === ACTIVE_CAMPAIGN_ID && c.enabled) ?? null
+export function getActiveCampaign(now = new Date()) {
+  const campaign = CAMPAIGNS.find((c) => c.id === ACTIVE_CAMPAIGN_ID && c.enabled)
+  if (!campaign) return null
+  if (campaign.endsOn && todayInNewYork(now) >= campaign.endsOn) return null
+  return campaign
 }

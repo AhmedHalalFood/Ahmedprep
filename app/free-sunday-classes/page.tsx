@@ -5,47 +5,84 @@ import { FreeClassRsvpForm } from "@/components/free-class-rsvp-form"
 import { Faq, type FaqItem } from "@/components/landing/faq"
 import { Breadcrumbs, JsonLd } from "@/components/landing/primitives"
 import { SundayClassViewTracker } from "@/components/sunday-classes/sunday-class-view-tracker"
-import { ThisSundayCard } from "@/components/sunday-classes/this-sunday-card"
+import { NextDatePendingCard, ThisSundayCard } from "@/components/sunday-classes/this-sunday-card"
 import { UpcomingClasses } from "@/components/sunday-classes/upcoming-classes"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
 import { BUSINESS, SITE_URL } from "@/lib/business"
-import { FREE_CLASS, RSVP_PROGRAMS, classMatchesProgram, findUpcomingClass, getUpcomingClasses, rsvpHref } from "@/lib/free-class"
+import {
+  FREE_CLASS,
+  PAID_PROGRAMS_NOTE,
+  PAUSE_ANNOUNCEMENT,
+  RSVP_PROGRAMS,
+  classMatchesProgram,
+  findUpcomingSunday,
+  getUpcomingSundays,
+  rsvpDayHref,
+  scheduleSummary,
+} from "@/lib/free-class"
 import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 
-// Rendered per request so "This Sunday" rolls over exactly when Sunday's class ends at 5 PM ET.
+// Rendered per request so the next class rolls over exactly when each session ends.
 export const dynamic = "force-dynamic"
 
 const title = "Free SHSAT & Digital SAT Classes Online | AhmedPrep"
-const description =
-  "Join AhmedPrep’s free live online Sunday test-prep classes. SHSAT and Digital SAT sessions alternate weekly, Sundays from 4–5 PM ET. RSVP required."
 
-export const metadata: Metadata = {
-  title: { absolute: title },
-  description,
-  alternates: { canonical: absoluteUrl(FREE_CLASS.path) },
-  robots: { index: true, follow: true },
-  openGraph: { ...baseOpenGraph, title, description, url: absoluteUrl(FREE_CLASS.path) },
-  twitter: { card: "summary_large_image", title, description },
+export function generateMetadata(): Metadata {
+  const summary = scheduleSummary()
+  const description = summary.paused
+    ? "AhmedPrep's free Sunday Zoom classes resume Sunday, January 10, 2027: SHSAT Math 6:00–6:45 PM ET and Digital SAT Math 7:00–7:45 PM ET, every other Sunday. RSVPs open December 13."
+    : summary.schedule === "weekly_2026"
+      ? "Free live online Sunday SHSAT and Digital SAT classes from AhmedPrep, Sundays 4–5 PM ET. Beginning in January 2027: free Math classes every other Sunday, SHSAT Math 6:00–6:45 PM ET and Digital SAT Math 7:00–7:45 PM ET. RSVP required."
+      : "Free live online SHSAT Math and Digital SAT Math classes from AhmedPrep, every other Sunday: SHSAT Math 6:00–6:45 PM ET, Digital SAT Math 7:00–7:45 PM ET. RSVP required."
+  return {
+    title: { absolute: title },
+    description,
+    alternates: { canonical: absoluteUrl(FREE_CLASS.path) },
+    robots: { index: true, follow: true },
+    openGraph: { ...baseOpenGraph, title, description, url: absoluteUrl(FREE_CLASS.path) },
+    twitter: { card: "summary_large_image", title, description },
+  }
 }
 
-const expectations = [
+const expectationsFor = (mathOnly: boolean) => [
   { icon: BookOpenCheck, title: "Live instruction from AhmedPrep", body: "A real lesson taught in real time, not a recording." },
   { icon: PencilLine, title: "Guided exam-style questions", body: "Students work through test-style problems step by step with the instructor." },
-  { icon: Calculator, title: "Math and reading/writing strategies", body: "Methods for the question types that cost students the most points." },
+  mathOnly
+    ? { icon: Calculator, title: "Focused Math strategies", body: "Methods for the Math question types that cost students the most points." }
+    : { icon: Calculator, title: "Math and reading/writing strategies", body: "Methods for the question types that cost students the most points." },
   { icon: Timer, title: "Timed practice", body: "Short timed sets that build pacing and focus under real test conditions." },
   { icon: MessageCircleQuestion, title: "Question-and-answer time", body: "Students ask questions while the material is still fresh." },
   { icon: Zap, title: "Practical preparation", body: "Strategies students can use immediately on homework and practice tests." },
 ]
 
-const faqs: FaqItem[] = [
+const SCHEDULE_FAQ_2026: FaqItem = {
+  q: "How does the schedule work?",
+  a: "Through December 27, 2026, one class meets every Sunday from 4:00–5:00 PM ET. The 1st and 3rd Sundays are SHSAT, the 2nd and 4th are Digital SAT, and a 5th Sunday is a special workshop. Beginning in January 2027, free classes focus on Math and meet every other Sunday: Free SHSAT Math Class 6:00–6:45 PM ET, then Free Digital SAT Math Class 7:00–7:45 PM ET, starting January 10, 2027.",
+}
+const SCHEDULE_FAQ_2027: FaqItem = {
+  q: "How does the schedule work?",
+  a: "Beginning Sunday, January 10, 2027, free Math classes meet every other Sunday. Each class Sunday has two sessions: the Free SHSAT Math Class from 6:00–6:45 PM ET, then the Free Digital SAT Math Class from 7:00–7:45 PM ET. Seats are subject to registration and available capacity.",
+}
+const SCHEDULE_FAQ_PAUSED: FaqItem = {
+  q: "When do the free Sunday classes resume?",
+  a: "Free Sunday Zoom classes are paused while we prepare our January programs. They resume Sunday, January 10, 2027, and meet every other Sunday: the Free SHSAT Math Class from 6:00–6:45 PM ET, then the Free Digital SAT Math Class from 7:00–7:45 PM ET. RSVPs open December 13, 2026. Each class needs its own RSVP.",
+}
+const SUBJECTS_FAQ: FaqItem = {
+  q: "Do the free classes cover ELA or Reading & Writing?",
+  a: `From January 10, 2027, both free Sunday classes focus exclusively on Math. ${PAID_PROGRAMS_NOTE}`,
+}
+
+const faqs = (scheduleFaq: FaqItem): FaqItem[] => [
   {
     q: "Are the Sunday classes really free?",
-    a: "Yes. Every Sunday class is free. RSVP is required so we can send the live class access information, and registering does not commit you to any paid program.",
+    a: "Yes. Every Sunday class is free, subject to registration and available capacity. RSVP is required so we can send the live class access information, and registering does not commit you to any paid program.",
   },
+  scheduleFaq,
+  SUBJECTS_FAQ,
   {
-    q: "How do SHSAT and Digital SAT classes alternate?",
-    a: "The 1st and 3rd Sundays of each month are SHSAT classes. The 2nd and 4th Sundays are Digital SAT classes. When a month has a 5th Sunday, it is a special workshop, diagnostic, or parent Q&A session.",
+    q: "Can my student attend both classes on the same Sunday?",
+    a: "Yes. RSVP separately for the Free SHSAT Math Class and the Free Digital SAT Math Class; each RSVP gets its own confirmation email.",
   },
   {
     q: "How do we get the class link?",
@@ -71,20 +108,25 @@ const PROGRAM_VALUES = new Set<string>(RSVP_PROGRAMS.map((p) => p.value))
 
 export default async function FreeSundayClassesPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const params = await searchParams
-  const classes = getUpcomingClasses(4)
-  const thisSunday = classes[0]
+  const days = getUpcomingSundays(4)
+  const classes = days.flatMap((d) => d.sessions)
+  const nextDay = days[0] as (typeof days)[number] | undefined
+  const firstSession = nextDay?.sessions[0]
+  const summary = scheduleSummary()
   const pageUrl = absoluteUrl(FREE_CLASS.path)
 
   const requestedDate = typeof params.date === "string" ? params.date : undefined
   const requestedProgram = typeof params.class === "string" && PROGRAM_VALUES.has(params.class) ? params.class : ""
-  const selected = findUpcomingClass(requestedDate, 4)
-  const initialProgram = requestedProgram || (selected && selected.type !== "workshop" ? selected.type : "")
-  const initialDate = selected && (!initialProgram || classMatchesProgram(selected, initialProgram)) ? selected.isoDate : ""
+  const selectedDay = findUpcomingSunday(requestedDate, 4)
+  const onlySession = selectedDay?.sessions.length === 1 ? selectedDay.sessions[0] : undefined
+  const initialProgram = requestedProgram || (onlySession && onlySession.type !== "workshop" ? onlySession.type : "")
+  const initialDate =
+    selectedDay && (!initialProgram || selectedDay.sessions.some((s) => classMatchesProgram(s, initialProgram))) ? selectedDay.isoDate : ""
 
   return (
     <>
       <Breadcrumbs items={[{ label: "Free Sunday Classes", href: FREE_CLASS.path }]} />
-      <SundayClassViewTracker classType={thisSunday.type} classDate={thisSunday.isoDate} />
+      {nextDay && firstSession && <SundayClassViewTracker classType={firstSession.type} classDate={nextDay.isoDate} />}
 
       <section aria-labelledby="free-class-title" className="bg-academic py-10 text-white md:py-16">
         <div className="container grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-x-16 lg:gap-y-6">
@@ -94,28 +136,41 @@ export default async function FreeSundayClassesPage({ searchParams }: { searchPa
               Free Sunday SHSAT & Digital SAT Classes
             </h1>
             <p className="text-sm font-extrabold uppercase tracking-widest text-gold">
-              Every Sunday <span aria-hidden="true">•</span> {FREE_CLASS.timeLabel} <span aria-hidden="true">•</span> Live Online
+              {summary.cadence} <span aria-hidden="true">•</span> {summary.times} <span aria-hidden="true">•</span> Live Online
             </p>
           </div>
 
           <div className="lg:row-span-2 lg:self-center">
-            <ThisSundayCard session={thisSunday} />
+            {nextDay ? <ThisSundayCard day={nextDay} /> : <NextDatePendingCard />}
           </div>
 
           <div className="flex flex-col gap-6 lg:self-start">
             <p className="max-w-xl text-pretty text-lg leading-relaxed text-white/80">
-              Join AhmedPrep every Sunday for one hour of live online test preparation. SHSAT and Digital SAT classes alternate weekly,
-              giving students focused instruction, guided practice, and practical test-taking strategies at no cost.
+              {summary.schedule === "weekly_2026"
+                ? "Join AhmedPrep on Sundays for live online test preparation. SHSAT and Digital SAT classes alternate weekly, giving students focused instruction, guided practice, and practical test-taking strategies at no cost."
+                : "Join AhmedPrep every other Sunday for free live online Math preparation: a 45-minute SHSAT Math class, then a 45-minute Digital SAT Math class. Students get focused instruction, guided practice, and practical test-taking strategies at no cost."}
             </p>
+            <p className="max-w-xl text-pretty text-sm leading-relaxed text-white/70">{PAID_PROGRAMS_NOTE}</p>
+            {summary.upcomingChange && (
+              <p className="max-w-xl border-l-4 border-gold pl-4 text-pretty text-sm font-semibold leading-relaxed text-white">
+                {summary.upcomingChange}
+              </p>
+            )}
             <div className="flex flex-wrap items-center gap-4">
-              <TrackedLink
-                href={rsvpHref(thisSunday)}
-                event={EVENTS.sundayClassCtaClick}
-                eventProps={{ location: "free_class_hero", class_type: thisSunday.type, class_date: thisSunday.isoDate }}
-                className="button button-gold button-lg"
-              >
-                Reserve My Free Seat <ArrowUpRight size={17} aria-hidden="true" />
-              </TrackedLink>
+              {nextDay && firstSession && (
+                <TrackedLink
+                  href={rsvpDayHref(nextDay)}
+                  event={EVENTS.sundayClassCtaClick}
+                  eventProps={{
+                    location: "free_class_hero",
+                    class_type: nextDay.sessions.length === 1 ? firstSession.type : "both",
+                    class_date: nextDay.isoDate,
+                  }}
+                  className="button button-gold button-lg"
+                >
+                  Reserve My Free Seat <ArrowUpRight size={17} aria-hidden="true" />
+                </TrackedLink>
+              )}
               <CallTextLinks location="free_class_hero" tone="dark" />
             </div>
             <p className="text-sm font-semibold text-white/70">
@@ -126,7 +181,7 @@ export default async function FreeSundayClassesPage({ searchParams }: { searchPa
         </div>
       </section>
 
-      <UpcomingClasses classes={classes} />
+      {days.length > 0 && <UpcomingClasses days={days} />}
 
       <section aria-labelledby="expect-title" className="bg-white py-14 md:py-20">
         <div className="container flex flex-col gap-10">
@@ -141,7 +196,7 @@ export default async function FreeSundayClassesPage({ searchParams }: { searchPa
             </p>
           </div>
           <ul className="grid gap-px border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
-            {expectations.map(({ icon: Icon, title, body }) => (
+            {expectationsFor(summary.schedule === "biweekly_2027").map(({ icon: Icon, title, body }) => (
               <li key={title} className="flex flex-col gap-3 bg-white p-6">
                 <Icon size={22} aria-hidden="true" className="text-brand" />
                 <h3 className="font-extrabold text-navy">{title}</h3>
@@ -188,7 +243,7 @@ export default async function FreeSundayClassesPage({ searchParams }: { searchPa
               Reserve a free seat
             </h2>
             <p className="text-pretty leading-relaxed text-subtle">
-              Choose SHSAT or Digital SAT and pick a Sunday. The live class access information is sent privately to the email you provide.
+              Registration for our January 2027 Free Sunday Zoom Classes opens December 13, 2026. Beginning January 10, students can attend SHSAT Math from 6:00–6:45 PM ET or Digital SAT Math from 7:00–7:45 PM ET every other Sunday. Separate RSVPs are required for each class. Class access information will be emailed privately after registration.
             </p>
             <div className="border-t border-line pt-5">
               <p className="text-sm font-semibold text-ink">Questions before registering?</p>
@@ -197,27 +252,39 @@ export default async function FreeSundayClassesPage({ searchParams }: { searchPa
               </div>
             </div>
           </div>
-          <FreeClassRsvpForm
-            key={`${initialProgram}-${initialDate}`}
-            location="free_class_page"
-            classes={classes}
-            initialProgram={initialProgram}
-            initialDate={initialDate}
-          />
+          {classes.length > 0 ? (
+            <FreeClassRsvpForm
+              key={`${initialProgram}-${initialDate}`}
+              location="free_class_page"
+              classes={classes}
+              initialProgram={initialProgram}
+              initialDate={initialDate}
+            />
+          ) : (
+            <div role="status" className="flex flex-col gap-3 border border-line border-t-4 border-t-gold bg-cream p-6 sm:p-8">
+              <p className="text-xl font-extrabold leading-snug text-navy text-balance">
+                {summary.paused ? PAUSE_ANNOUNCEMENT : "No class dates are open for RSVP right now."}
+              </p>
+              <p className="text-pretty leading-relaxed text-subtle">
+                The RSVP form for the January classes will appear here once registration opens. Questions in the meantime? Call or
+                text {BUSINESS.phoneDisplay}.
+              </p>
+            </div>
+          )}
         </div>
       </section>
 
-      <Faq id="free-class-faq" title="Free Sunday class questions" items={faqs} />
+      <Faq id="free-class-faq" title="Free Sunday class questions" items={faqs(summary.paused ? SCHEDULE_FAQ_PAUSED : summary.schedule === "weekly_2026" ? SCHEDULE_FAQ_2026 : SCHEDULE_FAQ_2027)} />
 
       <JsonLd
         data={{
           "@context": "https://schema.org",
           "@graph": classes.map((c) => ({
             "@type": "Event",
-            "@id": `${pageUrl}#class-${c.isoDate}`,
+            "@id": `${pageUrl}#class-${c.id}`,
             name: `${c.title}: ${c.topic}`,
-            description: `${c.title} by AhmedPrep: ${c.topic}. ${c.focus}. Live online, ${FREE_CLASS.timeLabel}. Free, RSVP required.`,
-            url: `${pageUrl}?date=${c.isoDate}`,
+            description: `${c.title} by AhmedPrep: ${c.topic}. ${c.focus}. Live online, ${c.timeLabel}. Free, RSVP required.`,
+            url: `${pageUrl}?${c.type === "workshop" ? "" : `class=${c.type}&`}date=${c.isoDate}`,
             startDate: c.startDate,
             endDate: c.endDate,
             eventStatus: "https://schema.org/EventScheduled",

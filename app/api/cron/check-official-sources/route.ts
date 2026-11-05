@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto"
 import { NextResponse } from "next/server"
-import { Resend } from "resend"
+import { SOURCE_CHECK_SENDER, createEmailClient } from "@/lib/email-sender"
 import { checkAllSources, type SourceCheckResult } from "@/lib/source-checker"
 import { todayInNewYork } from "@/lib/updates"
 
@@ -39,9 +39,9 @@ async function sendReviewAlert(flagged: SourceCheckResult[], today: string) {
   ].join("\n")
 
   const fingerprint = createHash("sha256").update(text).digest("hex").slice(0, 16)
-  const { error } = await new Resend(apiKey).emails.send(
+  const { error } = await createEmailClient(apiKey).emails.send(
     {
-      from: `AhmedPrep Source Check <updates@${domain}>`,
+      from: SOURCE_CHECK_SENDER,
       to: [REVIEWER],
       subject: `Review needed: ${flagged.length} official source${flagged.length > 1 ? "s" : ""} flagged (${today})`,
       text,

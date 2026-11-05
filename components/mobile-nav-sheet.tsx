@@ -4,16 +4,18 @@ import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { ArrowUpRight } from "lucide-react"
-import { NAV_LINKS, isNavActive } from "@/components/main-nav"
+import { isNavActive, navLinks } from "@/components/main-nav"
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet"
 import { trackEvent, EVENTS } from "@/lib/analytics"
 
 export default function MobileNavSheet({
   open,
+  showIntensive,
   onOpenChange,
   onCloseAutoFocus,
 }: {
   open: boolean
+  showIntensive: boolean
   onOpenChange: (open: boolean) => void
   onCloseAutoFocus: (event: Event) => void
 }) {
@@ -41,7 +43,7 @@ export default function MobileNavSheet({
           </div>
         </div>
         <nav aria-label="Mobile navigation" className="flex flex-col px-6 py-2">
-          {NAV_LINKS.map((link) => {
+          {navLinks(showIntensive).map((link) => {
             const active = isNavActive(pathname, link.href)
             return (
               <SheetClose asChild key={link.href}>

@@ -1,8 +1,9 @@
 import type { Metadata } from "next"
 import Image from "next/image"
-import { ArrowUpRight, Check, MessageSquare, Phone } from "lucide-react"
+import { ArrowRight, ArrowUpRight, Sparkle } from "lucide-react"
 import { CampaignBanner } from "@/components/landing/campaign-banner"
 import { DiagnosticSection } from "@/components/landing/diagnostic-section"
+import { Enrollment2027 } from "@/components/landing/enrollment-2027"
 import { GoogleReviews } from "@/components/landing/google-reviews"
 import { ProgramsPreview } from "@/components/landing/programs-preview"
 import { ResultsPreview } from "@/components/landing/results-preview"
@@ -13,13 +14,14 @@ import { ThisSundayStrip } from "@/components/sunday-classes/this-sunday-strip"
 import { TrackedLink } from "@/components/tracked-link"
 import { WeeklyPracticeCard } from "@/components/weekly-practice/weekly-practice-card"
 import { EVENTS } from "@/lib/analytics"
-import { BUSINESS } from "@/lib/business"
+import { ENROLLMENT_2027 } from "@/lib/enrollment-2027"
+import { intensivePromoActive } from "@/lib/intensive-promo"
 import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 
 export const metadata: Metadata = {
-  title: { absolute: "AhmedPrep | SHSAT & Digital SAT Prep in Astoria, Queens" },
+  title: { absolute: "AhmedPrep | January 2027 SHSAT & Digital SAT Enrollment in Astoria, Queens" },
   description:
-    "AhmedPrep provides SHSAT and Digital SAT preparation in Astoria, Queens and online, with personalized instruction, diagnostic testing, timed practice, and free weekly SHSAT classes.",
+    "January 2027 enrollment for SHSAT and Digital SAT Prep in Astoria, Queens: 12-week small-group programs with a maximum of 12 students, free diagnostics, and clear tuition.",
   alternates: { canonical: absoluteUrl("/") },
   openGraph: { ...baseOpenGraph, url: absoluteUrl("/") },
 }
@@ -27,28 +29,8 @@ export const metadata: Metadata = {
 // Hourly so the "Next free Sunday class" card rolls over shortly after each Sunday class ends.
 export const revalidate = 3600
 
-const programs = [
-  {
-    title: "SHSAT Prep",
-    kicker: "Specialized High School admissions",
-    body: "Build confidence, master difficult concepts, and prepare strategically for NYC Specialized High School admissions.",
-    points: ["Diagnostic assessment", "Targeted Math and ELA practice", "Full-length testing and pacing"],
-    cta: "Free SHSAT Diagnostic",
-    href: "/shsat",
-    event: EVENTS.shsatCtaClick,
-  },
-  {
-    title: "Digital SAT Prep",
-    kicker: "Adaptive test preparation",
-    body: "Improve your score through targeted practice, adaptive testing strategies, and personalized feedback.",
-    points: ["Reading & Writing and Math", "Desmos and digital test strategy", "Practice testing and score analysis"],
-    cta: "Free SAT Diagnostic",
-    href: "/digital-sat",
-    event: EVENTS.digitalSatCtaClick,
-  },
-]
-
-export default function Home() {
+export default async function Home() {
+  const showIntensive = await intensivePromoActive()
   return (
     <>
       <section id="top" className="hero-section" aria-labelledby="hero-title">
@@ -63,107 +45,52 @@ export default function Home() {
           />
         </div>
         <div className="hero-panel">
-          <p className="eyebrow blue">Astoria, Queens · Serving students across NYC</p>
-          <h1 id="hero-title">
-            SHSAT & Digital SAT Prep <em>in Astoria, Queens</em>
-          </h1>
-          <p className="hero-copy">
-            In-person tutoring in Astoria plus live online SHSAT preparation for students across New York City and Digital SAT
-            preparation for students across NYC and Long Island.
+          <p className="hero-announce">
+            <Sparkle className="hero-sparkle" size={13} fill="currentColor" strokeWidth={0} aria-hidden="true" />
+            New SHSAT &amp; Digital SAT Cohorts
+            <Sparkle className="hero-sparkle" size={13} fill="currentColor" strokeWidth={0} aria-hidden="true" />
           </p>
-          <p className="hero-copy">
-            Personalized preparation that helps NYC students build confidence, strengthen skills, and prepare for competitive exams.
+          <h1 id="hero-title">
+            <span className="hero-launch-date">January 2027</span>
+            <span className="hero-slogan">
+              <span className="hero-slogan-lead">Big Goals. Small Classes.</span>
+              <span className="hero-slogan-accent">Real Progress.</span>
+            </span>
+          </h1>
+          <p className="hero-support">
+            Personalized instruction <span aria-hidden="true">•</span> 12-week programs{" "}
+            <span aria-hidden="true">•</span> 72 scheduled hours, including breaks
           </p>
           <div className="hero-actions">
             <TrackedLink
-              href="#diagnostic"
-              event={EVENTS.diagnosticCtaClick}
-              eventProps={{ location: "home_hero" }}
-              className="button button-gold button-lg"
+              href={ENROLLMENT_2027.requestHref}
+              event={EVENTS.programCtaClick}
+              eventProps={{ location: "home_hero", cta: "request_enrollment_info" }}
+              className="button button-lg hero-cta"
             >
-              Book a Free Diagnostic <ArrowUpRight size={17} aria-hidden="true" />
-            </TrackedLink>
-            <TrackedLink
-              href="/shsat"
-              event={EVENTS.shsatCtaClick}
-              eventProps={{ location: "home_hero_secondary" }}
-              className="button button-outline button-lg"
-            >
-              Explore SHSAT Prep
+              Request Enrollment Information <ArrowRight size={18} aria-hidden="true" />
             </TrackedLink>
           </div>
-          <div className="hero-contact">
-            <span>Questions?</span>
-            <TrackedLink
-              href={BUSINESS.phoneHref}
-              event={EVENTS.phoneClick}
-              eventProps={{ location: "home_hero" }}
-              aria-label={`Call AhmedPrep at ${BUSINESS.phoneDisplay}`}
-            >
-              <Phone size={14} aria-hidden="true" />
-              Call {BUSINESS.phoneDisplay}
-            </TrackedLink>
-            <TrackedLink
-              href={BUSINESS.smsHref}
-              event={EVENTS.textClick}
-              eventProps={{ location: "home_hero" }}
-              aria-label={`Text AhmedPrep at ${BUSINESS.phoneDisplay}`}
-            >
-              <MessageSquare size={14} aria-hidden="true" />
-              Text us
-            </TrackedLink>
-          </div>
-          <p className="hero-trust">
-            SHSAT Preparation <span aria-hidden="true">•</span> Digital SAT Preparation
-          </p>
-          <p className="hero-trust">
-            Astoria <span aria-hidden="true">•</span> Queens <span aria-hidden="true">•</span> NYC-Wide Online{" "}
-            <span aria-hidden="true">•</span> Digital SAT Across NYC &amp; Long Island
-          </p>
         </div>
       </section>
 
-      <section id="programs" className="section programs-section" aria-labelledby="programs-title">
-        <div className="container">
-          <div className="section-heading">
-            <div>
-              <p className="eyebrow">Choose a program</p>
-              <h2 id="programs-title">
-                Two tests.
-                <br />
-                <span>Focused preparation.</span>
-              </h2>
-            </div>
-            <p>Every program starts with a free diagnostic, so students know exactly what to practice and why it matters.</p>
-          </div>
-          <div className="program-grid">
-            {programs.map((program) => (
-              <TrackedLink
-                key={program.title}
-                href={program.href}
-                event={program.event}
-                eventProps={{ location: "home_program_card" }}
-                className="program-card"
-              >
-                <p className="eyebrow blue">{program.kicker}</p>
-                <h3>{program.title}</h3>
-                <p className="program-body">{program.body}</p>
-                <ul>
-                  {program.points.map((point) => (
-                    <li key={point}>
-                      <Check size={15} aria-hidden="true" />
-                      {point}
-                    </li>
-                  ))}
-                </ul>
-                <span className="button button-gold button-lg program-cta">
-                  {program.cta} <ArrowUpRight size={16} aria-hidden="true" />
-                </span>
-              </TrackedLink>
-            ))}
-          </div>
-        </div>
-      </section>
+      {showIntensive && (
+        <aside aria-label="2026 SHSAT Final Intensive" className="border-b border-gold/40 bg-cream">
+          <p className="mx-auto w-[min(1180px,calc(100%-32px))] py-3 text-center text-sm leading-relaxed text-ink md:text-base">
+            Preparing for the November 2026 SHSAT?{" "}
+            <TrackedLink
+              href={ENROLLMENT_2027.intensive2026Href}
+              event={EVENTS.shsatIntensiveClick}
+              eventProps={{ location: "home_below_hero" }}
+              className="inline-flex min-h-11 items-center gap-1 font-bold text-navy underline underline-offset-4"
+            >
+              Explore our Final Intensive <ArrowUpRight size={15} aria-hidden="true" />
+            </TrackedLink>
+          </p>
+        </aside>
+      )}
+
+      <Enrollment2027 showIntensive={showIntensive} />
 
       <CampaignBanner />
 
@@ -178,7 +105,7 @@ export default function Home() {
 
       <ToolsResources />
 
-      <ProgramsPreview />
+      <ProgramsPreview showIntensive={showIntensive} />
 
       <GoogleReviews />
 

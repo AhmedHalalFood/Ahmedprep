@@ -124,6 +124,13 @@ export function todayInNewYork(now = new Date()) {
   return new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York" }).format(now)
 }
 
+/** First New York calendar day the 2026 Intensive is no longer promoted or accepting enrollments (12:00 AM ET). */
+export const INTENSIVE_PROMO_ENDS_ON = "2026-11-13"
+
+export function isIntensivePromoActive(now = new Date()) {
+  return todayInNewYork(now) < INTENSIVE_PROMO_ENDS_ON
+}
+
 /** Dropdown label for a first-class choice: date and the time that class meets. No price, the summary shows it. */
 export function startDateLabel(iso: string) {
   return `${formatClassDate(iso, "long")} \u00b7 ${classSession(iso).label}`
