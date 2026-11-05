@@ -13,6 +13,7 @@ import {
   FOUNDING_INTEREST_OPTIONS,
   GRADES_2027,
   SCHEDULE_UNSURE,
+  inquiryReceivedMessage,
   scheduleOptionsFor,
 } from "@/lib/enrollment-2027"
 
@@ -110,7 +111,7 @@ function ChoiceCards({
 
 export function Enrollment2027Form() {
   const [submitted, setSubmitted] = useState<InquiryData | null>(null)
-  const { data, errors, status, update, submit, formRef, honeypotRef } = useLeadForm({
+  const { data, errors, status, serverResult, update, submit, formRef, honeypotRef } = useLeadForm({
     endpoint: "/api/enrollment-2027",
     initial,
     validate,
@@ -131,12 +132,24 @@ export function Enrollment2027Form() {
   const selectedProgram = ENROLLMENT_2027.programs.find((p) => p.name === data.program)
 
   if (status === "success" && submitted) {
+    const received = inquiryReceivedMessage(serverResult, submitted.parentName, submitted.email)
     return (
       <div role="status" className="border-t-4 border-gold pt-5">
         <p className="eyebrow blue">Inquiry received</p>
-        <p className="mt-3 text-pretty text-lg font-extrabold leading-snug text-navy">
-          {`Thank you, ${submitted.parentName}. We received your ${ENROLLMENT_2027_NAME} inquiry and sent a confirmation to ${submitted.email}.`}
-        </p>
+        <p className="mt-3 text-pretty text-lg font-extrabold leading-snug text-navy">{received.text}</p>
+        {!received.confirmed && (
+          <p className="mt-3 text-sm leading-relaxed text-navy">
+            Your inquiry is saved, so please don&apos;t submit it again. If you need confirmation, contact AhmedPrep at{" "}
+            <a href={BUSINESS.phoneHref} className="font-semibold underline">
+              {BUSINESS.phoneDisplay}
+            </a>{" "}
+            or{" "}
+            <a href={`mailto:${BUSINESS.email}`} className="font-semibold underline">
+              {BUSINESS.email}
+            </a>
+            .
+          </p>
+        )}
         <dl className="mt-4 flex flex-col gap-2 border-l-4 border-brand bg-brand-soft px-4 py-3 text-sm text-navy">
           {(
             [

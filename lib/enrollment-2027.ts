@@ -113,5 +113,20 @@ export const scheduleOptionsFor = (programName: string): string[] => {
   return program ? [...program.schedules.map(scheduleLabel), SCHEDULE_UNSURE] : []
 }
 
+/**
+ * Only an explicit "sent" from the server confirms the parent's email. A failed or skipped send, and a repeat
+ * submission (saved earlier, so nothing is sent again), are reported as received but unconfirmed.
+ */
+export function inquiryReceivedMessage(result: unknown, parentName: string, email: string) {
+  const confirmed =
+    typeof result === "object" && result !== null && (result as { confirmation?: unknown }).confirmation === "sent"
+  return {
+    confirmed,
+    text: confirmed
+      ? `Thank you, ${parentName}. We received your ${ENROLLMENT_2027_NAME} inquiry and sent a confirmation to ${email}.`
+      : `Thank you, ${parentName}. We received your ${ENROLLMENT_2027_NAME} inquiry, but we could not confirm that a confirmation email was sent to ${email}.`,
+  }
+}
+
 export const ENROLLMENT_DISCLAIMER =
   "Submitting this form is an inquiry only. It does not guarantee a seat or reserve founding-family tuition, and no payment is taken. AhmedPrep will contact you to confirm availability, class dates, and tuition."
