@@ -13,6 +13,7 @@ import { BUSINESS, SITE_URL } from "@/lib/business"
 import {
   FREE_CLASS,
   PAID_PROGRAMS_NOTE,
+  PAUSE_ANNOUNCEMENT,
   RSVP_PROGRAMS,
   classMatchesProgram,
   findUpcomingSunday,
@@ -28,8 +29,10 @@ export const dynamic = "force-dynamic"
 const title = "Free SHSAT & Digital SAT Classes Online | AhmedPrep"
 
 export function generateMetadata(): Metadata {
-  const description =
-    scheduleSummary().schedule === "weekly_2026"
+  const summary = scheduleSummary()
+  const description = summary.paused
+    ? "AhmedPrep's free Sunday Zoom classes resume Sunday, January 10, 2027: SHSAT Math 6:00–6:45 PM ET and Digital SAT Math 7:00–7:45 PM ET, every other Sunday. RSVPs open December 13."
+    : summary.schedule === "weekly_2026"
       ? "Free live online Sunday SHSAT and Digital SAT classes from AhmedPrep, Sundays 4–5 PM ET. Beginning in January 2027: free Math classes every other Sunday, SHSAT Math 6:00–6:45 PM ET and Digital SAT Math 7:00–7:45 PM ET. RSVP required."
       : "Free live online SHSAT Math and Digital SAT Math classes from AhmedPrep, every other Sunday: SHSAT Math 6:00–6:45 PM ET, Digital SAT Math 7:00–7:45 PM ET. RSVP required."
   return {
@@ -55,15 +58,19 @@ const expectationsFor = (mathOnly: boolean) => [
 
 const SCHEDULE_FAQ_2026: FaqItem = {
   q: "How does the schedule work?",
-  a: "Through December 27, 2026, one class meets every Sunday from 4:00–5:00 PM ET. The 1st and 3rd Sundays are SHSAT, the 2nd and 4th are Digital SAT, and a 5th Sunday is a special workshop. Beginning in January 2027, free classes focus on Math and meet every other Sunday: Free SHSAT Math Class 6:00–6:45 PM ET, then Free Digital SAT Math Class 7:00–7:45 PM ET. The first January date will be announced soon.",
+  a: "Through December 27, 2026, one class meets every Sunday from 4:00–5:00 PM ET. The 1st and 3rd Sundays are SHSAT, the 2nd and 4th are Digital SAT, and a 5th Sunday is a special workshop. Beginning in January 2027, free classes focus on Math and meet every other Sunday: Free SHSAT Math Class 6:00–6:45 PM ET, then Free Digital SAT Math Class 7:00–7:45 PM ET, starting January 10, 2027.",
 }
 const SCHEDULE_FAQ_2027: FaqItem = {
   q: "How does the schedule work?",
-  a: "Beginning in January 2027, free Math classes meet every other Sunday. Each class Sunday has two sessions: the Free SHSAT Math Class from 6:00–6:45 PM ET, then the Free Digital SAT Math Class from 7:00–7:45 PM ET. Seats are subject to registration and available capacity.",
+  a: "Beginning Sunday, January 10, 2027, free Math classes meet every other Sunday. Each class Sunday has two sessions: the Free SHSAT Math Class from 6:00–6:45 PM ET, then the Free Digital SAT Math Class from 7:00–7:45 PM ET. Seats are subject to registration and available capacity.",
+}
+const SCHEDULE_FAQ_PAUSED: FaqItem = {
+  q: "When do the free Sunday classes resume?",
+  a: "Free Sunday Zoom classes are paused while we prepare our January programs. They resume Sunday, January 10, 2027, and meet every other Sunday: the Free SHSAT Math Class from 6:00–6:45 PM ET, then the Free Digital SAT Math Class from 7:00–7:45 PM ET. RSVPs open December 13, 2026. Each class needs its own RSVP.",
 }
 const SUBJECTS_FAQ: FaqItem = {
   q: "Do the free classes cover ELA or Reading & Writing?",
-  a: `Through December 27, 2026, free classes cover a mix of Math and ELA / Reading & Writing topics. Beginning in January 2027, both free Sunday classes focus exclusively on Math. ${PAID_PROGRAMS_NOTE}`,
+  a: `From January 10, 2027, both free Sunday classes focus exclusively on Math. ${PAID_PROGRAMS_NOTE}`,
 }
 
 const faqs = (scheduleFaq: FaqItem): FaqItem[] => [
@@ -75,7 +82,7 @@ const faqs = (scheduleFaq: FaqItem): FaqItem[] => [
   SUBJECTS_FAQ,
   {
     q: "Can my student attend both classes on the same Sunday?",
-    a: "Yes. On the 2027 schedule, RSVP separately for the Free SHSAT Math Class and the Free Digital SAT Math Class.",
+    a: "Yes. RSVP separately for the Free SHSAT Math Class and the Free Digital SAT Math Class; each RSVP gets its own confirmation email.",
   },
   {
     q: "How do we get the class link?",
@@ -248,17 +255,29 @@ export default async function FreeSundayClassesPage({ searchParams }: { searchPa
               </div>
             </div>
           </div>
-          <FreeClassRsvpForm
-            key={`${initialProgram}-${initialDate}`}
-            location="free_class_page"
-            classes={classes}
-            initialProgram={initialProgram}
-            initialDate={initialDate}
-          />
+          {classes.length > 0 ? (
+            <FreeClassRsvpForm
+              key={`${initialProgram}-${initialDate}`}
+              location="free_class_page"
+              classes={classes}
+              initialProgram={initialProgram}
+              initialDate={initialDate}
+            />
+          ) : (
+            <div role="status" className="flex flex-col gap-3 border border-line border-t-4 border-t-gold bg-cream p-6 sm:p-8">
+              <p className="text-xl font-extrabold leading-snug text-navy text-balance">
+                {summary.paused ? PAUSE_ANNOUNCEMENT : "No class dates are open for RSVP right now."}
+              </p>
+              <p className="text-pretty leading-relaxed text-subtle">
+                The RSVP form for the January classes will appear here once registration opens. Questions in the meantime? Call or
+                text {BUSINESS.phoneDisplay}.
+              </p>
+            </div>
+          )}
         </div>
       </section>
 
-      <Faq id="free-class-faq" title="Free Sunday class questions" items={faqs(summary.schedule === "weekly_2026" ? SCHEDULE_FAQ_2026 : SCHEDULE_FAQ_2027)} />
+      <Faq id="free-class-faq" title="Free Sunday class questions" items={faqs(summary.paused ? SCHEDULE_FAQ_PAUSED : summary.schedule === "weekly_2026" ? SCHEDULE_FAQ_2026 : SCHEDULE_FAQ_2027)} />
 
       <JsonLd
         data={{

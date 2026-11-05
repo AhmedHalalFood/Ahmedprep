@@ -55,14 +55,32 @@ export const RSVP_PROGRAMS: { value: RsvpProgram; label: string }[] = [
  * Two schedules, chosen by class date (never by today's date), so every stored registration keeps the time it was
  * booked under:
  * - weekly_2026: every Sunday through Dec 27, 2026, one class 4:00–5:00 PM ET, program by the Sunday's place in the month.
- * - biweekly_2027: every other Sunday in January 2027 onward, SHSAT 6:00–6:45 PM ET then Digital SAT 7:00–7:45 PM ET.
- * The first 2027 Sunday is not confirmed yet. While SCHEDULE_2027_FIRST_SUNDAY is null, no 2027 date is published or
- * bookable; set it to the confirmed ISO date (a Sunday) to open the 2027 schedule.
+ * - biweekly_2027: every other Sunday from January 10, 2027, SHSAT 6:00–6:45 PM ET then Digital SAT 7:00–7:45 PM ET.
+ *
+ * Booking is a separate rule from the schedule. Class dates inside FREE_CLASS_PAUSE are canceled: they still rebuild
+ * through getSessionByDate so stored registrations keep their original details, but they are never listed or bookable.
+ * 2027 dates become bookable on RSVP_2027_OPENS (New York date). Both rules are enforced in getUpcomingSundays, which
+ * the RSVP API uses, so they cannot be bypassed by a direct submission.
  */
 export type ScheduleId = "weekly_2026" | "biweekly_2027"
 export const SCHEDULE_2026_LAST_SUNDAY = "2026-12-27"
-export const SCHEDULE_2027_FIRST_SUNDAY: string | null = null
+export const SCHEDULE_2027_FIRST_SUNDAY: string | null = "2027-01-10"
 const BIWEEKLY_INTERVAL_DAYS = 14
+
+export const FREE_CLASS_PAUSE = { start: "2026-11-05", end: "2027-01-09" } as const
+export const RSVP_2027_OPENS = "2026-12-13"
+export const PAUSE_ANNOUNCEMENT = "Free Sunday Zoom Classes Resume January 10, 2027. RSVPs open December 13."
+
+/** A class date inside the pause window. Its session is canceled; stored registrations for it stay readable. */
+export function isPausedClassDate(isoDate: string) {
+  return isoDate >= FREE_CLASS_PAUSE.start && isoDate <= FREE_CLASS_PAUSE.end
+}
+
+/** Whether a scheduled class date may be booked, given today's New York date. */
+function isBookableClassDate(isoDate: string, schedule: ScheduleId, todayIso: string) {
+  if (isPausedClassDate(isoDate)) return false
+  return schedule !== "biweekly_2027" || todayIso >= RSVP_2027_OPENS
+}
 
 type SessionTime = { start: number; end: number; label: string; short: string }
 const hm = (h: number, m = 0) => h * 60 + m
@@ -74,7 +92,7 @@ export const BIWEEKLY_2027_TIMES: Record<RsvpProgram, SessionTime> = {
 }
 
 export const SCHEDULE_2027_ANNOUNCEMENT =
-  "Beginning in January 2027, free Sunday classes focus on Math and meet every other Sunday: Free SHSAT Math Class 6:00–6:45 PM ET, then Free Digital SAT Math Class 7:00–7:45 PM ET. The first January date will be announced soon. RSVP separately for each class, or for both."
+  "Beginning Sunday, January 10, 2027, free Sunday classes focus on Math and meet every other Sunday: Free SHSAT Math Class 6:00–6:45 PM ET, then Free Digital SAT Math Class 7:00–7:45 PM ET. RSVPs open December 13. RSVP separately for each class, or for both."
 
 /** One class session: a single program at a single time. Sundays on the 2027 schedule have two. */
 export type SundayClass = {
@@ -235,12 +253,12 @@ export function getUpcomingSundays(count = 4, now = new Date()): ClassDay[] {
   const todayIso = `${ny.year}-${String(ny.month).padStart(2, "0")}-${String(ny.day).padStart(2, "0")}`
   const firstSunday = ny.day + ((7 - ny.weekday) % 7)
   const days: ClassDay[] = []
-  // Bounded search. Once the 2026 schedule ends and the 2027 start date is unconfirmed, this can return fewer than
-  // `count` days, or none.
-  for (let week = 0; days.length < count && week < count * 2 + 8; week++) {
+  // Bounded search, long enough to step over the pause window. During the pause and before 2027 RSVPs open this
+  // returns no days, which is what blocks every booking path.
+  for (let week = 0; days.length < count && week < count * 2 + 12; week++) {
     // Noon UTC keeps the calendar date stable while adding days and formatting.
     const day = buildDay(new Date(Date.UTC(ny.year, ny.month - 1, firstSunday + week * 7, 12)))
-    if (!day) continue
+    if (!day || !isBookableClassDate(day.isoDate, day.schedule, todayIso)) continue
     if (day.isoDate === todayIso) {
       day.sessions = day.sessions.filter((s) => ny.minutes < s.endMinutes)
       if (!day.sessions.length) continue
@@ -308,6 +326,7 @@ export function scheduleSummary(now = new Date()) {
   if (next?.schedule === "weekly_2026") {
     return {
       schedule: next.schedule,
+      paused: false,
       cadence: "Every Sunday",
       times: WEEKLY_2026_TIME.label,
       timesShort: WEEKLY_2026_TIME.short,
@@ -315,12 +334,16 @@ export function scheduleSummary(now = new Date()) {
       upcomingChange: SCHEDULE_2027_ANNOUNCEMENT,
     }
   }
+  const ny = newYorkWallClock(now)
+  const todayIso = `${ny.year}-${String(ny.month).padStart(2, "0")}-${String(ny.day).padStart(2, "0")}`
+  const paused = !next && todayIso < RSVP_2027_OPENS
   return {
     schedule: "biweekly_2027" as ScheduleId,
-    cadence: "Every other Sunday",
+    paused,
+    cadence: paused ? "Every other Sunday from January 10, 2027" : "Every other Sunday",
     times: `SHSAT Math ${BIWEEKLY_2027_TIMES.shsat.label.replace(" ET", "")} · Digital SAT Math ${BIWEEKLY_2027_TIMES.digital_sat.label}`,
     timesShort: "SHSAT Math 6 PM · Digital SAT Math 7 PM ET",
     format: "Free SHSAT Math and Digital SAT Math classes are both taught on every class Sunday, one after the other",
-    upcomingChange: next ? null : "The first January 2027 class date will be announced soon.",
+    upcomingChange: paused ? PAUSE_ANNOUNCEMENT : next ? null : "The next class date will be announced soon.",
   }
 }

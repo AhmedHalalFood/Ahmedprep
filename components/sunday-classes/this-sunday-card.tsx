@@ -11,13 +11,14 @@ export function NextDatePendingCard() {
       aria-labelledby="this-sunday-title"
       className="flex flex-col gap-4 border border-line border-t-4 border-t-gold bg-white p-6 text-ink shadow-xl shadow-navy/20 sm:p-8"
     >
-      <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-gold-deep">January 2027</p>
+      <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-gold-deep">Classes paused until January</p>
       <h2 id="this-sunday-title" className="text-balance text-2xl font-extrabold leading-tight text-navy">
-        First class date announced soon
+        Free Sunday Zoom Classes Resume January 10, 2027
       </h2>
+      <p className="text-pretty font-semibold leading-relaxed text-navy">RSVPs open December 13.</p>
       <p className="text-pretty leading-relaxed text-subtle">
-        Every other Sunday: Free SHSAT Math Class 6:00–6:45 PM ET, then Free Digital SAT Math Class 7:00–7:45 PM ET. RSVP opens
-        once the first date is confirmed.
+        Every other Sunday: Free SHSAT Math Class 6:00–6:45 PM ET, then Free Digital SAT Math Class 7:00–7:45 PM ET. Each class
+        needs its own RSVP.
       </p>
     </article>
   )

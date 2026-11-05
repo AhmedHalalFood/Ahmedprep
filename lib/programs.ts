@@ -47,7 +47,7 @@ export const PROGRAMS: Program[] = [
     audience: "SHSAT and Digital SAT students who want structured, regular practice.",
     format: `Live online, taught by ${FREE_CLASS.instructor}. RSVP required.`,
     benefits: ["One focused topic each class", "Strategy and worked examples", "A low-pressure way to meet AhmedPrep"],
-    schedule: "Sundays 4:00–5:00 PM ET through Dec 27, 2026. Beginning January 2027: every other Sunday, SHSAT 6:00–6:45 PM ET and Digital SAT 7:00–7:45 PM ET",
+    schedule: "Paused until January. Resumes Sunday, January 10, 2027: every other Sunday, SHSAT Math 6:00–6:45 PM ET and Digital SAT Math 7:00–7:45 PM ET. RSVPs open December 13, 2026; RSVP separately for each class",
     price: "Free",
     cta: { label: "Reserve a Free Seat", href: `${FREE_CLASS.path}#rsvp` },
   },

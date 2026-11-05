@@ -1,7 +1,7 @@
 "use server"
 
 import { verifyResendToken } from "@/lib/admin-links"
-import { getSessionByDate, type RsvpProgram } from "@/lib/free-class"
+import { getSessionByDate, isPausedClassDate, type RsvpProgram } from "@/lib/free-class"
 import { sendConfirmationEmail } from "@/lib/lead-delivery"
 import { buildSundayConfirmation } from "@/lib/sunday-confirmation"
 import {
@@ -23,6 +23,9 @@ export async function resendConfirmation(_prev: ResendState, formData: FormData)
   try {
     registration = await getRegistration(id)
     if (!registration || !getSessionByDate(registration.classDate, registration.program)) return { status: "error", message: "Registration not found." }
+    if (isPausedClassDate(registration.classDate)) {
+      return { status: "error", message: "This class was canceled during the Free Sunday pause. No confirmation was sent." }
+    }
     attempt = await claimResendAttempt(id)
   } catch (error) {
     console.error("[confirmation-resend] Database unavailable:", describeDbError(error))

@@ -6,6 +6,7 @@ import { scheduleSummary } from "@/lib/free-class"
 import styles from "./top-contact-bar.module.css"
 
 export function TopContactBar() {
+  const summary = scheduleSummary()
   return (
     <div className={`contact-strip ${styles.strip}`}>
       <div className={styles.inner}>
@@ -16,7 +17,12 @@ export function TopContactBar() {
           className={styles.announce}
         >
           <span className={styles.tag}>Free</span>
-          {scheduleSummary().schedule === "weekly_2026" ? (
+          {summary.paused ? (
+            <span>
+              Free Sunday Zoom Classes Resume January 10, 2027{" "}
+              <span className={styles.sep} aria-hidden="true">•</span> RSVPs open December 13
+            </span>
+          ) : summary.schedule === "weekly_2026" ? (
             <span>
               Live SHSAT & Digital SAT Zoom Classes — Sundays 4:00–5:00 PM ET{" "}
               <span className={styles.sep} aria-hidden="true">•</span> Free Math classes from January 2027{" "}

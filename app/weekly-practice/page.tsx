@@ -7,7 +7,7 @@ import { TrackedLink } from "@/components/tracked-link"
 import { AnswerReveal } from "@/components/weekly-practice/answer-reveal"
 import { WeeklyPracticeViewTracker } from "@/components/weekly-practice/weekly-practice-view-tracker"
 import { EVENTS } from "@/lib/analytics"
-import { CLASS_TYPES, FREE_CLASS, getNextClass, getUpcomingClasses, rsvpHref } from "@/lib/free-class"
+import { CLASS_TYPES, FREE_CLASS, PAUSE_ANNOUNCEMENT, getNextClass, getUpcomingClasses, rsvpHref, scheduleSummary } from "@/lib/free-class"
 import { absoluteUrl, baseOpenGraph, webPageSchema } from "@/lib/seo"
 import {
   CHOICE_LETTERS,
@@ -119,7 +119,25 @@ function nextClassFor(q: WeeklyPracticeQuestion) {
 
 function SundayClassCta({ q, tracking }: { q: WeeklyPracticeQuestion; tracking: { test_type: string; week: string } }) {
   const next = nextClassFor(q)
-  if (!next) return null
+  if (!next) {
+    if (!scheduleSummary().paused) return null
+    return (
+      <div className="flex flex-col gap-4 border border-line bg-white p-6 md:flex-row md:items-center md:justify-between md:p-8">
+        <div className="flex flex-col gap-2">
+          <h2 className="text-pretty text-xl font-extrabold leading-snug text-navy">Want More {q.testType} Practice?</h2>
+          <p className="leading-relaxed text-ink">{PAUSE_ANNOUNCEMENT}</p>
+        </div>
+        <TrackedLink
+          href={FREE_CLASS.path}
+          event={EVENTS.weeklyPracticeSundayCta}
+          eventProps={{ location: "weekly_practice", class_date: "paused", ...tracking }}
+          className="button button-outline shrink-0 justify-center"
+        >
+          See the January Schedule <ArrowUpRight size={17} aria-hidden="true" />
+        </TrackedLink>
+      </div>
+    )
+  }
   const { session, when } = next
   return (
     <div className="flex flex-col gap-4 border border-line bg-white p-6 md:flex-row md:items-center md:justify-between md:p-8">
