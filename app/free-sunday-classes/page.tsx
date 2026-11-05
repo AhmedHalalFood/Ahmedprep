@@ -243,10 +243,7 @@ export default async function FreeSundayClassesPage({ searchParams }: { searchPa
               Reserve a free seat
             </h2>
             <p className="text-pretty leading-relaxed text-subtle">
-              Choose SHSAT or Digital SAT and pick a Sunday. The live class access information is sent privately to the email you provide.
-              {summary.schedule === "biweekly_2027" || days.some((d) => d.sessions.length > 1)
-                ? " Both 2027 classes are free Math classes: SHSAT Math at 6:00 PM ET and Digital SAT Math at 7:00 PM ET. To attend both on the same Sunday, submit one RSVP for each."
-                : ""}
+              Registration for our January 2027 Free Sunday Zoom Classes opens December 13, 2026. Beginning January 10, students can attend SHSAT Math from 6:00–6:45 PM ET or Digital SAT Math from 7:00–7:45 PM ET every other Sunday. Separate RSVPs are required for each class. Class access information will be emailed privately after registration.
             </p>
             <div className="border-t border-line pt-5">
               <p className="text-sm font-semibold text-ink">Questions before registering?</p>
