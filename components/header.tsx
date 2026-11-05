@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowUpRight } from "lucide-react"
+import { ArrowUpRight, MapPin } from "lucide-react"
 import { HideOnHome } from "@/components/hide-on-home"
 import { MainNav } from "@/components/main-nav"
 import { MobileNav } from "@/components/mobile-nav"
@@ -8,6 +8,7 @@ import { ShsatIntensiveBar } from "@/components/shsat-intensive-bar"
 import { TopContactBar } from "@/components/top-contact-bar"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
+import { ADDRESS_FULL, ADDRESS_LINE_1, MAPS_URL } from "@/lib/business"
 import { intensivePromoActive } from "@/lib/intensive-promo"
 
 export async function Header() {
@@ -19,23 +20,39 @@ export async function Header() {
         <TopContactBar />
       </HideOnHome>
       <div className="topbar container">
-        <Link href="/" className="brand" aria-label="AhmedPrep home">
-          <Image
-            src="/ahmedprep-logo.png"
-            alt="Ahmed Prep logo"
-            width={1254}
-            height={1254}
-            priority
-            sizes="(max-width: 800px) 46px, 68px"
-            className="brand-logo"
-          />
-          <span className="brand-text">
-            <span className="brand-wordmark">
-              Ahmed<span className="brand-wordmark-accent">Prep</span>
+        <div className="brand-group">
+          <Link href="/" className="brand" aria-label="AhmedPrep home">
+            <Image
+              src="/ahmedprep-logo.png"
+              alt="Ahmed Prep logo"
+              width={1254}
+              height={1254}
+              priority
+              sizes="(max-width: 800px) 46px, 68px"
+              className="brand-logo"
+            />
+            <span className="brand-text">
+              <span className="brand-wordmark">
+                Ahmed<span className="brand-wordmark-accent">Prep</span>
+              </span>
+              <small>ASTORIA • QUEENS</small>
             </span>
-            <small>ASTORIA • QUEENS</small>
-          </span>
-        </Link>
+          </Link>
+          <a
+            href={MAPS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="header-location"
+            aria-label={`AhmedPrep location: ${ADDRESS_FULL}. Opens Google Maps in a new tab.`}
+            title={ADDRESS_FULL}
+          >
+            <MapPin size={16} aria-hidden="true" className="header-location-icon" />
+            <span className="header-location-text">
+              <span className="header-location-area">Astoria, Queens</span>
+              <span className="header-location-street">{ADDRESS_LINE_1}</span>
+            </span>
+          </a>
+        </div>
         <div className="utility-nav">
           <TrackedLink
             href="/free-diagnostic"
@@ -51,7 +68,6 @@ export async function Header() {
       <div className="site-nav-bar">
         <div className="container nav-inner">
           <MainNav showIntensive={showIntensive} />
-          <span className="nav-note">20-65 47th Street, Astoria</span>
         </div>
       </div>
     </header>

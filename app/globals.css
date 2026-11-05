@@ -244,9 +244,56 @@ h3 {
   text-transform: uppercase;
 }
 
-.nav-note {
-  font-size: 0.7rem;
+.brand-group {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 24px;
+}
+
+.header-location {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 8px;
+  border-left: 1px solid var(--line);
+  padding-left: 24px;
+  color: var(--navy);
+}
+
+.header-location-icon {
+  flex-shrink: 0;
+  color: var(--gold);
+}
+
+.header-location-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  line-height: 1.15;
+}
+
+.header-location-area {
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.header-location-street {
+  font-size: 0.75rem;
   color: var(--muted);
+}
+
+.header-location:hover .header-location-area,
+.header-location:focus-visible .header-location-area {
+  color: var(--blue);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 800px) {
+  .header-location {
+    display: none;
+  }
 }
 
 .hero-section {
@@ -1187,8 +1234,7 @@ a.program-card:hover h3 {
     width: min(100% - 32px, 620px);
   }
 
-  .utility-nav,
-  .nav-note {
+  .utility-nav {
     display: none;
   }
 
