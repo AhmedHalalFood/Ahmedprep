@@ -35,7 +35,7 @@ export function ShsatIntensiveBar() {
         </div>
 
         <div className="flex flex-col items-center gap-3 md:items-end">
-          <p className="inline-flex items-center rounded-sm bg-gold px-2.5 py-1.5 text-[11px] font-extrabold uppercase leading-none tracking-[0.14em] text-navy">
+          <p className="inline-flex items-center rounded-sm bg-gold px-2.5 py-1.5 text-xs font-extrabold uppercase leading-none tracking-[0.14em] text-navy">
             Join Classes in Progress
             <span className="px-1.5" aria-hidden="true">
               |

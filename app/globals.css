@@ -235,8 +235,9 @@ h3 {
 
 .nav-inner nav {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 31px;
+  column-gap: 22px;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -282,7 +283,7 @@ h3 {
 
 .eyebrow {
   color: var(--gold-deep);
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -1147,15 +1148,21 @@ a.program-card:hover h3 {
 .footer-links div {
   display: grid;
   align-content: start;
-  gap: 9px;
+  gap: 4px;
   font-size: 0.78rem;
   color: #b6c8da;
+}
+
+.footer-links a {
+  display: inline-flex;
+  min-height: 24px;
+  align-items: center;
 }
 
 .footer-links span {
   margin-bottom: 6px;
   color: var(--gold);
-  font-size: 0.67rem;
+  font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;

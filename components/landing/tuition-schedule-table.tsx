@@ -36,7 +36,7 @@ export function TuitionScheduleTable({
         <col className="w-[24%]" />
       </colgroup>
       <thead>
-        <tr className={`border-b-2 text-[11px] font-bold uppercase tracking-wider sm:text-xs ${t.head}`}>
+        <tr className={`border-b-2 text-xs font-bold uppercase tracking-wider ${t.head}`}>
           <th scope="col" className="py-2 pr-2 font-bold">
             First class
           </th>
