@@ -5,7 +5,7 @@
 export const ENROLLMENT_2027 = {
   eyebrow: "January 2027 Enrollment",
   launchNote:
-    "Planned start dates are shown below and will be confirmed once the final calendar is approved. Each group meets for 72 scheduled hours, including breaks, over 12 weeks, with makeup classes for any cancellations.",
+    "Planned start dates are shown below and will be confirmed once the final calendar is approved. Each group meets for 72 scheduled hours, including breaks, over 12 weeks. If AhmedPrep cancels a scheduled class, we will provide a makeup class or equivalent live instruction at no additional cost.",
   datesStatus: "planned" as "planned" | "confirmed",
   weeks: 12,
   hours: 72,
@@ -81,7 +81,7 @@ export const ENROLLMENT_2027 = {
     { title: "Personalized feedback", body: "Specific notes on what each student should practice next." },
     { title: "Progress tracking", body: "Regular check-ins so families can see where skills are improving." },
     { title: "Small classes", body: "No more than 12 students in a class." },
-    { title: "Makeup classes", body: "If a class is cancelled, a makeup class is scheduled so every group still receives the full 72 scheduled hours, including breaks." },
+    { title: "Makeup classes", body: "If AhmedPrep cancels a scheduled class, we will provide a makeup class or equivalent live instruction at no additional cost." },
     { title: "Instructor accessibility", body: "Families can reach the instructor with questions between classes." },
   ],
 } as const
