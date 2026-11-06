@@ -1,7 +1,10 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { TERMS_2027, cohortTitle, cohortSchedule, PROGRAMS_2027 } from "@/lib/cohorts-2027"
-import { ASSESSMENT_PLAN, GRADECAM_NOTE, PROGRESS_INDICATORS, SESSION_BLOCKS, TOPICS, VERBAL_LABEL, mockSessionsFor } from "@/lib/curriculum-2027"
+import {
+  ASSESSMENT_PLAN, CALENDAR_REVIEW, EXAM_FORMAT, GRADECAM_NOTE, OFFICIAL_PRACTICE_TESTS, PROGRESS_INDICATORS, SESSION_BLOCKS,
+  SMART_METHOD, STAGE_LABEL, TOPICS, VERBAL_LABEL, mockSessionsFor,
+} from "@/lib/curriculum-2027"
 import { DraftNotice } from "@/components/curriculum/draft-notice"
 import { PrintButton } from "@/components/curriculum/print-button"
 
@@ -45,9 +48,42 @@ export default function Curriculum2027Page() {
             ))}
           </ul>
           <p className="text-sm leading-relaxed text-subtle">
-            Each session follows AhmedPrep&apos;s SMART method. Every review block opens with cumulative retrieval practice
-            drawn from earlier sessions and the student&apos;s own error log.
+            Each course moves through three phases: {Object.values(STAGE_LABEL).join(", then ")}. Priority topics (difficult
+            or heavily weighted) get an extra advanced-practice session when the course has room. Every review block opens
+            with retrieval practice, and students who missed a skill on the last quiz or exam work a targeted reteach set.
           </p>
+        </section>
+
+        <section aria-labelledby="smart" className="flex flex-col gap-4">
+          <h2 id="smart" className="text-2xl font-extrabold text-navy">The AhmedPrep SMART method</h2>
+          <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+            {SMART_METHOD.map((s) => (
+              <li key={s.letter} className="flex flex-col gap-1 border border-line bg-background p-4">
+                <p className="text-3xl font-extrabold text-navy">{s.letter}</p>
+                <p className="font-semibold text-ink">{s.name}</p>
+                <p className="text-sm leading-relaxed text-subtle">{s.meaning}</p>
+              </li>
+            ))}
+          </ul>
+          <p className="text-sm leading-relaxed text-subtle">Every lesson session in the dated syllabi lists one activity for each SMART step.</p>
+        </section>
+
+        <section aria-labelledby="formats" className="flex flex-col gap-4">
+          <h2 id="formats" className="text-2xl font-extrabold text-navy">Official exam formats</h2>
+          <div className="grid gap-4 md:grid-cols-2">
+            {PROGRAMS_2027.map((p) => (
+              <div key={p} className="flex flex-col gap-2 border border-line bg-background p-5 text-sm leading-relaxed text-ink">
+                <h3 className="font-bold text-navy">{p}</h3>
+                <p>{EXAM_FORMAT[p].summary}</p>
+                <p>{EXAM_FORMAT[p].simulation}</p>
+                <p className="text-subtle">
+                  Official practice test ({OFFICIAL_PRACTICE_TESTS[p].name}):{" "}
+                  {OFFICIAL_PRACTICE_TESTS[p].verified ? "verified for use." : "not yet verified for use, so all full-length exams are original AhmedPrep practice tests."}
+                </p>
+                <p className="text-xs text-subtle">Source: {EXAM_FORMAT[p].source}.</p>
+              </div>
+            ))}
+          </div>
         </section>
 
         <section aria-labelledby="shapes" className="flex flex-col gap-4">
@@ -89,6 +125,7 @@ export default function Curriculum2027Page() {
                     {TOPICS[program][track].map((t) => (
                       <li key={t.title}>
                         <span className="font-semibold">{t.title}</span> <span className="text-subtle">({t.domain})</span>
+                        {t.priority ? <span className="ml-2 text-xs font-semibold uppercase tracking-wide text-gold-deep">Priority</span> : null}
                         {t.desmos ? <span className="block text-subtle">Desmos: {t.desmos}</span> : null}
                       </li>
                     ))}
@@ -131,7 +168,35 @@ export default function Curriculum2027Page() {
           </div>
         </section>
 
+        <section aria-labelledby="calendar" className="flex flex-col gap-4 print:break-before-page">
+          <h2 id="calendar" className="text-2xl font-extrabold text-navy">Makeup and calendar review</h2>
+          <p className="text-sm leading-relaxed text-subtle">
+            No dates, times, or hours were changed. Every unapproved makeup stays labeled &ldquo;Proposed makeup — not yet approved.&rdquo;
+          </p>
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse bg-background text-left text-sm">
+              <thead className="bg-navy text-primary-foreground">
+                <tr><th className="p-3">Date</th><th className="p-3">Cohorts</th><th className="p-3">Finding</th><th className="p-3">Status</th></tr>
+              </thead>
+              <tbody>
+                {CALENDAR_REVIEW.map((r) => (
+                  <tr key={r.dates} className="border-b border-line align-top">
+                    <td className="p-3 font-semibold text-ink">{r.dates}</td>
+                    <td className="p-3">{r.cohorts}</td>
+                    <td className="p-3">{r.finding}</td>
+                    <td className={r.status === "No conflict found" ? "p-3" : "p-3 font-semibold text-gold-deep"}>{r.status}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
         <section aria-labelledby="syllabi" className="flex flex-col gap-4" data-print-hide>
+          <Link href="/curriculum-2027/progress-report" className="flex min-h-11 flex-col border border-line bg-background p-3 hover:border-brand">
+            <span className="font-semibold text-brand">Parent progress report template</span>
+            <span className="text-sm text-subtle">Printable SHSAT and Digital SAT templates</span>
+          </Link>
           <h2 id="syllabi" className="text-2xl font-extrabold text-navy">Dated draft syllabi</h2>
           {TERMS_2027.map((term) => (
             <div key={term.id} className="flex flex-col gap-2">

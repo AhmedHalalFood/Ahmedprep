@@ -17,7 +17,17 @@ export type Closure = { iso: string; reason: string }
  * An extra session that preserves the approved hours. `approved: false` means the specific assignment is still a
  * proposal and must be shown as such (Master Plan section 4).
  */
-export type Makeup = { iso: string; time: string; replaces: string; approved: boolean }
+export type Makeup = {
+  iso: string
+  time: string
+  replaces: string
+  approved: boolean
+  /**
+   * True when `replaces` was never a scheduled class (e.g. the July 5 holiday before a July 6 start): the session is an
+   * additional scheduled instructional session that completes the approved hours, not a makeup for a lost class.
+   */
+  additional?: boolean
+}
 
 export type Cohort = {
   id: string
@@ -133,13 +143,13 @@ const COHORTS: readonly Cohort[] = [
     id: "summer-shsat-intensive", term: "summer", program: "SHSAT", label: "Weekday Intensive",
     days: "Monday–Thursday", time: "10 AM–1 PM", dates: "July 6 – August 26; final session August 29", sessions: 32, hours: 96,
     ...SUMMER_INTENSIVE,
-    makeups: [{ iso: "2027-08-29", time: "10 AM–1 PM", replaces: "2027-07-05", approved: false }],
+    makeups: [{ iso: "2027-08-29", time: "10 AM–1 PM", replaces: "2027-07-05", approved: false, additional: true }],
   },
   {
     id: "summer-dsat-intensive", term: "summer", program: "Digital SAT", label: "Weekday Intensive",
     days: "Monday–Thursday", time: "2–5 PM", dates: "July 6 – August 26; final session August 29", sessions: 32, hours: 96,
     ...SUMMER_INTENSIVE,
-    makeups: [{ iso: "2027-08-29", time: "2–5 PM", replaces: "2027-07-05", approved: false }],
+    makeups: [{ iso: "2027-08-29", time: "2–5 PM", replaces: "2027-07-05", approved: false, additional: true }],
   },
   {
     id: "summer-shsat-weekend", term: "summer", program: "SHSAT", label: "Weekend",
@@ -182,7 +192,8 @@ export type ScheduledSession = {
   /** For a makeup: the date whose instruction it preserves. */
   replaces?: string
   approved: boolean
-}
+  additional?: boolean
+  }
 
 /** Every instructional session of a cohort, in date order, numbered 1..n. */
 export function sessionCalendar(cohort: Cohort): ScheduledSession[] {
@@ -193,7 +204,7 @@ export function sessionCalendar(cohort: Cohort): ScheduledSession[] {
       entries.push({ iso, time: cohort.time, kind: "regular", approved: true })
     }
   }
-  for (const m of cohort.makeups) entries.push({ iso: m.iso, time: m.time, kind: "makeup", replaces: m.replaces, approved: m.approved })
+  for (const m of cohort.makeups) entries.push({ iso: m.iso, time: m.time, kind: "makeup", replaces: m.replaces, approved: m.approved, additional: m.additional })
   return entries
     .sort((a, b) => (a.iso === b.iso ? a.time.localeCompare(b.time) : a.iso.localeCompare(b.iso)))
     .map((s, i) => ({ ...s, number: i + 1 }))
