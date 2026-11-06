@@ -12,6 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/shsat", priority: 0.9 },
     ...(isIntensivePromoActive() ? [{ path: INTENSIVE_PATH, priority: 0.9 }] : []),
     { path: "/enroll-2027", priority: 0.9 },
+    { path: "/programs-2027", priority: 0.9 },
     { path: "/digital-sat", priority: 0.9 },
     { path: "/free-sunday-classes", priority: 0.8 },
     { path: "/free-diagnostic", priority: 0.8 },
