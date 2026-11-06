@@ -12,13 +12,11 @@ export type Term = {
   id: "winter" | "spring" | "summer"
   name: string
   cohorts: readonly Cohort[]
-  tuition: { regular: number; early: number; founding: number }
   deadlines: readonly { group: string; founding: string; early: string }[]
 }
 export const TERMS_2027: readonly Term[] = [
   {
     id: "winter", name: "Winter 2027",
-    tuition: { regular: 1440, early: 1296, founding: 1080 },
     deadlines: [
       { group: "Weekend SHSAT and Digital SAT", founding: "November 28, 2026", early: "December 12, 2026" },
       { group: "Weekday SHSAT", founding: "November 30, 2026", early: "December 14, 2026" },
@@ -33,7 +31,6 @@ export const TERMS_2027: readonly Term[] = [
   },
   {
     id: "spring", name: "Spring 2027",
-    tuition: { regular: 1440, early: 1296, founding: 1080 },
     deadlines: [
       { group: "Weekend SHSAT and Digital SAT", founding: "February 20, 2027", early: "March 6, 2027" },
       { group: "Weekday SHSAT", founding: "February 22, 2027", early: "March 8, 2027" },
@@ -48,7 +45,6 @@ export const TERMS_2027: readonly Term[] = [
   },
   {
     id: "summer", name: "Summer 2027",
-    tuition: { regular: 0, early: 0, founding: 0 },
     deadlines: [
       { group: "Weekend SHSAT and Digital SAT", founding: "May 22, 2027", early: "June 5, 2027" },
       { group: "Weekday Intensive SHSAT and Digital SAT", founding: "May 25, 2027", early: "June 8, 2027" },
