@@ -15,11 +15,11 @@ const PATH = "/enroll-2027"
 const ATTENDANCE_FAQS: FaqItem[] = [
   {
     q: "Do classes continue during school holidays?",
-    a: "Yes. Classes normally continue during school and federal holidays unless AhmedPrep announces a closure.",
+    a: "Yes. AhmedPrep follows its published cohort calendar. Approved holiday closures are covered by scheduled makeup sessions; other school breaks do not automatically cancel classes.",
   },
   {
     q: "What happens if AhmedPrep cancels a class?",
-    a: "We will arrange a makeup class or provide equivalent live instruction at no additional cost.",
+    a: "We will provide the published makeup session or equivalent live instruction at no additional cost, preserving the promised 72 hours.",
   },
   {
     q: "What if my child misses a class?",
@@ -31,14 +31,14 @@ const ATTENDANCE_FAQS: FaqItem[] = [
   },
   {
     q: "Will my child receive all 72 program hours?",
-    a: "Yes. Each program includes 72 scheduled hours, including breaks. Any class canceled by AhmedPrep will be made up through an additional session or equivalent live instruction.",
+    a: "Yes. Each program includes 72 hours of scheduled live instruction. Holiday closures and any AhmedPrep cancellations are covered by makeup instruction.",
   },
 ]
 
 export const metadata: Metadata = {
   title: "January 2027 SHSAT & Digital SAT Enrollment",
   description:
-    "Enroll in AhmedPrep's January 2027 SHSAT and Digital SAT programs in Astoria: 12 weeks, 72 scheduled hours including breaks, and no more than 12 students per class.",
+    "Enroll in AhmedPrep's January 2027 SHSAT and Digital SAT programs in Astoria: 12 weeks, 72 hours of scheduled live instruction, and small classes of up to 10 students.",
   alternates: { canonical: absoluteUrl(PATH) },
   openGraph: { ...baseOpenGraph, url: absoluteUrl(PATH) },
 }
