@@ -1,32 +1,32 @@
 /**
  * January 2027 enrollment details approved by AhmedPrep.
- * Start dates are planned and stay labelled as such until the final calendar is approved.
+ * Start dates and cohort schedules approved in AhmedPrep 2027 Master Plan v3.0.
  */
 export const ENROLLMENT_2027 = {
   eyebrow: "January 2027 Enrollment",
   launchNote:
-    "Planned start dates are shown below and will be confirmed once the final calendar is approved. Each group meets for 72 scheduled hours, including breaks, over 12 weeks. If AhmedPrep cancels a scheduled class, we will provide a makeup class or equivalent live instruction at no additional cost.",
-  datesStatus: "planned" as "planned" | "confirmed",
+    "Approved start dates are shown below. Each group receives 72 hours of scheduled live instruction over 12 weeks, with holiday makeup sessions as published. If AhmedPrep cancels a scheduled class, we will provide a makeup class or equivalent live instruction at no additional cost.",
+  datesStatus: "confirmed" as "planned" | "confirmed",
   weeks: 12,
   hours: 72,
-  hoursLabel: "72 scheduled hours, including breaks",
-  maxClassSize: 12,
+  hoursLabel: "72 hours of scheduled live instruction",
+  maxClassSize: 10,
   location: "Astoria",
   requestHref: "/enroll-2027",
   diagnosticHref: "#diagnostic",
   intensive2026Href: "/shsat-final-intensive-2026",
-  availabilityStatus: "Enrollment inquiries open — Seats limited to 12 per class.",
+  availabilityStatus: "Enrollment inquiries open — Seats limited to 10 per class.",
   tuition: {
     founding: {
       label: "Founding-Family",
       total: "$1,080",
       savingsLabel: "Save $360",
       summary:
-        "Save $360. First 5 fully paid enrollments per class. Full payment by December 5, 2026, or before all 5 founding-family seats are filled, whichever comes first.",
+        "Save $360. First 5 fully paid enrollments per class. Full payment by the cohort-specific founding-family deadline (42 days before the first class), or before all 5 founding-family seats are filled, whichever comes first.",
       points: [
         "Save $360 off regular tuition",
         "Limited to the first 5 fully paid enrollments per class",
-        "Full payment by December 5, 2026, or before all 5 founding-family seats are filled, whichever comes first",
+        "Full payment by the cohort-specific deadline: November 28 (weekend SHSAT or Digital SAT), November 30 (weekday SHSAT), or December 1 (weekday Digital SAT), 2026; first five fully paid seats per cohort only",
       ],
       note: "Limited to the first 5 fully paid enrollments in each class.",
     },
@@ -34,8 +34,8 @@ export const ENROLLMENT_2027 = {
       label: "Early Full Payment",
       total: "$1,296",
       savingsLabel: "10% off",
-      summary: "10% discount. Full payment must be received by December 20, 2026, at 11:59:59 PM ET.",
-      points: ["10% discount ($144 off)", "Full payment must be received by December 20, 2026, at 11:59:59 PM ET"],
+      summary: "10% discount. Full payment is due by the cohort-specific early deadline: December 12 (weekend SHSAT or Digital SAT), December 14 (weekday SHSAT), or December 15 (weekday Digital SAT), 2026.",
+      points: ["10% discount ($144 off)", "Full payment by December 12 (weekend groups), December 14 (weekday SHSAT), or December 15 (weekday Digital SAT), 2026"],
     },
     regular: {
       label: "Regular Tuition",
@@ -44,7 +44,7 @@ export const ENROLLMENT_2027 = {
       summary: "Full payment is required before the student’s first scheduled class.",
       points: ["Full payment is required before the student’s first scheduled class"],
     },
-    rules: "Discounts cannot be combined. No installment plans for Winter 2027.",
+    rules: "Discounts cannot be combined. Payment and installment terms will be confirmed before payment is requested.",
     seatNote: "Enrollment is subject to available seats. An inquiry does not reserve a seat.",
   },
   steps: [
@@ -80,7 +80,7 @@ export const ENROLLMENT_2027 = {
     { title: "Original practice materials", body: "Problem sets and practice written for AhmedPrep students." },
     { title: "Personalized feedback", body: "Specific notes on what each student should practice next." },
     { title: "Progress tracking", body: "Regular check-ins so families can see where skills are improving." },
-    { title: "Small classes", body: "No more than 12 students in a class." },
+    { title: "Small classes", body: "No more than 10 students in a class." },
     { title: "Makeup classes", body: "If AhmedPrep cancels a scheduled class, we will provide a makeup class or equivalent live instruction at no additional cost." },
     { title: "Instructor accessibility", body: "Families can reach the instructor with questions between classes." },
   ],
