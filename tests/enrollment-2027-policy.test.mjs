@@ -54,7 +54,10 @@ test("early full payment closes December 20, 2026 at 11:59:59 PM Eastern", () =>
   assert.equal(isEarlyWindowOpen(new Date("2026-12-21T04:59:59Z")), true)
   assert.equal(isEarlyWindowOpen(new Date("2026-12-21T05:00:00Z")), false)
   assert.match(PAYMENT_OPTIONS["early-full"].detail, /December 20, 2026, at 11:59:59 PM ET/)
-  assert.match(ENROLLMENT_2027.tuition.early.summary, /December 20, 2026, at 11:59:59 PM ET/)
+  assert.match(
+    ENROLLMENT_2027.tuition.early.summary,
+    /December 12 \(weekend SHSAT or Digital SAT\), December 14 \(weekday SHSAT\), or December 15 \(weekday Digital SAT\), 2026/,
+  )
   assert.match(TUITION_TIERS.find((t) => t.id === "early").condition, /December 20, 2026/)
 })
 
@@ -63,7 +66,10 @@ test("regular tuition is due before the first scheduled class, with no installme
   assert.match(PAYMENT_OPTIONS["regular-full"].detail, /before the student’s first scheduled class/)
   assert.match(ENROLLMENT_2027.tuition.regular.summary, /before the student’s first scheduled class/)
   assert.match(TUITION_TIERS.find((t) => t.id === "regular").condition, /before the student’s first scheduled class/)
-  assert.equal(ENROLLMENT_2027.tuition.rules, "Discounts cannot be combined. No installment plans for Winter 2027.")
+  assert.equal(
+    ENROLLMENT_2027.tuition.rules,
+    "Discounts cannot be combined. Payment and installment terms will be confirmed before payment is requested.",
+  )
 })
 
 test("planned start dates match the approved Winter 2027 schedule", () => {
@@ -81,7 +87,7 @@ test("planned start dates match the approved Winter 2027 schedule", () => {
     "digital-sat Weekday group: Tuesday, January 12, 2027",
     "digital-sat Weekend group: Saturday, January 9, 2027",
   ])
-  assert.equal(ENROLLMENT_2027.datesStatus, "planned")
+  assert.equal(ENROLLMENT_2027.datesStatus, "confirmed")
 })
 
 test("class hours are preserved", () => {
@@ -103,9 +109,9 @@ test("class capacity stays at 12 everywhere", () => {
 
 test("program length uses the scheduled-hours wording", () => {
   assert.equal(ENROLLMENT_2027.hours, 72)
-  assert.equal(ENROLLMENT_2027.hoursLabel, "72 scheduled hours, including breaks")
-  assert.match(ENROLLMENT_2027.launchNote, /72 scheduled hours, including breaks/)
-  assert.match(read("app/api/enrollment-2027/route.ts"), /ENROLLMENT_2027\.hoursLabel/)
+  assert.equal(ENROLLMENT_2027.hoursLabel, "72 hours of scheduled live instruction")
+  assert.match(ENROLLMENT_2027.launchNote, /72 hours of scheduled live instruction/)
+  assert.match(read("lib/enrollment-2027-inquiry.ts"), /\$\{cohort\.hours\} hours of scheduled live instruction/)
 })
 
 test("no obsolete Winter 2027 policy or hours wording remains", () => {

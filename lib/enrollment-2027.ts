@@ -117,14 +117,14 @@ export const scheduleOptionsFor = (programName: string): string[] => {
  * Only an explicit "sent" from the server confirms the parent's email. A failed or skipped send, and a repeat
  * submission (saved earlier, so nothing is sent again), are reported as received but unconfirmed.
  */
-export function inquiryReceivedMessage(result: unknown, parentName: string, email: string) {
+export function inquiryReceivedMessage(result: unknown, parentName: string, email: string, name: string = ENROLLMENT_2027_NAME) {
   const confirmed =
     typeof result === "object" && result !== null && (result as { confirmation?: unknown }).confirmation === "sent"
   return {
     confirmed,
     text: confirmed
-      ? `Thank you, ${parentName}. We received your ${ENROLLMENT_2027_NAME} inquiry and sent a confirmation to ${email}.`
-      : `Thank you, ${parentName}. We received your ${ENROLLMENT_2027_NAME} inquiry, but we could not confirm that a confirmation email was sent to ${email}.`,
+      ? `Thank you, ${parentName}. We received your ${name} inquiry and sent a confirmation to ${email}.`
+      : `Thank you, ${parentName}. We received your ${name} inquiry, but we could not confirm that a confirmation email was sent to ${email}.`,
   }
 }
 

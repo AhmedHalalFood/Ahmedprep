@@ -37,14 +37,19 @@ const ATTENDANCE_FAQS: FaqItem[] = [
 ]
 
 export const metadata: Metadata = {
-  title: "January 2027 SHSAT & Digital SAT Enrollment",
+  title: "2027 SHSAT & Digital SAT Enrollment: Winter, Spring, Summer",
   description:
-    "Enroll in AhmedPrep's January 2027 SHSAT and Digital SAT programs in Astoria: 12 weeks, 72 hours of scheduled live instruction, and small classes of up to 12 students.",
+    "Request enrollment in AhmedPrep's Winter, Spring, or Summer 2027 SHSAT and Digital SAT cohorts in Astoria: small in-person classes of up to 12 students at $20 per instructional hour.",
   alternates: { canonical: absoluteUrl(PATH) },
   openGraph: { ...baseOpenGraph, url: absoluteUrl(PATH) },
 }
 
-export default function Enroll2027Page() {
+type Props = { searchParams: Promise<Record<string, string | string[] | undefined>> }
+const first = (value: string | string[] | undefined) => (Array.isArray(value) ? value[0] : value)
+
+export default async function Enroll2027Page({ searchParams }: Props) {
+  const params = await searchParams
+  const preset = { program: first(params.program), term: first(params.term), cohortId: first(params.cohort) }
   const E = ENROLLMENT_2027
   const facts = [
     { term: "Programs", value: "SHSAT & Digital SAT" },
@@ -118,7 +123,7 @@ export default function Enroll2027Page() {
             </p>
           </div>
           <div className="border border-line bg-white p-5 sm:p-8">
-            <Enrollment2027Form />
+            <Enrollment2027Form preset={preset} />
           </div>
         </div>
       </section>
