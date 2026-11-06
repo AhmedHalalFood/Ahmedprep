@@ -12,7 +12,7 @@ const dollars = (n: number) => "$" + n.toLocaleString("en-US")
 
 export default function Programs2027Page() {
   return (
-    <main className="bg-warm px-5 py-10 sm:py-14">
+    <div className="bg-warm px-5 py-10 sm:py-14">
       <div className="mx-auto max-w-5xl space-y-10">
         <header className="space-y-3">
           <p className="eyebrow blue">AhmedPrep 2027</p>
@@ -58,6 +58,6 @@ export default function Programs2027Page() {
         </section>
         <p className="text-sm text-subtle">Submitting an inquiry does not reserve a seat or a discounted tuition rate. Payment, cancellation, and refund terms will be provided before enrollment is finalized.</p>
       </div>
-    </main>
+    </div>
   )
 }
