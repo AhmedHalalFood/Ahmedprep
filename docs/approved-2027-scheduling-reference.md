@@ -56,8 +56,9 @@ No Friday paid classes.
 - Summer intensive: founding May 25; early Jun 8.
 
 ## Teaching and enrollment safeguards
+- Approved maximum class size: 12 students per cohort (owner confirmation November 6, 2026).
 - Each 3h class: 75m Math, 75m ELA/Reading-Writing, 30m cumulative practice/review.
 - Diagnostic, quizzes, mock tests, error log, parent progress reporting; separate teacher answer keys; Digital SAT students bring laptops.
 - Parent registration is an inquiry until seat availability and payment are verified.
-- Final class cap, refund/withdrawal/installment terms, precise session-by-session syllabi, and production Neon/Resend checks must be confirmed before publication.
+- Refund/withdrawal/installment terms, precise session-by-session syllabi, and production Neon/Resend checks must be confirmed before publication.
 - Do not merge, deploy, publish, or change live database/email settings without separate approval.
