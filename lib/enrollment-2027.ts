@@ -10,12 +10,12 @@ export const ENROLLMENT_2027 = {
   weeks: 12,
   hours: 72,
   hoursLabel: "72 hours of scheduled live instruction",
-  maxClassSize: 10,
+  maxClassSize: 12,
   location: "Astoria",
   requestHref: "/enroll-2027",
   diagnosticHref: "#diagnostic",
   intensive2026Href: "/shsat-final-intensive-2026",
-  availabilityStatus: "Enrollment inquiries open — Seats limited to 10 per class.",
+  availabilityStatus: "Enrollment inquiries open — Seats limited to 12 per class.",
   tuition: {
     founding: {
       label: "Founding-Family",
@@ -80,7 +80,7 @@ export const ENROLLMENT_2027 = {
     { title: "Original practice materials", body: "Problem sets and practice written for AhmedPrep students." },
     { title: "Personalized feedback", body: "Specific notes on what each student should practice next." },
     { title: "Progress tracking", body: "Regular check-ins so families can see where skills are improving." },
-    { title: "Small classes", body: "No more than 10 students in a class." },
+    { title: "Small classes", body: "No more than 12 students in a class." },
     { title: "Makeup classes", body: "If AhmedPrep cancels a scheduled class, we will provide a makeup class or equivalent live instruction at no additional cost." },
     { title: "Instructor accessibility", body: "Families can reach the instructor with questions between classes." },
   ],
