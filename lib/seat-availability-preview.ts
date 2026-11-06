@@ -9,8 +9,12 @@ export const GROUP_CAPACITY = 12
 
 export const FOUNDING_RULES = {
   seatsPerGroup: 5,
-  deadlineLabel: "December 5, 2026",
+  deadlineLabel:
+    "November 28 (weekend SHSAT or Digital SAT), November 30 (weekday SHSAT), or December 1 (weekday Digital SAT), 2026, at 11:59:59 PM ET",
 } as const
+
+const EARLY_DEADLINE_LABEL =
+  "December 12 (weekend SHSAT or Digital SAT), December 14 (weekday SHSAT), or December 15 (weekday Digital SAT), 2026, at 11:59:59 PM ET"
 
 export type TuitionTier = {
   id: "founding" | "early" | "regular"
@@ -30,7 +34,7 @@ export const TUITION_TIERS: TuitionTier[] = [
     id: "early",
     name: "Early payment",
     amount: "$1,296",
-    condition: "Full payment by December 20, 2026, at 11:59:59 PM ET.",
+    condition: `Full payment by ${EARLY_DEADLINE_LABEL}.`,
   },
   {
     id: "regular",

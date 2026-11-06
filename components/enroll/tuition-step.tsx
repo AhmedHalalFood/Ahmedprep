@@ -1,13 +1,13 @@
 import { OptionCard } from "./choice-steps"
 import {
-  EARLY_POLICY,
   FOUNDING_POLICY,
   MAX_CLASS_SIZE,
-  PAYMENT_OPTIONS,
   TUITION,
+  deadlinesForClass,
   formatUsd,
   isEarlyWindowOpen,
   isFoundingWindowOpen,
+  paymentOptionsFor,
   type PaymentOption,
 } from "@/lib/enrollment-catalog"
 
@@ -29,9 +29,25 @@ function ClosedNote({ children }: { children: React.ReactNode }) {
   return <p className="border border-line bg-warm p-4 text-sm leading-relaxed text-subtle">{children}</p>
 }
 
-export function TuitionStep({ value, onChange }: { value: PaymentOption | null; onChange: (p: PaymentOption) => void }) {
-  const foundingOpen = isFoundingWindowOpen()
-  const earlyOpen = isEarlyWindowOpen()
+/**
+ * Display only. `now` comes from the server render, and the final decision is re-checked on the server at checkout,
+ * so a wrong device clock cannot unlock a closed discount.
+ */
+export function TuitionStep({
+  classId,
+  now,
+  value,
+  onChange,
+}: {
+  classId: string
+  now: Date
+  value: PaymentOption | null
+  onChange: (p: PaymentOption) => void
+}) {
+  const options = paymentOptionsFor(classId)
+  const deadlines = deadlinesForClass(classId)
+  const foundingOpen = isFoundingWindowOpen(classId, now)
+  const earlyOpen = isEarlyWindowOpen(classId, now)
 
   return (
     <fieldset className="flex flex-col gap-6">
@@ -49,12 +65,12 @@ export function TuitionStep({ value, onChange }: { value: PaymentOption | null; 
             checked={value === "founding-full"}
             onSelect={() => onChange("founding-full")}
           >
-            <span className="font-bold text-ink">{PAYMENT_OPTIONS["founding-full"].title}</span>
+            <span className="font-bold text-ink">{options["founding-full"].title}</span>
             <Price amount={formatUsd(TUITION.foundingCents)} badge={`Save ${formatUsd(TUITION.savingsCents)}`} />
-            <span className="text-sm leading-relaxed text-subtle">{PAYMENT_OPTIONS["founding-full"].detail}</span>
+            <span className="text-sm leading-relaxed text-subtle">{options["founding-full"].detail}</span>
           </OptionCard>
         ) : (
-          <ClosedNote>{`Founding-Family tuition closed on ${FOUNDING_POLICY.deadlineLabel}.`}</ClosedNote>
+          <ClosedNote>{`Founding-Family tuition for this class closed on ${deadlines?.founding.label ?? "its deadline"}.`}</ClosedNote>
         )}
 
         <p className="text-sm leading-relaxed text-ink">
@@ -73,12 +89,12 @@ export function TuitionStep({ value, onChange }: { value: PaymentOption | null; 
             checked={value === "early-full"}
             onSelect={() => onChange("early-full")}
           >
-            <span className="font-bold text-ink">{PAYMENT_OPTIONS["early-full"].title}</span>
+            <span className="font-bold text-ink">{options["early-full"].title}</span>
             <Price amount={formatUsd(TUITION.earlyCents)} badge="10% off" />
-            <span className="text-sm leading-relaxed text-subtle">{PAYMENT_OPTIONS["early-full"].detail}</span>
+            <span className="text-sm leading-relaxed text-subtle">{options["early-full"].detail}</span>
           </OptionCard>
         ) : (
-          <ClosedNote>{`Early Full Payment closed on ${EARLY_POLICY.deadlineLabel}.`}</ClosedNote>
+          <ClosedNote>{`Early Full Payment for this class closed on ${deadlines?.early.label ?? "its deadline"}.`}</ClosedNote>
         )}
         <OptionCard
           name="tuition"
@@ -86,9 +102,9 @@ export function TuitionStep({ value, onChange }: { value: PaymentOption | null; 
           checked={value === "regular-full"}
           onSelect={() => onChange("regular-full")}
         >
-          <span className="font-bold text-ink">{PAYMENT_OPTIONS["regular-full"].title}</span>
+          <span className="font-bold text-ink">{options["regular-full"].title}</span>
           <Price amount={formatUsd(TUITION.regularCents)} />
-          <span className="text-sm leading-relaxed text-subtle">{PAYMENT_OPTIONS["regular-full"].detail}</span>
+          <span className="text-sm leading-relaxed text-subtle">{options["regular-full"].detail}</span>
         </OptionCard>
       </section>
 

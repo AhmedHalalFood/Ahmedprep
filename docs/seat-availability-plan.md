@@ -13,8 +13,8 @@ demonstration values only and is excluded from search engines.
 | 4 Astoria groups, 12 seats each | `capacity` column + check inside the approval transaction |
 | A seat counts only when an admin approves **and** full payment is verified | Only `status = 'confirmed'` rows are counted |
 | Inquiries never reduce availability | Inquiries stay in `lead_submissions`; they are never counted |
-| Founding-family: max 5 per group, ends Dec 5, 2026 (whichever comes first) | Checked on the server at approval time, under a row lock |
-| $1,296 early full payment if paid in full by Dec 20, 2026, 11:59:59 PM ET | Tier assigned by the server from the verified payment date |
+| Founding-family: max 5 per group, ends at the group's founding deadline (whichever comes first) — Nov 28 (weekend groups), Nov 30 (weekday SHSAT), Dec 1 (weekday Digital SAT), 2026, 11:59:59 PM ET | Checked on the server at approval time, under a row lock (`checkoutEligibility` in `lib/enrollment-catalog.ts`) |
+| $1,296 early full payment if paid in full by the group's early deadline — Dec 12 (weekend groups), Dec 14 (weekday SHSAT), Dec 15 (weekday Digital SAT), 2026, 11:59:59 PM ET | Tier assigned by the server from the verified payment date |
 | $1,440 regular tuition, paid in full before the student's first scheduled class | Default tier |
 | Discounts do not stack | One `tuition_tier` per enrollment; amount is looked up from the tier, never typed in |
 | Full group → waitlist | Waitlist entries in order; never counted as seats |
@@ -57,8 +57,9 @@ Production would follow only after separate approval.
    - locks the group row (`SELECT … FOR UPDATE`) so two simultaneous approvals cannot both take the
      last seat;
    - re-counts confirmed seats and rejects the approval if the group is full (offering the waitlist instead);
-   - assigns the tuition tier: founding only if before Dec 5, 2026 **and** fewer than 5 founding
-     seats are confirmed; otherwise early if paid in full by Dec 20, 2026; otherwise regular;
+   - assigns the tuition tier: founding only if before the group's founding deadline **and** fewer
+     than 5 founding seats are confirmed; otherwise early if paid in full by the group's early
+     deadline; otherwise regular;
    - sets `status = 'confirmed'` and writes an `admin_audit_log` entry.
 5. **Cancellation or refund** frees the seat; the next waitlist family can be offered it.
 
@@ -87,9 +88,8 @@ admin writes go through server actions with input validation and parameterised q
 
 ## 6. Decisions needed before Phase 2
 
-1. **Existing `/enroll` preview conflicts with these rules.** It currently says founding tuition ends
-   November 30, 2026, offers 3 installments of $480, and describes classes of "no more than 10".
-   This plan uses Dec 5, the $1,296 early-payment tier, no installments, and 12 seats. Which is final?
+1. **Resolved:** `/enroll` checkout now uses the approved per-group founding and early deadlines,
+   the $1,296 early-payment tier, no installments, and 12 seats.
 2. **Payment verification source**: manual (Zelle/check reference typed by an admin) or Stripe later?
 3. **Waitlist offers**: how long should a family have to accept an opened seat (suggest 48 hours)?
 4. **Admin sign-in**: confirm Neon Auth with an admin email allow-list.

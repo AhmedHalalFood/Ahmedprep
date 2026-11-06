@@ -23,7 +23,10 @@ test("Programs: SHSAT and Digital SAT show the published January 2027 tuition", 
     const p = getProgram(id)
     assert.ok(p.price.includes(regular.total) && p.price.includes("January 2027"), id)
     for (const total of [early.total, founding.total]) assert.ok(p.priceNote.includes(total), `${id} note ${total}`)
-    assert.ok(p.priceNote.includes("December 20, 2026") && p.priceNote.includes("December 5, 2026"))
+    for (const date of ["December 12", "December 14", "December 15", "November 28", "November 30", "December 1 "]) {
+      assert.ok(p.priceNote.includes(date), `${id} note ${date}`)
+    }
+    assert.ok(!p.priceNote.includes("December 20, 2026") && !p.priceNote.includes("December 5, 2026"))
     assert.ok(p.priceNote.includes("Discounts cannot be combined"))
     assert.ok(p.priceNote.includes("Private tutoring is priced separately"))
   }

@@ -26,7 +26,7 @@ export default async function EnrollPage() {
               everything before payment. Small classes of no more than 12 students.
             </p>
           </header>
-          <EnrollmentFlow />
+          <EnrollmentFlow serverNowIso={new Date().toISOString()} />
         </div>
       </section>
     </>

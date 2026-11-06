@@ -24,7 +24,7 @@ const CONTACT_CTA = { label: "Contact AhmedPrep", href: "/contact" }
 
 const T = ENROLLMENT_2027.tuition
 export const JANUARY_2027_PRICE = `${T.regular.total} regular tuition (January 2027 small group)`
-export const JANUARY_2027_PRICE_NOTE = `12-week small-group program, ${ENROLLMENT_2027.hoursLabel}. Early full payment ${T.early.total} by December 20, 2026; founding-family ${T.founding.total} for the first 5 fully paid enrollments per class, by December 5, 2026. ${T.rules} Private tutoring is priced separately.`
+export const JANUARY_2027_PRICE_NOTE = `12-week small-group program, ${ENROLLMENT_2027.hoursLabel}. Early full payment ${T.early.total} by December 12 (weekend groups), December 14 (weekday SHSAT), or December 15 (weekday Digital SAT), 2026; founding-family ${T.founding.total} for the first 5 fully paid enrollments per class, by November 28 (weekend groups), November 30 (weekday SHSAT), or December 1 (weekday Digital SAT), 2026. ${T.rules} Private tutoring is priced separately.`
 
 export const PROGRAMS: Program[] = [
   {
