@@ -39,7 +39,7 @@ const ATTENDANCE_FAQS: FaqItem[] = [
 export const metadata: Metadata = {
   title: "January 2027 SHSAT & Digital SAT Enrollment",
   description:
-    "Enroll in AhmedPrep's January 2027 SHSAT and Digital SAT programs in Astoria: 12 weeks, 72 hours of scheduled live instruction, and small classes of up to 10 students.",
+    "Enroll in AhmedPrep's January 2027 SHSAT and Digital SAT programs in Astoria: 12 weeks, 72 hours of scheduled live instruction, and small classes of up to 12 students.",
   alternates: { canonical: absoluteUrl(PATH) },
   openGraph: { ...baseOpenGraph, url: absoluteUrl(PATH) },
 }
