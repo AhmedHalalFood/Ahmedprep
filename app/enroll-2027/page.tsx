@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { MapPin } from "lucide-react"
+import Link from "next/link"
 import { ClassCards } from "@/components/enroll-2027/class-cards"
 import { EnrollmentSteps } from "@/components/enroll-2027/enrollment-steps"
 import { TuitionOptions } from "@/components/enroll-2027/tuition-options"
@@ -94,6 +95,11 @@ export default function Enroll2027Page() {
 
       <div className="bg-warm px-5 py-10 sm:py-14">
         <div className="mx-auto flex max-w-5xl flex-col gap-12">
+          <div className="border-l-4 border-brand bg-white p-5 text-sm leading-relaxed text-ink">
+            <p className="font-extrabold text-navy">Looking ahead to Spring or Summer 2027?</p>
+            <p className="mt-1">Review all 12 approved SHSAT and Digital SAT cohorts, tuition options, and full-payment deadlines.</p>
+            <Link href="/programs-2027" className="mt-2 inline-block font-bold text-brand underline">View all 2027 class schedules and tuition</Link>
+          </div>
           <ClassCards />
           <TuitionOptions />
           <EnrollmentSteps />
