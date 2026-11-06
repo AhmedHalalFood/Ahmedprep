@@ -7,6 +7,7 @@ import { Faq, type FaqItem } from "@/components/landing/faq"
 import { LocationSection } from "@/components/landing/location-section"
 import { Breadcrumbs, JsonLd, Section } from "@/components/landing/primitives"
 import { ProgramHero } from "@/components/landing/program-hero"
+import { ProgramCohorts2027, courseInstances2027 } from "@/components/landing/program-cohorts-2027"
 import { SuccessStories } from "@/components/landing/success-stories"
 import { ThisSundayStrip } from "@/components/sunday-classes/this-sunday-strip"
 import { TeachingVideos } from "@/components/videos/teaching-videos"
@@ -93,11 +94,7 @@ const courseSchema = {
   description: "Diagnostic-based Digital SAT preparation covering Reading and Writing and Math, adaptive strategy, and Desmos instruction.",
   url: `${SITE_URL}/digital-sat`,
   provider: { "@id": `${SITE_URL}/#organization` },
-  hasCourseInstance: {
-    "@type": "CourseInstance",
-    courseMode: "Onsite",
-    location: { "@type": "Place", name: "AhmedPrep, Astoria, Queens" },
-  },
+  hasCourseInstance: courseInstances2027("Digital SAT"),
 }
 
 export default function DigitalSatPage() {
@@ -127,7 +124,9 @@ export default function DigitalSatPage() {
         </div>
       </Section>
 
-      <Section id="how-it-works" tone="warm" eyebrow="How SAT preparation works" title="From baseline score to target score">
+      <ProgramCohorts2027 program="Digital SAT" />
+
+      <Section id="how-it-works" eyebrow="How SAT preparation works" title="From baseline score to target score">
         <ol className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {steps.map(([title, body], i) => (
             <li key={title} className="flex flex-col gap-3 border-t-4 border-navy bg-white p-6">

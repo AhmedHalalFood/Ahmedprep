@@ -246,3 +246,28 @@ export const cohortsFor = (program: string, term: string) => COHORTS.filter((c) 
 export const cohortTitle = (c: Cohort) => `${TERM_NAMES[c.term]} ${c.program} ${c.label}`
 /** "Monday and Wednesday, 5:30–8:30 PM ET" */
 export const cohortSchedule = (c: Cohort) => `${c.days}, ${c.time} ET`
+
+/** Inquiry form link with this cohort already selected. */
+export const cohortInquiryHref = (c: Cohort) =>
+  `/enroll-2027?${new URLSearchParams({ program: c.program, term: c.term, cohort: c.id })}`
+
+/** Date span, hour range, regular-tuition range and earliest discount deadlines for one term. */
+export function termSummary(term: Term) {
+  const spans = term.cohorts.map(cohortSpan)
+  const hours = term.cohorts.map((c) => c.hours)
+  const regular = term.cohorts.map((c) => priceFor(c).regular)
+  const deadlines = term.cohorts.map(deadlinesFor)
+  const range = (values: number[], fmt: (n: number) => string) => {
+    const lo = Math.min(...values)
+    const hi = Math.max(...values)
+    return lo === hi ? fmt(lo) : `${fmt(lo)}–${fmt(hi)}`
+  }
+  return {
+    startIso: spans.map((s) => s.startIso).sort()[0],
+    endIso: spans.map((s) => s.endIso).sort().at(-1)!,
+    hoursLabel: range(hours, String) + " hours",
+    regularLabel: range(regular, dollars),
+    firstFoundingIso: deadlines.map((d) => d.foundingIso).sort()[0],
+    firstEarlyIso: deadlines.map((d) => d.earlyIso).sort()[0],
+  }
+}

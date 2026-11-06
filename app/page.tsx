@@ -19,9 +19,9 @@ import { intensivePromoActive } from "@/lib/intensive-promo"
 import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 
 export const metadata: Metadata = {
-  title: { absolute: "AhmedPrep | January 2027 SHSAT & Digital SAT Enrollment in Astoria, Queens" },
+  title: { absolute: "AhmedPrep | Winter, Spring & Summer 2027 SHSAT & Digital SAT Classes in Astoria, Queens" },
   description:
-    "January 2027 enrollment for SHSAT and Digital SAT Prep in Astoria, Queens: 12-week small-group programs with a maximum of 12 students, free diagnostics, and clear tuition.",
+    "Winter, Spring, and Summer 2027 SHSAT and Digital SAT Prep in Astoria, Queens: small in-person classes of up to 12 students at $20 per instructional hour, free diagnostics, and published class dates.",
   alternates: { canonical: absoluteUrl("/") },
   openGraph: { ...baseOpenGraph, url: absoluteUrl("/") },
 }
@@ -51,15 +51,15 @@ export default async function Home() {
             <Sparkle className="hero-sparkle" size={13} fill="currentColor" strokeWidth={0} aria-hidden="true" />
           </p>
           <h1 id="hero-title">
-            <span className="hero-launch-date">January 2027</span>
+            <span className="hero-launch-date">Winter · Spring · Summer 2027</span>
             <span className="hero-slogan">
               <span className="hero-slogan-lead">Big Goals. Small Classes.</span>
               <span className="hero-slogan-accent">Real Progress.</span>
             </span>
           </h1>
           <p className="hero-support">
-            Personalized instruction <span aria-hidden="true">•</span> 12-week programs{" "}
-            <span aria-hidden="true">•</span> 72 scheduled hours, including breaks
+            Classes start January 9, April 3 &amp; July 3 <span aria-hidden="true">•</span> Max 12 students{" "}
+            <span aria-hidden="true">•</span> $20 per class hour
           </p>
           <div className="hero-actions">
             <TrackedLink

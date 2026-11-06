@@ -17,12 +17,17 @@ test("Why Families: Free Sunday copy states the January 2027 every-other-Sunday 
   assert.doesNotMatch(src, /Free weekly learning/)
 })
 
-test("Programs: SHSAT and Digital SAT show the published January 2027 tuition", () => {
+test("Programs: SHSAT and Digital SAT show the approved 2027 hourly tuition", () => {
   const { regular, early, founding } = ENROLLMENT_2027.tuition
   for (const id of ["shsat", "digital_sat"]) {
     const p = getProgram(id)
-    assert.ok(p.price.includes(regular.total) && p.price.includes("January 2027"), id)
-    for (const total of [early.total, founding.total]) assert.ok(p.priceNote.includes(total), `${id} note ${total}`)
+    assert.ok(p.price.includes("$20 per scheduled instructional hour") && p.price.includes("2027"), id)
+    assert.ok(!p.price.includes("January 2027"), `${id} price is not January-only`)
+    for (const total of [regular.total, "$1,920", "$960"]) assert.ok(p.priceNote.includes(total), `${id} note ${total}`)
+    for (const phrase of ["saves 10%", "saves 25%", "first 5 fully paid enrollments per cohort"]) {
+      assert.ok(p.priceNote.includes(phrase), `${id} note ${phrase}`)
+    }
+    assert.ok(early.total && founding.total)
     for (const date of ["December 12", "December 14", "December 15", "November 28", "November 30", "December 1 "]) {
       assert.ok(p.priceNote.includes(date), `${id} note ${date}`)
     }
