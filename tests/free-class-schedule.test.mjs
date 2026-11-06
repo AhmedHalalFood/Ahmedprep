@@ -37,7 +37,7 @@ test("late December 2026 lists only January 2027 class Sundays (Dec 27 is paused
 test("after RSVPs open, the summary describes the every-other-Sunday 2027 schedule", () => {
   const summary = scheduleSummary(new Date("2026-12-28T15:00:00Z"))
   assert.equal(summary.paused, false)
-  assert.equal(summary.cadence, "Every other Sunday")
+  assert.equal(summary.cadence, "Every other Sunday through June 27, 2027")
 })
 
 test("historical 2026 registrations still rebuild their original session", () => {

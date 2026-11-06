@@ -65,6 +65,11 @@ export const RSVP_PROGRAMS: { value: RsvpProgram; label: string }[] = [
 export type ScheduleId = "weekly_2026" | "biweekly_2027"
 export const SCHEDULE_2026_LAST_SUNDAY = "2026-12-27"
 export const SCHEDULE_2027_FIRST_SUNDAY: string | null = "2027-01-10"
+/** Winter and Spring only: both programs are suspended for July and August 2027, and no Fall date is approved. */
+export const SCHEDULE_2027_LAST_SUNDAY = "2027-06-27"
+export const SUMMER_2027_SUSPENSION = { start: "2027-07-01", end: "2027-08-31" } as const
+export const SUMMER_SUSPENSION_ANNOUNCEMENT =
+  "Free Sunday Zoom classes run in Winter and Spring only. Both free classes are suspended during July and August 2027; Fall 2027 dates have not been announced."
 const BIWEEKLY_INTERVAL_DAYS = 14
 
 export const FREE_CLASS_PAUSE = { start: "2026-11-05", end: "2027-01-09" } as const
@@ -166,6 +171,7 @@ function newYorkOffset(date: Date) {
 export function scheduleForDate(isoDate: string): ScheduleId | null {
   if (isoDate <= SCHEDULE_2026_LAST_SUNDAY) return "weekly_2026"
   if (!SCHEDULE_2027_FIRST_SUNDAY || isoDate < SCHEDULE_2027_FIRST_SUNDAY) return null
+  if (isoDate > SCHEDULE_2027_LAST_SUNDAY) return null
   const days = Math.round((Date.parse(isoDate) - Date.parse(SCHEDULE_2027_FIRST_SUNDAY)) / DAY_MS)
   return days % BIWEEKLY_INTERVAL_DAYS === 0 ? "biweekly_2027" : null
 }
@@ -337,13 +343,24 @@ export function scheduleSummary(now = new Date()) {
   const ny = newYorkWallClock(now)
   const todayIso = `${ny.year}-${String(ny.month).padStart(2, "0")}-${String(ny.day).padStart(2, "0")}`
   const paused = !next && todayIso < RSVP_2027_OPENS
+  const suspended = !next && todayIso > SCHEDULE_2027_LAST_SUNDAY
   return {
     schedule: "biweekly_2027" as ScheduleId,
-    paused,
-    cadence: paused ? "Every other Sunday from January 10, 2027" : "Every other Sunday",
+    paused: paused || suspended,
+    cadence: paused
+      ? "Every other Sunday from January 10, 2027"
+      : suspended
+        ? "Winter and Spring only; suspended July–August 2027"
+        : "Every other Sunday through June 27, 2027",
     times: `SHSAT Math ${BIWEEKLY_2027_TIMES.shsat.label.replace(" ET", "")} · Digital SAT Math ${BIWEEKLY_2027_TIMES.digital_sat.label}`,
     timesShort: "SHSAT Math 6 PM · Digital SAT Math 7 PM ET",
     format: "Free SHSAT Math and Digital SAT Math classes are both taught on every class Sunday, one after the other",
-    upcomingChange: paused ? PAUSE_ANNOUNCEMENT : next ? null : "The next class date will be announced soon.",
+    upcomingChange: paused
+      ? PAUSE_ANNOUNCEMENT
+      : suspended
+        ? SUMMER_SUSPENSION_ANNOUNCEMENT
+        : next
+          ? null
+          : "The next class date will be announced soon.",
   }
 }

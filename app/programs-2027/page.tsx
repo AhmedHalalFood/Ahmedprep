@@ -18,8 +18,8 @@ export default function Programs2027Page() {
           <p className="eyebrow blue">AhmedPrep 2027</p>
           <h1 className="text-3xl font-extrabold text-navy sm:text-5xl">SHSAT and Digital SAT class schedules</h1>
           <p className="max-w-3xl text-lg text-subtle">Small-group classes in Astoria. Compare all 12 approved cohorts, instructional hours, tuition, and full-payment discount deadlines. All times are Eastern Time.</p>
-          <Link href="/enroll-2027" className="button button-gold button-lg inline-flex">Request January enrollment information</Link>
-          <p className="text-sm text-subtle">January enrollment inquiries are open. Spring and Summer enrollment forms are being prepared; contact AhmedPrep to express interest in those terms.</p>
+          <Link href="/enroll-2027" className="button button-gold button-lg inline-flex">Request 2027 enrollment information</Link>
+          <p className="text-sm text-subtle">Enrollment inquiries are open for all Winter, Spring, and Summer 2027 cohorts. Choose a cohort below to start an inquiry with it already selected.</p>
         </header>
         {TERMS_2027.map((term) => (
           <section key={term.id} id={term.id} className="space-y-5" aria-labelledby={term.id + "-title"}>
@@ -34,6 +34,12 @@ export default function Programs2027Page() {
                     <p className="text-sm text-subtle">{cohort.dates}, 2027</p>
                     <p className="mt-2 text-sm text-ink">{cohort.sessions} classes · {cohort.hours} scheduled instructional hours</p>
                     <p className="mt-3 text-sm text-ink">Regular <strong>{dollars(price.regular)}</strong> · Early <strong>{dollars(price.early)}</strong> · Founding <strong>{dollars(price.founding)}</strong></p>
+                    <Link
+                      href={`/enroll-2027?${new URLSearchParams({ program: cohort.program, term: cohort.term, cohort: cohort.id })}`}
+                      className="mt-3 inline-block text-sm font-bold text-brand underline"
+                    >
+                      Request info for {term.name} {cohort.program} {cohort.label}
+                    </Link>
                   </li>
                 )
               })}
@@ -53,7 +59,7 @@ export default function Programs2027Page() {
         <section className="space-y-3 border-l-4 border-brand bg-white p-5">
           <h2 className="text-xl font-extrabold text-navy">Holiday makeups and free Sunday Zoom</h2>
           <p className="text-sm text-ink">Winter and Spring makeup instruction is scheduled on select Saturdays from 5:30–8:30 PM. Summer makeups are daytime sessions on August 28–29. Exact makeup assignments remain subject to final curriculum sequencing and calendar verification before publication.</p>
-          <p className="text-sm text-ink">Free Sunday Zoom classes continue every other Sunday in Winter and Spring: SHSAT 6–6:45 PM and Digital SAT 7–7:45 PM. Both are suspended during July and August 2027. A Fall restart will be evaluated.</p>
+          <p className="text-sm text-ink">Free Sunday Zoom classes continue every other Sunday in Winter and Spring: SHSAT 6–6:45 PM and Digital SAT 7–7:45 PM. The last 2027 class Sunday is June 27. Both are suspended during July and August 2027, and Fall 2027 dates have not been announced.</p>
           <p className="text-sm text-ink">Summer break begins August 30, 2027. Digital SAT students bring their own laptops.</p>
         </section>
         <p className="text-sm text-subtle">Submitting an inquiry does not reserve a seat or a discounted tuition rate. Payment, cancellation, and refund terms will be provided before enrollment is finalized.</p>

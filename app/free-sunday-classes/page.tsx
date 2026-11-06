@@ -62,7 +62,7 @@ const SCHEDULE_FAQ_2026: FaqItem = {
 }
 const SCHEDULE_FAQ_2027: FaqItem = {
   q: "How does the schedule work?",
-  a: "Beginning Sunday, January 10, 2027, free Math classes meet every other Sunday. Each class Sunday has two sessions: the Free SHSAT Math Class from 6:00–6:45 PM ET, then the Free Digital SAT Math Class from 7:00–7:45 PM ET. Seats are subject to registration and available capacity.",
+  a: "Beginning Sunday, January 10, 2027, free Math classes meet every other Sunday. Each class Sunday has two sessions: the Free SHSAT Math Class from 6:00–6:45 PM ET, then the Free Digital SAT Math Class from 7:00–7:45 PM ET. Free classes run in Winter and Spring only; the last 2027 class Sunday is June 27, and both classes are suspended during July and August 2027. Fall 2027 dates have not been announced. Seats are subject to registration and available capacity.",
 }
 const SCHEDULE_FAQ_PAUSED: FaqItem = {
   q: "When do the free Sunday classes resume?",
