@@ -3,7 +3,7 @@ import Link from "next/link"
 import { ArrowUpRight, ExternalLink } from "lucide-react"
 import { Breadcrumbs, JsonLd } from "@/components/landing/primitives"
 import { ToolHero } from "@/components/tools/tool-hero"
-import { intensivePromoActive } from "@/lib/intensive-promo"
+import { intensiveSitewidePromoActive } from "@/lib/intensive-promo"
 import { OFFICIAL_DATES } from "@/lib/official-dates"
 import { getSource } from "@/lib/official-sources"
 import { absoluteUrl, baseOpenGraph, webPageSchema } from "@/lib/seo"
@@ -35,7 +35,7 @@ function countdownLabel(days: number, endDays: number) {
 }
 
 export default async function ShsatDatesPage() {
-  const showIntensive = await intensivePromoActive()
+  const showIntensive = await intensiveSitewidePromoActive()
   const group = OFFICIAL_DATES.find((g) => g.title.includes("SHSAT"))!
   const source = getSource(group.sourceId)
   const today = todayInNewYork()

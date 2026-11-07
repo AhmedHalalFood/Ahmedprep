@@ -15,7 +15,7 @@ import { TrackedLink } from "@/components/tracked-link"
 import { TuitionScheduleLink } from "@/components/landing/tuition-schedule-link"
 import { EVENTS } from "@/lib/analytics"
 import { NOT_AFFILIATED_NOTE, SITE_URL } from "@/lib/business"
-import { intensivePromoActive } from "@/lib/intensive-promo"
+import { intensiveSitewidePromoActive } from "@/lib/intensive-promo"
 import { INTENSIVE_PATH } from "@/lib/shsat-intensive"
 import { NYCPS_SHSAT_URL } from "@/lib/resources-shsat-2026"
 
@@ -111,7 +111,7 @@ const courseSchema = {
 }
 
 export default async function ShsatPage() {
-  const showIntensive = await intensivePromoActive()
+  const showIntensive = await intensiveSitewidePromoActive()
   return (
     <>
       <Breadcrumbs items={[{ label: "SHSAT Prep", href: "/shsat" }]} />

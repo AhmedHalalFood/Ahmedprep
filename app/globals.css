@@ -1102,6 +1102,11 @@ a.program-card:hover h3 {
 }
 
 @media (max-width: 800px) {
+  /* Keeps scrolled-to and keyboard-focused controls clear of the fixed bottom bar so taps land on them. */
+  html {
+    scroll-padding-bottom: calc(68px + env(safe-area-inset-bottom));
+  }
+
   body {
     padding-bottom: calc(68px + env(safe-area-inset-bottom));
   }

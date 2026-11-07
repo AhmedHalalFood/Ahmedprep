@@ -15,7 +15,7 @@ import { TrackedLink } from "@/components/tracked-link"
 import { WeeklyPracticeCard } from "@/components/weekly-practice/weekly-practice-card"
 import { EVENTS } from "@/lib/analytics"
 import { ENROLLMENT_2027 } from "@/lib/enrollment-2027"
-import { intensivePromoActive } from "@/lib/intensive-promo"
+import { intensiveSitewidePromoActive } from "@/lib/intensive-promo"
 import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 
 export const metadata: Metadata = {
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 export const revalidate = 3600
 
 export default async function Home() {
-  const showIntensive = await intensivePromoActive()
+  const showIntensive = await intensiveSitewidePromoActive()
   return (
     <>
       <section id="top" className="hero-section" aria-labelledby="hero-title">
