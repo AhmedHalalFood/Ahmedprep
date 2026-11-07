@@ -38,12 +38,12 @@ export function Footer() {
         <div className="footer-links">
           <div>
             <span>Programs</span>
+            <Link href="/programs-2027">Programs &amp; Pricing</Link>
             <Link href="/shsat">SHSAT Prep</Link>
             <Link href="/digital-sat">Digital SAT Prep</Link>
             <Link href="/free-sunday-classes">Free Sunday Classes</Link>
             <Link href="/free-diagnostic">Free Diagnostic</Link>
-            <Link href="/programs">Programs & Pricing</Link>
-            <Link href="/programs-2027">2027 Classes &amp; Dates</Link>
+            <Link href="/programs-2027#more-options">Private Tutoring</Link>
             <Link href="/enroll-2027">2027 Enrollment</Link>
             <Link href="/results">Student Results</Link>
             <Link href="/tools">Free Tools</Link>

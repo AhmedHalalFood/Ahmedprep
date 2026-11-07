@@ -24,7 +24,7 @@ export function ProgramsPreview({ showIntensive }: { showIntensive: boolean }) {
               Free ways to start, and programs to go further
             </h2>
           </div>
-          <TrackedLink href="/programs" event={EVENTS.programCtaClick} eventProps={{ location: "home_programs_preview" }} className="text-link">
+          <TrackedLink href="/programs-2027" event={EVENTS.programCtaClick} eventProps={{ location: "home_programs_preview" }} className="text-link">
             Compare programs <ArrowUpRight size={15} aria-hidden="true" />
           </TrackedLink>
         </div>
@@ -61,7 +61,7 @@ export function ProgramsPreview({ showIntensive }: { showIntensive: boolean }) {
           {visiblePrograms(showIntensive).map((program) => (
             <li key={program.id} className="border-b border-line">
               <TrackedLink
-                href={`/programs#${program.id}`}
+                href={program.id === "private_tutoring" ? "/programs-2027#more-options" : program.href}
                 event={EVENTS.programCtaClick}
                 eventProps={{ location: "home_programs_preview", program: program.id }}
                 className="group flex h-full items-start justify-between gap-4 py-5 pr-4"

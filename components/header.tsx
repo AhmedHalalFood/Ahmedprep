@@ -9,10 +9,10 @@ import { TopContactBar } from "@/components/top-contact-bar"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
 import { ADDRESS_FULL, ADDRESS_LINE_1, MAPS_URL } from "@/lib/business"
-import { intensivePromoActive } from "@/lib/intensive-promo"
+import { intensiveSitewidePromoActive } from "@/lib/intensive-promo"
 
 export async function Header() {
-  const showIntensive = await intensivePromoActive()
+  const showIntensive = await intensiveSitewidePromoActive()
   return (
     <header className="site-header">
       <HideOnHome>

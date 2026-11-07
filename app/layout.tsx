@@ -7,7 +7,7 @@ import { GoogleAnalytics } from '@/components/google-analytics'
 import { Header } from '@/components/header'
 import { MobileCtaBar } from '@/components/mobile-cta-bar'
 import { BUSINESS, MAPS_URL, SITE_URL } from '@/lib/business'
-import { intensivePromoActive } from '@/lib/intensive-promo'
+import { intensiveSitewidePromoActive } from '@/lib/intensive-promo'
 import { baseOpenGraph } from '@/lib/seo'
 
 const organizationSchema = {
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     template: '%s | AhmedPrep',
   },
   description:
-    'Personalized SHSAT and Digital SAT preparation in Astoria, Queens for students across NYC. Book a free diagnostic with AhmedPrep.',
+    'SHSAT and Digital SAT preparation center in Astoria, Queens serving NYC and Long Island. Book a free diagnostic with AhmedPrep.',
   keywords: [
     'SHSAT prep Queens',
     'SHSAT tutoring Astoria',
@@ -97,7 +97,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const showIntensive = await intensivePromoActive()
+  const showIntensive = await intensiveSitewidePromoActive()
   return (
     <html lang="en" className="bg-background">
       <body className={`${inter.variable} ${playfair.variable} font-sans antialiased`}>

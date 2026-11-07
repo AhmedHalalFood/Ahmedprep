@@ -16,7 +16,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/digital-sat", priority: 0.9 },
     { path: "/free-sunday-classes", priority: 0.8 },
     { path: "/free-diagnostic", priority: 0.8 },
-    { path: "/programs", priority: 0.8 },
     { path: "/results", priority: 0.7 },
     { path: "/resources", priority: 0.7 },
     { path: "/shsat-practice-tests", priority: 0.7 },

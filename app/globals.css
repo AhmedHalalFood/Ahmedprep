@@ -376,30 +376,32 @@ h3 {
   color: var(--hero-gold);
 }
 
-.hero-panel h1 {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+.hero-headline {
+  max-width: 14ch;
   margin-top: 14px;
+  color: var(--hero-royal);
+  font-size: clamp(2.4rem, 5.4vw, 4.4rem);
   font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+  animation: hero-fade-in 0.9s 0.05s ease-out both;
 }
 
 .hero-launch-date {
-  position: relative;
-  display: inline-block;
-  padding-bottom: 12px;
-  color: var(--hero-royal);
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  column-gap: 0.25em;
+  column-gap: 0.4em;
   row-gap: 0.1em;
   max-width: 100%;
-  font-size: clamp(1.75rem, 5.6vw, 4.4rem);
-  line-height: 1.05;
-  letter-spacing: -0.025em;
+  margin-top: 14px;
+  color: var(--hero-royal);
+  font-size: clamp(1.05rem, 1.9vw, 1.5rem);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  overflow-wrap: anywhere;
   animation: hero-fade-in 0.9s 0.1s ease-out both;
 }
 
@@ -425,22 +427,131 @@ h3 {
 }
 
 .hero-season-sep {
-  opacity: 0.7;
+  color: var(--hero-gold);
 }
 
 .hero-season-year {
   white-space: nowrap;
 }
 
-.hero-slogan {
+.hero-programs {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 12px;
   max-width: 600px;
-  margin-top: 24px;
-  font-size: clamp(1.9rem, 3.6vw, 3.1rem);
-  line-height: 1.08;
-  letter-spacing: -0.035em;
+  margin-top: 22px;
+  list-style: none;
+}
+
+.hero-programs li {
+  flex: 1 1 240px;
+}
+
+.hero-program {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  column-gap: 12px;
+  height: 100%;
+  min-height: 64px;
+  padding: 12px 16px;
+  border: 1px solid rgba(16, 58, 98, 0.18);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--hero-navy);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.hero-program:hover {
+  border-color: var(--hero-royal);
+  box-shadow: 0 6px 16px rgba(16, 58, 98, 0.12);
+}
+
+.hero-program:focus-visible {
+  outline: 3px solid var(--hero-royal);
+  outline-offset: 3px;
+}
+
+.hero-program-name {
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.hero-program-subjects {
+  grid-row: 2;
+  color: var(--hero-muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.hero-program-arrow {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  color: var(--hero-royal);
+}
+
+.hero-secondary {
+  display: inline-flex;
+  min-height: 56px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 22px;
+  border: 2px solid var(--hero-navy);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--hero-navy);
+  font-size: 0.9rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.hero-secondary:hover {
+  background: var(--hero-navy);
+  color: #fff;
+}
+
+.hero-secondary:focus-visible {
+  outline: 3px solid var(--hero-royal);
+  outline-offset: 3px;
+}
+
+.hero-slogan-band {
+  --hero-navy: #103a62;
+  --hero-blue: #0878c8;
+  --hero-gold: #e9b83d;
+  --hero-muted: #4f667c;
+  padding: 32px 20px;
+  border-bottom: 1px solid rgba(16, 58, 98, 0.12);
+  background: #f4f8fb;
+  text-align: center;
+}
+
+.hero-slogan {
+  max-width: 900px;
+  margin: 0 auto;
+  font-size: clamp(1.5rem, 3vw, 2.4rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
   text-wrap: balance;
+}
+
+.hero-slogan-detail {
+  margin-top: 10px;
+  color: var(--hero-muted);
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.hero-slogan-detail span {
+  margin-inline: 4px;
+  color: var(--hero-gold);
 }
 
 .hero-slogan-lead {
@@ -1102,6 +1213,11 @@ a.program-card:hover h3 {
 }
 
 @media (max-width: 800px) {
+  /* Keeps scrolled-to and keyboard-focused controls clear of the fixed bottom bar so taps land on them. */
+  html {
+    scroll-padding-bottom: calc(68px + env(safe-area-inset-bottom));
+  }
+
   body {
     padding-bottom: calc(68px + env(safe-area-inset-bottom));
   }
@@ -1297,15 +1413,25 @@ a.program-card:hover h3 {
     letter-spacing: 0.12em;
   }
 
+  .hero-headline {
+    font-size: clamp(2.1rem, 10vw, 3.4rem);
+  }
+
   .hero-launch-date {
-    padding-bottom: 14px;
-    font-size: clamp(1.6rem, 8.6vw, 3.4rem);
-    letter-spacing: -0.02em;
+    font-size: clamp(1rem, 4.6vw, 1.35rem);
+    letter-spacing: 0.04em;
+  }
+
+  .hero-programs li {
+    flex-basis: 100%;
+  }
+
+  .hero-secondary {
+    width: 100%;
   }
 
   .hero-slogan {
-    margin-top: 20px;
-    font-size: clamp(1.75rem, 7.6vw, 2.6rem);
+    font-size: clamp(1.4rem, 6.4vw, 2rem);
   }
 
   .hero-support {
