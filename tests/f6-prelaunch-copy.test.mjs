@@ -44,11 +44,13 @@ test("Programs: private tutoring keeps its contact-for-pricing behaviour", () =>
   assert.equal(getProgram("private_tutoring").price, null)
 })
 
-test("Home Programs & Pricing preview reads tuition from the central settings and links to /enroll-2027", () => {
+test("Home Programs & Pricing preview covers all 2027 terms, derives tuition centrally, and links to /programs-2027", () => {
   const src = read("components/landing/programs-preview.tsx")
-  assert.match(src, /January 2027 SHSAT &amp; Digital SAT small-group tuition/)
+  assert.match(src, /2027 SHSAT &amp; Digital SAT small-group tuition/)
+  assert.doesNotMatch(src, /January 2027/)
+  assert.match(src, /priceFor\(/)
   assert.match(src, /ENROLLMENT_2027\.tuition/)
-  assert.match(src, /ENROLLMENT_2027\.requestHref/)
+  assert.match(src, /href="\/programs-2027"/)
   assert.doesNotMatch(src, /\$1,440|\$1,296|\$1,080/)
 })
 
