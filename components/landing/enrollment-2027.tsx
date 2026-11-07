@@ -3,7 +3,7 @@ import { ArrowUpRight, Check } from "lucide-react"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
 import {
-  EARLY_DAYS_BEFORE,
+  EARLY_DAYS_AFTER_FOUNDING,
   FOUNDING_DAYS_BEFORE,
   FOUNDING_SEATS_PER_COHORT,
   HOURLY_RATE,
@@ -83,9 +83,15 @@ export function Enrollment2027({ showIntensive }: { showIntensive: boolean }) {
                     </li>
                   ))}
                 </ul>
-                <p className="text-sm leading-relaxed text-subtle">
-                  Founding-family deadlines from {formatShortDate(s.firstFoundingIso)}; early payment from {formatShortDate(s.firstEarlyIso)}.
-                </p>
+                <dl className="flex flex-col gap-2 text-sm leading-relaxed text-subtle">
+                  {term.deadlines.map((d) => (
+                    <div key={d.group} className="flex flex-col">
+                      <dt className="font-bold text-navy">{d.group}</dt>
+                      <dd>Founding-family payment deadline: {d.foundingShort}</dd>
+                      <dd>Early-payment deadline: {d.earlyShort}</dd>
+                    </div>
+                  ))}
+                </dl>
                 <Link
                   href={`/programs-2027#${term.id}`}
                   className="mt-auto inline-flex min-h-11 items-center gap-2 self-start text-sm font-bold text-brand underline-offset-4 hover:underline"
@@ -112,7 +118,7 @@ export function Enrollment2027({ showIntensive }: { showIntensive: boolean }) {
             <ul className="flex flex-col border-t border-white/20">
               {[
                 { label: "Founding-Family", value: "25% off", note: `First ${FOUNDING_SEATS_PER_COHORT} fully paid seats per cohort, paid in full ${FOUNDING_DAYS_BEFORE} days before the first class` },
-                { label: "Early Full Payment", value: "10% off", note: `Paid in full ${EARLY_DAYS_BEFORE} days before the first class` },
+                { label: "Early Full Payment", value: "10% off", note: `Paid in full by the cohort’s early-payment deadline, ${EARLY_DAYS_AFTER_FOUNDING} days after its founding-family deadline` },
                 { label: "Regular Tuition", value: "Full rate", note: "Paid in full before the student’s first scheduled class" },
               ].map((t) => (
                 <li key={t.label} className="flex flex-col gap-1 border-b border-white/20 py-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">

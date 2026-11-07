@@ -14,7 +14,7 @@ demonstration values only and is excluded from search engines.
 | A seat counts only when an admin approves **and** full payment is verified | Only `status = 'confirmed'` rows are counted |
 | Inquiries never reduce availability | Inquiries stay in `lead_submissions`; they are never counted |
 | Founding-family: max 5 per group, ends at the group's founding deadline (whichever comes first) — Nov 28 (weekend groups), Nov 30 (weekday SHSAT), Dec 1 (weekday Digital SAT), 2026, 11:59:59 PM ET | Checked on the server at approval time, under a row lock (`checkoutEligibility` in `lib/enrollment-catalog.ts`) |
-| $1,296 early full payment if paid in full by the group's early deadline — Dec 12 (weekend groups), Dec 14 (weekday SHSAT), Dec 15 (weekday Digital SAT), 2026, 11:59:59 PM ET | Tier assigned by the server from the verified payment date |
+| $1,296 early full payment if paid in full by the group's early deadline — Dec 19 (weekend groups), Dec 21 (weekday SHSAT), Dec 22 (weekday Digital SAT), 2026, 11:59:59 PM ET (21 days after each founding-family deadline) | Tier assigned by the server from the verified payment date |
 | $1,440 regular tuition, paid in full before the student's first scheduled class | Default tier |
 | Discounts do not stack | One `tuition_tier` per enrollment; amount is looked up from the tier, never typed in |
 | Full group → waitlist | Waitlist entries in order; never counted as seats |

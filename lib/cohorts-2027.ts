@@ -53,13 +53,15 @@ export type Term = {
   id: TermId
   name: string
   cohorts: readonly Cohort[]
-  deadlines: readonly { group: string; founding: string; early: string }[]
+  /** One row per deadline group. `founding`/`early` are "November 28, 2026"; the *Short forms are "Sat, Nov 28, 2026". */
+  deadlines: readonly { group: string; founding: string; early: string; foundingShort: string; earlyShort: string }[]
 }
 
 export const HOURLY_RATE = 20
 export const SESSION_HOURS = 3
 export const FOUNDING_DAYS_BEFORE = 42
-export const EARLY_DAYS_BEFORE = 28
+/** Owner-approved: the early-payment deadline is exactly 21 calendar days after the founding-family deadline. */
+export const EARLY_DAYS_AFTER_FOUNDING = 21
 export const FOUNDING_SEATS_PER_COHORT = 5
 export const MAX_CLASS_SIZE = 12
 export const SUMMER_BREAK_BEGINS_ISO = "2027-08-30"
@@ -225,11 +227,18 @@ export const priceFor = (cohort: Pick<Cohort, "hours">) => {
   return { regular, early: Math.round(regular * 0.9), founding: Math.round(regular * 0.75) }
 }
 
-/** Full-payment deadlines, counted back from the first scheduled class. */
-export const deadlinesFor = (cohort: Pick<Cohort, "firstIso">) => ({
-  foundingIso: addDays(cohort.firstIso, -FOUNDING_DAYS_BEFORE),
-  earlyIso: addDays(cohort.firstIso, -EARLY_DAYS_BEFORE),
-})
+/**
+ * Final full-payment deadlines (each ends 11:59:59 PM ET on the date). Founding-family is counted back from the first
+ * scheduled class; early payment closes 21 calendar days after the founding-family deadline.
+ */
+export const deadlinesFor = (cohort: Pick<Cohort, "firstIso">) => {
+  const foundingIso = addDays(cohort.firstIso, -FOUNDING_DAYS_BEFORE)
+  return { foundingIso, earlyIso: addDays(foundingIso, EARLY_DAYS_AFTER_FOUNDING) }
+}
+
+/** "Sat, Nov 28, 2026" */
+export const formatDeadline = (iso: string) =>
+  toDate(iso).toLocaleDateString("en-US", { timeZone: "UTC", weekday: "short", month: "short", day: "numeric", year: "numeric" })
 
 export const dollars = (n: number) => "$" + n.toLocaleString("en-US")
 
@@ -239,10 +248,16 @@ const groupName = (c: Cohort) => (c.label === "Weekday" ? `Weekday ${c.program}`
 
 export const TERMS_2027: readonly Term[] = TERM_IDS.map((id) => {
   const cohorts = COHORTS.filter((c) => c.term === id)
-  const groups = new Map<string, { group: string; founding: string; early: string }>()
+  const groups = new Map<string, Term["deadlines"][number]>()
   for (const c of cohorts) {
     const { foundingIso, earlyIso } = deadlinesFor(c)
-    groups.set(groupName(c), { group: groupName(c), founding: formatDate(foundingIso), early: formatDate(earlyIso) })
+    groups.set(groupName(c), {
+      group: groupName(c),
+      founding: formatDate(foundingIso),
+      early: formatDate(earlyIso),
+      foundingShort: formatDeadline(foundingIso),
+      earlyShort: formatDeadline(earlyIso),
+    })
   }
   return { id, name: TERM_NAMES[id], cohorts, deadlines: [...groups.values()] }
 })

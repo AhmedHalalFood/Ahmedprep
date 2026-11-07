@@ -24,7 +24,7 @@ const CONTACT_CTA = { label: "Contact AhmedPrep", href: "/contact" }
 
 const T = ENROLLMENT_2027.tuition
 export const PRICE_2027 = "$20 per scheduled instructional hour (2027 small group)"
-export const PRICE_2027_NOTE = `Winter and Spring 2027 cohorts: 72 hours, ${T.regular.total} regular tuition. Summer 2027: $1,920 weekday intensive (96 hours) or $960 weekend (48 hours). Early full payment saves 10% when paid 28 days before the cohort's first class; founding-family tuition saves 25% for the first 5 fully paid enrollments per cohort, 42 days before the first class. Winter deadlines: founding November 28 (weekend groups), November 30 (weekday SHSAT), or December 1 (weekday Digital SAT), 2026; early December 12 (weekend groups), December 14 (weekday SHSAT), or December 15 (weekday Digital SAT), 2026. ${T.rules} Private tutoring is priced separately.`
+export const PRICE_2027_NOTE = `Winter and Spring 2027 cohorts: 72 hours, ${T.regular.total} regular tuition. Summer 2027: $1,920 weekday intensive (96 hours) or $960 weekend (48 hours). Founding-family tuition saves 25% for the first 5 fully paid enrollments per cohort, paid in full by the cohort's founding-family deadline (42 days before the first class). Early full payment saves 10% when paid in full by the cohort's early-payment deadline, 21 days after its founding-family deadline. Winter founding-family payment deadlines: November 28 (weekend groups), November 30 (weekday SHSAT), or December 1 (weekday Digital SAT), 2026. Winter early-payment deadlines: December 19 (weekend groups), December 21 (weekday SHSAT), or December 22 (weekday Digital SAT), 2026. Spring and Summer deadlines are listed with each cohort. ${T.rules} Private tutoring is priced separately.`
 
 export const PROGRAMS: Program[] = [
   {
@@ -47,7 +47,7 @@ export const PROGRAMS: Program[] = [
     audience: "SHSAT and Digital SAT students who want structured, regular practice.",
     format: `Live online, taught by ${FREE_CLASS.instructor}. RSVP required.`,
     benefits: ["One focused topic each class", "Strategy and worked examples", "A low-pressure way to meet AhmedPrep"],
-    schedule: "Paused until January. Resumes Sunday, January 10, 2027: every other Sunday, SHSAT Math 6:00–6:45 PM ET and Digital SAT Math 7:00–7:45 PM ET. RSVPs open December 13, 2026; RSVP separately for each class. The last class before the summer break is June 27, 2027; there are no Sunday classes in July or August 2027",
+    schedule: "Paused until January. Resumes Sunday, January 10, 2027: every other Sunday, SHSAT (Math and ELA) 6:00–6:45 PM ET and Digital SAT (Math and Reading/Writing) 7:00–7:45 PM ET. RSVPs open December 13, 2026; RSVP separately for each class. The last class before the summer break is June 27, 2027; there are no Sunday classes in July or August 2027",
     price: "Free",
     cta: { label: "Reserve a Free Seat", href: `${FREE_CLASS.path}#rsvp` },
   },

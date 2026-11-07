@@ -29,17 +29,17 @@ export const CLASS_TYPES: Record<ClassType, { label: string; title: string; focu
   workshop: { label: "Special Workshop", title: "Free Special Workshop", focus: "Diagnostic, Strategy & Parent Q&A" },
 }
 
-/** The 2027 free program is Math only; 2026 sessions keep CLASS_TYPES so historical classes read as they were booked. */
+/** 2027 free program: SHSAT covers Math and ELA, Digital SAT covers Math and Reading/Writing; 2026 sessions keep CLASS_TYPES so historical classes read as they were booked. */
 export const CLASS_TYPES_2027: Record<RsvpProgram, { label: string; title: string; focus: string }> = {
   shsat: {
-    label: "SHSAT Math",
-    title: "Free SHSAT Math Class",
-    focus: "SHSAT Math: word problems, algebra, geometry & pacing",
+    label: "SHSAT",
+    title: "Free SHSAT Class",
+    focus: "Focused SHSAT Math and ELA practice",
   },
   digital_sat: {
-    label: "Digital SAT Math",
-    title: "Free Digital SAT Math Class",
-    focus: "Digital SAT Math: algebra, advanced math, Desmos & pacing",
+    label: "Digital SAT",
+    title: "Free Digital SAT Class",
+    focus: "Focused Digital SAT Math and Reading/Writing practice",
   },
 }
 
@@ -97,7 +97,7 @@ export const BIWEEKLY_2027_TIMES: Record<RsvpProgram, SessionTime> = {
 }
 
 export const SCHEDULE_2027_ANNOUNCEMENT =
-  "Beginning Sunday, January 10, 2027, free Sunday classes focus on Math and meet every other Sunday: Free SHSAT Math Class 6:00–6:45 PM ET, then Free Digital SAT Math Class 7:00–7:45 PM ET. RSVPs open December 13. RSVP separately for each class, or for both."
+  "Beginning Sunday, January 10, 2027, free Sunday classes meet every other Sunday: Free SHSAT Class 6:00–6:45 PM ET, then Free Digital SAT Class 7:00–7:45 PM ET. RSVPs open December 13. RSVP separately for each class, or for both."
 
 /** One class session: a single program at a single time. Sundays on the 2027 schedule have two. */
 export type SundayClass = {
@@ -352,9 +352,9 @@ export function scheduleSummary(now = new Date()) {
       : suspended
         ? "Winter and Spring only; suspended July–August 2027"
         : "Every other Sunday through June 27, 2027",
-    times: `SHSAT Math ${BIWEEKLY_2027_TIMES.shsat.label.replace(" ET", "")} · Digital SAT Math ${BIWEEKLY_2027_TIMES.digital_sat.label}`,
-    timesShort: "SHSAT Math 6 PM · Digital SAT Math 7 PM ET",
-    format: "Free SHSAT Math and Digital SAT Math classes are both taught on every class Sunday, one after the other",
+    times: `SHSAT ${BIWEEKLY_2027_TIMES.shsat.label.replace(" ET", "")} · Digital SAT ${BIWEEKLY_2027_TIMES.digital_sat.label}`,
+    timesShort: "SHSAT 6 PM · Digital SAT 7 PM ET",
+    format: "Free SHSAT and Digital SAT classes are both taught on every class Sunday, one after the other",
     upcomingChange: paused
       ? PAUSE_ANNOUNCEMENT
       : suspended

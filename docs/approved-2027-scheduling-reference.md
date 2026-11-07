@@ -48,15 +48,16 @@ Owner-approved: Sunday, August 29, 2027 is the required final instructional sess
 - Summer intensive 96h: regular $1,920; early $1,728; founding $1,440.
 - Summer weekend 48h: regular $960; early $864; founding $720.
 - Founding: first five fully paid enrollments per cohort, deadline 42 days before cohort starts.
-- Early: full payment 28 days before cohort starts; no stacking.
-- Winter weekend: founding Nov 28, 2026; early Dec 12.
-- Winter weekday SHSAT: founding Nov 30; early Dec 14.
-- Winter weekday Digital SAT: founding Dec 1; early Dec 15.
-- Spring weekend: founding Feb 20, 2027; early Mar 6.
-- Spring weekday SHSAT: founding Feb 22; early Mar 8.
-- Spring weekday Digital SAT: founding Feb 23; early Mar 9.
-- Summer weekend: founding May 22; early Jun 5.
-- Summer intensive: founding May 25; early Jun 8.
+- Early: full payment by exactly 21 calendar days after the cohort's founding-family deadline (owner-approved; replaces the earlier 14-day separation); no stacking.
+- All deadlines are final payment deadlines ending 11:59:59 PM ET on the listed date.
+- Winter weekend: founding Nov 28, 2026; early Dec 19.
+- Winter weekday SHSAT: founding Nov 30; early Dec 21.
+- Winter weekday Digital SAT: founding Dec 1; early Dec 22.
+- Spring weekend: founding Feb 20, 2027; early Mar 13.
+- Spring weekday SHSAT: founding Feb 22; early Mar 15.
+- Spring weekday Digital SAT: founding Feb 23; early Mar 16.
+- Summer weekend: founding May 22; early Jun 12.
+- Summer intensive: founding May 25; early Jun 15.
 
 ## Teaching and enrollment safeguards
 - Approved maximum class size: 12 students per cohort (owner confirmation November 6, 2026).

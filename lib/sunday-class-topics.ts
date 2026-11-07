@@ -28,7 +28,7 @@ export const DIGITAL_SAT_TOPICS = [
   "Pacing & Bluebook Strategy",
 ]
 
-/** 2027 schedule (every other Sunday, Math only). Each list advances one topic per class Sunday. */
+/** 2027 schedule (every other Sunday). Each list advances one topic per class Sunday. */
 export const SHSAT_MATH_TOPICS = [
   "SHSAT Math Word Problems",
   "Ratios, Rates & Percents",

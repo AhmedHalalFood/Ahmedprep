@@ -1,6 +1,16 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { TERMS_2027, priceFor } from "@/lib/cohorts-2027"
+import {
+  MAX_CLASS_SIZE,
+  TERMS_2027,
+  cohortInquiryHref,
+  cohortSchedule,
+  cohortSpan,
+  deadlinesFor,
+  formatDeadline,
+  formatLongDate,
+  priceFor,
+} from "@/lib/cohorts-2027"
 import { absoluteUrl } from "@/lib/seo"
 
 export const metadata: Metadata = {
@@ -22,21 +32,27 @@ export default function Programs2027Page() {
           <p className="text-sm text-subtle">Enrollment inquiries are open for all Winter, Spring, and Summer 2027 cohorts. Choose a cohort below to start an inquiry with it already selected.</p>
         </header>
         {TERMS_2027.map((term) => (
-          <section key={term.id} id={term.id} className="space-y-5" aria-labelledby={term.id + "-title"}>
+          <section key={term.id} id={term.id} className="scroll-mt-28 space-y-5" aria-labelledby={term.id + "-title"}>
             <h2 id={term.id + "-title"} className="text-2xl font-extrabold text-navy">{term.name}</h2>
             <ul className="grid gap-4 md:grid-cols-2">
               {term.cohorts.map((cohort) => {
                 const price = priceFor(cohort)
+                const span = cohortSpan(cohort)
+                const d = deadlinesFor(cohort)
                 return (
                   <li key={cohort.id} className="border border-line border-t-4 border-t-brand bg-white p-5">
                     <h3 className="text-lg font-extrabold text-navy">{cohort.program} · {cohort.label}</h3>
-                    <p className="mt-2 font-semibold text-ink">{cohort.days}, {cohort.time}</p>
-                    <p className="text-sm text-subtle">{cohort.dates}, 2027</p>
-                    <p className="mt-2 text-sm text-ink">{cohort.sessions} classes · {cohort.hours} scheduled instructional hours</p>
-                    <p className="mt-3 text-sm text-ink">Regular <strong>{dollars(price.regular)}</strong> · Early <strong>{dollars(price.early)}</strong> · Founding <strong>{dollars(price.founding)}</strong></p>
+                    <p className="mt-2 font-semibold text-ink">{cohortSchedule(cohort)}</p>
+                    <p className="text-sm text-subtle">{formatLongDate(span.startIso)} – {formatLongDate(span.endIso)}</p>
+                    <p className="mt-2 text-sm text-ink">{cohort.sessions} classes · {cohort.hours} scheduled instructional hours · Maximum {MAX_CLASS_SIZE} students</p>
+                    <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm text-ink">
+                      <dt>Regular tuition</dt><dd><strong>{dollars(price.regular)}</strong></dd>
+                      <dt>Founding-family tuition</dt><dd><strong>{dollars(price.founding)}</strong> — payment deadline {formatDeadline(d.foundingIso)}</dd>
+                      <dt>Early-payment tuition</dt><dd><strong>{dollars(price.early)}</strong> — payment deadline {formatDeadline(d.earlyIso)}</dd>
+                    </dl>
                     <Link
-                      href={`/enroll-2027?${new URLSearchParams({ program: cohort.program, term: cohort.term, cohort: cohort.id })}`}
-                      className="mt-3 inline-block text-sm font-bold text-brand underline"
+                      href={cohortInquiryHref(cohort)}
+                      className="mt-3 inline-flex min-h-11 items-center text-sm font-bold text-brand underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
                     >
                       Request info for {term.name} {cohort.program} {cohort.label}
                     </Link>
@@ -59,7 +75,7 @@ export default function Programs2027Page() {
         <section className="space-y-3 border-l-4 border-brand bg-white p-5">
           <h2 className="text-xl font-extrabold text-navy">Holiday makeups and free Sunday Zoom</h2>
           <p className="text-sm text-ink">Winter and Spring makeup instruction is scheduled on select Saturdays from 5:30–8:30 PM. The summer weekend makeup is a daytime session on August 28. Sunday, August 29 is the required final instructional session for both summer intensive cohorts (SHSAT 10 AM–1 PM ET; Digital SAT 2–5 PM ET). Exact makeup assignments remain subject to final curriculum sequencing and calendar verification before publication.</p>
-          <p className="text-sm text-ink">Free Sunday Zoom classes continue every other Sunday in Winter and Spring: SHSAT 6–6:45 PM and Digital SAT 7–7:45 PM. The last 2027 class Sunday is June 27. Both are suspended during July and August 2027, and Fall 2027 dates have not been announced.</p>
+          <p className="text-sm text-ink">Free Sunday Zoom classes continue every other Sunday in Winter and Spring. Free SHSAT preparation (6:00–6:45 PM ET): focused Math and ELA practice. Free Digital SAT preparation (7:00–7:45 PM ET): focused Math and Reading/Writing practice. A separate RSVP is required for each program. The last session before summer break is June 27, 2027; there are no free Sunday sessions in July or August 2027, and Fall 2027 restart dates have not been announced.</p>
           <p className="text-sm text-ink">Summer break begins August 30, 2027. Digital SAT students bring their own laptops.</p>
         </section>
         <p className="text-sm text-subtle">Submitting an inquiry does not reserve a seat or a discounted tuition rate. Payment, cancellation, and refund terms will be provided before enrollment is finalized.</p>

@@ -51,7 +51,14 @@ export default async function Home() {
             <Sparkle className="hero-sparkle" size={13} fill="currentColor" strokeWidth={0} aria-hidden="true" />
           </p>
           <h1 id="hero-title">
-            <span className="hero-launch-date">Winter · Spring · Summer 2027</span>
+            <span className="hero-launch-date">
+              <a href="/programs-2027#winter" className="hero-season-link">Winter</a>
+              <span className="hero-season-sep" aria-hidden="true">·</span>
+              <a href="/programs-2027#spring" className="hero-season-link">Spring</a>
+              <span className="hero-season-sep" aria-hidden="true">·</span>
+              <a href="/programs-2027#summer" className="hero-season-link">Summer</a>
+              <span className="hero-season-year">2027</span>
+            </span>
             <span className="hero-slogan">
               <span className="hero-slogan-lead">Big Goals. Small Classes.</span>
               <span className="hero-slogan-accent">Real Progress.</span>

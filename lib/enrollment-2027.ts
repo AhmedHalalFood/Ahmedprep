@@ -34,8 +34,8 @@ export const ENROLLMENT_2027 = {
       label: "Early Full Payment",
       total: "$1,296",
       savingsLabel: "10% off",
-      summary: "10% discount. Full payment is due by the cohort-specific early deadline: December 12 (weekend SHSAT or Digital SAT), December 14 (weekday SHSAT), or December 15 (weekday Digital SAT), 2026.",
-      points: ["10% discount ($144 off)", "Full payment by December 12 (weekend groups), December 14 (weekday SHSAT), or December 15 (weekday Digital SAT), 2026"],
+      summary: "10% discount. Full payment is due by the cohort-specific early-payment deadline, 21 days after its founding-family deadline: December 19 (weekend SHSAT or Digital SAT), December 21 (weekday SHSAT), or December 22 (weekday Digital SAT), 2026.",
+      points: ["10% discount ($144 off)", "Full payment by December 19 (weekend groups), December 21 (weekday SHSAT), or December 22 (weekday Digital SAT), 2026"],
     },
     regular: {
       label: "Regular Tuition",

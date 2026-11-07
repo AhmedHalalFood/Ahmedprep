@@ -28,7 +28,7 @@ test("Programs: SHSAT and Digital SAT show the approved 2027 hourly tuition", ()
       assert.ok(p.priceNote.includes(phrase), `${id} note ${phrase}`)
     }
     assert.ok(early.total && founding.total)
-    for (const date of ["December 12", "December 14", "December 15", "November 28", "November 30", "December 1 "]) {
+    for (const date of ["December 19", "December 21", "December 22", "November 28", "November 30", "December 1 "]) {
       assert.ok(p.priceNote.includes(date), `${id} note ${date}`)
     }
     assert.ok(!p.priceNote.includes("December 20, 2026") && !p.priceNote.includes("December 5, 2026"))

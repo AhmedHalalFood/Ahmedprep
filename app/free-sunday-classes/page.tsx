@@ -31,10 +31,10 @@ const title = "Free SHSAT & Digital SAT Classes Online | AhmedPrep"
 export function generateMetadata(): Metadata {
   const summary = scheduleSummary()
   const description = summary.paused
-    ? "AhmedPrep's free Sunday Zoom classes resume Sunday, January 10, 2027: SHSAT Math 6:00–6:45 PM ET and Digital SAT Math 7:00–7:45 PM ET, every other Sunday. RSVPs open December 13."
+    ? "AhmedPrep's free Sunday Zoom classes resume Sunday, January 10, 2027: SHSAT (Math and ELA) 6:00–6:45 PM ET and Digital SAT (Math and Reading/Writing) 7:00–7:45 PM ET, every other Sunday. RSVPs open December 13."
     : summary.schedule === "weekly_2026"
-      ? "Free live online Sunday SHSAT and Digital SAT classes from AhmedPrep, Sundays 4–5 PM ET. Beginning in January 2027: free Math classes every other Sunday, SHSAT Math 6:00–6:45 PM ET and Digital SAT Math 7:00–7:45 PM ET. RSVP required."
-      : "Free live online SHSAT Math and Digital SAT Math classes from AhmedPrep, every other Sunday: SHSAT Math 6:00–6:45 PM ET, Digital SAT Math 7:00–7:45 PM ET. RSVP required."
+      ? "Free live online Sunday SHSAT and Digital SAT classes from AhmedPrep, Sundays 4–5 PM ET. Beginning in January 2027: free classes every other Sunday, SHSAT (Math and ELA) 6:00–6:45 PM ET and Digital SAT (Math and Reading/Writing) 7:00–7:45 PM ET. RSVP required."
+      : "Free live online SHSAT and Digital SAT classes from AhmedPrep, every other Sunday: SHSAT (Math and ELA) 6:00–6:45 PM ET, Digital SAT (Math and Reading/Writing) 7:00–7:45 PM ET. RSVP required."
   return {
     title: { absolute: title },
     description,
@@ -58,19 +58,19 @@ const expectationsFor = (mathOnly: boolean) => [
 
 const SCHEDULE_FAQ_2026: FaqItem = {
   q: "How does the schedule work?",
-  a: "Through December 27, 2026, one class meets every Sunday from 4:00–5:00 PM ET. The 1st and 3rd Sundays are SHSAT, the 2nd and 4th are Digital SAT, and a 5th Sunday is a special workshop. Beginning in January 2027, free classes focus on Math and meet every other Sunday: Free SHSAT Math Class 6:00–6:45 PM ET, then Free Digital SAT Math Class 7:00–7:45 PM ET, starting January 10, 2027.",
+  a: "Through December 27, 2026, one class meets every Sunday from 4:00–5:00 PM ET. The 1st and 3rd Sundays are SHSAT, the 2nd and 4th are Digital SAT, and a 5th Sunday is a special workshop. Beginning in January 2027, free classes meet every other Sunday: Free SHSAT Class 6:00–6:45 PM ET, then Free Digital SAT Class 7:00–7:45 PM ET, starting January 10, 2027.",
 }
 const SCHEDULE_FAQ_2027: FaqItem = {
   q: "How does the schedule work?",
-  a: "Beginning Sunday, January 10, 2027, free Math classes meet every other Sunday. Each class Sunday has two sessions: the Free SHSAT Math Class from 6:00–6:45 PM ET, then the Free Digital SAT Math Class from 7:00–7:45 PM ET. Free classes run in Winter and Spring only; the last 2027 class Sunday is June 27, and both classes are suspended during July and August 2027. Fall 2027 dates have not been announced. Seats are subject to registration and available capacity.",
+  a: "Beginning Sunday, January 10, 2027, free classes meet every other Sunday. Each class Sunday has two sessions: the Free SHSAT Class from 6:00–6:45 PM ET, then the Free Digital SAT Class from 7:00–7:45 PM ET. Free classes run in Winter and Spring only; the last 2027 class Sunday is June 27, and both classes are suspended during July and August 2027. Fall 2027 dates have not been announced. Seats are subject to registration and available capacity.",
 }
 const SCHEDULE_FAQ_PAUSED: FaqItem = {
   q: "When do the free Sunday classes resume?",
-  a: "Free Sunday Zoom classes are paused while we prepare our January programs. They resume Sunday, January 10, 2027, and meet every other Sunday: the Free SHSAT Math Class from 6:00–6:45 PM ET, then the Free Digital SAT Math Class from 7:00–7:45 PM ET. RSVPs open December 13, 2026. Each class needs its own RSVP.",
+  a: "Free Sunday Zoom classes are paused while we prepare our January programs. They resume Sunday, January 10, 2027, and meet every other Sunday: the Free SHSAT Class from 6:00–6:45 PM ET, then the Free Digital SAT Class from 7:00–7:45 PM ET. RSVPs open December 13, 2026. Each class needs its own RSVP.",
 }
 const SUBJECTS_FAQ: FaqItem = {
   q: "Do the free classes cover ELA or Reading & Writing?",
-  a: `From January 10, 2027, both free Sunday classes focus exclusively on Math. ${PAID_PROGRAMS_NOTE}`,
+  a: `From January 10, 2027, the free SHSAT class covers focused Math and ELA practice, and the free Digital SAT class covers focused Math and Reading/Writing practice. ${PAID_PROGRAMS_NOTE}`,
 }
 
 const faqs = (scheduleFaq: FaqItem): FaqItem[] => [
@@ -82,7 +82,7 @@ const faqs = (scheduleFaq: FaqItem): FaqItem[] => [
   SUBJECTS_FAQ,
   {
     q: "Can my student attend both classes on the same Sunday?",
-    a: "Yes. RSVP separately for the Free SHSAT Math Class and the Free Digital SAT Math Class; each RSVP gets its own confirmation email.",
+    a: "Yes. RSVP separately for the Free SHSAT Class and the Free Digital SAT Class; each RSVP gets its own confirmation email.",
   },
   {
     q: "How do we get the class link?",
@@ -148,7 +148,7 @@ export default async function FreeSundayClassesPage({ searchParams }: { searchPa
             <p className="max-w-xl text-pretty text-lg leading-relaxed text-white/80">
               {summary.schedule === "weekly_2026"
                 ? "Join AhmedPrep on Sundays for live online test preparation. SHSAT and Digital SAT classes alternate weekly, giving students focused instruction, guided practice, and practical test-taking strategies at no cost."
-                : "Join AhmedPrep every other Sunday for free live online Math preparation: a 45-minute SHSAT Math class, then a 45-minute Digital SAT Math class. Students get focused instruction, guided practice, and practical test-taking strategies at no cost."}
+                : "Join AhmedPrep every other Sunday for free live online test preparation: a 45-minute SHSAT class (Math and ELA), then a 45-minute Digital SAT class (Math and Reading/Writing). Students get focused instruction, guided practice, and practical test-taking strategies at no cost."}
             </p>
             <p className="max-w-xl text-pretty text-sm leading-relaxed text-white/70">{PAID_PROGRAMS_NOTE}</p>
             {summary.upcomingChange && (
@@ -243,7 +243,7 @@ export default async function FreeSundayClassesPage({ searchParams }: { searchPa
               Reserve a free seat
             </h2>
             <p className="text-pretty leading-relaxed text-subtle">
-              Registration for our January 2027 Free Sunday Zoom Classes opens December 13, 2026. Beginning January 10, students can attend SHSAT Math from 6:00–6:45 PM ET or Digital SAT Math from 7:00–7:45 PM ET every other Sunday. Separate RSVPs are required for each class. Class access information will be emailed privately after registration.
+              Registration for our January 2027 Free Sunday Zoom Classes opens December 13, 2026. Beginning January 10, students can attend SHSAT (Math and ELA) from 6:00–6:45 PM ET or Digital SAT (Math and Reading/Writing) from 7:00–7:45 PM ET every other Sunday. Separate RSVPs are required for each class. Class access information will be emailed privately after registration.
             </p>
             <div className="border-t border-line pt-5">
               <p className="text-sm font-semibold text-ink">Questions before registering?</p>

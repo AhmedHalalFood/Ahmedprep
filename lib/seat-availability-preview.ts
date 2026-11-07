@@ -14,7 +14,7 @@ export const FOUNDING_RULES = {
 } as const
 
 const EARLY_DEADLINE_LABEL =
-  "December 12 (weekend SHSAT or Digital SAT), December 14 (weekday SHSAT), or December 15 (weekday Digital SAT), 2026, at 11:59:59 PM ET"
+  "December 19 (weekend SHSAT or Digital SAT), December 21 (weekday SHSAT), or December 22 (weekday Digital SAT), 2026, at 11:59:59 PM ET"
 
 export type TuitionTier = {
   id: "founding" | "early" | "regular"

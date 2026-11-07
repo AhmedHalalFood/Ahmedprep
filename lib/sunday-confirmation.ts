@@ -37,7 +37,7 @@ export function buildSundayConfirmation(session: SundayClass, program: RsvpProgr
       zoomParagraph,
       "This access information is for your family only. Please do not share it publicly. Please have a pencil and scratch paper ready for practice questions.",
       ...(isMath2027
-        ? [`This free Sunday class focuses on Math. ${PAID_PROGRAMS_NOTE} Students may RSVP for both free Math classes on the same Sunday.`]
+        ? [`The free SHSAT class covers focused Math and ELA practice; the free Digital SAT class covers focused Math and Reading/Writing practice. ${PAID_PROGRAMS_NOTE} Students may RSVP for both free classes on the same Sunday.`]
         : []),
       `AhmedPrep\n${ADDRESS_LINE_1}\n${ADDRESS_LINE_2}\nCall or text: ${BUSINESS.phoneDisplay}\nEmail: ${BUSINESS.email}`,
       "Questions? Simply reply to this email.",

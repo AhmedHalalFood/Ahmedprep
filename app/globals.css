@@ -389,12 +389,47 @@ h3 {
   display: inline-block;
   padding-bottom: 12px;
   color: var(--hero-royal);
-  font-size: clamp(2.5rem, 7.4vw, 5.2rem);
-  line-height: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 0.25em;
+  row-gap: 0.1em;
+  max-width: 100%;
+  font-size: clamp(1.75rem, 5.6vw, 4.4rem);
+  line-height: 1.05;
   letter-spacing: -0.025em;
   text-transform: uppercase;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
   animation: hero-fade-in 0.9s 0.1s ease-out both;
+}
+
+.hero-season-link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 0.06em;
+  text-underline-offset: 0.12em;
+  text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+  border-radius: 4px;
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+
+.hero-season-link:hover {
+  color: var(--hero-gold);
+  text-decoration-color: currentColor;
+}
+
+.hero-season-link:focus-visible {
+  outline: 3px solid var(--hero-gold);
+  outline-offset: 4px;
+  text-decoration-color: currentColor;
+}
+
+.hero-season-sep {
+  opacity: 0.7;
+}
+
+.hero-season-year {
+  white-space: nowrap;
 }
 
 .hero-launch-date::after {
@@ -1286,7 +1321,7 @@ a.program-card:hover h3 {
 
   .hero-launch-date {
     padding-bottom: 14px;
-    font-size: clamp(1.95rem, 10.4vw, 4.2rem);
+    font-size: clamp(1.6rem, 8.6vw, 3.4rem);
     letter-spacing: -0.02em;
   }
 
