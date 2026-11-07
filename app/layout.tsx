@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     template: '%s | AhmedPrep',
   },
   description:
-    'Personalized SHSAT and Digital SAT preparation in Astoria, Queens for students across NYC. Book a free diagnostic with AhmedPrep.',
+    'SHSAT and Digital SAT preparation center in Astoria, Queens serving NYC and Long Island. Book a free diagnostic with AhmedPrep.',
   keywords: [
     'SHSAT prep Queens',
     'SHSAT tutoring Astoria',
