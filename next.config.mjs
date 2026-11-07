@@ -13,6 +13,8 @@ const nextConfig = {
   async redirects() {
     return [
       { source: "/free-shsat-class", destination: "/free-sunday-classes", permanent: true },
+      // Temporary (307) during owner review; switch to permanent once the change is approved.
+      { source: "/programs", destination: "/programs-2027", permanent: false },
       {
         source: "/:path*",
         has: [{ type: "host", value: "www.ahmedprep.com" }],
