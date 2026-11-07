@@ -171,7 +171,8 @@ export default function Curriculum2027Page() {
         <section aria-labelledby="calendar" className="flex flex-col gap-4 print:break-before-page">
           <h2 id="calendar" className="text-2xl font-extrabold text-navy">Makeup and calendar review</h2>
           <p className="text-sm leading-relaxed text-subtle">
-            No dates, times, or hours were changed. Every unapproved makeup stays labeled &ldquo;Proposed makeup — not yet approved.&rdquo;
+            No dates, times, or hours were changed. Sunday, August 29 is the approved required final instructional session for
+            both summer intensive cohorts. Every other unapproved makeup stays labeled &ldquo;Proposed makeup — not yet approved.&rdquo;
           </p>
           <div className="overflow-x-auto">
             <table className="w-full border-collapse bg-background text-left text-sm">
@@ -184,7 +185,7 @@ export default function Curriculum2027Page() {
                     <td className="p-3 font-semibold text-ink">{r.dates}</td>
                     <td className="p-3">{r.cohorts}</td>
                     <td className="p-3">{r.finding}</td>
-                    <td className={r.status === "No conflict found" ? "p-3" : "p-3 font-semibold text-gold-deep"}>{r.status}</td>
+                    <td className={r.status !== "Owner decision needed" ? "p-3" : "p-3 font-semibold text-gold-deep"}>{r.status}</td>
                   </tr>
                 ))}
               </tbody>

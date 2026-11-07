@@ -143,13 +143,14 @@ const COHORTS: readonly Cohort[] = [
     id: "summer-shsat-intensive", term: "summer", program: "SHSAT", label: "Weekday Intensive",
     days: "Monday–Thursday", time: "10 AM–1 PM", dates: "July 6 – August 26; final session August 29", sessions: 32, hours: 96,
     ...SUMMER_INTENSIVE,
-    makeups: [{ iso: "2027-08-29", time: "10 AM–1 PM", replaces: "2027-07-05", approved: false, additional: true }],
+    // Owner approved Sunday, August 29, 2027 as the required final instructional session for both intensive cohorts.
+    makeups: [{ iso: "2027-08-29", time: "10 AM–1 PM", replaces: "2027-07-05", approved: true, additional: true }],
   },
   {
     id: "summer-dsat-intensive", term: "summer", program: "Digital SAT", label: "Weekday Intensive",
     days: "Monday–Thursday", time: "2–5 PM", dates: "July 6 – August 26; final session August 29", sessions: 32, hours: 96,
     ...SUMMER_INTENSIVE,
-    makeups: [{ iso: "2027-08-29", time: "2–5 PM", replaces: "2027-07-05", approved: false, additional: true }],
+    makeups: [{ iso: "2027-08-29", time: "2–5 PM", replaces: "2027-07-05", approved: true, additional: true }],
   },
   {
     id: "summer-shsat-weekend", term: "summer", program: "SHSAT", label: "Weekend",

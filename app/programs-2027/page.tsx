@@ -58,7 +58,7 @@ export default function Programs2027Page() {
         ))}
         <section className="space-y-3 border-l-4 border-brand bg-white p-5">
           <h2 className="text-xl font-extrabold text-navy">Holiday makeups and free Sunday Zoom</h2>
-          <p className="text-sm text-ink">Winter and Spring makeup instruction is scheduled on select Saturdays from 5:30–8:30 PM. Summer makeups are daytime sessions on August 28–29. Exact makeup assignments remain subject to final curriculum sequencing and calendar verification before publication.</p>
+          <p className="text-sm text-ink">Winter and Spring makeup instruction is scheduled on select Saturdays from 5:30–8:30 PM. The summer weekend makeup is a daytime session on August 28. Sunday, August 29 is the required final instructional session for both summer intensive cohorts (SHSAT 10 AM–1 PM ET; Digital SAT 2–5 PM ET). Exact makeup assignments remain subject to final curriculum sequencing and calendar verification before publication.</p>
           <p className="text-sm text-ink">Free Sunday Zoom classes continue every other Sunday in Winter and Spring: SHSAT 6–6:45 PM and Digital SAT 7–7:45 PM. The last 2027 class Sunday is June 27. Both are suspended during July and August 2027, and Fall 2027 dates have not been announced.</p>
           <p className="text-sm text-ink">Summer break begins August 30, 2027. Digital SAT students bring their own laptops.</p>
         </section>

@@ -90,7 +90,7 @@ test("unverified official tests are not claimed; exams are labeled original Ahme
   }
 })
 
-test("proposed makeups stay unapproved; August 29 is an additional session; no same-day overlaps", () => {
+test("proposed makeups stay unapproved; August 29 is the approved final intensive session; no same-day overlaps", () => {
   const toMin = (t) => {
     const [, h, m = "0", ap] = t.match(/^(\d+)(?::(\d+))?\s*(AM|PM)?/)
     return ((+h % 12) + (ap === "PM" || (!ap && /PM/.test(t)) ? 12 : 0)) * 60 + +m
@@ -113,7 +113,13 @@ test("proposed makeups stay unapproved; August 29 is an additional session; no s
     if (c.label === "Weekday Intensive") {
       const aug29 = makeups.find((m) => m.iso === "2027-08-29")
       assert.ok(aug29?.additional, c.id)
+      assert.equal(aug29.approved, true, c.id)
+      assert.equal(aug29.number, 32, c.id)
+      assert.equal(aug29.time, c.program === "SHSAT" ? "10 AM–1 PM" : "2–5 PM", c.id)
+      assert.equal(s.at(-1).iso, "2027-08-29", c.id)
       assert.ok(!sessionCalendar(c).some((x) => x.iso === "2027-07-05"), c.id)
+    } else {
+      for (const m of makeups) assert.equal(m.approved, false, `${c.id} ${m.iso} must stay proposed`)
     }
     for (const x of s) all.push({ id: c.id, iso: x.iso, r: range(x.time) })
   }
@@ -121,6 +127,7 @@ test("proposed makeups stay unapproved; August 29 is an additional session; no s
     if (a.id < b.id && a.iso === b.iso) assert.ok(a.r[1] <= b.r[0] || b.r[1] <= a.r[0], `${a.id} / ${b.id} overlap on ${a.iso}`)
   }
   assert.match(read("app/curriculum-2027/[cohort]/page.tsx"), /Proposed makeup — not yet approved/)
+  assert.match(read("app/curriculum-2027/[cohort]/page.tsx"), /Approved required final instructional session/)
 })
 
 test("curriculum pages are drafts, not indexed, not in navigation or sitemap, and claim no GradeCam integration", () => {

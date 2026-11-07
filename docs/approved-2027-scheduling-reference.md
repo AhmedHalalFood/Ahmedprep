@@ -15,8 +15,8 @@ Status: scheduling framework approved November 6, 2026. This file is a working i
 - Digital SAT weekend: Sat/Sun 2–5 PM, Apr 3–Jun 20.
 
 ## Summer
-- SHSAT intensive: Mon–Thu 10 AM–1 PM, Jul 6–Aug 26, 31 regular sessions + Aug 29 makeup = 32 sessions / 96 hours.
-- Digital SAT intensive: Mon–Thu 2–5 PM, Jul 6–Aug 26, 31 regular sessions + Aug 29 makeup = 32 sessions / 96 hours.
+- SHSAT intensive: Mon–Thu 10 AM–1 PM, Jul 6–Aug 26, 31 regular sessions + required final session Sun Aug 29 (10 AM–1 PM ET) = 32 sessions / 96 hours.
+- Digital SAT intensive: Mon–Thu 2–5 PM, Jul 6–Aug 26, 31 regular sessions + required final session Sun Aug 29 (2–5 PM ET) = 32 sessions / 96 hours.
 - SHSAT weekend: Sat/Sun 10 AM–1 PM, Jul 3–Aug 22, excluding Jul 4, plus Aug 28 makeup = 16 sessions / 48 hours.
 - Digital SAT weekend: Sat/Sun 2–5 PM, Jul 3–Aug 22, excluding Jul 4, plus Aug 28 makeup = 16 sessions / 48 hours.
 - Summer break begins Aug 30.
@@ -31,9 +31,12 @@ Winter/Spring: Saturdays 5:30–8:30 PM only.
 Summer only: daytime weekend makeups after regular instruction.
 - Aug 28, 10 AM–1 PM: Summer weekend SHSAT (Jul 4).
 - Aug 28, 2–5 PM: Summer weekend Digital SAT (Jul 4).
-- Aug 29, 10 AM–1 PM: Summer intensive SHSAT session 32.
-- Aug 29, 2–5 PM: Summer intensive Digital SAT session 32.
 No Friday paid classes.
+
+## Approved final instructional sessions (not makeups)
+Owner-approved: Sunday, August 29, 2027 is the required final instructional session for both summer intensive cohorts.
+- Aug 29, 10 AM–1 PM ET: Summer intensive SHSAT session 32.
+- Aug 29, 2–5 PM ET: Summer intensive Digital SAT session 32.
 
 ## Free Sunday Zoom
 - Winter and Spring: every other Sunday, SHSAT 6–6:45 PM ET; Digital SAT 7–7:45 PM ET.

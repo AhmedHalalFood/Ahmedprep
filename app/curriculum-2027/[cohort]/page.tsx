@@ -78,18 +78,21 @@ export default async function CohortSyllabusPage({ params }: Params) {
               <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-subtle">
                 {s.format === "diagnostic" ? "Diagnostic" : s.format === "mock" ? "Full-length mock exam" : STAGE_LABEL[s.stage ?? "foundations"]}
               </p>
-              {s.kind === "makeup" ? (
+              {s.kind === "makeup" && s.additional ? (
+                <div className="mt-2 text-sm leading-relaxed">
+                  <p className={s.approved ? "font-semibold text-ink" : "font-semibold text-gold-deep"}>
+                    {s.approved ? "Approved required final instructional session" : "Additional session — not yet approved"}
+                  </p>
+                  <p className="text-ink">
+                    Completes the approved {cohort.sessions} sessions and {cohort.hours} instructional hours.
+                  </p>
+                </div>
+              ) : s.kind === "makeup" ? (
                 <div className="mt-2 text-sm leading-relaxed">
                   <p className={s.approved ? "font-semibold text-ink" : "font-semibold text-gold-deep"}>
                     {s.approved ? "Approved makeup" : "Proposed makeup — not yet approved"}
-                    {s.replaces && !s.additional ? `, preserving the hours of ${formatDate(s.replaces)}` : ""}
+                    {s.replaces ? `, preserving the hours of ${formatDate(s.replaces)}` : ""}
                   </p>
-                  {s.additional ? (
-                    <p className="text-ink">
-                      Additional scheduled instructional session that completes the approved {cohort.sessions} sessions and{" "}
-                      {cohort.hours} hours. {formatDate(s.replaces ?? "")} was never a scheduled class.
-                    </p>
-                  ) : null}
                 </div>
               ) : null}
 

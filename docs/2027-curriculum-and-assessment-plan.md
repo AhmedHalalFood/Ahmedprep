@@ -53,13 +53,13 @@ The website has **no** GradeCam integration and none is claimed. AhmedPrep does 
 
 ## Makeup and calendar review
 
-No time overlaps were found between cohorts on any date. Saturday-evening makeups (5:30–8:30 PM) start 30 minutes after the same-day weekend cohorts end. The **August 29** summer intensive session is an additional scheduled instructional session. July 5 (the observed Independence Day holiday) falls before the July 6 start, so it was never a class. The session completes 32 sessions / 96 hours and is still labeled "Proposed makeup — not yet approved".
+No time overlaps were found between cohorts on any date. Saturday-evening makeups (5:30–8:30 PM) start 30 minutes after the same-day weekend cohorts end. **Sunday, August 29, 2027** is the owner-approved required final instructional session for both summer intensive cohorts (SHSAT 10 AM–1 PM ET; Digital SAT 2–5 PM ET). It completes 32 sessions / 96 hours and is not a makeup; July 5 (the observed Independence Day holiday) falls before the July 6 start, so it was never a class.
 
 ## Needs owner decision
 
 1. Approve the topic sequence, priority topics, and mock-exam placement.
 2. Verify official SHSAT and Bluebook practice tests (availability, current format, permitted classroom use) before any are scheduled.
-3. Approve every makeup date still marked proposed, including the August 29 additional session.
+3. Approve every makeup date still marked proposed. (The August 29 summer intensive final session is approved.)
 4. SHSAT full-length simulations fill the whole 180-minute period, which leaves no time for check-in and directions. Decide on early arrival or an extended session.
 5. Holiday conflicts: Easter Sunday (Mar 28), Lunar New Year (Feb 6), Juneteenth (Jun 19), and estimated Eid dates near the pending Mar 9 and May 17 closures.
 6. Confirm the diagnostic and mock sessions may depart from the 75/75/30 structure.
