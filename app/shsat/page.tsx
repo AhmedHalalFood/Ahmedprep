@@ -7,6 +7,7 @@ import { Faq, type FaqItem } from "@/components/landing/faq"
 import { LocationSection } from "@/components/landing/location-section"
 import { Breadcrumbs, JsonLd, Section } from "@/components/landing/primitives"
 import { ProgramHero } from "@/components/landing/program-hero"
+import { ProgramCohorts2027, courseInstances2027 } from "@/components/landing/program-cohorts-2027"
 import { SuccessStories } from "@/components/landing/success-stories"
 import { ThisSundayStrip } from "@/components/sunday-classes/this-sunday-strip"
 import { TeachingVideos } from "@/components/videos/teaching-videos"
@@ -106,11 +107,7 @@ const courseSchema = {
   description: "Diagnostic-based SHSAT preparation covering Math and ELA, with full-length practice exams and parent progress reports.",
   url: `${SITE_URL}/shsat`,
   provider: { "@id": `${SITE_URL}/#organization` },
-  hasCourseInstance: {
-    "@type": "CourseInstance",
-    courseMode: "Onsite",
-    location: { "@type": "Place", name: "AhmedPrep, Astoria, Queens" },
-  },
+  hasCourseInstance: courseInstances2027("SHSAT"),
 }
 
 export default async function ShsatPage() {
@@ -164,6 +161,8 @@ export default async function ShsatPage() {
           ))}
         </div>
       </Section>
+
+      <ProgramCohorts2027 program="SHSAT" />
 
       <Section
         id="how-it-works"

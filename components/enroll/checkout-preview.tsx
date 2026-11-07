@@ -1,16 +1,17 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useTransition } from "react"
 import { Lock } from "lucide-react"
 import {
-  PAYMENT_OPTIONS,
   TUITION,
   formatUsd,
+  paymentOptionsFor,
   startLabelFor,
   type ClassOffering,
   type PaymentOption,
   type Program,
 } from "@/lib/enrollment-catalog"
+import { verifyCheckoutEligibility } from "@/app/enroll/actions"
 import type { FamilyInfo } from "./family-step"
 
 function Row({ label, value, onEdit }: { label: string; value: React.ReactNode; onEdit?: () => void }) {
@@ -43,7 +44,22 @@ export function CheckoutPreview({
   onEdit: (step: number) => void
 }) {
   const [simulated, setSimulated] = useState(false)
-  const option = PAYMENT_OPTIONS[payment]
+  const [blocked, setBlocked] = useState<string | null>(null)
+  const [checking, startChecking] = useTransition()
+  const option = paymentOptionsFor(offering.id)[payment]
+
+  const continueToPayment = () =>
+    startChecking(async () => {
+      setSimulated(false)
+      setBlocked(null)
+      try {
+        const result = await verifyCheckoutEligibility(offering.id, payment)
+        if (result.ok) setSimulated(true)
+        else setBlocked(`${result.message} Please go back and choose another tuition option.`)
+      } catch {
+        setBlocked("We could not confirm tuition eligibility. Please try again.")
+      }
+    })
   const totalCents = option.amountCents
   const savingsCents = TUITION.regularCents - totalCents
 
@@ -105,14 +121,20 @@ export function CheckoutPreview({
 
       <button
         type="button"
-        onClick={() => setSimulated(true)}
-        className="flex min-h-12 items-center justify-center gap-2 bg-gold px-5 text-sm font-extrabold uppercase tracking-wide text-navy hover:bg-gold-hover"
+        onClick={continueToPayment}
+        disabled={checking}
+        className="flex min-h-12 items-center justify-center gap-2 bg-gold px-5 text-sm font-extrabold uppercase tracking-wide text-navy hover:bg-gold-hover disabled:opacity-60"
       >
         <Lock className="size-4" aria-hidden />
-        Continue to Secure Payment
+        {checking ? "Checking eligibility…" : "Continue to Secure Payment"}
       </button>
 
       <div aria-live="polite">
+        {blocked && (
+          <p role="alert" className="border-l-4 border-error bg-error-soft px-3 py-2 text-sm font-semibold text-error">
+            {blocked}
+          </p>
+        )}
         {simulated && (
           <div className="flex flex-col gap-2 border border-brand bg-brand-soft p-4 text-sm leading-relaxed text-navy">
             <p className="font-extrabold">Demo stop: no payment was taken.</p>

@@ -29,17 +29,17 @@ export const CLASS_TYPES: Record<ClassType, { label: string; title: string; focu
   workshop: { label: "Special Workshop", title: "Free Special Workshop", focus: "Diagnostic, Strategy & Parent Q&A" },
 }
 
-/** The 2027 free program is Math only; 2026 sessions keep CLASS_TYPES so historical classes read as they were booked. */
+/** 2027 free program: SHSAT covers Math and ELA, Digital SAT covers Math and Reading/Writing; 2026 sessions keep CLASS_TYPES so historical classes read as they were booked. */
 export const CLASS_TYPES_2027: Record<RsvpProgram, { label: string; title: string; focus: string }> = {
   shsat: {
-    label: "SHSAT Math",
-    title: "Free SHSAT Math Class",
-    focus: "SHSAT Math: word problems, algebra, geometry & pacing",
+    label: "SHSAT",
+    title: "Free SHSAT Class",
+    focus: "Focused SHSAT Math and ELA practice",
   },
   digital_sat: {
-    label: "Digital SAT Math",
-    title: "Free Digital SAT Math Class",
-    focus: "Digital SAT Math: algebra, advanced math, Desmos & pacing",
+    label: "Digital SAT",
+    title: "Free Digital SAT Class",
+    focus: "Focused Digital SAT Math and Reading/Writing practice",
   },
 }
 
@@ -65,6 +65,11 @@ export const RSVP_PROGRAMS: { value: RsvpProgram; label: string }[] = [
 export type ScheduleId = "weekly_2026" | "biweekly_2027"
 export const SCHEDULE_2026_LAST_SUNDAY = "2026-12-27"
 export const SCHEDULE_2027_FIRST_SUNDAY: string | null = "2027-01-10"
+/** Winter and Spring only: both programs are suspended for July and August 2027, and no Fall date is approved. */
+export const SCHEDULE_2027_LAST_SUNDAY = "2027-06-27"
+export const SUMMER_2027_SUSPENSION = { start: "2027-07-01", end: "2027-08-31" } as const
+export const SUMMER_SUSPENSION_ANNOUNCEMENT =
+  "Free Sunday Zoom classes run in Winter and Spring only. Both free classes are suspended during July and August 2027; Fall 2027 dates have not been announced."
 const BIWEEKLY_INTERVAL_DAYS = 14
 
 export const FREE_CLASS_PAUSE = { start: "2026-11-05", end: "2027-01-09" } as const
@@ -92,7 +97,7 @@ export const BIWEEKLY_2027_TIMES: Record<RsvpProgram, SessionTime> = {
 }
 
 export const SCHEDULE_2027_ANNOUNCEMENT =
-  "Beginning Sunday, January 10, 2027, free Sunday classes focus on Math and meet every other Sunday: Free SHSAT Math Class 6:00–6:45 PM ET, then Free Digital SAT Math Class 7:00–7:45 PM ET. RSVPs open December 13. RSVP separately for each class, or for both."
+  "Beginning Sunday, January 10, 2027, free Sunday classes meet every other Sunday: Free SHSAT Class 6:00–6:45 PM ET, then Free Digital SAT Class 7:00–7:45 PM ET. RSVPs open December 13. RSVP separately for each class, or for both."
 
 /** One class session: a single program at a single time. Sundays on the 2027 schedule have two. */
 export type SundayClass = {
@@ -166,6 +171,7 @@ function newYorkOffset(date: Date) {
 export function scheduleForDate(isoDate: string): ScheduleId | null {
   if (isoDate <= SCHEDULE_2026_LAST_SUNDAY) return "weekly_2026"
   if (!SCHEDULE_2027_FIRST_SUNDAY || isoDate < SCHEDULE_2027_FIRST_SUNDAY) return null
+  if (isoDate > SCHEDULE_2027_LAST_SUNDAY) return null
   const days = Math.round((Date.parse(isoDate) - Date.parse(SCHEDULE_2027_FIRST_SUNDAY)) / DAY_MS)
   return days % BIWEEKLY_INTERVAL_DAYS === 0 ? "biweekly_2027" : null
 }
@@ -337,13 +343,24 @@ export function scheduleSummary(now = new Date()) {
   const ny = newYorkWallClock(now)
   const todayIso = `${ny.year}-${String(ny.month).padStart(2, "0")}-${String(ny.day).padStart(2, "0")}`
   const paused = !next && todayIso < RSVP_2027_OPENS
+  const suspended = !next && todayIso > SCHEDULE_2027_LAST_SUNDAY
   return {
     schedule: "biweekly_2027" as ScheduleId,
-    paused,
-    cadence: paused ? "Every other Sunday from January 10, 2027" : "Every other Sunday",
-    times: `SHSAT Math ${BIWEEKLY_2027_TIMES.shsat.label.replace(" ET", "")} · Digital SAT Math ${BIWEEKLY_2027_TIMES.digital_sat.label}`,
-    timesShort: "SHSAT Math 6 PM · Digital SAT Math 7 PM ET",
-    format: "Free SHSAT Math and Digital SAT Math classes are both taught on every class Sunday, one after the other",
-    upcomingChange: paused ? PAUSE_ANNOUNCEMENT : next ? null : "The next class date will be announced soon.",
+    paused: paused || suspended,
+    cadence: paused
+      ? "Every other Sunday from January 10, 2027"
+      : suspended
+        ? "Winter and Spring only; suspended July–August 2027"
+        : "Every other Sunday through June 27, 2027",
+    times: `SHSAT ${BIWEEKLY_2027_TIMES.shsat.label.replace(" ET", "")} · Digital SAT ${BIWEEKLY_2027_TIMES.digital_sat.label}`,
+    timesShort: "SHSAT 6 PM · Digital SAT 7 PM ET",
+    format: "Free SHSAT and Digital SAT classes are both taught on every class Sunday, one after the other",
+    upcomingChange: paused
+      ? PAUSE_ANNOUNCEMENT
+      : suspended
+        ? SUMMER_SUSPENSION_ANNOUNCEMENT
+        : next
+          ? null
+          : "The next class date will be announced soon.",
   }
 }

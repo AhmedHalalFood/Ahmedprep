@@ -25,14 +25,14 @@ export function TopContactBar() {
           ) : summary.schedule === "weekly_2026" ? (
             <span>
               Live SHSAT & Digital SAT Zoom Classes — Sundays 4:00–5:00 PM ET{" "}
-              <span className={styles.sep} aria-hidden="true">•</span> Free Math classes from January 2027{" "}
+              <span className={styles.sep} aria-hidden="true">•</span> Free Sunday classes from January 2027{" "}
               <span className={styles.sep} aria-hidden="true">•</span> RSVP
             </span>
           ) : (
             <span>
-              Free SHSAT & Digital SAT Math Zoom Classes — Every Other Sunday{" "}
-              <span className={styles.sep} aria-hidden="true">•</span> SHSAT Math: 6:00–6:45 PM ET{" "}
-              <span className={styles.sep} aria-hidden="true">•</span> Digital SAT Math: 7:00–7:45 PM ET{" "}
+              Free SHSAT & Digital SAT Zoom Classes — Every Other Sunday{" "}
+              <span className={styles.sep} aria-hidden="true">•</span> SHSAT (Math and ELA): 6:00–6:45 PM ET{" "}
+              <span className={styles.sep} aria-hidden="true">•</span> Digital SAT (Math and Reading/Writing): 7:00–7:45 PM ET{" "}
               <span className={styles.sep} aria-hidden="true">•</span> RSVP
             </span>
           )}

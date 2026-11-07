@@ -1,10 +1,17 @@
 import { ArrowUpRight } from "lucide-react"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
+import { dollars, priceFor } from "@/lib/cohorts-2027"
 import { ENROLLMENT_2027 } from "@/lib/enrollment-2027"
 import { visiblePrograms } from "@/lib/programs"
 
 const T = ENROLLMENT_2027.tuition
+
+const TUITION_ROWS = [
+  { label: "Winter & Spring cohorts", hours: 72 },
+  { label: "Summer weekday intensive", hours: 96 },
+  { label: "Summer weekend", hours: 48 },
+] as const
 
 export function ProgramsPreview({ showIntensive }: { showIntensive: boolean }) {
   return (
@@ -22,27 +29,32 @@ export function ProgramsPreview({ showIntensive }: { showIntensive: boolean }) {
           </TrackedLink>
         </div>
         <div className="flex flex-col gap-4 border-l-0 border-t-4 border-t-gold bg-warm p-5 md:flex-row md:items-center md:justify-between md:p-6">
-          <div className="flex flex-col gap-2">
-            <h3 className="text-lg font-extrabold text-navy">January 2027 SHSAT &amp; Digital SAT small-group tuition</h3>
-            <dl className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-ink">
-              {[T.regular, T.early, T.founding].map((option) => (
-                <div key={option.label} className="flex gap-2">
-                  <dt className="font-semibold">{option.label}</dt>
-                  <dd className="font-extrabold text-navy">{option.total}</dd>
-                </div>
-              ))}
-            </dl>
+          <div className="flex flex-col gap-3">
+            <h3 className="text-lg font-extrabold text-navy">2027 SHSAT &amp; Digital SAT small-group tuition</h3>
+            <ul className="flex flex-col gap-1 text-sm leading-relaxed text-ink">
+              {TUITION_ROWS.map((row) => {
+                const price = priceFor(row)
+                return (
+                  <li key={row.label}>
+                    <span className="font-semibold">{row.label}</span>
+                    {" — "}
+                    {row.hours} hours: <span className="font-extrabold text-navy">{dollars(price.regular)}</span> regular,{" "}
+                    {dollars(price.early)} early payment, {dollars(price.founding)} founding-family
+                  </li>
+                )
+              })}
+            </ul>
             <p className="text-sm leading-relaxed text-subtle">
-              12 weeks, {ENROLLMENT_2027.hoursLabel}. {T.rules} Private tutoring is priced separately.
+              Payment deadlines are set per cohort. {T.rules} Private tutoring is priced separately.
             </p>
           </div>
           <TrackedLink
-            href={ENROLLMENT_2027.requestHref}
+            href="/programs-2027"
             event={EVENTS.programCtaClick}
-            eventProps={{ location: "home_programs_preview", cta: "january_2027_tuition" }}
+            eventProps={{ location: "home_programs_preview", cta: "2027_tuition" }}
             className="text-link shrink-0"
           >
-            See January 2027 tuition details <ArrowUpRight size={15} aria-hidden="true" />
+            See all 2027 cohorts &amp; deadlines <ArrowUpRight size={15} aria-hidden="true" />
           </TrackedLink>
         </div>
         <ul className="grid border-t border-line sm:grid-cols-2 lg:grid-cols-3">

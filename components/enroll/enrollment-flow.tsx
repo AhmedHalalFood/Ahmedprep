@@ -8,7 +8,7 @@ import { FamilyStep, EMPTY_FAMILY, validateFamily, type FamilyInfo, type FamilyE
 import { TuitionStep } from "./tuition-step"
 import { CheckoutPreview } from "./checkout-preview"
 
-export function EnrollmentFlow() {
+export function EnrollmentFlow({ serverNowIso }: { serverNowIso: string }) {
   const [step, setStep] = useState(0)
   const [programId, setProgramId] = useState<ProgramId | null>(null)
   const [classId, setClassId] = useState<string | null>(null)
@@ -71,6 +71,7 @@ export function EnrollmentFlow() {
             programId={programId}
             value={classId}
             onChange={(id) => {
+              if (id !== classId) setPayment(null)
               setClassId(id)
               setStepError(null)
             }}
@@ -86,8 +87,10 @@ export function EnrollmentFlow() {
             }}
           />
         )}
-        {step === 3 && (
+        {step === 3 && classId && (
           <TuitionStep
+            classId={classId}
+            now={new Date(serverNowIso)}
             value={payment}
             onChange={(p) => {
               setPayment(p)

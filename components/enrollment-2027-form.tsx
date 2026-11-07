@@ -7,15 +7,23 @@ import { useLeadForm } from "@/components/forms/use-lead-form"
 import { EVENTS, trackEvent } from "@/lib/analytics"
 import { BUSINESS } from "@/lib/business"
 import {
-  ENROLLMENT_2027,
-  ENROLLMENT_2027_NAME,
-  ENROLLMENT_DISCLAIMER,
-  FOUNDING_INTEREST_OPTIONS,
-  GRADES_2027,
-  SCHEDULE_UNSURE,
-  inquiryReceivedMessage,
-  scheduleOptionsFor,
-} from "@/lib/enrollment-2027"
+  PROGRAMS_2027,
+  TERMS_2027,
+  cohortSchedule,
+  cohortSpan,
+  cohortsFor,
+  deadlinesFor,
+  dollars,
+  findCohort,
+  formatDate,
+  formatShortDate,
+  isProgramId,
+  isTermId,
+  priceFor,
+  termName,
+} from "@/lib/cohorts-2027"
+import { ENROLLMENT_DISCLAIMER, FOUNDING_INTEREST_OPTIONS, GRADES_2027, inquiryReceivedMessage } from "@/lib/enrollment-2027"
+import { inquiryName, resolveSelection, selectionLabel } from "@/lib/enrollment-2027-inquiry"
 
 type InquiryData = {
   parentName: string
@@ -24,7 +32,8 @@ type InquiryData = {
   studentName: string
   studentGrade: string
   program: string
-  schedule: string
+  term: string
+  cohortId: string
   foundingInterest: string
   message: string
 }
@@ -32,16 +41,20 @@ type InquiryData = {
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const LOCATION = "enrollment-2027"
 
-const initial: InquiryData = {
-  parentName: "",
-  email: "",
-  phone: "",
-  studentName: "",
-  studentGrade: "",
-  program: "",
-  schedule: "",
-  foundingInterest: "",
-  message: "",
+const PROGRAM_DETAIL: Record<string, string> = {
+  SHSAT: "Specialized High School Admissions Test",
+  "Digital SAT": "College admissions test preparation",
+}
+
+export type Enrollment2027Preset = { program?: string; term?: string; cohortId?: string }
+
+/** Turns ?program=&term=&cohort= into a consistent preset; anything that doesn't match the catalog is dropped. */
+export function presetFrom(input: Enrollment2027Preset): Pick<InquiryData, "program" | "term" | "cohortId"> {
+  const cohort = input.cohortId ? findCohort(input.cohortId) : undefined
+  if (cohort) return { program: cohort.program, term: cohort.term, cohortId: cohort.id }
+  const program = input.program && isProgramId(input.program) ? input.program : ""
+  const term = program && input.term && isTermId(input.term) ? input.term : ""
+  return { program, term, cohortId: "" }
 }
 
 function validate(d: InquiryData) {
@@ -54,8 +67,9 @@ function validate(d: InquiryData) {
   if (!d.studentName.trim()) errors.studentName = "Please enter the student's name."
   if (!d.studentGrade) errors.studentGrade = "Please select the student's current grade."
   if (!d.program) errors.program = "Please choose a program."
-  if (!d.schedule) errors.schedule = "Please choose a preferred schedule."
-  else if (d.program && !scheduleOptionsFor(d.program).includes(d.schedule)) errors.schedule = "Please choose a schedule for this program."
+  if (!d.term) errors.term = "Please choose a term."
+  if (!d.cohortId) errors.cohortId = "Please choose a cohort."
+  else if (!resolveSelection(d)) errors.cohortId = "Please choose a cohort for this program and term."
   if (!d.foundingInterest) errors.foundingInterest = "Please let us know about founding-family tuition."
   return errors
 }
@@ -67,13 +81,15 @@ function ChoiceCards({
   value,
   onChange,
   error,
+  columns = "sm:grid-cols-2",
 }: {
   name: keyof InquiryData
   legend: string
-  options: { value: string; title: string; detail?: string }[]
+  options: { value: string; title: string; detail?: string; lines?: string[] }[]
   value: string
   onChange: (value: string) => void
   error?: string
+  columns?: string
 }) {
   const errorId = `${LOCATION}-${name}-error`
   return (
@@ -82,7 +98,7 @@ function ChoiceCards({
         {legend} <span aria-hidden="true" className="text-error">*</span>
         <span className="sr-only">(required)</span>
       </legend>
-      <div className="mt-2 grid gap-3 sm:grid-cols-2">
+      <div className={`mt-2 grid gap-3 ${columns}`}>
         {options.map((o) => (
           <label
             key={o.value}
@@ -100,6 +116,11 @@ function ChoiceCards({
             <span className="flex flex-col">
               <span className="text-sm font-bold">{o.title}</span>
               {o.detail && <span className="text-sm leading-relaxed text-subtle">{o.detail}</span>}
+              {o.lines?.map((line) => (
+                <span key={line} className="text-sm leading-relaxed text-subtle">
+                  {line}
+                </span>
+              ))}
             </span>
           </label>
         ))}
@@ -109,15 +130,43 @@ function ChoiceCards({
   )
 }
 
-export function Enrollment2027Form() {
+function Placeholder({ label, text, error }: { label: string; text: string; error?: string }) {
+  return (
+    <div>
+      <p className="text-sm font-semibold text-ink">
+        {label} <span aria-hidden="true" className="text-error">*</span>
+        <span className="sr-only">(required)</span>
+      </p>
+      <p className="mt-2 border border-dashed border-line px-4 py-3 text-sm text-subtle">{text}</p>
+      {error && <p className="mt-1.5 text-xs font-medium text-error">{error}</p>}
+    </div>
+  )
+}
+
+export function Enrollment2027Form({ preset = {} }: { preset?: Enrollment2027Preset }) {
   const [submitted, setSubmitted] = useState<InquiryData | null>(null)
   const { data, errors, status, serverResult, update, submit, formRef, honeypotRef } = useLeadForm({
     endpoint: "/api/enrollment-2027",
-    initial,
+    initial: {
+      parentName: "",
+      email: "",
+      phone: "",
+      studentName: "",
+      studentGrade: "",
+      ...presetFrom(preset),
+      foundingInterest: "",
+      message: "",
+    },
     validate,
     onSuccess: (sent) => {
       setSubmitted(sent)
-      trackEvent(EVENTS.enrollment2027Lead, { location: LOCATION, program: sent.program, lead_stage: "inquiry_submit" })
+      trackEvent(EVENTS.enrollment2027Lead, {
+        location: LOCATION,
+        program: sent.program,
+        term: sent.term,
+        cohort: sent.cohortId,
+        lead_stage: "inquiry_submit",
+      })
     },
   })
 
@@ -129,10 +178,17 @@ export function Enrollment2027Form() {
     onChange: (v: string) => update(key, v),
   })
 
-  const selectedProgram = ENROLLMENT_2027.programs.find((p) => p.name === data.program)
+  const cohorts = data.program && data.term ? cohortsFor(data.program, data.term) : []
+  const chosen = findCohort(data.cohortId)
 
   if (status === "success" && submitted) {
-    const received = inquiryReceivedMessage(serverResult, submitted.parentName, submitted.email)
+    const selection = resolveSelection(submitted)
+    const received = inquiryReceivedMessage(
+      serverResult,
+      submitted.parentName,
+      submitted.email,
+      selection ? inquiryName(selection) : undefined,
+    )
     return (
       <div role="status" className="border-t-4 border-gold pt-5">
         <p className="eyebrow blue">Inquiry received</p>
@@ -154,8 +210,7 @@ export function Enrollment2027Form() {
           {(
             [
               ["Student", `${submitted.studentName} (${submitted.studentGrade})`],
-              ["Program", submitted.program],
-              ["Preferred schedule", submitted.schedule],
+              ["Cohort", selection ? selectionLabel(selection) : submitted.cohortId],
               ["Founding-family tuition", submitted.foundingInterest],
             ] as const
           ).map(([term, value]) => (
@@ -169,6 +224,9 @@ export function Enrollment2027Form() {
       </div>
     )
   }
+
+  const chosenPrice = chosen ? priceFor(chosen) : null
+  const chosenDeadlines = chosen ? deadlinesFor(chosen) : null
 
   return (
     <form
@@ -197,37 +255,73 @@ export function Enrollment2027Form() {
         error={errors.program}
         onChange={(v) => {
           update("program", v)
-          if (data.schedule && !scheduleOptionsFor(v).includes(data.schedule)) update("schedule", "")
+          update("cohortId", "")
         }}
-        options={ENROLLMENT_2027.programs.map((p) => ({ value: p.name, title: p.name, detail: p.kicker }))}
+        options={PROGRAMS_2027.map((p) => ({ value: p, title: p, detail: PROGRAM_DETAIL[p] }))}
       />
 
-      {selectedProgram ? (
+      {data.program ? (
         <ChoiceCards
-          name="schedule"
-          legend="Preferred Schedule"
-          value={data.schedule}
-          error={errors.schedule}
-          onChange={(v) => update("schedule", v)}
-          options={[
-            ...selectedProgram.schedules.map((s) => ({
-              value: `${s.label}: ${s.days}, ${s.time}`,
-              title: s.label,
-              detail: `${s.days}, ${s.time}`,
-            })),
-            { value: SCHEDULE_UNSURE, title: SCHEDULE_UNSURE, detail: "We can help you choose." },
-          ]}
+          name="term"
+          legend="Term"
+          value={data.term}
+          error={errors.term}
+          columns="sm:grid-cols-3"
+          onChange={(v) => {
+            update("term", v)
+            update("cohortId", "")
+          }}
+          options={TERMS_2027.map((t) => {
+            const starts = cohortsFor(data.program, t.id).map((c) => c.firstIso).sort()
+            return { value: t.id, title: t.name, detail: starts[0] ? `Starts ${formatShortDate(starts[0])}` : undefined }
+          })}
         />
       ) : (
-        <div>
-          <p className="text-sm font-semibold text-ink">
-            Preferred Schedule <span aria-hidden="true" className="text-error">*</span>
-            <span className="sr-only">(required)</span>
-          </p>
-          <p className="mt-2 border border-dashed border-line px-4 py-3 text-sm text-subtle">
-            Choose a program above to see its weekday and weekend groups.
-          </p>
-          {errors.schedule && <p className="mt-1.5 text-xs font-medium text-error">{errors.schedule}</p>}
+        <Placeholder label="Term" text="Choose a program above to see the Winter, Spring, and Summer 2027 terms." error={errors.term} />
+      )}
+
+      {cohorts.length > 0 ? (
+        <ChoiceCards
+          name="cohortId"
+          legend={`${isTermId(data.term) ? termName(data.term) : ""} ${data.program} cohort`}
+          value={data.cohortId}
+          error={errors.cohortId}
+          onChange={(v) => update("cohortId", v)}
+          options={cohorts.map((c) => {
+            const { startIso, endIso } = cohortSpan(c)
+            return {
+              value: c.id,
+              title: c.label,
+              detail: cohortSchedule(c),
+              lines: [
+                `${formatShortDate(startIso)} to ${formatShortDate(endIso)}`,
+                `${c.sessions} sessions, ${c.hours} hours · ${dollars(priceFor(c).regular)} regular tuition`,
+              ],
+            }
+          })}
+        />
+      ) : (
+        <Placeholder
+          label="Cohort"
+          text={data.program ? "Choose a term above to see its cohorts." : "Choose a program and term to see the available cohorts."}
+          error={errors.cohortId}
+        />
+      )}
+
+      {chosen && chosenPrice && chosenDeadlines && (
+        <div aria-live="polite" className="border border-line bg-cream px-4 py-3 text-sm leading-relaxed text-navy">
+          <p className="font-bold">Tuition for this cohort ({chosen.hours} hours at $20 per hour)</p>
+          <ul className="mt-1 flex flex-col gap-1">
+            <li>Regular: {dollars(chosenPrice.regular)}, paid in full before the first class.</li>
+            <li>
+              Early full payment: {dollars(chosenPrice.early)} (10% off) if paid in full by {formatDate(chosenDeadlines.earlyIso)}.
+            </li>
+            <li>
+              Founding-family: {dollars(chosenPrice.founding)} (25% off) for the first 5 fully paid enrollments in this cohort, if paid in
+              full by {formatDate(chosenDeadlines.foundingIso)}.
+            </li>
+            <li>Discounts cannot be combined.</li>
+          </ul>
         </div>
       )}
 
@@ -236,7 +330,7 @@ export function Enrollment2027Form() {
         required
         placeholder="Select an option"
         options={[...FOUNDING_INTEREST_OPTIONS]}
-        hint={`${ENROLLMENT_2027.tuition.founding.total} — ${ENROLLMENT_2027.tuition.founding.summary}`}
+        hint="25% off for the first 5 fully paid enrollments in each cohort, while seats remain."
         {...field("foundingInterest")}
       />
 

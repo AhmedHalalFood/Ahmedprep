@@ -43,7 +43,8 @@ export function Footer() {
             <Link href="/free-sunday-classes">Free Sunday Classes</Link>
             <Link href="/free-diagnostic">Free Diagnostic</Link>
             <Link href="/programs">Programs & Pricing</Link>
-            <Link href="/enroll-2027">January 2027 Enrollment</Link>
+            <Link href="/programs-2027">2027 Classes &amp; Dates</Link>
+            <Link href="/enroll-2027">2027 Enrollment</Link>
             <Link href="/results">Student Results</Link>
             <Link href="/tools">Free Tools</Link>
           </div>

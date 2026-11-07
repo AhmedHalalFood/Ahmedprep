@@ -16,7 +16,7 @@ export function FreeClassPromo() {
           <h2 id="free-class-promo-title" className="text-balance text-2xl font-extrabold leading-tight tracking-tight text-navy md:text-3xl">
             {summary.schedule === "weekly_2026"
               ? "SHSAT & Digital SAT Classes Alternate Weekly"
-              : "Free SHSAT Math & Digital SAT Math Classes Every Other Sunday"}
+              : "Free SHSAT & Digital SAT Classes Every Other Sunday"}
           </h2>
           <p className="text-sm font-bold uppercase tracking-wider text-subtle">
             {summary.cadence} <span aria-hidden="true">•</span> {summary.times} <span aria-hidden="true">•</span> Live Online{" "}

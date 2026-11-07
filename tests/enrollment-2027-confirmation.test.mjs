@@ -111,15 +111,19 @@ test("duplicate submission sends no second email and is shown as unconfirmed", a
   // A repeat the database recognises returns before any email is attempted.
   const storage = readFileSync(new URL("../lib/lead-storage.ts", import.meta.url), "utf8")
   const duplicateBranch = storage.slice(storage.indexOf('claim.kind === "duplicate"'), storage.indexOf("return deliverLead("))
-  assert.match(duplicateBranch, /return NextResponse\.json\(\{ success: true, duplicate: true, saved: true \}\)/)
+  assert.doesNotMatch(duplicateBranch, /deliverLead|sendConfirmationEmail/, "duplicates never send email")
+  // Only an original confirmation recorded as "sent" may be reported; anything else stays unconfirmed.
+  assert.match(duplicateBranch, /claim\.confirmation === "sent" \? \{ confirmation: "sent" \} : \{\}/)
+  assert.match(duplicateBranch, /NextResponse\.json\(\{ success: true, duplicate: true, saved: true, \.\.\.confirmation \}\)/)
 
   const message = inquiryReceivedMessage({ success: true, duplicate: true, saved: true }, PARENT, FAMILY)
   assert.deepEqual(message, { confirmed: false, text: UNCONFIRMED_TEXT })
+  assert.equal(inquiryReceivedMessage({ success: true, duplicate: true, confirmation: "sent" }, PARENT, FAMILY).confirmed, true)
 })
 
 test("form uses the server result and offers contact details when unconfirmed", () => {
   const form = readFileSync(new URL("../components/enrollment-2027-form.tsx", import.meta.url), "utf8")
-  assert.match(form, /inquiryReceivedMessage\(serverResult, submitted\.parentName, submitted\.email\)/)
+  assert.match(form, /inquiryReceivedMessage\(\s*serverResult,\s*submitted\.parentName,\s*submitted\.email,/)
   assert.doesNotMatch(form, /inquiry and sent a confirmation to \$\{submitted\.email\}/, "no hard-coded sent message")
   assert.match(form, /!received\.confirmed &&[\s\S]*BUSINESS\.phoneHref[\s\S]*BUSINESS\.email/)
 })

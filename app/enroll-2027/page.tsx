@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { MapPin } from "lucide-react"
+import Link from "next/link"
 import { ClassCards } from "@/components/enroll-2027/class-cards"
 import { EnrollmentSteps } from "@/components/enroll-2027/enrollment-steps"
 import { TuitionOptions } from "@/components/enroll-2027/tuition-options"
@@ -15,11 +16,11 @@ const PATH = "/enroll-2027"
 const ATTENDANCE_FAQS: FaqItem[] = [
   {
     q: "Do classes continue during school holidays?",
-    a: "Yes. Classes normally continue during school and federal holidays unless AhmedPrep announces a closure.",
+    a: "Yes. AhmedPrep follows its published cohort calendar. Approved holiday closures are covered by scheduled makeup sessions; other school breaks do not automatically cancel classes.",
   },
   {
     q: "What happens if AhmedPrep cancels a class?",
-    a: "We will arrange a makeup class or provide equivalent live instruction at no additional cost.",
+    a: "We will provide the published makeup session or equivalent live instruction at no additional cost, preserving the promised 72 hours.",
   },
   {
     q: "What if my child misses a class?",
@@ -31,19 +32,24 @@ const ATTENDANCE_FAQS: FaqItem[] = [
   },
   {
     q: "Will my child receive all 72 program hours?",
-    a: "Yes. Each program includes 72 scheduled hours, including breaks. Any class canceled by AhmedPrep will be made up through an additional session or equivalent live instruction.",
+    a: "Yes. Each program includes 72 hours of scheduled live instruction. Holiday closures and any AhmedPrep cancellations are covered by makeup instruction.",
   },
 ]
 
 export const metadata: Metadata = {
-  title: "January 2027 SHSAT & Digital SAT Enrollment",
+  title: "2027 SHSAT & Digital SAT Enrollment: Winter, Spring, Summer",
   description:
-    "Enroll in AhmedPrep's January 2027 SHSAT and Digital SAT programs in Astoria: 12 weeks, 72 scheduled hours including breaks, and no more than 12 students per class.",
+    "Request enrollment in AhmedPrep's Winter, Spring, or Summer 2027 SHSAT and Digital SAT cohorts in Astoria: small in-person classes of up to 12 students at $20 per instructional hour.",
   alternates: { canonical: absoluteUrl(PATH) },
   openGraph: { ...baseOpenGraph, url: absoluteUrl(PATH) },
 }
 
-export default function Enroll2027Page() {
+type Props = { searchParams: Promise<Record<string, string | string[] | undefined>> }
+const first = (value: string | string[] | undefined) => (Array.isArray(value) ? value[0] : value)
+
+export default async function Enroll2027Page({ searchParams }: Props) {
+  const params = await searchParams
+  const preset = { program: first(params.program), term: first(params.term), cohortId: first(params.cohort) }
   const E = ENROLLMENT_2027
   const facts = [
     { term: "Programs", value: "SHSAT & Digital SAT" },
@@ -94,6 +100,11 @@ export default function Enroll2027Page() {
 
       <div className="bg-warm px-5 py-10 sm:py-14">
         <div className="mx-auto flex max-w-5xl flex-col gap-12">
+          <div className="border-l-4 border-brand bg-white p-5 text-sm leading-relaxed text-ink">
+            <p className="font-extrabold text-navy">Looking ahead to Spring or Summer 2027?</p>
+            <p className="mt-1">Review all 12 approved SHSAT and Digital SAT cohorts, tuition options, and full-payment deadlines.</p>
+            <Link href="/programs-2027" className="mt-2 inline-block font-bold text-brand underline">View all 2027 class schedules and tuition</Link>
+          </div>
           <ClassCards />
           <TuitionOptions />
           <EnrollmentSteps />
@@ -112,7 +123,7 @@ export default function Enroll2027Page() {
             </p>
           </div>
           <div className="border border-line bg-white p-5 sm:p-8">
-            <Enrollment2027Form />
+            <Enrollment2027Form preset={preset} />
           </div>
         </div>
       </section>
