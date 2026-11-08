@@ -1,40 +1,51 @@
 import Link from "next/link"
-import { ArrowUpRight } from "lucide-react"
+import { ArrowUpRight, ClipboardCheck, LineChart, UserRound, Users } from "lucide-react"
+import { MAX_CLASS_SIZE } from "@/lib/cohorts-2027"
 
 const REASONS = [
-  ["Diagnostic-based instruction", "Every student starts with a diagnostic, so lessons target the skills that need work instead of a generic syllabus."],
-  ["High-attention teaching", "Small groups and one-on-one sessions mean the instructor sees each student's work, not just their final answers."],
-  ["Direct instructor access", "Families work directly with founder and lead instructor Tariq Ahmed, not a rotating call center."],
-  ["Structured homework", "Assignments follow each lesson and practice the exact skills that were taught."],
-  ["Progress tracking", "Practice sections and full-length tests are reviewed so the plan can be adjusted as the student improves."],
-  ["Parent communication", "Parents hear what was covered, what to practice next, and how the student is doing."],
-  [
-    "Free Sunday classes",
-    "Beginning January 2027, free live SHSAT and Digital SAT classes are both offered on the same every-other Sunday: SHSAT at 6:00–6:45 PM ET and Digital SAT at 7:00–7:45 PM ET. Open to any student who RSVPs.",
-  ],
+  {
+    icon: Users,
+    title: `Maximum ${MAX_CLASS_SIZE} students per class`,
+    body: "Small groups mean the instructor sees each student's work, not just their final answers.",
+  },
+  {
+    icon: UserRound,
+    title: "Personalized instruction",
+    body: "Students learn directly from founder and lead instructor Tariq Ahmed.",
+  },
+  {
+    icon: ClipboardCheck,
+    title: "Diagnostic-based teaching",
+    body: "Every student starts with a diagnostic, so lessons and practice target the skills that need work.",
+  },
+  {
+    icon: LineChart,
+    title: "Progress you can follow",
+    body: "Progress tracking, structured homework after each lesson, and regular parent communication.",
+  },
 ] as const
 
 export function WhyFamilies() {
   return (
-    <section id="why-families" className="method-section" aria-labelledby="why-families-title">
-      <div className="container">
-        <div className="method-intro">
-          <p className="eyebrow gold">For parents</p>
-          <h2 id="why-families-title">Why Families Choose AhmedPrep</h2>
-          <p>
-            Preparation in Astoria, Queens built around how each student learns, with clear communication for the family at every step.
-          </p>
+    <section id="why-families" aria-labelledby="why-families-title" className="border-y border-line bg-warm py-12 md:py-16">
+      <div className="container flex flex-col gap-8">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div className="flex max-w-2xl flex-col gap-3">
+            <p className="eyebrow blue">For parents</p>
+            <h2 id="why-families-title" className="text-balance text-3xl font-extrabold leading-tight tracking-tight text-navy md:text-4xl">
+              Why Choose AhmedPrep?
+            </h2>
+          </div>
           <Link href="/about" className="text-link">
-            Meet Tariq Ahmed <ArrowUpRight size={15} aria-hidden="true" />
+            Learn more about AhmedPrep <ArrowUpRight size={15} aria-hidden="true" />
           </Link>
         </div>
-        <ul className="method-grid">
-          {REASONS.map(([title, body]) => (
-            <li key={title} className="method-card">
-              <div>
-                <h3>{title}</h3>
-                <p>{body}</p>
-              </div>
+        <ul className="grid gap-px border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
+          {REASONS.map(({ icon: Icon, title, body }) => (
+            <li key={title} className="flex flex-col gap-3 bg-white p-5 md:p-6">
+              <Icon size={24} aria-hidden="true" className="text-brand" />
+              <h3 className="text-lg font-extrabold leading-snug text-navy">{title}</h3>
+              <p className="text-pretty text-sm leading-relaxed text-subtle">{body}</p>
             </li>
           ))}
         </ul>

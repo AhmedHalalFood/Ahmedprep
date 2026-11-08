@@ -1,59 +1,76 @@
-import Link from "next/link"
-import { ArrowUpRight } from "lucide-react"
+import { ArrowRight, ArrowUpRight } from "lucide-react"
 import { TrackedLink } from "@/components/tracked-link"
-import { EVENTS } from "@/lib/analytics"
-import { RESOURCES } from "@/lib/resources"
-import { FREE_TOOLS, toolPath } from "@/lib/tools"
+import { EVENTS, type EventName } from "@/lib/analytics"
+import { scheduleSummary } from "@/lib/free-class"
+import { toolPath } from "@/lib/tools"
 
 export function ToolsResources() {
-  const featured = [RESOURCES.find((r) => r.category === "SHSAT"), RESOURCES.find((r) => r.category === "Digital SAT")].filter(
-    (r) => r !== undefined,
-  )
+  const sunday = scheduleSummary()
+  const items: { label: string; title: string; body: string; href: string; event: EventName }[] = [
+    {
+      label: "Practice tests",
+      title: "Free SHSAT practice tests",
+      body: "Official NYCPS digital practice tests plus AhmedPrep Math and ELA practice.",
+      href: "/shsat-practice-tests",
+      event: EVENTS.toolOpen,
+    },
+    {
+      label: "Free tool · SHSAT",
+      title: "SHSAT readiness quiz",
+      body: "Ten short Math, ELA, and test-habit questions with a summary and next steps.",
+      href: toolPath("shsat-readiness-quiz"),
+      event: EVENTS.toolOpen,
+    },
+    {
+      label: "Free tool · Digital SAT",
+      title: "Digital SAT score goal planner",
+      body: "Enter a current practice score and a target to see a suggested study plan.",
+      href: toolPath("digital-sat-score-planner"),
+      event: EVENTS.toolOpen,
+    },
+    {
+      label: "Free Sunday Zoom classes",
+      title: "Free live Sunday classes",
+      body: `${sunday.cadence}. ${sunday.times}. RSVP required.`,
+      href: "/free-sunday-classes",
+      event: EVENTS.sundayClassCtaClick,
+    },
+  ]
+
   return (
-    <section id="resources" className="resources-section" aria-labelledby="resources-heading">
-      <div className="container">
-        <div className="resources-heading flex flex-wrap items-end justify-between gap-6">
-          <div>
-            <p className="eyebrow">Free Tools & Resources</p>
-            <h2 id="resources-heading">
-              Know the test.
-              <br />
-              <span>Know the next step.</span>
-            </h2>
-          </div>
-          <div className="flex flex-wrap gap-6">
-            <Link href="/tools" className="text-link">
-              All tools <ArrowUpRight size={15} aria-hidden="true" />
-            </Link>
-            <Link href="/resources" className="text-link">
-              All resources <ArrowUpRight size={15} aria-hidden="true" />
-            </Link>
-          </div>
+    <section id="resources" aria-labelledby="resources-heading" className="scroll-mt-4 bg-white py-12 md:py-16">
+      <div className="container flex flex-col gap-8">
+        <div className="flex max-w-2xl flex-col gap-3">
+          <p className="eyebrow blue">Free Resources</p>
+          <h2 id="resources-heading" className="text-balance text-3xl font-extrabold leading-tight tracking-tight text-navy md:text-4xl">
+            Practice, plan, and learn for free
+          </h2>
         </div>
-        <div className="resource-grid">
-          {FREE_TOOLS.map((tool) => (
-            <TrackedLink
-              key={tool.slug}
-              href={toolPath(tool.slug)}
-              event={EVENTS.toolOpen}
-              eventProps={{ location: "home_tools", tool: tool.slug }}
-              className="resource-item"
-            >
-              <span>Free tool · {tool.test}</span>
-              <h3>{tool.title}</h3>
-              <p>{tool.description}</p>
-              <ArrowUpRight size={18} aria-hidden="true" />
-            </TrackedLink>
+        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {items.map((item) => (
+            <li key={item.href}>
+              <TrackedLink
+                href={item.href}
+                event={item.event}
+                eventProps={{ location: "home_resources_preview" }}
+                className="group flex h-full flex-col gap-2 border border-line bg-white p-5 transition-colors hover:border-brand hover:bg-brand-soft"
+              >
+                <span className="text-xs font-extrabold uppercase tracking-wider text-brand">{item.label}</span>
+                <span className="text-lg font-extrabold leading-snug text-navy">{item.title}</span>
+                <span className="text-pretty text-sm leading-relaxed text-subtle">{item.body}</span>
+                <ArrowUpRight size={16} aria-hidden="true" className="mt-auto self-end text-brand" />
+              </TrackedLink>
+            </li>
           ))}
-          {featured.map((item) => (
-            <Link key={item.slug} href={`/resources/${item.slug}`} className="resource-item">
-              <span>Guide · {item.category}</span>
-              <h3>{item.title}</h3>
-              <p>{item.description}</p>
-              <ArrowUpRight size={18} aria-hidden="true" />
-            </Link>
-          ))}
-        </div>
+        </ul>
+        <TrackedLink
+          href="/resources"
+          event={EVENTS.toolOpen}
+          eventProps={{ location: "home_resources_preview", cta: "explore_all" }}
+          className="button button-navy-outline button-lg min-h-12 self-start"
+        >
+          Explore All Free Resources <ArrowRight size={18} aria-hidden="true" />
+        </TrackedLink>
       </div>
     </section>
   )

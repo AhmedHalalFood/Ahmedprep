@@ -7,14 +7,22 @@ import { getProgram } from "../lib/programs.ts"
 
 const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), "utf8")
 
-test("Why Families: Free Sunday copy states the January 2027 every-other-Sunday schedule", () => {
+test("Why Choose AhmedPrep: compact benefits grid with class size, founder, and About link", () => {
   const src = read("components/landing/why-families.tsx")
-  assert.match(src, /Beginning January 2027/)
-  assert.match(src, /same every-other Sunday/)
-  assert.match(src, /SHSAT at 6:00–6:45 PM ET/)
-  assert.match(src, /Digital SAT at 7:00–7:45 PM ET/)
+  assert.match(src, /MAX_CLASS_SIZE/)
+  assert.match(src, /founder and lead instructor Tariq Ahmed/)
+  assert.match(src, /href="\/about"/)
   assert.doesNotMatch(src, /alternate between SHSAT and Digital SAT/)
   assert.doesNotMatch(src, /Free weekly learning/)
+})
+
+test("Home Free Resources preview: Sunday Zoom card derives the approved schedule centrally and links to RSVP", () => {
+  const src = read("components/landing/tools-resources.tsx")
+  assert.match(src, /scheduleSummary\(\)/)
+  assert.match(src, /href: "\/free-sunday-classes"/)
+  assert.match(src, /href="\/resources"/)
+  assert.match(src, /Explore All Free Resources/)
+  assert.doesNotMatch(src, /alternate between SHSAT and Digital SAT/)
 })
 
 test("Programs: SHSAT and Digital SAT show the approved 2027 hourly tuition", () => {
@@ -46,12 +54,13 @@ test("Programs: private tutoring keeps its contact-for-pricing behaviour", () =>
 
 test("Home Programs & Pricing preview covers all 2027 terms, derives tuition centrally, and links to /programs-2027", () => {
   const src = read("components/landing/programs-preview.tsx")
-  assert.match(src, /2027 SHSAT &amp; Digital SAT small-group tuition/)
-  assert.doesNotMatch(src, /January 2027/)
-  assert.match(src, /priceFor\(/)
+  assert.match(src, /TERMS_2027\.map/)
+  assert.match(src, /termSummary\(term\)/)
   assert.match(src, /ENROLLMENT_2027\.tuition/)
   assert.match(src, /href="\/programs-2027"/)
-  assert.doesNotMatch(src, /\$1,440|\$1,296|\$1,080/)
+  assert.match(src, /href=\{`\/programs-2027#\$\{term\.id\}`\}/)
+  assert.match(src, /View Programs/)
+  assert.doesNotMatch(src, /\$1,440|\$1,296|\$1,080|\$1,920|\$1,728|\$960|\$864/)
 })
 
 test("Mobile CALL | TEXT | RESERVE A SEAT bar is unchanged and rendered on every page", () => {

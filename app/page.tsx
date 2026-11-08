@@ -1,18 +1,12 @@
 import type { Metadata } from "next"
 import Image from "next/image"
 import { ArrowRight, ArrowUpRight, Sparkle } from "lucide-react"
-import { CampaignBanner } from "@/components/landing/campaign-banner"
 import { DiagnosticSection } from "@/components/landing/diagnostic-section"
-import { Enrollment2027 } from "@/components/landing/enrollment-2027"
-import { GoogleReviews } from "@/components/landing/google-reviews"
 import { ProgramsPreview } from "@/components/landing/programs-preview"
-import { ResultsPreview } from "@/components/landing/results-preview"
+import { ReviewInvite } from "@/components/landing/review-invite"
 import { ToolsResources } from "@/components/landing/tools-resources"
 import { WhyFamilies } from "@/components/landing/why-families"
-import { PracticeLibraryCard } from "@/components/practice-tests/practice-library-card"
-import { ThisSundayStrip } from "@/components/sunday-classes/this-sunday-strip"
 import { TrackedLink } from "@/components/tracked-link"
-import { WeeklyPracticeCard } from "@/components/weekly-practice/weekly-practice-card"
 import { EVENTS } from "@/lib/analytics"
 import { ENROLLMENT_2027 } from "@/lib/enrollment-2027"
 import { intensiveSitewidePromoActive } from "@/lib/intensive-promo"
@@ -60,12 +54,11 @@ export default async function Home() {
             SHSAT &amp; Digital SAT Prep
           </h1>
           <nav aria-label="2027 seasons" className="hero-launch-date">
-            <a href="/programs-2027#winter" className="hero-season-link">Winter</a>
+            <a href="/programs-2027#winter" className="hero-season-link">Winter Programs 2027</a>
             <span className="hero-season-sep" aria-hidden="true">•</span>
-            <a href="/programs-2027#spring" className="hero-season-link">Spring</a>
+            <a href="/programs-2027#spring" className="hero-season-link">Spring Programs 2027</a>
             <span className="hero-season-sep" aria-hidden="true">•</span>
-            <a href="/programs-2027#summer" className="hero-season-link">Summer</a>
-            <span className="hero-season-year">2027</span>
+            <a href="/programs-2027#summer" className="hero-season-link">Summer Programs 2027</a>
           </nav>
           <p className="hero-support">
             Small-group SHSAT and Digital SAT preparation in Astoria, Queens. Math, ELA, and Reading &amp; Writing
@@ -145,30 +138,19 @@ export default async function Home() {
         </aside>
       )}
 
-      <Enrollment2027 showIntensive={showIntensive} />
-
-      <CampaignBanner />
-
-      <ResultsPreview />
-
-      <ThisSundayStrip location="home" />
-
-      <WeeklyPracticeCard location="home" />
-      <PracticeLibraryCard />
+      <ProgramsPreview />
 
       <WhyFamilies />
 
-      <ToolsResources />
-
-      <ProgramsPreview showIntensive={showIntensive} />
-
-      <GoogleReviews />
-
       <DiagnosticSection
         location="home"
-        title="Start with a free diagnostic"
+        title="Book Free Diagnostic"
         intro="Choose SHSAT or Digital SAT and tell us about your student. We'll contact you to confirm a diagnostic time at our Astoria location."
       />
+
+      <ToolsResources />
+
+      <ReviewInvite />
     </>
   )
 }

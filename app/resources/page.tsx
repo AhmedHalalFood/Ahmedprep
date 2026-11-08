@@ -6,11 +6,12 @@ import { Breadcrumbs, Section } from "@/components/landing/primitives"
 import { ThisSundayStrip } from "@/components/sunday-classes/this-sunday-strip"
 import { TeachingVideos } from "@/components/videos/teaching-videos"
 import { RESOURCES, type Resource } from "@/lib/resources"
+import { toolPath } from "@/lib/tools"
 
 export const metadata: Metadata = {
-  title: "SHSAT & Digital SAT Resources",
+  title: "Free SHSAT & Digital SAT Resources",
   description:
-    "Free SHSAT and Digital SAT guides for NYC families: 2026 SHSAT dates, the digital SHSAT format, SHSAT Math topics, practice test strategy, and ELA tips.",
+    "Free SHSAT and Digital SAT resources for NYC families: practice tests, weekly practice, readiness quiz, score planner, SHSAT dates, guides, and free Sunday Zoom classes.",
   alternates: { canonical: absoluteUrl("/resources") },
   openGraph: { ...baseOpenGraph, url: absoluteUrl("/resources") },
 }
@@ -21,6 +22,49 @@ const groups: { category: Resource["category"]; title: string; href: string; cta
 ]
 
 const PRACTICE_SLUGS = ["shsat-math-practice", "shsat-ela-practice"]
+
+type CategoryLink = { label: string; href: string; note?: string }
+
+const CATEGORIES: { id: string; title: string; links: CategoryLink[] }[] = [
+  {
+    id: "practice-tests",
+    title: "Practice Tests",
+    links: [
+      { label: "SHSAT practice tests", href: "/shsat-practice-tests" },
+      { label: "Weekly SHSAT practice", href: "/weekly-practice" },
+      { label: "SHSAT Math practice", href: "/resources/shsat-math-practice" },
+      { label: "SHSAT ELA practice", href: "/resources/shsat-ela-practice" },
+      { label: "Digital SAT Math practice", href: "/resources/digital-sat-math-practice" },
+    ],
+  },
+  {
+    id: "free-tools",
+    title: "Free Tools",
+    links: [
+      { label: "SHSAT readiness quiz", href: toolPath("shsat-readiness-quiz") },
+      { label: "Digital SAT score goal planner", href: toolPath("digital-sat-score-planner") },
+      { label: "All free tools", href: "/tools" },
+    ],
+  },
+  {
+    id: "test-dates-guides",
+    title: "Test Dates & Guides",
+    links: [
+      { label: "SHSAT dates & deadline", href: toolPath("shsat-dates"), note: "Fall 2026 test cycle" },
+      { label: "SHSAT guide", href: "/resources/shsat-guide" },
+      { label: "Digital SAT guide", href: "/resources/digital-sat-guide" },
+      { label: "Digital SAT Reading & Writing", href: "/resources/digital-sat-reading-writing" },
+    ],
+  },
+  {
+    id: "free-sunday-classes",
+    title: "Free Sunday Zoom Classes",
+    links: [
+      { label: "SHSAT & Digital SAT free Zoom sessions", href: "/free-sunday-classes", note: "Schedule & RSVP" },
+      { label: "Free Sunday classes FAQ & updates", href: "/updates" },
+    ],
+  },
+]
 
 export default function ResourcesPage() {
   const featured = RESOURCES.filter((r) => r.featured)
@@ -39,6 +83,37 @@ export default function ResourcesPage() {
           <p className="mt-5 text-pretty text-lg leading-relaxed text-subtle">
             Practical guides for NYC families preparing for the SHSAT and the Digital SAT, written by the AhmedPrep team in Astoria, Queens.
           </p>
+        </div>
+      </section>
+
+      <section aria-labelledby="resource-categories-title" className="border-b border-line bg-warm py-12 md:py-16">
+        <div className="container flex flex-col gap-6">
+          <h2 id="resource-categories-title" className="text-2xl font-extrabold text-navy md:text-3xl">
+            Browse by category
+          </h2>
+          <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {CATEGORIES.map((category) => (
+              <li key={category.id} id={category.id} className="flex scroll-mt-24 flex-col gap-4 border border-line bg-white p-5 md:p-6">
+                <h3 className="text-lg font-extrabold text-navy">{category.title}</h3>
+                <ul className="flex flex-col gap-1">
+                  {category.links.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        className="flex min-h-11 items-center justify-between gap-3 border-b border-line py-2 text-sm font-semibold leading-snug text-ink transition-colors hover:text-brand"
+                      >
+                        <span>
+                          {link.label}
+                          {link.note && <span className="block text-xs font-normal text-subtle">{link.note}</span>}
+                        </span>
+                        <ArrowUpRight size={15} aria-hidden="true" className="shrink-0 text-brand" />
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
