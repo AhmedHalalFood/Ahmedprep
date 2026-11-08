@@ -1,6 +1,6 @@
 # AhmedPrep 2027 approved scheduling reference
 
-Status: scheduling framework approved November 6, 2026. This file is a working implementation reference. Do not deploy without owner review.
+Status: scheduling framework approved November 6, 2026; enrollment-policy amendments approved November 8, 2026. Documentation only. Do not deploy without separate owner approval.
 
 ## Winter (72 hours per cohort, 24 × 3-hour sessions)
 - SHSAT weekday: Mon/Wed 5:30–8:30 PM, Jan 11–Mar 31.
@@ -43,21 +43,27 @@ Owner-approved: Sunday, August 29, 2027 is the required final instructional sess
 - Summer (July–August): both free Sunday classes suspended.
 - Fall: evaluate whether to resume; no restart date approved.
 
-## Tuition
-- Winter/Spring 72h: regular $1,440; early $1,296; founding $1,080.
-- Summer intensive 96h: regular $1,920; early $1,728; founding $1,440.
-- Summer weekend 48h: regular $960; early $864; founding $720.
-- Founding: first five fully paid enrollments per cohort, deadline 42 days before cohort starts.
-- Early: full payment by exactly 21 calendar days after the cohort's founding-family deadline (owner-approved; replaces the earlier 14-day separation); no stacking.
-- All deadlines are final payment deadlines ending 11:59:59 PM ET on the listed date.
-- Winter weekend: founding Nov 28, 2026; early Dec 19.
-- Winter weekday SHSAT: founding Nov 30; early Dec 21.
-- Winter weekday Digital SAT: founding Dec 1; early Dec 22.
-- Spring weekend: founding Feb 20, 2027; early Mar 13.
-- Spring weekday SHSAT: founding Feb 22; early Mar 15.
-- Spring weekday Digital SAT: founding Feb 23; early Mar 16.
-- Summer weekend: founding May 22; early Jun 12.
-- Summer intensive: founding May 25; early Jun 15.
+## Tuition and enrollment policy (owner-approved November 8, 2026)
+- Winter/Spring 72h regular $1,440; 10% early-payment $1,296. Winter-only founding-family $1,080 (25% off regular).
+- Summer intensive 96h regular $1,920; 10% early-payment $1,728.
+- Summer weekend 48h regular $960; 10% early-payment $864.
+- **Founding-family offer applies to Winter 2027 only**, limited to the first five fully paid enrollments per Winter cohort and its published founding deadline. Do not advertise or apply a founding-family tier for Spring or Summer unless the owner separately approves a future promotion after Winter enrollment review.
+- **Winter early-payment deadlines remain as currently published**, 21 calendar days after founding-family deadlines: Winter weekend founding Nov 28, 2026 / early Dec 19; Winter weekday SHSAT founding Nov 30 / early Dec 21; Winter weekday Digital SAT founding Dec 1 / early Dec 22.
+- **Spring and Summer early-payment discount requires full payment 28 calendar days before cohort start** (replaces the prior 21-day gap after a hypothetical founding deadline): Spring weekend Mar 6, 2027; Spring weekday SHSAT Mar 8; Spring weekday Digital SAT Mar 9; Summer weekend Jun 5; Summer intensive Jun 8.
+- All listed payment deadlines end 11:59:59 PM America/New_York on the listed date. Discounts do not stack. The regular tuition is unchanged.
+- **Summer $250 seat deposit: concept approved, payment-policy approval pending.** Proposed credit against tuition, for Summer intensive and weekend cohorts; do not collect deposits, promise guaranteed seats, or change payment flows until owner approves refundability, cancellation/withdrawal terms, balance due date, deposit handling, and capacity verification. A deposit alone does not satisfy the existing full-payment requirement for the 10% early discount.
+
+## Homepage and cohort discovery (approved for future implementation)
+- Replace bare season labels with clickable **Winter Programs 2027**, **Spring Programs 2027**, and **Summer Programs 2027** cards.
+- Show each season's overall program window below its label: Winter Jan 9–Apr 1; Spring Apr 3–Jun 24; Summer Jul 3–Aug 29, 2027. These are season-wide ranges; individual cohort start/end dates differ and must be shown accurately in each cohort's details.
+- Link each season card to its corresponding section of `/programs-2027` (`#winter`, `#spring`, `#summer`), where parents can view cohort schedules, tuition tiers, discount deadlines and enrollment options.
+
+## Cohort-specific waitlists (approved for future implementation)
+- Each of the 12 cohorts has its own capacity of 12 **confirmed** students and a separate waitlist; inquiries and waitlist entries do not occupy seats.
+- When a cohort reaches 12 confirmed seats, replace its enrollment call to action with **Class Full · Join Waitlist**; joining the waitlist is free and does not guarantee a seat.
+- Prevent duplicate active enrollment/waitlist entries, ensure concurrency-safe capacity checks, and protect family information.
+- When a seat becomes available, notify the administrator to offer it to the next eligible waitlisted family. Offer expiration, notification mechanics and deposit/payment interaction remain to be approved before implementation.
+- Existing `docs/seat-availability-plan.md` is an older proposal; this November 8 approval supersedes conflicting business rules but does **not** authorize a database migration or live implementation.
 
 ## Teaching and enrollment safeguards
 - Approved maximum class size: 12 students per cohort (owner confirmation November 6, 2026).
