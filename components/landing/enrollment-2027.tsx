@@ -4,6 +4,7 @@ import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
 import {
   EARLY_DAYS_AFTER_FOUNDING,
+  EARLY_DAYS_BEFORE_SPRING_SUMMER,
   FOUNDING_DAYS_BEFORE,
   FOUNDING_SEATS_PER_COHORT,
   HOURLY_RATE,
@@ -87,7 +88,7 @@ export function Enrollment2027({ showIntensive }: { showIntensive: boolean }) {
                   {term.deadlines.map((d) => (
                     <div key={d.group} className="flex flex-col">
                       <dt className="font-bold text-navy">{d.group}</dt>
-                      <dd>Founding-family payment deadline: {d.foundingShort}</dd>
+                      {d.foundingShort && <dd>Founding-family payment deadline: {d.foundingShort}</dd>}
                       <dd>Early-payment deadline: {d.earlyShort}</dd>
                     </div>
                   ))}
@@ -117,8 +118,8 @@ export function Enrollment2027({ showIntensive }: { showIntensive: boolean }) {
             </div>
             <ul className="flex flex-col border-t border-white/20">
               {[
-                { label: "Founding-Family", value: "25% off", note: `First ${FOUNDING_SEATS_PER_COHORT} fully paid seats per cohort, paid in full ${FOUNDING_DAYS_BEFORE} days before the first class` },
-                { label: "Early Full Payment", value: "10% off", note: `Paid in full by the cohort’s early-payment deadline, ${EARLY_DAYS_AFTER_FOUNDING} days after its founding-family deadline` },
+                { label: "Founding-Family (Winter 2027 only)", value: "25% off", note: `First ${FOUNDING_SEATS_PER_COHORT} fully paid seats per Winter cohort, paid in full ${FOUNDING_DAYS_BEFORE} days before the first class` },
+                { label: "Early Full Payment", value: "10% off", note: `Winter: ${EARLY_DAYS_AFTER_FOUNDING} days after the founding-family deadline. Spring and Summer: ${EARLY_DAYS_BEFORE_SPRING_SUMMER} days before the first class` },
                 { label: "Regular Tuition", value: "Full rate", note: "Paid in full before the student’s first scheduled class" },
               ].map((t) => (
                 <li key={t.label} className="flex flex-col gap-1 border-b border-white/20 py-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">

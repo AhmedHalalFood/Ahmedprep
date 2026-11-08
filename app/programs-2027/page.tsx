@@ -2,23 +2,23 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowDown, ArrowUpRight } from "lucide-react"
 import {
+  DEADLINE_TIME_LABEL,
   EARLY_DAYS_AFTER_FOUNDING,
+  EARLY_DAYS_BEFORE_SPRING_SUMMER,
   FOUNDING_SEATS_PER_COHORT,
   MAX_CLASS_SIZE,
   TERMS_2027,
-  cohortInquiryHref,
   cohortSchedule,
   cohortSpan,
-  deadlinesFor,
   dollars,
-  formatDeadline,
   formatLongDate,
   formatShortDate,
-  priceFor,
   termSummary,
+  tuitionOptionsFor,
   type Cohort,
   type ProgramId,
 } from "@/lib/cohorts-2027"
+import { WAITLIST_DISCLAIMER, enrollActionFor, isCohortFull } from "@/lib/cohort-capacity"
 import { getProgram } from "@/lib/programs"
 import { absoluteUrl } from "@/lib/seo"
 
@@ -33,7 +33,8 @@ const PROGRAM_PAGE: Record<ProgramId, string> = { SHSAT: "/shsat", "Digital SAT"
 
 const SECONDARY_OPTIONS = (["free_diagnostic", "free_sunday", "private_tutoring"] as const).map((id) => getProgram(id)!)
 
-export default function Programs2027Page() {
+export default async function Programs2027Page({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+  const previewFull = (await searchParams).previewFull === "1"
   return (
     <div className="bg-warm">
       <section aria-labelledby="programs-2027-title" className="px-5 pb-10 pt-10 sm:pt-14">
@@ -75,9 +76,10 @@ export default function Programs2027Page() {
             </ul>
           </nav>
           <p className="max-w-3xl text-sm leading-relaxed text-subtle">
-            Founding-family tuition is limited to the first {FOUNDING_SEATS_PER_COHORT} fully paid enrollments per cohort, paid by the founding-family
-            deadline. Early-payment tuition (10% off) requires full payment by the early-payment deadline, {EARLY_DAYS_AFTER_FOUNDING} days later.
-            Discounts do not stack.
+            Winter 2027 only: founding-family tuition is limited to the first {FOUNDING_SEATS_PER_COHORT} fully paid enrollments per cohort, paid
+            by the founding-family deadline, while seats remain. Early-payment tuition (10% off) requires full payment by the cohort&apos;s
+            early-payment deadline: for Winter, {EARLY_DAYS_AFTER_FOUNDING} days after the founding-family deadline; for Spring and Summer,{" "}
+            {EARLY_DAYS_BEFORE_SPRING_SUMMER} days before the first class. All deadlines end at {DEADLINE_TIME_LABEL}. Discounts do not stack.
           </p>
         </div>
       </section>
@@ -90,7 +92,7 @@ export default function Programs2027Page() {
             </h2>
             <ul className="grid gap-4 md:grid-cols-2">
               {term.cohorts.map((cohort) => (
-                <CohortCard key={cohort.id} cohort={cohort} termName={term.name} />
+                <CohortCard key={cohort.id} cohort={cohort} termName={term.name} full={isCohortFull(cohort.id, { previewFull })} />
               ))}
             </ul>
           </div>
@@ -132,10 +134,10 @@ export default function Programs2027Page() {
   )
 }
 
-function CohortCard({ cohort, termName }: { cohort: Cohort; termName: string }) {
-  const price = priceFor(cohort)
+function CohortCard({ cohort, termName, full }: { cohort: Cohort; termName: string; full: boolean }) {
   const span = cohortSpan(cohort)
-  const d = deadlinesFor(cohort)
+  const options = tuitionOptionsFor(cohort)
+  const action = enrollActionFor(cohort, full)
   return (
     <li className="flex flex-col gap-3 border border-line border-t-4 border-t-brand bg-white p-5">
       <div className="flex flex-col gap-1">
@@ -154,29 +156,26 @@ function CohortCard({ cohort, termName }: { cohort: Cohort; termName: string }) 
         </p>
       </div>
       <dl className="flex flex-col border-t border-line text-sm">
-        <div className="flex items-baseline justify-between gap-3 border-b border-line py-2">
-          <dt className="text-ink">Regular tuition</dt>
-          <dd className="font-extrabold text-navy">{dollars(price.regular)}</dd>
-        </div>
-        <div className="flex items-baseline justify-between gap-3 border-b border-line py-2">
-          <dt className="flex flex-col text-ink">
-            Founding-family tuition
-            <span className="text-xs text-subtle">Pay in full by {formatDeadline(d.foundingIso)}</span>
-          </dt>
-          <dd className="font-extrabold text-navy">{dollars(price.founding)}</dd>
-        </div>
-        <div className="flex items-baseline justify-between gap-3 border-b border-line py-2">
-          <dt className="flex flex-col text-ink">
-            Early-payment tuition
-            <span className="text-xs text-subtle">Pay in full by {formatDeadline(d.earlyIso)}</span>
-          </dt>
-          <dd className="font-extrabold text-navy">{dollars(price.early)}</dd>
-        </div>
+        {[...options].reverse().map((option) => (
+          <div key={option.id} className="flex items-baseline justify-between gap-3 border-b border-line py-2">
+            <dt className="flex flex-col text-ink">
+              {option.label}
+              {option.id !== "regular" ? <span className="text-xs text-subtle">{option.condition}</span> : null}
+            </dt>
+            <dd className="font-extrabold text-navy">{dollars(option.amount)}</dd>
+          </div>
+        ))}
       </dl>
-      <Link href={cohortInquiryHref(cohort)} className="button button-gold mt-auto min-h-11 justify-center uppercase">
-        Enroll<span className="sr-only">
+      {full ? <p className="text-sm font-semibold text-ink">This class is full. {WAITLIST_DISCLAIMER}</p> : null}
+      <Link
+        href={action.href}
+        data-cohort-id={cohort.id}
+        className={`button mt-auto min-h-11 justify-center uppercase ${full ? "button-outline" : "button-gold"}`}
+      >
+        {action.label}
+        <span className="sr-only">
           {" "}
-          in {termName} {cohort.program} {cohort.label}
+          {full ? "for" : "in"} {termName} {cohort.program} {cohort.label}
         </span>{" "}
         <ArrowUpRight size={16} aria-hidden="true" />
       </Link>

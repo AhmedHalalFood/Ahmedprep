@@ -54,6 +54,8 @@ export function leadIdempotencyKey(formType: LeadFormType, submissionId: string,
   return sha256(`${formType}|${clientId}|${contentHash}`)
 }
 
+export const identityIdempotencyKey = (formType: LeadFormType, identity: string) => sha256(`${formType}|identity|${identity}`)
+
 /**
  * Saves the submission, or finds the one already saved under the same key. The original row is never overwritten.
  * Returns "deliver" only to the one request that holds the delivery lease and only while AhmedPrep has not been
@@ -191,6 +193,7 @@ export async function saveAndDeliverLead({
   record,
   email,
   failureAlertNoteFor,
+  identity,
 }: {
   formType: LeadFormType
   submissionId: unknown
@@ -198,8 +201,12 @@ export async function saveAndDeliverLead({
   email: Omit<LeadEmail, "dedupeKey" | "onDelivery" | "persisted">
   /** Admin-only note (e.g. a signed resend link) for the stored row, added to delivery-failure alerts. */
   failureAlertNoteFor?: (leadId: number) => string | undefined
+  /** When set, the row is keyed by this identity alone (e.g. one waitlist entry per email per cohort). */
+  identity?: string
 }) {
-  const idempotencyKey = leadIdempotencyKey(formType, clean(submissionId, 64), record.payload)
+  const idempotencyKey = identity
+    ? identityIdempotencyKey(formType, identity)
+    : leadIdempotencyKey(formType, clean(submissionId, 64), record.payload)
   const lease = randomUUID()
 
   let claim: Claim

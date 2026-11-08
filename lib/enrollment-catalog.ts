@@ -146,6 +146,8 @@ export function deadlinesForClass(classId: string): ClassDeadlines | null {
   const cohort = findCohort(COHORT_2027_FOR_CLASS[classId] ?? "")
   if (!cohort) return null
   const { foundingIso, earlyIso } = deadlinesFor(cohort)
+  // The (inactive) checkout catalog sells Winter tuition only; Spring/Summer have no founding option and stay closed here.
+  if (!foundingIso) return null
   return { founding: toDeadline(foundingIso), early: toDeadline(earlyIso) }
 }
 
