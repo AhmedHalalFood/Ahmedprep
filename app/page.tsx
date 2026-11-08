@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Image from "next/image"
-import { ArrowRight, ArrowUpRight, Sparkle } from "lucide-react"
+import { ArrowRight, ArrowUpRight, Leaf, type LucideIcon, Snowflake, Sparkle, Sun } from "lucide-react"
+import { TERMS_2027, type TermId, termSummary } from "@/lib/cohorts-2027"
 import { DiagnosticSection } from "@/components/landing/diagnostic-section"
 import { ProgramsPreview } from "@/components/landing/programs-preview"
 import { ReviewInvite } from "@/components/landing/review-invite"
@@ -29,11 +30,22 @@ export const metadata: Metadata = {
 // Hourly so the "Next free Sunday class" card rolls over shortly after each Sunday class ends.
 export const revalidate = 3600
 
-const HERO_SEASONS = [
-  { id: "winter", name: "Winter 2027", dates: "January 9 – April 1, 2027", hours: "72 scheduled hours" },
-  { id: "spring", name: "Spring 2027", dates: "April 3 – June 24, 2027", hours: "72 scheduled hours" },
-  { id: "summer", name: "Summer 2027", dates: "July 3 – August 29, 2027", hours: "48–96 scheduled hours by cohort" },
-] as const
+const SEASON_ICONS: Record<TermId, LucideIcon> = { winter: Snowflake, spring: Leaf, summer: Sun }
+
+const longDay = (iso: string) =>
+  new Date(`${iso}T12:00:00Z`).toLocaleDateString("en-US", { timeZone: "UTC", month: "long", day: "numeric" })
+
+const HERO_SEASONS = TERMS_2027.map((term) => {
+  const summary = termSummary(term)
+  const hoursVary = new Set(term.cohorts.map((c) => c.hours)).size > 1
+  return {
+    id: term.id,
+    name: `${term.name} Programs`,
+    dates: `${longDay(summary.startIso)} – ${longDay(summary.endIso)}, ${summary.endIso.slice(0, 4)}`,
+    hours: `${summary.hoursLabel.replace(" hours", "")} scheduled hours${hoursVary ? ", depending on cohort" : ""}`,
+    Icon: SEASON_ICONS[term.id],
+  }
+})
 
 export default async function Home() {
   const showIntensive = await intensiveSitewidePromoActive()
@@ -63,7 +75,14 @@ export default async function Home() {
             <ul className="hero-seasons">
               {HERO_SEASONS.map((season) => (
                 <li key={season.id}>
-                  <a href={`/programs-2027#${season.id}`} className="hero-season-card">
+                  <a
+                    href={`/programs-2027#${season.id}`}
+                    className="hero-season-card"
+                    data-season={season.id}
+                  >
+                    <span className="hero-season-icon" aria-hidden="true">
+                      <season.Icon size={18} strokeWidth={2.2} />
+                    </span>
                     <span className="hero-season-name">{season.name}</span>
                     <span className="hero-season-dates">{season.dates}</span>
                     <span className="hero-season-hours">{season.hours}</span>
