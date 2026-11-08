@@ -53,8 +53,11 @@ export type Term = {
   id: TermId
   name: string
   cohorts: readonly Cohort[]
-  /** One row per deadline group. `founding`/`early` are "November 28, 2026"; the *Short forms are "Sat, Nov 28, 2026". */
-  deadlines: readonly { group: string; founding: string; early: string; foundingShort: string; earlyShort: string }[]
+  /**
+   * One row per deadline group. `founding`/`early` are "November 28, 2026"; the *Short forms are "Sat, Nov 28, 2026".
+   * `founding` is null outside Winter, where founding-family tuition is not offered.
+   */
+  deadlines: readonly { group: string; founding: string | null; early: string; foundingShort: string | null; earlyShort: string }[]
 }
 
 export const HOURLY_RATE = 20
@@ -221,19 +224,37 @@ export function cohortSpan(cohort: Cohort) {
 
 // ---------- Tuition ----------
 
-/** $20 per scheduled instructional hour; early is 10% off, founding-family 25% off. Discounts never combine. */
-export const priceFor = (cohort: Pick<Cohort, "hours">) => {
+/** Owner-approved: Spring and Summer early payment closes 28 calendar days before the first scheduled class. */
+export const EARLY_DAYS_BEFORE_SPRING_SUMMER = 28
+export const DEADLINE_TIME_LABEL = "11:59:59 PM ET"
+
+/** Founding-family tuition is offered for Winter 2027 cohorts only. */
+export const foundingEligible = (cohort: Pick<Cohort, "term">) => cohort.term === "winter"
+
+/**
+ * $20 per scheduled instructional hour; early is 10% off. Founding-family (25% off) exists for Winter only, so it is
+ * null for Spring and Summer. Discounts never combine.
+ */
+export const priceFor = (cohort: Pick<Cohort, "hours" | "term">) => {
   const regular = cohort.hours * HOURLY_RATE
-  return { regular, early: Math.round(regular * 0.9), founding: Math.round(regular * 0.75) }
+  return {
+    regular,
+    early: Math.round(regular * 0.9),
+    founding: foundingEligible(cohort) ? Math.round(regular * 0.75) : null,
+  }
 }
 
 /**
- * Final full-payment deadlines (each ends 11:59:59 PM ET on the date). Founding-family is counted back from the first
- * scheduled class; early payment closes 21 calendar days after the founding-family deadline.
+ * Final full-payment deadlines (each ends 11:59:59 PM ET on the date).
+ * Winter (unchanged, approved): founding-family 42 days before the first class, early payment 21 days after that.
+ * Spring and Summer: no founding-family deadline; early payment 28 days before the first class.
  */
-export const deadlinesFor = (cohort: Pick<Cohort, "firstIso">) => {
-  const foundingIso = addDays(cohort.firstIso, -FOUNDING_DAYS_BEFORE)
-  return { foundingIso, earlyIso: addDays(foundingIso, EARLY_DAYS_AFTER_FOUNDING) }
+export const deadlinesFor = (cohort: Pick<Cohort, "firstIso" | "term">) => {
+  if (foundingEligible(cohort)) {
+    const foundingIso = addDays(cohort.firstIso, -FOUNDING_DAYS_BEFORE)
+    return { foundingIso: foundingIso as string | null, earlyIso: addDays(foundingIso, EARLY_DAYS_AFTER_FOUNDING) }
+  }
+  return { foundingIso: null as string | null, earlyIso: addDays(cohort.firstIso, -EARLY_DAYS_BEFORE_SPRING_SUMMER) }
 }
 
 /** "Sat, Nov 28, 2026" */
@@ -253,9 +274,9 @@ export const TERMS_2027: readonly Term[] = TERM_IDS.map((id) => {
     const { foundingIso, earlyIso } = deadlinesFor(c)
     groups.set(groupName(c), {
       group: groupName(c),
-      founding: formatDate(foundingIso),
+      founding: foundingIso ? formatDate(foundingIso) : null,
       early: formatDate(earlyIso),
-      foundingShort: formatDeadline(foundingIso),
+      foundingShort: foundingIso ? formatDeadline(foundingIso) : null,
       earlyShort: formatDeadline(earlyIso),
     })
   }
@@ -294,7 +315,38 @@ export function termSummary(term: Term) {
     endIso: spans.map((s) => s.endIso).sort().at(-1)!,
     hoursLabel: range(hours, String) + " hours",
     regularLabel: range(regular, dollars),
-    firstFoundingIso: deadlines.map((d) => d.foundingIso).sort()[0],
+    firstFoundingIso: deadlines.flatMap((d) => (d.foundingIso ? [d.foundingIso] : [])).sort()[0] ?? null,
     firstEarlyIso: deadlines.map((d) => d.earlyIso).sort()[0],
   }
+}
+
+/** "Jan 9 – Apr 1, 2027" style range for a season label. */
+export const formatRange = (startIso: string, endIso: string) => {
+  const md = (iso: string) => toDate(iso).toLocaleDateString("en-US", { timeZone: "UTC", month: "short", day: "numeric" })
+  return `${md(startIso)} – ${md(endIso)}, ${endIso.slice(0, 4)}`
+}
+
+/** The tuition options a family may be offered for one cohort, in display order. Founding appears for Winter only. */
+export function tuitionOptionsFor(cohort: Cohort) {
+  const price = priceFor(cohort)
+  const d = deadlinesFor(cohort)
+  const options: { id: "founding" | "early" | "regular"; label: string; amount: number; condition: string }[] = []
+  if (price.founding !== null && d.foundingIso) {
+    options.push({
+      id: "founding",
+      label: "Founding-family tuition",
+      amount: price.founding,
+      condition: `First ${FOUNDING_SEATS_PER_COHORT} fully paid enrollments in this cohort, paid in full by ${formatDate(d.foundingIso)} at ${DEADLINE_TIME_LABEL}, while founding-family seats remain.`,
+    })
+  }
+  options.push(
+    {
+      id: "early",
+      label: "Early-payment tuition",
+      amount: price.early,
+      condition: `10% off when paid in full by ${formatDate(d.earlyIso)} at ${DEADLINE_TIME_LABEL}.`,
+    },
+    { id: "regular", label: "Regular tuition", amount: price.regular, condition: "Paid in full before the first scheduled class." },
+  )
+  return options
 }

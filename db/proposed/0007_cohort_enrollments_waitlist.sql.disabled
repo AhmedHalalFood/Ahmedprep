@@ -1,0 +1,52 @@
+-- Confirmed cohort enrollments and per-cohort waitlists for the 12 cohorts of 2027 (12 students each).
+-- NOT YET APPLIED. Requires the owner's approval before `pnpm db:migrate` is run against any database.
+-- The `.disabled` suffix keeps scripts/migrate.mjs from picking this file up.
+--
+-- Additive only and safe to re-run. No existing table, row, column, constraint or index is changed.
+-- Free inquiries stay in lead_submissions and are never counted as enrollments. Only rows in cohort_enrollments with
+-- status = 'confirmed_paid' count toward the 12-seat capacity. Nothing here charges or enrolls a family automatically.
+
+-- Confirmed, fully paid enrollments. Entered by AhmedPrep after payment is verified, never by the public form.
+CREATE TABLE IF NOT EXISTS cohort_enrollments (
+  id bigserial PRIMARY KEY,
+  cohort_id text NOT NULL,
+  student_name text NOT NULL,
+  parent_email text NOT NULL,
+  status text NOT NULL DEFAULT 'confirmed_paid'
+    CHECK (status IN ('confirmed_paid', 'withdrawn', 'refunded')),
+  tuition_tier text NOT NULL CHECK (tuition_tier IN ('regular', 'early', 'founding')),
+  amount_paid_cents integer NOT NULL CHECK (amount_paid_cents > 0),
+  paid_at timestamptz NOT NULL,
+  source_lead_id bigint REFERENCES lead_submissions (id),
+  created_at timestamptz NOT NULL DEFAULT now(),
+  -- Founding-family pricing exists for Winter 2027 cohorts only.
+  CHECK (tuition_tier <> 'founding' OR cohort_id LIKE 'winter-%')
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS cohort_enrollments_one_per_student
+  ON cohort_enrollments (cohort_id, lower(parent_email), lower(student_name))
+  WHERE status = 'confirmed_paid';
+
+CREATE INDEX IF NOT EXISTS cohort_enrollments_seats
+  ON cohort_enrollments (cohort_id) WHERE status = 'confirmed_paid';
+
+-- One independent waitlist per cohort. Queue order is the original request time and is never rewritten.
+CREATE TABLE IF NOT EXISTS cohort_waitlist (
+  id bigserial PRIMARY KEY,
+  cohort_id text NOT NULL,
+  lead_submission_id bigint NOT NULL REFERENCES lead_submissions (id),
+  parent_email text NOT NULL,
+  student_name text NOT NULL,
+  requested_at timestamptz NOT NULL DEFAULT now(),
+  status text NOT NULL DEFAULT 'waiting'
+    CHECK (status IN ('waiting', 'offered', 'accepted', 'declined', 'removed')),
+  status_updated_at timestamptz
+);
+
+-- Prevents duplicate entries for the same student in the same cohort while they are still in the queue.
+CREATE UNIQUE INDEX IF NOT EXISTS cohort_waitlist_one_active_entry
+  ON cohort_waitlist (cohort_id, lower(parent_email), lower(student_name))
+  WHERE status IN ('waiting', 'offered');
+
+CREATE INDEX IF NOT EXISTS cohort_waitlist_queue
+  ON cohort_waitlist (cohort_id, requested_at, id);

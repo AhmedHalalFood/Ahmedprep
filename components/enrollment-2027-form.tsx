@@ -12,18 +12,18 @@ import {
   cohortSchedule,
   cohortSpan,
   cohortsFor,
-  deadlinesFor,
   dollars,
   findCohort,
-  formatDate,
   formatShortDate,
   isProgramId,
   isTermId,
   priceFor,
   termName,
+  tuitionOptionsFor,
 } from "@/lib/cohorts-2027"
+import { WAITLIST_DISCLAIMER } from "@/lib/cohort-capacity"
 import { ENROLLMENT_DISCLAIMER, FOUNDING_INTEREST_OPTIONS, GRADES_2027, inquiryReceivedMessage } from "@/lib/enrollment-2027"
-import { inquiryName, resolveSelection, selectionLabel } from "@/lib/enrollment-2027-inquiry"
+import { foundingQuestionApplies, inquiryName, resolveSelection, selectionLabel } from "@/lib/enrollment-2027-inquiry"
 
 type InquiryData = {
   parentName: string
@@ -36,6 +36,8 @@ type InquiryData = {
   cohortId: string
   foundingInterest: string
   message: string
+  intent: string
+  previewFull: string
 }
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -46,7 +48,7 @@ const PROGRAM_DETAIL: Record<string, string> = {
   "Digital SAT": "College admissions test preparation",
 }
 
-export type Enrollment2027Preset = { program?: string; term?: string; cohortId?: string }
+export type Enrollment2027Preset = { program?: string; term?: string; cohortId?: string; waitlist?: boolean; previewFull?: boolean }
 
 /** Turns ?program=&term=&cohort= into a consistent preset; anything that doesn't match the catalog is dropped. */
 export function presetFrom(input: Enrollment2027Preset): Pick<InquiryData, "program" | "term" | "cohortId"> {
@@ -70,7 +72,7 @@ function validate(d: InquiryData) {
   if (!d.term) errors.term = "Please choose a term."
   if (!d.cohortId) errors.cohortId = "Please choose a cohort."
   else if (!resolveSelection(d)) errors.cohortId = "Please choose a cohort for this program and term."
-  if (!d.foundingInterest) errors.foundingInterest = "Please let us know about founding-family tuition."
+  if (isTermId(d.term) && foundingQuestionApplies(d.term) && !d.foundingInterest) errors.foundingInterest = "Please let us know about founding-family tuition."
   return errors
 }
 
@@ -145,6 +147,9 @@ function Placeholder({ label, text, error }: { label: string; text: string; erro
 
 export function Enrollment2027Form({ preset = {} }: { preset?: Enrollment2027Preset }) {
   const [submitted, setSubmitted] = useState<InquiryData | null>(null)
+  const initialSelection = presetFrom(preset)
+  // Waitlist mode needs an exact cohort; the server separately confirms that cohort is full before accepting it.
+  const waitlist = Boolean(preset.waitlist && initialSelection.cohortId)
   const { data, errors, status, serverResult, update, submit, formRef, honeypotRef } = useLeadForm({
     endpoint: "/api/enrollment-2027",
     initial: {
@@ -153,9 +158,11 @@ export function Enrollment2027Form({ preset = {} }: { preset?: Enrollment2027Pre
       phone: "",
       studentName: "",
       studentGrade: "",
-      ...presetFrom(preset),
+      ...initialSelection,
       foundingInterest: "",
       message: "",
+      intent: waitlist ? "waitlist" : "inquiry",
+      previewFull: waitlist && preset.previewFull ? "1" : "",
     },
     validate,
     onSuccess: (sent) => {
@@ -165,7 +172,7 @@ export function Enrollment2027Form({ preset = {} }: { preset?: Enrollment2027Pre
         program: sent.program,
         term: sent.term,
         cohort: sent.cohortId,
-        lead_stage: "inquiry_submit",
+        lead_stage: sent.intent === "waitlist" ? "waitlist_submit" : "inquiry_submit",
       })
     },
   })
@@ -183,15 +190,21 @@ export function Enrollment2027Form({ preset = {} }: { preset?: Enrollment2027Pre
 
   if (status === "success" && submitted) {
     const selection = resolveSelection(submitted)
+    const sentWaitlist = submitted.intent === "waitlist"
     const received = inquiryReceivedMessage(
       serverResult,
       submitted.parentName,
       submitted.email,
-      selection ? inquiryName(selection) : undefined,
+      selection ? (sentWaitlist ? `${selectionLabel(selection)} waitlist` : inquiryName(selection)) : undefined,
     )
+    const summary: [string, string][] = [
+      ["Student", `${submitted.studentName} (${submitted.studentGrade})`],
+      ["Cohort", selection ? selectionLabel(selection) : submitted.cohortId],
+    ]
+    if (submitted.foundingInterest) summary.push(["Founding-family tuition", submitted.foundingInterest])
     return (
       <div role="status" className="border-t-4 border-gold pt-5">
-        <p className="eyebrow blue">Inquiry received</p>
+        <p className="eyebrow blue">{sentWaitlist ? "Waitlist request received" : "Inquiry received"}</p>
         <p className="mt-3 text-pretty text-lg font-extrabold leading-snug text-navy">{received.text}</p>
         {!received.confirmed && (
           <p className="mt-3 text-sm leading-relaxed text-navy">
@@ -207,26 +220,21 @@ export function Enrollment2027Form({ preset = {} }: { preset?: Enrollment2027Pre
           </p>
         )}
         <dl className="mt-4 flex flex-col gap-2 border-l-4 border-brand bg-brand-soft px-4 py-3 text-sm text-navy">
-          {(
-            [
-              ["Student", `${submitted.studentName} (${submitted.studentGrade})`],
-              ["Cohort", selection ? selectionLabel(selection) : submitted.cohortId],
-              ["Founding-family tuition", submitted.foundingInterest],
-            ] as const
-          ).map(([term, value]) => (
+          {summary.map(([term, value]) => (
             <div key={term} className="flex flex-col">
               <dt className="font-bold">{term}</dt>
               <dd>{value}</dd>
             </div>
           ))}
         </dl>
-        <p className="mt-4 text-sm leading-relaxed text-subtle">{ENROLLMENT_DISCLAIMER}</p>
+        <p className="mt-4 text-sm leading-relaxed text-subtle">{sentWaitlist ? WAITLIST_DISCLAIMER : ENROLLMENT_DISCLAIMER}</p>
       </div>
     )
   }
 
-  const chosenPrice = chosen ? priceFor(chosen) : null
-  const chosenDeadlines = chosen ? deadlinesFor(chosen) : null
+  const tuitionOptions = chosen ? tuitionOptionsFor(chosen) : []
+  const askFounding = isTermId(data.term) && foundingQuestionApplies(data.term)
+  const isWaitlist = data.intent === "waitlist"
 
   return (
     <form
@@ -270,6 +278,7 @@ export function Enrollment2027Form({ preset = {} }: { preset?: Enrollment2027Pre
           onChange={(v) => {
             update("term", v)
             update("cohortId", "")
+            if (!(isTermId(v) && foundingQuestionApplies(v))) update("foundingInterest", "")
           }}
           options={TERMS_2027.map((t) => {
             const starts = cohortsFor(data.program, t.id).map((c) => c.firstIso).sort()
@@ -308,31 +317,30 @@ export function Enrollment2027Form({ preset = {} }: { preset?: Enrollment2027Pre
         />
       )}
 
-      {chosen && chosenPrice && chosenDeadlines && (
+      {chosen && (
         <div aria-live="polite" className="border border-line bg-cream px-4 py-3 text-sm leading-relaxed text-navy">
           <p className="font-bold">Tuition for this cohort ({chosen.hours} hours at $20 per hour)</p>
           <ul className="mt-1 flex flex-col gap-1">
-            <li>Regular: {dollars(chosenPrice.regular)}, paid in full before the first class.</li>
-            <li>
-              Early full payment: {dollars(chosenPrice.early)} (10% off) if paid in full by {formatDate(chosenDeadlines.earlyIso)}.
-            </li>
-            <li>
-              Founding-family: {dollars(chosenPrice.founding)} (25% off) for the first 5 fully paid enrollments in this cohort, if paid in
-              full by {formatDate(chosenDeadlines.foundingIso)}.
-            </li>
+            {tuitionOptions.map((option) => (
+              <li key={option.id}>
+                {option.label}: {dollars(option.amount)}, {option.condition.charAt(0).toLowerCase() + option.condition.slice(1)}
+              </li>
+            ))}
             <li>Discounts cannot be combined.</li>
           </ul>
         </div>
       )}
 
-      <SelectField
-        label="Interested in Founding-Family Tuition?"
-        required
-        placeholder="Select an option"
-        options={[...FOUNDING_INTEREST_OPTIONS]}
-        hint="25% off for the first 5 fully paid enrollments in each cohort, while seats remain."
-        {...field("foundingInterest")}
-      />
+      {askFounding && (
+        <SelectField
+          label="Interested in Founding-Family Tuition?"
+          required
+          placeholder="Select an option"
+          options={[...FOUNDING_INTEREST_OPTIONS]}
+          hint="Winter 2027 only: 25% off for the first 5 fully paid enrollments in each cohort, while seats remain."
+          {...field("foundingInterest")}
+        />
+      )}
 
       <TextAreaField
         label="Comments"
@@ -340,7 +348,9 @@ export function Enrollment2027Form({ preset = {} }: { preset?: Enrollment2027Pre
         {...field("message")}
       />
 
-      <p className="border-l-4 border-gold bg-cream px-4 py-3 text-sm leading-relaxed text-navy">{ENROLLMENT_DISCLAIMER}</p>
+      <p className="border-l-4 border-gold bg-cream px-4 py-3 text-sm leading-relaxed text-navy">
+        {isWaitlist ? WAITLIST_DISCLAIMER : ENROLLMENT_DISCLAIMER}
+      </p>
 
       {status === "error" && (
         <p role="alert" className="border-l-4 border-error bg-error-soft px-4 py-3 text-sm text-error">
@@ -353,7 +363,7 @@ export function Enrollment2027Form({ preset = {} }: { preset?: Enrollment2027Pre
       )}
 
       <SubmitButton submitting={status === "submitting"}>
-        Request Enrollment Information <ArrowRight size={17} aria-hidden="true" />
+        {isWaitlist ? "Join Waitlist" : "Request Enrollment Information"} <ArrowRight size={17} aria-hidden="true" />
       </SubmitButton>
     </form>
   )

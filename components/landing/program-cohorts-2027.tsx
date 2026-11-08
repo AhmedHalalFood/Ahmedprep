@@ -74,7 +74,10 @@ export function ProgramCohorts2027({ program }: { program: ProgramId }) {
                       </span>
                       <span className="text-sm text-ink">
                         <span className="font-bold">{dollars(price.regular)}</span> regular · {dollars(price.early)} by{" "}
-                        {formatShortDate(d.earlyIso)} · {dollars(price.founding)} founding by {formatShortDate(d.foundingIso)}
+                        {formatShortDate(d.earlyIso)}
+                        {price.founding !== null && d.foundingIso
+                          ? ` · ${dollars(price.founding)} founding-family by ${formatShortDate(d.foundingIso)}`
+                          : null}
                       </span>
                       <Link
                         href={cohortInquiryHref(c)}

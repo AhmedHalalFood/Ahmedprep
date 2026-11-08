@@ -3,11 +3,14 @@ import { MapPin } from "lucide-react"
 import Link from "next/link"
 import { ClassCards } from "@/components/enroll-2027/class-cards"
 import { EnrollmentSteps } from "@/components/enroll-2027/enrollment-steps"
+import { SelectedCohortSummary } from "@/components/enroll-2027/selected-cohort"
+import { TERM_IDS, cohortTitle, findCohort, termName } from "@/lib/cohorts-2027"
 import { TuitionOptions } from "@/components/enroll-2027/tuition-options"
 import { Enrollment2027Form } from "@/components/enrollment-2027-form"
 import { Faq, type FaqItem } from "@/components/landing/faq"
 import { Breadcrumbs } from "@/components/landing/primitives"
 import { ADDRESS_LINE_1, ADDRESS_LINE_2 } from "@/lib/business"
+import { isCohortFull } from "@/lib/cohort-capacity"
 import { ENROLLMENT_2027 } from "@/lib/enrollment-2027"
 import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 
@@ -49,28 +52,100 @@ const first = (value: string | string[] | undefined) => (Array.isArray(value) ? 
 
 export default async function Enroll2027Page({ searchParams }: Props) {
   const params = await searchParams
-  const preset = { program: first(params.program), term: first(params.term), cohortId: first(params.cohort) }
+  const cohortParam = first(params.cohort)
+  const previewFull = first(params.previewFull) === "1"
+  const preset = {
+    program: first(params.program),
+    term: first(params.term),
+    cohortId: cohortParam,
+    // Only an exact cohort that is actually full (or preview-full off production) opens the form in waitlist mode.
+    waitlist: first(params.intent) === "waitlist" && Boolean(cohortParam) && isCohortFull(cohortParam ?? "", { previewFull }),
+    previewFull,
+  }
   const E = ENROLLMENT_2027
+  const selected = cohortParam ? findCohort(cohortParam) : undefined
+  const unknownCohort = Boolean(cohortParam) && !selected
   const facts = [
     { term: "Programs", value: "SHSAT & Digital SAT" },
-    { term: "Length", value: `${E.weeks} weeks · ${E.hoursLabel}` },
+    { term: "Seasons", value: "Winter · Spring · Summer 2027" },
     { term: "Class size", value: `Max ${E.maxClassSize} students` },
   ]
 
+  const inquirySection = (
+    <section aria-labelledby="inquiry-heading" className="scroll-mt-4 bg-white px-5 py-10 sm:py-14" id="inquiry-form">
+      <div className="mx-auto flex max-w-3xl flex-col gap-6">
+        <div className="flex flex-col gap-2">
+          <p className="eyebrow blue">{preset.waitlist ? "Waitlist" : "Step 1"}</p>
+          <h2 id="inquiry-heading" className="text-balance text-2xl font-extrabold tracking-tight text-navy sm:text-3xl">
+            {preset.waitlist ? "Join this cohort's waitlist" : "Free enrollment inquiry"}
+          </h2>
+          <p className="text-pretty leading-relaxed text-subtle">
+            No payment is taken here. We&apos;ll contact you to confirm availability and send payment instructions.
+          </p>
+        </div>
+        {unknownCohort && (
+          <p role="alert" className="border-l-4 border-gold bg-cream p-4 text-sm font-semibold leading-relaxed text-navy">
+            We couldn&apos;t find that class. Please choose your program, season and cohort below.
+          </p>
+        )}
+        <div className="border border-line bg-white p-5 sm:p-8">
+          <Enrollment2027Form preset={preset} />
+        </div>
+      </div>
+    </section>
+  )
+
+  if (selected) {
+    return (
+      <>
+        <Breadcrumbs items={[{ label: "2027 Enrollment", href: PATH }, { label: cohortTitle(selected), href: `${PATH}?cohort=${selected.id}` }]} />
+
+        <section aria-labelledby="enroll-heading" className="border-b-4 border-gold bg-white px-5 pb-8 pt-8 sm:pt-12">
+          <div className="mx-auto flex max-w-3xl flex-col gap-5">
+            <div className="flex flex-col gap-2">
+              <p className="eyebrow blue">{preset.waitlist ? "Cohort full · Waitlist" : "2027 Enrollment"}</p>
+              <h1 id="enroll-heading" className="text-balance text-3xl font-extrabold leading-tight tracking-tight text-navy sm:text-4xl">
+                {cohortTitle(selected)}
+              </h1>
+              <p className="flex items-start gap-2 text-sm leading-relaxed text-ink">
+                <MapPin size={18} aria-hidden="true" className="mt-0.5 shrink-0 text-brand" />
+                <span>{`${E.location}: ${ADDRESS_LINE_1}, ${ADDRESS_LINE_2}`}</span>
+              </p>
+            </div>
+            <SelectedCohortSummary cohort={selected} />
+            <Link href={`/programs-2027#${selected.term}`} className="inline-flex min-h-11 items-center self-start text-sm font-bold text-brand underline">
+              Compare all {termName(selected.term)} cohorts
+            </Link>
+          </div>
+        </section>
+
+        {inquirySection}
+
+        <div className="bg-warm px-5 py-10 sm:py-14">
+          <div className="mx-auto flex max-w-5xl flex-col gap-12">
+            <EnrollmentSteps />
+          </div>
+        </div>
+
+        <Faq id="attendance-faq" title="Class attendance and holidays" items={ATTENDANCE_FAQS} />
+      </>
+    )
+  }
+
   return (
     <>
-      <Breadcrumbs items={[{ label: "January 2027 Enrollment", href: PATH }]} />
+      <Breadcrumbs items={[{ label: "2027 Enrollment", href: PATH }]} />
 
       <section aria-labelledby="enroll-heading" className="border-b-4 border-gold bg-white px-5 pb-10 pt-10 sm:pt-14">
         <div className="mx-auto flex max-w-5xl flex-col gap-6">
           <div className="flex max-w-2xl flex-col gap-3">
-            <p className="eyebrow blue">{E.eyebrow}</p>
+            <p className="eyebrow blue">2027 Enrollment</p>
             <h1 id="enroll-heading" className="text-balance text-3xl font-extrabold leading-tight tracking-tight text-navy sm:text-5xl">
-              Enroll for January 2027
+              Enroll in 2027 SHSAT &amp; Digital SAT Prep
             </h1>
             <p className="text-pretty text-lg leading-relaxed text-subtle">
-              Small-group SHSAT and Digital SAT preparation in Astoria. Start with a free inquiry and we&apos;ll guide you
-              through the rest.
+              Winter, Spring and Summer 2027 cohorts in Astoria. Start with a free inquiry and we&apos;ll guide you through the
+              rest.
             </p>
           </div>
 
@@ -100,33 +175,29 @@ export default async function Enroll2027Page({ searchParams }: Props) {
 
       <div className="bg-warm px-5 py-10 sm:py-14">
         <div className="mx-auto flex max-w-5xl flex-col gap-12">
-          <div className="border-l-4 border-brand bg-white p-5 text-sm leading-relaxed text-ink">
-            <p className="font-extrabold text-navy">Looking ahead to Spring or Summer 2027?</p>
-            <p className="mt-1">Review all 12 approved SHSAT and Digital SAT cohorts, tuition options, and full-payment deadlines.</p>
-            <Link href="/programs-2027" className="mt-2 inline-block font-bold text-brand underline">View all 2027 class schedules and tuition</Link>
+          <div className="flex flex-col gap-2 border-l-4 border-brand bg-white p-5 text-sm leading-relaxed text-ink">
+            <p className="font-extrabold text-navy">Choose your season</p>
+            <p>The classes and tuition below are for Winter 2027 (January start), the only season with founding-family pricing.</p>
+            <ul className="flex flex-col">
+              {TERM_IDS.map((id) => (
+                <li key={id}>
+                  <Link href={`/programs-2027#${id}`} className="inline-flex min-h-11 items-center font-bold text-brand underline">
+                    {`${termName(id)} cohorts, schedules and tuition`}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
-          <ClassCards />
-          <TuitionOptions />
+          <div className="flex flex-col gap-12">
+            <p className="eyebrow blue">Winter 2027 · January start</p>
+            <ClassCards />
+            <TuitionOptions />
+          </div>
           <EnrollmentSteps />
         </div>
       </div>
 
-      <section aria-labelledby="inquiry-heading" className="scroll-mt-4 bg-white px-5 py-10 sm:py-14" id="inquiry-form">
-        <div className="mx-auto flex max-w-3xl flex-col gap-6">
-          <div className="flex flex-col gap-2">
-            <p className="eyebrow blue">Step 1</p>
-            <h2 id="inquiry-heading" className="text-balance text-2xl font-extrabold tracking-tight text-navy sm:text-3xl">
-              Free enrollment inquiry
-            </h2>
-            <p className="text-pretty leading-relaxed text-subtle">
-              No payment is taken here. We&apos;ll contact you to confirm availability and send payment instructions.
-            </p>
-          </div>
-          <div className="border border-line bg-white p-5 sm:p-8">
-            <Enrollment2027Form preset={preset} />
-          </div>
-        </div>
-      </section>
+      {inquirySection}
 
       <Faq id="attendance-faq" title="Class attendance and holidays" items={ATTENDANCE_FAQS} />
     </>

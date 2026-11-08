@@ -18,17 +18,18 @@ export const ENROLLMENT_2027 = {
   availabilityStatus: "Enrollment inquiries open — Seats limited to 12 per class.",
   tuition: {
     founding: {
-      label: "Founding-Family",
+      label: "Founding-Family (Winter 2027 only)",
       total: "$1,080",
       savingsLabel: "Save $360",
       summary:
-        "Save $360. First 5 fully paid enrollments per class. Full payment by the cohort-specific founding-family deadline (42 days before the first class), or before all 5 founding-family seats are filled, whichever comes first.",
+        "Winter 2027 only. Save $360. First 5 fully paid enrollments per class. Full payment by the cohort-specific founding-family deadline (42 days before the first class), or before all 5 founding-family seats are filled, whichever comes first.",
       points: [
         "Save $360 off regular tuition",
+        "Winter 2027 cohorts only; Spring and Summer 2027 offer Early Full Payment and Regular Tuition",
         "Limited to the first 5 fully paid enrollments per class",
         "Full payment by the cohort-specific deadline: November 28 (weekend SHSAT or Digital SAT), November 30 (weekday SHSAT), or December 1 (weekday Digital SAT), 2026; first five fully paid seats per cohort only",
       ],
-      note: "Limited to the first 5 fully paid enrollments in each class.",
+      note: "Winter 2027 only. Limited to the first 5 fully paid enrollments in each class.",
     },
     early: {
       label: "Early Full Payment",

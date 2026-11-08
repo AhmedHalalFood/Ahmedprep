@@ -8,9 +8,10 @@ import { visiblePrograms } from "@/lib/programs"
 const T = ENROLLMENT_2027.tuition
 
 const TUITION_ROWS = [
-  { label: "Winter & Spring cohorts", hours: 72 },
-  { label: "Summer weekday intensive", hours: 96 },
-  { label: "Summer weekend", hours: 48 },
+  { label: "Winter cohorts", hours: 72, term: "winter" },
+  { label: "Spring cohorts", hours: 72, term: "spring" },
+  { label: "Summer weekday intensive", hours: 96, term: "summer" },
+  { label: "Summer weekend", hours: 48, term: "summer" },
 ] as const
 
 export function ProgramsPreview({ showIntensive }: { showIntensive: boolean }) {
@@ -39,7 +40,8 @@ export function ProgramsPreview({ showIntensive }: { showIntensive: boolean }) {
                     <span className="font-semibold">{row.label}</span>
                     {" — "}
                     {row.hours} hours: <span className="font-extrabold text-navy">{dollars(price.regular)}</span> regular,{" "}
-                    {dollars(price.early)} early payment, {dollars(price.founding)} founding-family
+                    {dollars(price.early)} early payment
+                    {price.founding !== null ? `, ${dollars(price.founding)} founding-family` : null}
                   </li>
                 )
               })}
