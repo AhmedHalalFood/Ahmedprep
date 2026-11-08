@@ -29,6 +29,12 @@ export const metadata: Metadata = {
 // Hourly so the "Next free Sunday class" card rolls over shortly after each Sunday class ends.
 export const revalidate = 3600
 
+const HERO_SEASONS = [
+  { id: "winter", name: "Winter 2027", dates: "January 9 – April 1, 2027", hours: "72 scheduled hours" },
+  { id: "spring", name: "Spring 2027", dates: "April 3 – June 24, 2027", hours: "72 scheduled hours" },
+  { id: "summer", name: "Summer 2027", dates: "July 3 – August 29, 2027", hours: "48–96 scheduled hours by cohort" },
+] as const
+
 export default async function Home() {
   const showIntensive = await intensiveSitewidePromoActive()
   return (
@@ -53,12 +59,22 @@ export default async function Home() {
           <h1 id="hero-title" className="hero-headline">
             SHSAT &amp; Digital SAT Prep
           </h1>
-          <nav aria-label="2027 seasons" className="hero-launch-date">
-            <a href="/programs-2027#winter" className="hero-season-link">Winter Programs 2027</a>
-            <span className="hero-season-sep" aria-hidden="true">•</span>
-            <a href="/programs-2027#spring" className="hero-season-link">Spring Programs 2027</a>
-            <span className="hero-season-sep" aria-hidden="true">•</span>
-            <a href="/programs-2027#summer" className="hero-season-link">Summer Programs 2027</a>
+          <nav aria-label="2027 seasons">
+            <ul className="hero-seasons">
+              {HERO_SEASONS.map((season) => (
+                <li key={season.id}>
+                  <a href={`/programs-2027#${season.id}`} className="hero-season-card">
+                    <span className="hero-season-name">{season.name}</span>
+                    <span className="hero-season-dates">{season.dates}</span>
+                    <span className="hero-season-hours">{season.hours}</span>
+                    <span className="hero-season-cta">
+                      View Programs
+                      <ArrowRight size={14} aria-hidden="true" />
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
           </nav>
           <p className="hero-support">
             Small-group SHSAT and Digital SAT preparation in Astoria, Queens. Math, ELA, and Reading &amp; Writing

@@ -388,47 +388,79 @@ h3 {
   animation: hero-fade-in 0.9s 0.05s ease-out both;
 }
 
-.hero-launch-date {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  column-gap: 0.4em;
-  row-gap: 0.1em;
-  max-width: min(100%, 600px);
-  margin-top: 14px;
-  color: var(--hero-royal);
-  font-size: clamp(1.05rem, 1.9vw, 1.5rem);
-  font-weight: 800;
-  line-height: 1.2;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+.hero-seasons {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  max-width: 720px;
+  margin-top: 18px;
+  list-style: none;
   animation: hero-fade-in 0.9s 0.1s ease-out both;
 }
 
-.hero-season-link {
-  color: inherit;
-  white-space: nowrap;
-  text-decoration: underline;
-  text-decoration-thickness: 0.06em;
-  text-underline-offset: 0.12em;
-  text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
-  border-radius: 4px;
-  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+.hero-season-card {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  height: 100%;
+  padding: 12px 14px 11px;
+  border-top: 3px solid var(--hero-gold);
+  border-radius: 8px;
+  background: var(--hero-navy);
+  color: #ffffff;
+  box-shadow: 0 6px 18px rgba(16, 58, 98, 0.18);
+  transition: background-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.hero-season-link:hover {
-  color: var(--hero-gold);
-  text-decoration-color: currentColor;
+.hero-season-card:hover {
+  background: var(--hero-royal);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(16, 58, 98, 0.24);
 }
 
-.hero-season-link:focus-visible {
+.hero-season-card:focus-visible {
   outline: 3px solid var(--hero-gold);
-  outline-offset: 4px;
-  text-decoration-color: currentColor;
+  outline-offset: 3px;
 }
 
-.hero-season-sep {
-  display: none;
+.hero-season-name {
+  color: var(--hero-gold);
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hero-season-dates {
+  font-size: 0.84rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.hero-season-hours {
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.hero-season-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: auto;
+  padding-top: 8px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.hero-season-card:hover .hero-season-cta svg {
+  transform: translateX(2px);
+}
+
+.hero-season-cta svg {
+  transition: transform 0.15s ease;
 }
 
 .hero-season-year {
@@ -1418,9 +1450,41 @@ a.program-card:hover h3 {
     font-size: clamp(2.1rem, 10vw, 3.4rem);
   }
 
-  .hero-launch-date {
-    font-size: clamp(1rem, 4.6vw, 1.35rem);
-    letter-spacing: 0.04em;
+  .hero-seasons {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .hero-season-card {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "name cta"
+      "dates dates"
+      "hours hours";
+    align-items: center;
+    column-gap: 10px;
+    min-height: 44px;
+    padding: 10px 14px;
+  }
+
+  .hero-season-name {
+    grid-area: name;
+  }
+
+  .hero-season-dates {
+    grid-area: dates;
+  }
+
+  .hero-season-hours {
+    grid-area: hours;
+  }
+
+  .hero-season-cta {
+    grid-area: cta;
+    margin-top: 0;
+    padding-top: 0;
   }
 
   .hero-programs li {
