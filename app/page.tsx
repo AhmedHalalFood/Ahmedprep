@@ -1,16 +1,18 @@
 import type { Metadata } from "next"
 import Image from "next/image"
 import {
-  ArrowRight,
   ArrowUpRight,
   CalendarDays,
+  ChartNoAxesColumn,
   Clock,
+  GraduationCap,
   Leaf,
   List,
   type LucideIcon,
   Snowflake,
   Star,
   Sun,
+  Users,
 } from "lucide-react"
 import { TERMS_2027, type TermId, termSummary } from "@/lib/cohorts-2027"
 import { DiagnosticSection } from "@/components/landing/diagnostic-section"
@@ -51,12 +53,18 @@ const HERO_SEASONS = TERMS_2027.map((term) => {
   const hoursVary = new Set(term.cohorts.map((c) => c.hours)).size > 1
   return {
     id: term.id,
-    name: `${term.name} Programs`,
+    name: term.name,
     dates: `${longDay(summary.startIso)} – ${longDay(summary.endIso)}, ${summary.endIso.slice(0, 4)}`,
     hours: `${summary.hoursLabel.replace(" hours", "")} scheduled hours${hoursVary ? ", depending on cohort" : ""}`,
     Icon: SEASON_ICONS[term.id],
   }
 })
+
+const HERO_TRUST: { title: string; detail: string; Icon: LucideIcon }[] = [
+  { title: "Small Groups", detail: "Maximum 12 students", Icon: Users },
+  { title: "Diagnostic-Based", detail: "Targeted, personalized instruction", Icon: GraduationCap },
+  { title: "Track Progress", detail: "Practice, homework & parent updates", Icon: ChartNoAxesColumn },
+]
 
 export default async function Home() {
   const showIntensive = await intensiveSitewidePromoActive()
@@ -75,11 +83,9 @@ export default async function Home() {
         </div>
         <div className="hero-panel">
           <p className="hero-announce">
-            <span className="hero-stars" aria-hidden="true">
-              <Star size={14} fill="currentColor" strokeWidth={0} />
-              <Star size={14} fill="currentColor" strokeWidth={0} />
-            </span>
+            <Star className="hero-sparkle" size={16} fill="currentColor" strokeWidth={0} aria-hidden="true" />
             AhmedPrep · Astoria, Queens
+            <Star className="hero-sparkle" size={16} fill="currentColor" strokeWidth={0} aria-hidden="true" />
           </p>
           <h1 id="hero-title" className="hero-headline">
             SHSAT &amp; Digital SAT Prep
@@ -89,7 +95,10 @@ export default async function Home() {
             <br className="hero-support-break" />
             Math, ELA, and Reading &amp; Writing instruction. Maximum 12 students per class.
           </p>
-          <nav aria-label="2027 seasons">
+          <nav aria-labelledby="hero-seasons-label" className="hero-seasons-nav">
+            <p id="hero-seasons-label" className="hero-seasons-label">
+              Choose your 2027 program
+            </p>
             <ul className="hero-seasons">
               {HERO_SEASONS.map((season) => (
                 <li key={season.id}>
@@ -100,7 +109,7 @@ export default async function Home() {
                   >
                     <span className="hero-season-head">
                       <span className="hero-season-icon" aria-hidden="true">
-                        <season.Icon size={26} strokeWidth={2.2} />
+                        <season.Icon size={20} strokeWidth={2.2} />
                       </span>
                       <span className="hero-season-name">{season.name}</span>
                     </span>
@@ -114,7 +123,7 @@ export default async function Home() {
                     </span>
                     <span className="hero-season-cta">
                       View Programs
-                      <ArrowRight size={15} aria-hidden="true" />
+                      <ArrowUpRight size={15} aria-hidden="true" />
                     </span>
                   </a>
                 </li>
@@ -129,7 +138,7 @@ export default async function Home() {
               className="button button-lg hero-cta"
             >
               <List size={20} aria-hidden="true" />
-              View Programs &amp; Pricing <ArrowRight size={18} aria-hidden="true" />
+              View Programs &amp; Pricing <ArrowUpRight size={18} aria-hidden="true" />
             </TrackedLink>
             <TrackedLink
               href="/free-diagnostic"
@@ -138,9 +147,20 @@ export default async function Home() {
               className="hero-secondary"
             >
               <CalendarDays size={20} aria-hidden="true" />
-              Book Free Diagnostic <ArrowRight size={18} aria-hidden="true" />
+              Book Free Diagnostic <ArrowUpRight size={18} aria-hidden="true" />
             </TrackedLink>
           </div>
+          <ul className="hero-trust-strip">
+            {HERO_TRUST.map(({ title, detail, Icon }) => (
+              <li key={title}>
+                <Icon size={30} strokeWidth={1.8} aria-hidden="true" />
+                <span>
+                  <strong>{title}</strong>
+                  {detail}
+                </span>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
