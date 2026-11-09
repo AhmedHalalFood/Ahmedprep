@@ -9,7 +9,7 @@ export type Campaign = {
   title: string
   body: string
   ctaLabel: string
-  /** Use "#diagnostic" to scroll to the form on the current page, or a path such as "/shsat#diagnostic". */
+  /** Use "#diagnostic" to scroll to the form on the current page, or a path such as "/shsat-prep#diagnostic". */
   href: string
   program?: "SHSAT" | "Digital SAT"
 }
@@ -27,7 +27,7 @@ export const CAMPAIGNS: Campaign[] = [
     title: "SHSAT Final Countdown",
     body: "November SHSAT preparation is underway. Get a diagnostic assessment and targeted final preparation before test day.",
     ctaLabel: "Reserve Your Diagnostic",
-    href: "/shsat#diagnostic",
+    href: "/shsat-prep#diagnostic",
     program: "SHSAT",
   },
   {
@@ -37,7 +37,7 @@ export const CAMPAIGNS: Campaign[] = [
     title: "Digital SAT Intensive",
     body: "Focused Math and Reading & Writing review with full-length adaptive practice before test day.",
     ctaLabel: "Reserve Your Diagnostic",
-    href: "/digital-sat#diagnostic",
+    href: "/digital-sat-prep#diagnostic",
     program: "Digital SAT",
   },
   {
@@ -47,7 +47,7 @@ export const CAMPAIGNS: Campaign[] = [
     title: "Summer SHSAT Prep",
     body: "Use the summer to build Math and ELA foundations before the school year gets busy.",
     ctaLabel: "Reserve Your Diagnostic",
-    href: "/shsat#diagnostic",
+    href: "/shsat-prep#diagnostic",
     program: "SHSAT",
   },
   {
@@ -57,7 +57,7 @@ export const CAMPAIGNS: Campaign[] = [
     title: "Fall SHSAT Prep",
     body: "Structured weekly preparation, timed practice, and progress reviews through the fall.",
     ctaLabel: "Reserve Your Diagnostic",
-    href: "/shsat#diagnostic",
+    href: "/shsat-prep#diagnostic",
     program: "SHSAT",
   },
   {
@@ -67,7 +67,7 @@ export const CAMPAIGNS: Campaign[] = [
     title: "SAT Spring Intensive",
     body: "Targeted spring preparation built around a diagnostic and a clear score goal.",
     ctaLabel: "Reserve Your Diagnostic",
-    href: "/digital-sat#diagnostic",
+    href: "/digital-sat-prep#diagnostic",
     program: "Digital SAT",
   },
 ]

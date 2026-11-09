@@ -32,8 +32,8 @@ export const metadata: Metadata = {
 export const revalidate = 3600
 
 const PROGRAMS = {
-  SHSAT: { href: "/shsat", label: "Explore the AhmedPrep SHSAT program", classType: "shsat" },
-  "Digital SAT": { href: "/digital-sat", label: "Explore the AhmedPrep Digital SAT program", classType: "digital_sat" },
+  SHSAT: { href: "/shsat-prep", label: "Explore the AhmedPrep SHSAT program", classType: "shsat" },
+  "Digital SAT": { href: "/digital-sat-prep", label: "Explore the AhmedPrep Digital SAT program", classType: "digital_sat" },
 } as const
 
 function letterFor(choices: string[] | undefined, answer: string) {

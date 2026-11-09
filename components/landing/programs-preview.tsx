@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
@@ -27,7 +28,14 @@ export function ProgramsPreview() {
           </p>
           <p>
             Tuition from {lowestTuition}. Founding-family pricing for Winter only; early-payment discounts for Spring
-            &amp; Summer. See individual program pricing.
+            &amp; Summer. See individual program pricing:{" "}
+            <Link href="/shsat-prep" className="font-bold text-brand underline underline-offset-4 hover:text-navy">
+              SHSAT Prep
+            </Link>{" "}
+            <span aria-hidden="true">·</span>{" "}
+            <Link href="/digital-sat-prep" className="font-bold text-brand underline underline-offset-4 hover:text-navy">
+              Digital SAT Prep
+            </Link>
           </p>
         </div>
         <TrackedLink

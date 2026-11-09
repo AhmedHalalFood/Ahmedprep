@@ -13,6 +13,9 @@ const nextConfig = {
   async redirects() {
     return [
       { source: "/free-shsat-class", destination: "/free-sunday-classes", permanent: true },
+      // The dedicated program pages moved; permanent redirects carry existing search equity to the new URLs.
+      { source: "/shsat", destination: "/shsat-prep", permanent: true },
+      { source: "/digital-sat", destination: "/digital-sat-prep", permanent: true },
       // Temporary (307) during owner review; switch to permanent once the change is approved.
       { source: "/programs", destination: "/programs-2027", permanent: false },
       {

@@ -1,3 +1,4 @@
+import type { ReactNode } from "react"
 import { ArrowUpRight, Check } from "lucide-react"
 import { CallTextLinks } from "@/components/call-text-links"
 import { TrackedLink } from "@/components/tracked-link"
@@ -13,7 +14,9 @@ export function ProgramHero({
   ctaEvent,
   location,
   serviceArea,
+  actions,
 }: {
+  actions?: ReactNode
   eyebrow: string
   title: string
   intro: string
@@ -39,12 +42,19 @@ export function ProgramHero({
             <p className="max-w-xl text-pretty text-base font-bold leading-relaxed text-navy">{serviceArea}</p>
           ) : null}
           <p className="max-w-xl text-pretty text-lg leading-relaxed text-subtle">{intro}</p>
-          <div className="flex flex-wrap items-center gap-4">
-            <TrackedLink href="#diagnostic" event={ctaEvent} eventProps={{ location: `${location}_hero` }} className="button button-gold button-lg">
-              {ctaLabel} <ArrowUpRight size={17} aria-hidden="true" />
-            </TrackedLink>
-            <CallTextLinks location={`${location}_hero`} />
-          </div>
+          {actions ? (
+            <div className="flex flex-col gap-4">
+              {actions}
+              <CallTextLinks location={`${location}_hero`} />
+            </div>
+          ) : (
+            <div className="flex flex-wrap items-center gap-4">
+              <TrackedLink href="#diagnostic" event={ctaEvent} eventProps={{ location: `${location}_hero` }} className="button button-gold button-lg">
+                {ctaLabel} <ArrowUpRight size={17} aria-hidden="true" />
+              </TrackedLink>
+              <CallTextLinks location={`${location}_hero`} />
+            </div>
+          )}
         </div>
         <div className="border border-line border-t-4 border-t-gold bg-warm p-6 md:p-8">
           <h2 className="text-lg font-extrabold text-navy">{benefitsTitle}</h2>

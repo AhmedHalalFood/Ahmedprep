@@ -23,7 +23,7 @@ export function ShsatHelpCta({ location }: { location: string }) {
         >
           BOOK A FREE DIAGNOSTIC <ArrowRight size={15} aria-hidden="true" />
         </TrackedLink>
-        <TrackedLink href="/shsat" event={EVENTS.shsatCtaClick} eventProps={{ location }} className="button button-outline">
+        <TrackedLink href="/shsat-prep" event={EVENTS.shsatCtaClick} eventProps={{ location }} className="button button-outline">
           VIEW SHSAT PREP
         </TrackedLink>
         <TrackedLink
