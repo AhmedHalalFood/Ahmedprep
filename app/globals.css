@@ -532,8 +532,9 @@ h3 {
     left: max(50%, calc((100% - 1180px) / 2 + 600px));
   }
 
+  /* Right-anchored: the far-right student sits at the photo's edge, so any crop must come from the bookshelf side. */
   .hero-image img {
-    object-position: 62% 45%;
+    object-position: right 45%;
   }
 
   .hero-image::after {
@@ -579,13 +580,13 @@ h3 {
   .hero-image {
     position: relative;
     inset: auto;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 4 / 3;
     max-height: 420px;
     width: 100%;
   }
 
   .hero-image img {
-    object-position: 66% 42%;
+    object-position: right 42%;
   }
 
   .hero-image::after {
@@ -1379,6 +1380,17 @@ a.program-card:hover h3 {
 .footer-nap a:hover {
   color: #fff;
   text-decoration: underline;
+}
+
+.footer-inline-list li {
+  display: flex;
+  align-items: center;
+}
+
+.footer-inline-list li + li::before {
+  content: '·';
+  margin-right: 0.75rem;
+  color: var(--muted);
 }
 
 .footer-note {
