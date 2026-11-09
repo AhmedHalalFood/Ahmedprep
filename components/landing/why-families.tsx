@@ -1,51 +1,50 @@
-import Link from "next/link"
-import { ArrowUpRight, ClipboardCheck, LineChart, UserRound, Users } from "lucide-react"
+import { ChartNoAxesColumn, ClipboardCheck, GraduationCap, Users } from "lucide-react"
 import { MAX_CLASS_SIZE } from "@/lib/cohorts-2027"
 
 const REASONS = [
   {
     icon: Users,
     title: `Maximum ${MAX_CLASS_SIZE} students per class`,
-    body: "Small groups mean the instructor sees each student's work, not just their final answers.",
+    body: "Individual attention in a focused, supportive setting.",
   },
   {
-    icon: UserRound,
+    icon: GraduationCap,
     title: "Personalized instruction",
-    body: "Students learn directly from founder and lead instructor Tariq Ahmed.",
+    body: "Learn directly from founder and lead instructor Tariq Ahmed.",
   },
   {
     icon: ClipboardCheck,
     title: "Diagnostic-based teaching",
-    body: "Every student starts with a diagnostic, so lessons and practice target the skills that need work.",
+    body: "Instruction tailored to each student's strengths and areas for improvement.",
   },
   {
-    icon: LineChart,
-    title: "Progress tracking & parent communication",
-    body: "Structured homework after each lesson and regular updates so parents know where things stand.",
+    icon: ChartNoAxesColumn,
+    title: "Progress you can follow",
+    body: "Progress tracking, structured homework, and regular parent communication.",
   },
 ] as const
 
 export function WhyFamilies() {
   return (
-    <section id="why-families" aria-labelledby="why-families-title" className="border-y border-line bg-warm py-12 md:py-16">
-      <div className="container flex flex-col gap-8">
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div className="flex max-w-2xl flex-col gap-3">
-            <p className="eyebrow blue">For parents</p>
-            <h2 id="why-families-title" className="text-balance text-3xl font-extrabold leading-tight tracking-tight text-navy md:text-4xl">
-              Why Choose AhmedPrep?
-            </h2>
-          </div>
-          <Link href="/about" className="text-link">
-            Learn more about AhmedPrep <ArrowUpRight size={15} aria-hidden="true" />
-          </Link>
+    <section id="why-families" aria-labelledby="why-families-title" className="border-b border-line bg-brand-soft/60 py-6">
+      <div className="container flex flex-col gap-5 lg:flex-row lg:items-stretch lg:gap-0">
+        <div className="flex shrink-0 flex-col gap-1 lg:w-64 lg:justify-center lg:border-r lg:border-line lg:pr-6">
+          <p className="eyebrow blue">For parents</p>
+          <h2
+            id="why-families-title"
+            className="text-balance text-3xl font-extrabold leading-tight tracking-tight text-navy"
+          >
+            Why Choose AhmedPrep?
+          </h2>
         </div>
-        <ul className="grid gap-px border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
+        <ul className="grid flex-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0">
           {REASONS.map(({ icon: Icon, title, body }) => (
-            <li key={title} className="flex flex-col gap-3 bg-white p-5 md:p-6">
-              <Icon size={24} aria-hidden="true" className="text-brand" />
-              <h3 className="text-lg font-extrabold leading-snug text-navy">{title}</h3>
-              <p className="text-pretty text-sm leading-relaxed text-subtle">{body}</p>
+            <li key={title} className="flex gap-3 lg:border-r lg:border-line lg:px-5 lg:last:border-r-0">
+              <Icon size={30} strokeWidth={1.7} aria-hidden="true" className="mt-0.5 shrink-0 text-brand" />
+              <div className="flex flex-col gap-1">
+                <h3 className="text-pretty text-base font-extrabold leading-snug text-navy">{title}</h3>
+                <p className="text-pretty text-sm leading-relaxed text-subtle">{body}</p>
+              </div>
             </li>
           ))}
         </ul>

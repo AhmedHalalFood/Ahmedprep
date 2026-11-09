@@ -1,64 +1,41 @@
-import { ArrowRight, ArrowUpRight } from "lucide-react"
+import { ArrowRight, FileText, type LucideIcon, Target, TrendingUp, Video } from "lucide-react"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS, type EventName } from "@/lib/analytics"
-import { scheduleSummary } from "@/lib/free-class"
 import { toolPath } from "@/lib/tools"
 
-export function ToolsResources() {
-  const sunday = scheduleSummary()
-  const items: { label: string; title: string; body: string; href: string; event: EventName }[] = [
-    {
-      label: "Practice tests",
-      title: "Free SHSAT Practice Tests",
-      body: "Official NYCPS digital practice tests plus AhmedPrep Math and ELA practice.",
-      href: "/shsat-practice-tests",
-      event: EVENTS.toolOpen,
-    },
-    {
-      label: "Free tool · SHSAT",
-      title: "SHSAT Readiness Quiz",
-      body: "Ten short Math, ELA, and test-habit questions with a summary and next steps.",
-      href: toolPath("shsat-readiness-quiz"),
-      event: EVENTS.toolOpen,
-    },
-    {
-      label: "Free tool · Digital SAT",
-      title: "Digital SAT Score Goal Planner",
-      body: "Enter a current practice score and a target to see a suggested study plan.",
-      href: toolPath("digital-sat-score-planner"),
-      event: EVENTS.toolOpen,
-    },
-    {
-      label: "Live on Zoom",
-      title: "Free Sunday Zoom Classes",
-      body: `${sunday.cadence}. ${sunday.times}. RSVP required.`,
-      href: "/free-sunday-classes",
-      event: EVENTS.sundayClassCtaClick,
-    },
-  ]
+const ITEMS: { title: string; href: string; event: EventName; Icon: LucideIcon }[] = [
+  { title: "SHSAT Practice Tests", href: "/shsat-practice-tests", event: EVENTS.toolOpen, Icon: FileText },
+  { title: "SHSAT Readiness Quiz", href: toolPath("shsat-readiness-quiz"), event: EVENTS.toolOpen, Icon: Target },
+  {
+    title: "Digital SAT Score Planner",
+    href: toolPath("digital-sat-score-planner"),
+    event: EVENTS.toolOpen,
+    Icon: TrendingUp,
+  },
+  { title: "Free Sunday Zoom Classes", href: "/free-sunday-classes", event: EVENTS.sundayClassCtaClick, Icon: Video },
+]
 
+export function ToolsResources() {
   return (
-    <section id="resources" aria-labelledby="resources-heading" className="scroll-mt-4 bg-white py-12 md:py-16">
-      <div className="container flex flex-col gap-8">
-        <div className="flex max-w-2xl flex-col gap-3">
-          <p className="eyebrow blue">Free Resources</p>
-          <h2 id="resources-heading" className="text-balance text-3xl font-extrabold leading-tight tracking-tight text-navy md:text-4xl">
+    <section id="resources" aria-labelledby="resources-heading" className="scroll-mt-4 bg-background py-6">
+      <div className="container flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-5">
+        <div className="flex shrink-0 flex-col gap-1 lg:w-56 xl:w-64">
+          <p className="eyebrow blue">Free resources</p>
+          <h2 id="resources-heading" className="text-balance text-2xl font-extrabold leading-tight tracking-tight text-navy">
             Practice, Plan &amp; Learn for Free
           </h2>
         </div>
-        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {items.map((item) => (
-            <li key={item.href}>
+        <ul className="grid flex-1 grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {ITEMS.map(({ title, href, event, Icon }) => (
+            <li key={href}>
               <TrackedLink
-                href={item.href}
-                event={item.event}
+                href={href}
+                event={event}
                 eventProps={{ location: "home_resources_preview" }}
-                className="group flex h-full flex-col gap-2 border border-line bg-white p-5 transition-colors hover:border-brand hover:bg-brand-soft"
+                className="flex h-full min-h-14 items-center gap-3 rounded-md border border-line bg-brand-soft/40 px-3 py-2 text-[0.95rem] font-bold leading-snug text-navy shadow-sm transition-colors hover:border-brand hover:bg-brand-soft"
               >
-                <span className="text-xs font-extrabold uppercase tracking-wider text-brand">{item.label}</span>
-                <span className="text-lg font-extrabold leading-snug text-navy">{item.title}</span>
-                <span className="text-pretty text-sm leading-relaxed text-subtle">{item.body}</span>
-                <ArrowUpRight size={16} aria-hidden="true" className="mt-auto self-end text-brand" />
+                <Icon size={26} strokeWidth={1.8} aria-hidden="true" className="shrink-0 text-brand" />
+                <span className="text-pretty">{title}</span>
               </TrackedLink>
             </li>
           ))}
@@ -67,9 +44,9 @@ export function ToolsResources() {
           href="/resources"
           event={EVENTS.toolOpen}
           eventProps={{ location: "home_resources_preview", cta: "explore_all" }}
-          className="button button-navy-outline button-lg min-h-12 self-start"
+          className="inline-flex min-h-14 shrink-0 items-center justify-center gap-2 self-start rounded-md border-2 border-navy bg-background px-5 text-center font-extrabold leading-snug text-navy transition-colors hover:bg-navy hover:text-primary-foreground lg:max-w-44 lg:self-auto"
         >
-          Explore All Free Resources <ArrowRight size={18} aria-hidden="true" />
+          <span>Explore All Free Resources</span> <ArrowRight size={18} aria-hidden="true" className="shrink-0" />
         </TrackedLink>
       </div>
     </section>
