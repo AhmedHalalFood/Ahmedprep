@@ -7,8 +7,8 @@ export function ResourceNextSteps({ category }: { category: Resource["category"]
   const isSat = category === "Digital SAT"
   const links = [
     isSat
-      ? { href: "/digital-sat", label: "Digital SAT Prep at AhmedPrep", body: "Reading & Writing and Math preparation in person in Astoria, Queens, with private tutoring also available online." }
-      : { href: "/shsat", label: "SHSAT Prep at AhmedPrep", body: "Math and ELA preparation for the computer-adaptive SHSAT." },
+      ? { href: "/digital-sat-prep", label: "Digital SAT Prep at AhmedPrep", body: "Reading & Writing and Math preparation in person in Astoria, Queens, with private tutoring also available online." }
+      : { href: "/shsat-prep", label: "SHSAT Prep at AhmedPrep", body: "Math and ELA preparation for the computer-adaptive SHSAT." },
     { href: FREE_CLASS.path, label: "Free Sunday Classes", body: "Free live online SHSAT and Digital SAT classes on Sundays. See upcoming dates and times." },
     { href: "/free-diagnostic", label: "Free Diagnostic", body: "Find out exactly which skills to practice first." },
     isSat

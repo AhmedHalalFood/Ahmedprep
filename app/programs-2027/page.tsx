@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   alternates: { canonical: absoluteUrl("/programs-2027") },
 }
 
-const PROGRAM_PAGE: Record<ProgramId, string> = { SHSAT: "/shsat", "Digital SAT": "/digital-sat" }
+const PROGRAM_PAGE: Record<ProgramId, string> = { SHSAT: "/shsat-prep", "Digital SAT": "/digital-sat-prep" }
 
 const SECONDARY_OPTIONS = (["free_diagnostic", "free_sunday", "private_tutoring"] as const).map((id) => getProgram(id)!)
 

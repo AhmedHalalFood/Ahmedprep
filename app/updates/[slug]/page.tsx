@@ -48,7 +48,7 @@ export default async function UpdatePage({ params }: { params: Promise<{ slug: s
   const source = getSource(update.sourceId)
   const url = `${SITE_URL}/updates/${update.slug}`
   const isSat = update.filter === "digital-sat"
-  const programHref = isSat ? "/digital-sat" : "/shsat"
+  const programHref = isSat ? "/digital-sat-prep" : "/shsat-prep"
   const related = updatesChronological().filter((u) => u.slug !== update.slug).slice(0, 4)
 
   return (

@@ -54,7 +54,7 @@ export const PROGRAMS: Program[] = [
   {
     id: "shsat",
     name: "SHSAT Preparation",
-    href: "/shsat",
+    href: "/shsat-prep",
     summary: "Math and ELA preparation for NYC Specialized High Schools admissions.",
     audience: "NYC students preparing for the SHSAT, typically in grades 7 and 8.",
     format: "Winter, Spring, and Summer 2027 small-group classes meet in person in Astoria, Queens. Private tutoring is available in person or online.",
@@ -66,7 +66,7 @@ export const PROGRAMS: Program[] = [
   {
     id: "digital_sat",
     name: "Digital SAT Preparation",
-    href: "/digital-sat",
+    href: "/digital-sat-prep",
     summary: "Reading & Writing and Math preparation for the adaptive Digital SAT.",
     audience: "High school students preparing for the Digital SAT.",
     format: "Winter, Spring, and Summer 2027 small-group classes meet in person in Astoria, Queens. Private tutoring is available in person or online.",

@@ -59,7 +59,7 @@ export const ENROLLMENT_2027 = {
       name: "SHSAT Prep",
       kicker: "Specialized High School admissions",
       body: "Math and ELA preparation for the NYC Specialized High Schools Admissions Test, built around each student’s diagnostic results.",
-      href: "/shsat",
+      href: "/shsat-prep",
       schedules: [
         { label: "Weekday group", days: "Monday & Wednesday", time: "5:30–8:30 PM ET", start: "Monday, January 11, 2027" },
         { label: "Weekend group", days: "Saturday & Sunday", time: "10 AM–1 PM ET", start: "Saturday, January 9, 2027" },
@@ -70,7 +70,7 @@ export const ENROLLMENT_2027 = {
       name: "Digital SAT Prep",
       kicker: "College admissions testing",
       body: "Reading & Writing and Math preparation for the adaptive Digital SAT, including Desmos and pacing strategy.",
-      href: "/digital-sat",
+      href: "/digital-sat-prep",
       schedules: [
         { label: "Weekday group", days: "Tuesday & Thursday", time: "5:30–8:30 PM ET", start: "Tuesday, January 12, 2027" },
         { label: "Weekend group", days: "Saturday & Sunday", time: "2–5 PM ET", start: "Saturday, January 9, 2027" },

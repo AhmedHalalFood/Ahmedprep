@@ -17,6 +17,9 @@
   --paper: #fff;
   --warm: #edf3f7;
   --cream: #faf7ef;
+  --footer-bg: #f0f5fa;
+  --footer-navy: #0d2d50;
+  --footer-divider: #d3dfeb;
   --background: #fff;
   --foreground: var(--ink);
   --radius: 0;
@@ -1854,6 +1857,9 @@ select {
   --color-subtle: var(--muted);
   --color-line: var(--line);
   --color-warm: var(--warm);
+  --color-footer: var(--footer-bg);
+  --color-footer-navy: var(--footer-navy);
+  --color-footer-divider: var(--footer-divider);
   --color-error: #b42318;
   --color-error-soft: #fef3f2;
   --radius-md: 0;

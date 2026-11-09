@@ -14,7 +14,6 @@ import {
 } from "lucide-react"
 import { TERMS_2027, type TermId, termSummary } from "@/lib/cohorts-2027"
 import { ProgramsPreview } from "@/components/landing/programs-preview"
-import { ReviewInvite } from "@/components/landing/review-invite"
 import { ToolsResources } from "@/components/landing/tools-resources"
 import { WhyFamilies } from "@/components/landing/why-families"
 import { TrackedLink } from "@/components/tracked-link"
@@ -164,8 +163,6 @@ export default async function Home() {
       <ProgramsPreview />
 
       <ToolsResources />
-
-      <ReviewInvite />
     </>
   )
 }

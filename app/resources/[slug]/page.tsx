@@ -48,7 +48,7 @@ export default async function ResourcePage({ params }: { params: Promise<{ slug:
   if (!resource) notFound()
 
   const isShsat = resource.category === "SHSAT"
-  const programHref = isShsat ? "/shsat" : "/digital-sat"
+  const programHref = isShsat ? "/shsat-prep" : "/digital-sat-prep"
   const related = RESOURCES.filter((r) => r.category === resource.category && r.slug !== resource.slug).slice(0, 6)
   const updated = resource.dateModified ?? resource.datePublished
   const url = `${SITE_URL}/resources/${resource.slug}`

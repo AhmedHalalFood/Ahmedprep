@@ -99,8 +99,8 @@ const faqs = (scheduleFaq: FaqItem): FaqItem[] => [
 ]
 
 const programLinks = [
-  { label: "SHSAT Prep", href: "/shsat", event: EVENTS.shsatCtaClick },
-  { label: "Digital SAT Prep", href: "/digital-sat", event: EVENTS.digitalSatCtaClick },
+  { label: "SHSAT Prep", href: "/shsat-prep", event: EVENTS.shsatCtaClick },
+  { label: "Digital SAT Prep", href: "/digital-sat-prep", event: EVENTS.digitalSatCtaClick },
   { label: "Free Diagnostic", href: "/free-diagnostic", event: EVENTS.diagnosticCtaClick },
 ]
 

@@ -126,7 +126,7 @@ export default async function ShsatFinalIntensivePage() {
     <>
       <Breadcrumbs
         items={[
-          { label: "SHSAT Prep", href: "/shsat" },
+          { label: "SHSAT Prep", href: "/shsat-prep" },
           { label: INTENSIVE_NAME, href: INTENSIVE_PATH },
         ]}
       />
@@ -185,7 +185,7 @@ export default async function ShsatFinalIntensivePage() {
         }
       >
         <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-8">
-          <Link href="/shsat" className="text-link">
+          <Link href="/shsat-prep" className="text-link">
             Year-round SHSAT tutoring in Queens <ArrowUpRight size={15} aria-hidden="true" />
           </Link>
           <Link href="/free-diagnostic" className="text-link">

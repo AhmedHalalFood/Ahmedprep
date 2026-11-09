@@ -17,8 +17,8 @@ export const metadata: Metadata = {
 }
 
 const groups: { category: Resource["category"]; title: string; href: string; cta: string }[] = [
-  { category: "SHSAT", title: "SHSAT resources", href: "/shsat", cta: "SHSAT Prep program" },
-  { category: "Digital SAT", title: "Digital SAT resources", href: "/digital-sat", cta: "Digital SAT Prep program" },
+  { category: "SHSAT", title: "SHSAT resources", href: "/shsat-prep", cta: "SHSAT Prep program" },
+  { category: "Digital SAT", title: "Digital SAT resources", href: "/digital-sat-prep", cta: "Digital SAT Prep program" },
 ]
 
 const PRACTICE_SLUGS = ["shsat-math-practice", "shsat-ela-practice"]
