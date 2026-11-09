@@ -2,7 +2,7 @@
  * Verified AhmedPrep Google Business Profile review-writing link.
  * Never substitute a Google Maps search URL.
  */
-export const GOOGLE_REVIEW_URL = "https://g.page/r/CZa1mHAKJA8BEBM/review"
+export const GOOGLE_REVIEW_URL = "https://g.page/r/CZa1mHAKJA8BEAE/review"
 
 /** Where every review CTA points. */
 export const REVIEW_HREF = GOOGLE_REVIEW_URL

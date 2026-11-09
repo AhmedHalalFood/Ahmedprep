@@ -3,8 +3,9 @@
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { ArrowUpRight } from "lucide-react"
+import { ArrowUpRight, Star } from "lucide-react"
 import { isNavActive, navLinks } from "@/components/main-nav"
+import { ReviewLink } from "@/components/review-link"
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet"
 import { trackEvent, EVENTS } from "@/lib/analytics"
 
@@ -58,6 +59,13 @@ export default function MobileNavSheet({
               </SheetClose>
             )
           })}
+          <ReviewLink
+            location="mobile_menu"
+            className="flex min-h-12 items-center justify-between gap-3 border-b border-white/10 text-base font-bold uppercase tracking-wider text-gold"
+          >
+            Write a Google Review
+            <Star size={18} aria-hidden="true" fill="currentColor" />
+          </ReviewLink>
         </nav>
         <div className="px-6 pb-8 pt-4">
           <SheetClose asChild>

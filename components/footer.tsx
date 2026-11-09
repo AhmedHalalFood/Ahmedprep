@@ -51,12 +51,12 @@ export function Footer() {
           <div>
             <span>Explore</span>
             <Link href="/updates">SHSAT & SAT Updates</Link>
-            <Link href="/resources">Resources</Link>
+            <Link href="/resources">Free Resources</Link>
             <Link href="/about">About</Link>
             <Link href="/contact">Contact</Link>
             <Link href="/referral">Referral</Link>
             <ReviewLink location="footer" className="inline-flex min-h-11 items-center">
-              <span aria-hidden="true">★</span>&nbsp;Leave a Google Review
+              <span aria-hidden="true">★</span>&nbsp;Write a Google Review
             </ReviewLink>
           </div>
         </div>

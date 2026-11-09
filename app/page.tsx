@@ -1,18 +1,23 @@
 import type { Metadata } from "next"
 import Image from "next/image"
-import { ArrowRight, ArrowUpRight, Sparkle } from "lucide-react"
-import { CampaignBanner } from "@/components/landing/campaign-banner"
-import { DiagnosticSection } from "@/components/landing/diagnostic-section"
-import { Enrollment2027 } from "@/components/landing/enrollment-2027"
-import { GoogleReviews } from "@/components/landing/google-reviews"
+import {
+  ArrowRight,
+  ArrowUpRight,
+  CalendarDays,
+  Clock,
+  Leaf,
+  List,
+  type LucideIcon,
+  Snowflake,
+  Star,
+  Sun,
+} from "lucide-react"
+import { TERMS_2027, type TermId, termSummary } from "@/lib/cohorts-2027"
 import { ProgramsPreview } from "@/components/landing/programs-preview"
-import { ResultsPreview } from "@/components/landing/results-preview"
+import { ReviewInvite } from "@/components/landing/review-invite"
 import { ToolsResources } from "@/components/landing/tools-resources"
 import { WhyFamilies } from "@/components/landing/why-families"
-import { PracticeLibraryCard } from "@/components/practice-tests/practice-library-card"
-import { ThisSundayStrip } from "@/components/sunday-classes/this-sunday-strip"
 import { TrackedLink } from "@/components/tracked-link"
-import { WeeklyPracticeCard } from "@/components/weekly-practice/weekly-practice-card"
 import { EVENTS } from "@/lib/analytics"
 import { ENROLLMENT_2027 } from "@/lib/enrollment-2027"
 import { intensiveSitewidePromoActive } from "@/lib/intensive-promo"
@@ -35,6 +40,23 @@ export const metadata: Metadata = {
 // Hourly so the "Next free Sunday class" card rolls over shortly after each Sunday class ends.
 export const revalidate = 3600
 
+const SEASON_ICONS: Record<TermId, LucideIcon> = { winter: Snowflake, spring: Leaf, summer: Sun }
+
+const longDay = (iso: string) =>
+  new Date(`${iso}T12:00:00Z`).toLocaleDateString("en-US", { timeZone: "UTC", month: "long", day: "numeric" })
+
+const HERO_SEASONS = TERMS_2027.map((term) => {
+  const summary = termSummary(term)
+  const hoursVary = new Set(term.cohorts.map((c) => c.hours)).size > 1
+  return {
+    id: term.id,
+    name: `${term.name} Programs`,
+    dates: `${longDay(summary.startIso)} – ${longDay(summary.endIso)}, ${summary.endIso.slice(0, 4)}`,
+    hours: `${summary.hoursLabel.replace(" hours", "")} scheduled hours${hoursVary ? ", depending on cohort" : ""}`,
+    Icon: SEASON_ICONS[term.id],
+  }
+})
+
 export default async function Home() {
   const showIntensive = await intensiveSitewidePromoActive()
   return (
@@ -52,51 +74,52 @@ export default async function Home() {
         </div>
         <div className="hero-panel">
           <p className="hero-announce">
-            <Sparkle className="hero-sparkle" size={13} fill="currentColor" strokeWidth={0} aria-hidden="true" />
+            <span className="hero-stars" aria-hidden="true">
+              <Star size={14} fill="currentColor" strokeWidth={0} />
+              <Star size={14} fill="currentColor" strokeWidth={0} />
+            </span>
             AhmedPrep · Astoria, Queens
-            <Sparkle className="hero-sparkle" size={13} fill="currentColor" strokeWidth={0} aria-hidden="true" />
           </p>
           <h1 id="hero-title" className="hero-headline">
             SHSAT &amp; Digital SAT Prep
           </h1>
-          <nav aria-label="2027 seasons" className="hero-launch-date">
-            <a href="/programs-2027#winter" className="hero-season-link">Winter</a>
-            <span className="hero-season-sep" aria-hidden="true">•</span>
-            <a href="/programs-2027#spring" className="hero-season-link">Spring</a>
-            <span className="hero-season-sep" aria-hidden="true">•</span>
-            <a href="/programs-2027#summer" className="hero-season-link">Summer</a>
-            <span className="hero-season-year">2027</span>
-          </nav>
           <p className="hero-support">
-            Small-group SHSAT and Digital SAT preparation in Astoria, Queens. Math, ELA, and Reading &amp; Writing
-            instruction. Maximum 12 students per class.
+            Small-group SHSAT and Digital SAT preparation in Astoria, Queens.{" "}
+            <br className="hero-support-break" />
+            Math, ELA, and Reading &amp; Writing instruction. Maximum 12 students per class.
           </p>
-          <ul className="hero-programs" aria-label="Choose a program">
-            <li>
-              <TrackedLink
-                href="/shsat#classes-2027"
-                event={EVENTS.shsatCtaClick}
-                eventProps={{ location: "home_hero" }}
-                className="hero-program"
-              >
-                <span className="hero-program-name">SHSAT Preparation</span>
-                <span className="hero-program-subjects">Math + ELA</span>
-                <ArrowRight className="hero-program-arrow" size={18} aria-hidden="true" />
-              </TrackedLink>
-            </li>
-            <li>
-              <TrackedLink
-                href="/digital-sat#classes-2027"
-                event={EVENTS.digitalSatCtaClick}
-                eventProps={{ location: "home_hero" }}
-                className="hero-program"
-              >
-                <span className="hero-program-name">Digital SAT Preparation</span>
-                <span className="hero-program-subjects">Math + Reading &amp; Writing</span>
-                <ArrowRight className="hero-program-arrow" size={18} aria-hidden="true" />
-              </TrackedLink>
-            </li>
-          </ul>
+          <nav aria-label="2027 seasons">
+            <ul className="hero-seasons">
+              {HERO_SEASONS.map((season) => (
+                <li key={season.id}>
+                  <a
+                    href={`/programs-2027#${season.id}`}
+                    className="hero-season-card"
+                    data-season={season.id}
+                  >
+                    <span className="hero-season-head">
+                      <span className="hero-season-icon" aria-hidden="true">
+                        <season.Icon size={26} strokeWidth={2.2} />
+                      </span>
+                      <span className="hero-season-name">{season.name}</span>
+                    </span>
+                    <span className="hero-season-row hero-season-dates">
+                      <CalendarDays size={16} aria-hidden="true" />
+                      {season.dates}
+                    </span>
+                    <span className="hero-season-row hero-season-hours">
+                      <Clock size={16} aria-hidden="true" />
+                      {season.hours}
+                    </span>
+                    <span className="hero-season-cta">
+                      View Programs
+                      <ArrowRight size={15} aria-hidden="true" />
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
           <div className="hero-actions">
             <TrackedLink
               href="/programs-2027"
@@ -104,6 +127,7 @@ export default async function Home() {
               eventProps={{ location: "home_hero", cta: "view_programs_pricing" }}
               className="button button-lg hero-cta"
             >
+              <List size={20} aria-hidden="true" />
               View Programs &amp; Pricing <ArrowRight size={18} aria-hidden="true" />
             </TrackedLink>
             <TrackedLink
@@ -112,21 +136,11 @@ export default async function Home() {
               eventProps={{ location: "home_hero" }}
               className="hero-secondary"
             >
-              Book Free Diagnostic
+              <CalendarDays size={20} aria-hidden="true" />
+              Book Free Diagnostic <ArrowRight size={18} aria-hidden="true" />
             </TrackedLink>
           </div>
         </div>
-      </section>
-
-      <section className="hero-slogan-band" aria-labelledby="hero-slogan-title">
-        <h2 id="hero-slogan-title" className="hero-slogan">
-          <span className="hero-slogan-lead">Big Goals. Small Classes.</span>{" "}
-          <span className="hero-slogan-accent">Real Progress.</span>
-        </h2>
-        <p className="hero-slogan-detail">
-          Classes start January 9, April 3 &amp; July 3 <span aria-hidden="true">•</span> Max 12 students{" "}
-          <span aria-hidden="true">•</span> $20 per class hour
-        </p>
       </section>
 
       {showIntensive && (
@@ -145,30 +159,13 @@ export default async function Home() {
         </aside>
       )}
 
-      <Enrollment2027 showIntensive={showIntensive} />
-
-      <CampaignBanner />
-
-      <ResultsPreview />
-
-      <ThisSundayStrip location="home" />
-
-      <WeeklyPracticeCard location="home" />
-      <PracticeLibraryCard />
-
       <WhyFamilies />
+
+      <ProgramsPreview />
 
       <ToolsResources />
 
-      <ProgramsPreview showIntensive={showIntensive} />
-
-      <GoogleReviews />
-
-      <DiagnosticSection
-        location="home"
-        title="Start with a free diagnostic"
-        intro="Choose SHSAT or Digital SAT and tell us about your student. We'll contact you to confirm a diagnostic time at our Astoria location."
-      />
+      <ReviewInvite />
     </>
   )
 }

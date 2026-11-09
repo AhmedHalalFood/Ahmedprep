@@ -11,9 +11,10 @@ export function navLinks(_showIntensive?: boolean) {
 }
 
 export const NAV_LINKS = [
+  { label: "Home", href: "/" },
   { label: "Programs & Pricing", href: "/programs-2027" },
   { label: "Free Diagnostic", href: "/free-diagnostic" },
-  { label: "Free Sunday Classes", href: "/free-sunday-classes" },
+  { label: "Free Resources", href: "/resources" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
   ...(STUDENT_PORTAL_URL ? [{ label: "Student Login", href: STUDENT_PORTAL_URL }] : []),

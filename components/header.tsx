@@ -1,9 +1,10 @@
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowUpRight, MapPin } from "lucide-react"
+import { ArrowUpRight, MapPin, Star } from "lucide-react"
 import { HideOnHome } from "@/components/hide-on-home"
 import { MainNav } from "@/components/main-nav"
 import { MobileNav } from "@/components/mobile-nav"
+import { ReviewLink } from "@/components/review-link"
 import { ShsatIntensiveBar } from "@/components/shsat-intensive-bar"
 import { TopContactBar } from "@/components/top-contact-bar"
 import { TrackedLink } from "@/components/tracked-link"
@@ -54,6 +55,10 @@ export async function Header() {
           </a>
         </div>
         <div className="utility-nav">
+          <ReviewLink location="header" className="header-review-link">
+            <Star size={15} aria-hidden="true" fill="currentColor" className="header-review-icon" />
+            Write a Google Review
+          </ReviewLink>
           <TrackedLink
             href="/free-diagnostic"
             event={EVENTS.diagnosticCtaClick}
