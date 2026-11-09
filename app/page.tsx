@@ -1,6 +1,17 @@
 import type { Metadata } from "next"
 import Image from "next/image"
-import { ArrowRight, ArrowUpRight, Leaf, type LucideIcon, Snowflake, Sparkle, Sun } from "lucide-react"
+import {
+  ArrowRight,
+  ArrowUpRight,
+  CalendarDays,
+  Clock,
+  Leaf,
+  List,
+  type LucideIcon,
+  Snowflake,
+  Star,
+  Sun,
+} from "lucide-react"
 import { TERMS_2027, type TermId, termSummary } from "@/lib/cohorts-2027"
 import { DiagnosticSection } from "@/components/landing/diagnostic-section"
 import { ProgramsPreview } from "@/components/landing/programs-preview"
@@ -64,16 +75,19 @@ export default async function Home() {
         </div>
         <div className="hero-panel">
           <p className="hero-announce">
-            <Sparkle className="hero-sparkle" size={13} fill="currentColor" strokeWidth={0} aria-hidden="true" />
+            <span className="hero-stars" aria-hidden="true">
+              <Star size={14} fill="currentColor" strokeWidth={0} />
+              <Star size={14} fill="currentColor" strokeWidth={0} />
+            </span>
             AhmedPrep · Astoria, Queens
-            <Sparkle className="hero-sparkle" size={13} fill="currentColor" strokeWidth={0} aria-hidden="true" />
           </p>
           <h1 id="hero-title" className="hero-headline">
             SHSAT &amp; Digital SAT Prep
           </h1>
           <p className="hero-support">
-            Small-group SHSAT and Digital SAT preparation in Astoria, Queens, with Math, ELA, and Reading &amp; Writing
-            instruction. Maximum 12 students per class.
+            Small-group SHSAT and Digital SAT preparation in Astoria, Queens.{" "}
+            <br className="hero-support-break" />
+            Math, ELA, and Reading &amp; Writing instruction. Maximum 12 students per class.
           </p>
           <nav aria-label="2027 seasons">
             <ul className="hero-seasons">
@@ -84,15 +98,23 @@ export default async function Home() {
                     className="hero-season-card"
                     data-season={season.id}
                   >
-                    <span className="hero-season-icon" aria-hidden="true">
-                      <season.Icon size={18} strokeWidth={2.2} />
+                    <span className="hero-season-head">
+                      <span className="hero-season-icon" aria-hidden="true">
+                        <season.Icon size={26} strokeWidth={2.2} />
+                      </span>
+                      <span className="hero-season-name">{season.name}</span>
                     </span>
-                    <span className="hero-season-name">{season.name}</span>
-                    <span className="hero-season-dates">{season.dates}</span>
-                    <span className="hero-season-hours">{season.hours}</span>
+                    <span className="hero-season-row hero-season-dates">
+                      <CalendarDays size={16} aria-hidden="true" />
+                      {season.dates}
+                    </span>
+                    <span className="hero-season-row hero-season-hours">
+                      <Clock size={16} aria-hidden="true" />
+                      {season.hours}
+                    </span>
                     <span className="hero-season-cta">
                       View Programs
-                      <ArrowRight size={14} aria-hidden="true" />
+                      <ArrowRight size={15} aria-hidden="true" />
                     </span>
                   </a>
                 </li>
@@ -106,6 +128,7 @@ export default async function Home() {
               eventProps={{ location: "home_hero", cta: "view_programs_pricing" }}
               className="button button-lg hero-cta"
             >
+              <List size={20} aria-hidden="true" />
               View Programs &amp; Pricing <ArrowRight size={18} aria-hidden="true" />
             </TrackedLink>
             <TrackedLink
@@ -114,7 +137,8 @@ export default async function Home() {
               eventProps={{ location: "home_hero" }}
               className="hero-secondary"
             >
-              Book Free Diagnostic
+              <CalendarDays size={20} aria-hidden="true" />
+              Book Free Diagnostic <ArrowRight size={18} aria-hidden="true" />
             </TrackedLink>
           </div>
         </div>
