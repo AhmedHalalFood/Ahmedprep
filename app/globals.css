@@ -1290,6 +1290,46 @@ h3 {
   color: var(--navy);
 }
 
+.nav-inner nav a.is-prominent {
+  color: var(--blue);
+  font-weight: 800;
+}
+
+.nav-inner nav a.is-prominent.is-active {
+  color: var(--navy);
+}
+
+.nav-inner nav a.is-prominent + a:not(.is-prominent) {
+  margin-left: 4px;
+}
+
+.nav-inner nav a.is-prominent + a:not(.is-prominent)::before {
+  content: '';
+  position: absolute;
+  left: -12px;
+  top: 50%;
+  width: 1px;
+  height: 18px;
+  transform: translateY(-50%);
+  background: var(--line);
+}
+
+@media (min-width: 801px) and (max-width: 1023px) {
+  .nav-inner nav {
+    column-gap: 11px;
+    font-size: 0.66rem;
+    letter-spacing: 0.03em;
+  }
+
+  .nav-inner nav a.is-prominent + a:not(.is-prominent) {
+    margin-left: 2px;
+  }
+
+  .nav-inner nav a.is-prominent + a:not(.is-prominent)::before {
+    left: -7px;
+  }
+}
+
 .nav-inner nav a.is-active::after {
   content: '';
   position: absolute;
