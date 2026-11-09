@@ -71,6 +71,10 @@ export default async function Home() {
           <h1 id="hero-title" className="hero-headline">
             SHSAT &amp; Digital SAT Prep
           </h1>
+          <p className="hero-support">
+            Small-group SHSAT and Digital SAT preparation in Astoria, Queens, with Math, ELA, and Reading &amp; Writing
+            instruction. Maximum 12 students per class.
+          </p>
           <nav aria-label="2027 seasons">
             <ul className="hero-seasons">
               {HERO_SEASONS.map((season) => (
@@ -95,36 +99,6 @@ export default async function Home() {
               ))}
             </ul>
           </nav>
-          <p className="hero-support">
-            Small-group SHSAT and Digital SAT preparation in Astoria, Queens. Math, ELA, and Reading &amp; Writing
-            instruction. Maximum 12 students per class.
-          </p>
-          <ul className="hero-programs" aria-label="Choose a program">
-            <li>
-              <TrackedLink
-                href="/shsat#classes-2027"
-                event={EVENTS.shsatCtaClick}
-                eventProps={{ location: "home_hero" }}
-                className="hero-program"
-              >
-                <span className="hero-program-name">SHSAT Preparation</span>
-                <span className="hero-program-subjects">Math + ELA</span>
-                <ArrowRight className="hero-program-arrow" size={18} aria-hidden="true" />
-              </TrackedLink>
-            </li>
-            <li>
-              <TrackedLink
-                href="/digital-sat#classes-2027"
-                event={EVENTS.digitalSatCtaClick}
-                eventProps={{ location: "home_hero" }}
-                className="hero-program"
-              >
-                <span className="hero-program-name">Digital SAT Preparation</span>
-                <span className="hero-program-subjects">Math + Reading &amp; Writing</span>
-                <ArrowRight className="hero-program-arrow" size={18} aria-hidden="true" />
-              </TrackedLink>
-            </li>
-          </ul>
           <div className="hero-actions">
             <TrackedLink
               href="/programs-2027"
@@ -173,9 +147,9 @@ export default async function Home() {
         </aside>
       )}
 
-      <ProgramsPreview />
-
       <WhyFamilies />
+
+      <ProgramsPreview />
 
       <DiagnosticSection
         location="home"

@@ -52,14 +52,16 @@ test("Programs: private tutoring keeps its contact-for-pricing behaviour", () =>
   assert.equal(getProgram("private_tutoring").price, null)
 })
 
-test("Home Programs & Pricing preview covers all 2027 terms, derives tuition centrally, and links to /programs-2027", () => {
+test("Home Programs & Pricing preview derives tuition centrally, does not repeat season cards, and links to /programs-2027", () => {
   const src = read("components/landing/programs-preview.tsx")
-  assert.match(src, /TERMS_2027\.map/)
-  assert.match(src, /termSummary\(term\)/)
-  assert.match(src, /ENROLLMENT_2027\.tuition/)
+  assert.match(src, /TERMS_2027/)
+  assert.match(src, /priceFor\(/)
+  assert.match(src, /EARLY_DAYS_BEFORE_SPRING_SUMMER/)
+  assert.match(src, /FOUNDING_SEATS_PER_COHORT/)
+  assert.match(src, /Winter only:/)
   assert.match(src, /href="\/programs-2027"/)
-  assert.match(src, /href=\{`\/programs-2027#\$\{term\.id\}`\}/)
-  assert.match(src, /View Programs/)
+  assert.match(src, /Compare All Programs/)
+  assert.doesNotMatch(src, /View Programs/)
   assert.doesNotMatch(src, /\$1,440|\$1,296|\$1,080|\$1,920|\$1,728|\$960|\$864/)
 })
 

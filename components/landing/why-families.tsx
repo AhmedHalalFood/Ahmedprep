@@ -20,8 +20,8 @@ const REASONS = [
   },
   {
     icon: LineChart,
-    title: "Progress you can follow",
-    body: "Progress tracking, structured homework after each lesson, and regular parent communication.",
+    title: "Progress tracking & parent communication",
+    body: "Structured homework after each lesson and regular updates so parents know where things stand.",
   },
 ] as const
 

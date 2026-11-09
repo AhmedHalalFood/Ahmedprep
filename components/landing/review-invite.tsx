@@ -3,7 +3,7 @@ import { ReviewLink } from "@/components/review-link"
 
 export function ReviewInvite() {
   return (
-    <section id="google-review" aria-labelledby="google-review-title" className="border-t border-line bg-warm py-10 md:py-12">
+    <section id="google-review" aria-labelledby="google-review-title" className="border-y border-gold/50 bg-gold/15 py-10 md:py-12">
       <div className="container flex flex-col items-start gap-5 md:flex-row md:items-center md:justify-between">
         <div className="flex max-w-2xl flex-col gap-2">
           <h2 id="google-review-title" className="text-balance text-2xl font-extrabold leading-tight text-navy md:text-3xl">

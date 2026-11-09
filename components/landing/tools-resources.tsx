@@ -9,28 +9,28 @@ export function ToolsResources() {
   const items: { label: string; title: string; body: string; href: string; event: EventName }[] = [
     {
       label: "Practice tests",
-      title: "Free SHSAT practice tests",
+      title: "Free SHSAT Practice Tests",
       body: "Official NYCPS digital practice tests plus AhmedPrep Math and ELA practice.",
       href: "/shsat-practice-tests",
       event: EVENTS.toolOpen,
     },
     {
       label: "Free tool · SHSAT",
-      title: "SHSAT readiness quiz",
+      title: "SHSAT Readiness Quiz",
       body: "Ten short Math, ELA, and test-habit questions with a summary and next steps.",
       href: toolPath("shsat-readiness-quiz"),
       event: EVENTS.toolOpen,
     },
     {
       label: "Free tool · Digital SAT",
-      title: "Digital SAT score goal planner",
+      title: "Digital SAT Score Goal Planner",
       body: "Enter a current practice score and a target to see a suggested study plan.",
       href: toolPath("digital-sat-score-planner"),
       event: EVENTS.toolOpen,
     },
     {
-      label: "Free Sunday Zoom classes",
-      title: "Free live Sunday classes",
+      label: "Live on Zoom",
+      title: "Free Sunday Zoom Classes",
       body: `${sunday.cadence}. ${sunday.times}. RSVP required.`,
       href: "/free-sunday-classes",
       event: EVENTS.sundayClassCtaClick,
@@ -43,7 +43,7 @@ export function ToolsResources() {
         <div className="flex max-w-2xl flex-col gap-3">
           <p className="eyebrow blue">Free Resources</p>
           <h2 id="resources-heading" className="text-balance text-3xl font-extrabold leading-tight tracking-tight text-navy md:text-4xl">
-            Practice, plan, and learn for free
+            Practice, Plan &amp; Learn for Free
           </h2>
         </div>
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
