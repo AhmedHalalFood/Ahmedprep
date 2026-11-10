@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowUpRight, ChevronDown } from "lucide-react"
 import { ClassFinder } from "@/components/programs/class-finder"
+import { FinderHashRestore } from "@/components/programs/finder-hash-restore"
 import {
   DEADLINE_TIME_LABEL,
   EARLY_DAYS_AFTER_FOUNDING,
@@ -48,6 +49,7 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
         </div>
       </section>
 
+      <FinderHashRestore season={state.season} program={state.program} />
       <ClassFinder state={state} full={(id) => isCohortFull(id, { previewFull })} />
 
       <section aria-labelledby="tuition-rules-title" className="px-5 pb-10">

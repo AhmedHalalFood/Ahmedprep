@@ -1290,8 +1290,15 @@ h3 {
   align-items: center;
 }
 
-.nav-inner nav a.is-active {
+.nav-inner nav a,
+.nav-inner nav a.is-active,
+.nav-inner nav a.is-prominent {
   color: var(--navy);
+}
+
+.nav-inner nav a:hover,
+.nav-inner nav a:focus-visible {
+  color: var(--blue);
 }
 
 .nav-inner nav a.is-prominent {

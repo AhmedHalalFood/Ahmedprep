@@ -79,6 +79,16 @@ export function ClassFinder({ state, full }: { state: FinderState; full: (cohort
 
         <ol className="flex flex-col gap-8">
           <Step n={1} title="Choose a season" done={Boolean(season)}>
+            {program && !season && (
+              <p className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-xl border border-line bg-paper px-4 py-3 text-sm text-ink">
+                <span>
+                  Showing <strong className="text-navy">{program}</strong> classes ({PROGRAM_META[program].subjects}).
+                </span>
+                <Link href={programsHref({})} scroll={false} className="font-bold text-navy underline underline-offset-4">
+                  Change program
+                </Link>
+              </p>
+            )}
             <ul className="grid gap-3 sm:grid-cols-3">
               {TERMS_2027.map((term) => {
                 const s = termSummary(term)
