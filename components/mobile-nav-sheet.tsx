@@ -51,7 +51,7 @@ export default function MobileNavSheet({
                 <Link
                   href={link.href}
                   aria-current={active ? "page" : undefined}
-                  className={`flex min-h-12 items-center justify-between border-b border-white/10 text-base font-bold uppercase tracking-wider ${active ? "text-gold" : "text-white"}`}
+                  className={`flex min-h-12 items-center justify-between border-b border-white/10 text-base font-bold uppercase tracking-wider ${active ? "text-gold" : "text-white hover:text-gold focus-visible:text-gold"}`}
                 >
                   {link.label}
                   {active && <span className="size-1.5 bg-gold" aria-hidden="true" />}

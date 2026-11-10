@@ -20,6 +20,7 @@ import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
 import { ENROLLMENT_2027 } from "@/lib/enrollment-2027"
 import { intensiveSitewidePromoActive } from "@/lib/intensive-promo"
+import { programsHref } from "@/lib/program-finder"
 import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 
 export const metadata: Metadata = {
@@ -92,7 +93,7 @@ export default async function Home() {
               {HERO_SEASONS.map((season) => (
                 <li key={season.id}>
                   <a
-                    href={`/programs-2027#${season.id}`}
+                    href={programsHref({ season: season.id })}
                     className="hero-season-card"
                     data-season={season.id}
                   >

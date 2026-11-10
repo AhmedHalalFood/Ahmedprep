@@ -7,6 +7,10 @@
   --slate: #315f82;
   --blue: #1769aa;
   --blue-soft: #edf3f7;
+  --sage: #38846a;
+  /* Darker sage for small text on light backgrounds (4.5:1 on #fffcf7). */
+  --sage-deep: #2b6a54;
+  --sage-soft: #edf7f0;
   --gold: #e8ba3f;
   --gold-deep: #8a6812;
   /* Slightly lifted gold so small text on the blue intensive band clears 4.5:1 contrast. */
@@ -1286,17 +1290,19 @@ h3 {
   align-items: center;
 }
 
-.nav-inner nav a.is-active {
+.nav-inner nav a,
+.nav-inner nav a.is-active,
+.nav-inner nav a.is-prominent {
   color: var(--navy);
+}
+
+.nav-inner nav a:hover,
+.nav-inner nav a:focus-visible {
+  color: var(--blue);
 }
 
 .nav-inner nav a.is-prominent {
-  color: var(--blue);
   font-weight: 800;
-}
-
-.nav-inner nav a.is-prominent.is-active {
-  color: var(--navy);
 }
 
 .nav-inner nav a.is-prominent + a:not(.is-prominent) {
@@ -1889,6 +1895,10 @@ select {
   --color-slate: var(--slate);
   --color-brand: var(--blue);
   --color-brand-soft: var(--blue-soft);
+  --color-paper: var(--paper);
+  --color-sage: var(--sage);
+  --color-sage-deep: var(--sage-deep);
+  --color-sage-soft: var(--sage-soft);
   --color-gold: var(--gold);
   --color-gold-hover: #f0ca63;
   --color-gold-deep: var(--gold-deep);

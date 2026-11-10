@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
 import { MAX_CLASS_SIZE, TERMS_2027, dollars, priceFor } from "@/lib/cohorts-2027"
+import { programsHref } from "@/lib/program-finder"
 
 const lowestTuition = dollars(
   Math.min(...TERMS_2027.flatMap((term) => term.cohorts.map((cohort) => priceFor(cohort).regular))),
@@ -29,11 +30,11 @@ export function ProgramsPreview() {
           <p>
             Tuition from {lowestTuition}. Founding-family pricing for Winter only; early-payment discounts for Spring
             &amp; Summer. See individual program pricing:{" "}
-            <Link href="/shsat-prep" className="font-bold text-brand underline underline-offset-4 hover:text-navy">
+            <Link href={programsHref({ program: "SHSAT" })} className="font-bold text-brand underline underline-offset-4 hover:text-navy">
               SHSAT Prep
             </Link>{" "}
             <span aria-hidden="true">·</span>{" "}
-            <Link href="/digital-sat-prep" className="font-bold text-brand underline underline-offset-4 hover:text-navy">
+            <Link href={programsHref({ program: "Digital SAT" })} className="font-bold text-brand underline underline-offset-4 hover:text-navy">
               Digital SAT Prep
             </Link>
           </p>
