@@ -2,16 +2,16 @@
 @import 'tw-animate-css';
 
 :root {
-  --navy: #12345a;
+  --navy: #0b2e52;
   --academic: #244e73;
   --slate: #315f82;
-  --blue: #2769ac;
-  --blue-soft: #eaf4fc;
+  --blue: #1769aa;
+  --blue-soft: #edf3f7;
   --sage: #38846a;
   /* Darker sage for small text on light backgrounds (4.5:1 on #fffcf7). */
   --sage-deep: #2b6a54;
   --sage-soft: #edf7f0;
-  --gold: #e9be52;
+  --gold: #e8ba3f;
   --gold-deep: #8a6812;
   /* Slightly lifted gold so small text on the blue intensive band clears 4.5:1 contrast. */
   --gold-on-blue: #f0c656;
@@ -20,7 +20,7 @@
   --line: #d8e0e7;
   --paper: #fff;
   --warm: #edf3f7;
-  --cream: #fffcf7;
+  --cream: #faf7ef;
   --footer-bg: #f0f5fa;
   --footer-navy: #0d2d50;
   --footer-divider: #d3dfeb;
@@ -1295,12 +1295,7 @@ h3 {
 }
 
 .nav-inner nav a.is-prominent {
-  color: var(--blue);
   font-weight: 800;
-}
-
-.nav-inner nav a.is-prominent.is-active {
-  color: var(--navy);
 }
 
 .nav-inner nav a.is-prominent + a:not(.is-prominent) {
