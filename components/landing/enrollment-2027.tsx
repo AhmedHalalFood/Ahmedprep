@@ -17,6 +17,7 @@ import {
   priceFor,
   termSummary,
 } from "@/lib/cohorts-2027"
+import { programsHref } from "@/lib/program-finder"
 import { ENROLLMENT_2027 as E } from "@/lib/enrollment-2027"
 
 export function Enrollment2027({ showIntensive }: { showIntensive: boolean }) {
@@ -94,7 +95,7 @@ export function Enrollment2027({ showIntensive }: { showIntensive: boolean }) {
                   ))}
                 </dl>
                 <Link
-                  href={`/programs-2027#${term.id}`}
+                  href={programsHref({ season: term.id })}
                   className="mt-auto inline-flex min-h-11 items-center gap-2 self-start text-sm font-bold text-brand underline-offset-4 hover:underline"
                 >
                   {term.name} dates and closures <ArrowUpRight size={16} aria-hidden="true" />

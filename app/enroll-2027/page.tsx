@@ -13,6 +13,7 @@ import { ADDRESS_LINE_1, ADDRESS_LINE_2 } from "@/lib/business"
 import { isCohortFull } from "@/lib/cohort-capacity"
 import { ENROLLMENT_2027 } from "@/lib/enrollment-2027"
 import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
+import { programsHref } from "@/lib/program-finder"
 
 const PATH = "/enroll-2027"
 
@@ -113,7 +114,7 @@ export default async function Enroll2027Page({ searchParams }: Props) {
               </p>
             </div>
             <SelectedCohortSummary cohort={selected} />
-            <Link href={`/programs-2027#${selected.term}`} className="inline-flex min-h-11 items-center self-start text-sm font-bold text-brand underline">
+            <Link href={programsHref({ season: selected.term })} className="inline-flex min-h-11 items-center self-start text-sm font-bold text-brand underline">
               Compare all {termName(selected.term)} cohorts
             </Link>
           </div>
@@ -181,7 +182,7 @@ export default async function Enroll2027Page({ searchParams }: Props) {
             <ul className="flex flex-col">
               {TERM_IDS.map((id) => (
                 <li key={id}>
-                  <Link href={`/programs-2027#${id}`} className="inline-flex min-h-11 items-center font-bold text-brand underline">
+                  <Link href={programsHref({ season: id })} className="inline-flex min-h-11 items-center font-bold text-brand underline">
                     {`${termName(id)} cohorts, schedules and tuition`}
                   </Link>
                 </li>

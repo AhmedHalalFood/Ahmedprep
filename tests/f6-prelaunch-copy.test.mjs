@@ -65,9 +65,9 @@ test("Home Programs & Pricing preview derives tuition centrally, does not repeat
   assert.doesNotMatch(src, /\$1,440|\$1,296|\$1,080|\$1,920|\$1,728|\$960|\$864/)
 })
 
-test("Mobile CALL | TEXT | RESERVE A SEAT bar is unchanged and rendered on every page", () => {
+test("Mobile CALL | TEXT | REQUEST ENROLLMENT bar is rendered on every page", () => {
   const layout = read("app/layout.tsx")
   assert.match(layout, /<MobileCtaBar showIntensive=\{showIntensive\} \/>/)
   const bar = read("components/mobile-cta-bar.tsx")
-  for (const label of [">\n        Call\n", ">\n        Text\n", "Reserve a Seat"]) assert.ok(bar.includes(label), label)
+  for (const label of [">\n        Call\n", ">\n        Text\n", "Request Enrollment"]) assert.ok(bar.includes(label), label)
 })

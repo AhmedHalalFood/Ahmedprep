@@ -12,6 +12,7 @@ import {
   tuitionOptionsFor,
   type ProgramId,
 } from "@/lib/cohorts-2027"
+import { programsHref } from "@/lib/program-finder"
 
 export function ProgramTuition({ program, note }: { program: ProgramId; note?: string }) {
   return (
@@ -30,7 +31,7 @@ export function ProgramTuition({ program, note }: { program: ProgramId; note?: s
               <div className="flex flex-wrap items-baseline justify-between gap-2 border-b-2 border-navy pb-2">
                 <h3 className="text-2xl font-extrabold text-navy">{term.name}</h3>
                 <Link
-                  href={`/programs-2027#${term.id}`}
+                  href={programsHref({ season: term.id })}
                   className="text-sm font-semibold text-subtle underline underline-offset-4 hover:text-brand"
                 >
                   Full {term.name} calendar, closures, and makeups

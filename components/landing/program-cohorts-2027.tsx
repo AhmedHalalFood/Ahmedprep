@@ -14,6 +14,7 @@ import {
   priceFor,
   type ProgramId,
 } from "@/lib/cohorts-2027"
+import { programsHref } from "@/lib/program-finder"
 import { SITE_URL } from "@/lib/business"
 
 /** Schema.org CourseInstance entries for every 2027 cohort of one program. */
@@ -93,7 +94,7 @@ export function ProgramCohorts2027({ program }: { program: ProgramId }) {
                 })}
             </ul>
             <Link
-              href={`/programs-2027#${term.id}`}
+              href={programsHref({ season: term.id })}
               className="mt-auto inline-flex min-h-11 items-center text-sm font-semibold text-subtle underline underline-offset-4"
             >
               Full {term.name} calendar and closures

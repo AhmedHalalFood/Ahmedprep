@@ -34,7 +34,7 @@ export function MobileCtaBar({ showIntensive }: { showIntensive: boolean }) {
           eventProps={{ location: "mobile_bar", cta: "request_enrollment_info" }}
           className="mobile-cta-primary"
         >
-          Reserve a Seat <ArrowRight size={15} aria-hidden="true" />
+          Request Enrollment <ArrowRight size={15} aria-hidden="true" />
         </TrackedLink>
       )}
     </nav>

@@ -150,6 +150,7 @@ export function Enrollment2027Form({ preset = {} }: { preset?: Enrollment2027Pre
   const initialSelection = presetFrom(preset)
   // Waitlist mode needs an exact cohort; the server separately confirms that cohort is full before accepting it.
   const waitlist = Boolean(preset.waitlist && initialSelection.cohortId)
+  const [changingSelection, setChangingSelection] = useState(!initialSelection.cohortId)
   const { data, errors, status, serverResult, update, submit, formRef, honeypotRef } = useLeadForm({
     endpoint: "/api/enrollment-2027",
     initial: {
@@ -256,6 +257,30 @@ export function Enrollment2027Form({ preset = {} }: { preset?: Enrollment2027Pre
         <SelectField label="Current Grade" required placeholder="Select grade" options={GRADES_2027} {...field("studentGrade")} />
       </div>
 
+      {chosen && !changingSelection ? (
+        <section aria-labelledby={`${LOCATION}-selected-title`} className="flex flex-col gap-3 rounded-2xl border-2 border-brand bg-brand-soft p-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-0.5">
+            <h3 id={`${LOCATION}-selected-title`} className="text-xs font-bold uppercase tracking-widest text-subtle">
+              Your selected class
+            </h3>
+            <p className="font-extrabold text-navy">
+              {termName(chosen.term)} {chosen.program} · {chosen.label}
+            </p>
+            <p className="text-sm text-ink">{cohortSchedule(chosen)}</p>
+            <p className="text-sm text-subtle">
+              {formatShortDate(cohortSpan(chosen).startIso)} to {formatShortDate(cohortSpan(chosen).endIso)} · {chosen.hours} hours
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setChangingSelection(true)}
+            className="inline-flex min-h-11 items-center justify-center self-start rounded-full border-2 border-navy bg-paper px-4 text-sm font-bold text-navy transition-colors hover:bg-navy hover:text-paper sm:self-center"
+          >
+            Change selection
+          </button>
+        </section>
+      ) : (
+      <>
       <ChoiceCards
         name="program"
         legend="Program"
@@ -315,6 +340,8 @@ export function Enrollment2027Form({ preset = {} }: { preset?: Enrollment2027Pre
           text={data.program ? "Choose a term above to see its cohorts." : "Choose a program and term to see the available cohorts."}
           error={errors.cohortId}
         />
+      )}
+      </>
       )}
 
       {chosen && (
