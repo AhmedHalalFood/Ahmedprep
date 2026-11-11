@@ -3,15 +3,17 @@ import { MapPin } from "lucide-react"
 import Link from "next/link"
 import { ClassCards } from "@/components/enroll-2027/class-cards"
 import { EnrollmentSteps } from "@/components/enroll-2027/enrollment-steps"
-import { SelectedCohortSummary } from "@/components/enroll-2027/selected-cohort"
-import { TERM_IDS, cohortTitle, findCohort, termName } from "@/lib/cohorts-2027"
+import { EnrollmentHelp } from "@/components/enroll-2027/enrollment-help"
+import { PayNowSlot } from "@/components/enroll-2027/pay-now-slot"
+import { SelectedClassSummary } from "@/components/enroll-2027/selected-class-summary"
+import { TERM_IDS, cohortTitle, findCohort, termStartLabel } from "@/lib/cohorts-2027"
 import { TuitionOptions } from "@/components/enroll-2027/tuition-options"
 import { Enrollment2027Form } from "@/components/enrollment-2027-form"
 import { Faq, type FaqItem } from "@/components/landing/faq"
 import { Breadcrumbs } from "@/components/landing/primitives"
 import { ADDRESS_LINE_1, ADDRESS_LINE_2 } from "@/lib/business"
 import { isCohortFull } from "@/lib/cohort-capacity"
-import { ENROLLMENT_2027 } from "@/lib/enrollment-2027"
+import { ENROLLMENT_2027, ENROLLMENT_ACTIONS, REQUEST_NOT_GUARANTEE } from "@/lib/enrollment-2027"
 import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 import { programsHref } from "@/lib/program-finder"
 
@@ -68,7 +70,7 @@ export default async function Enroll2027Page({ searchParams }: Props) {
   const unknownCohort = Boolean(cohortParam) && !selected
   const facts = [
     { term: "Programs", value: "SHSAT & Digital SAT" },
-    { term: "Seasons", value: "Winter · Spring · Summer 2027" },
+    { term: "Classes start", value: "January · April · July 2027" },
     { term: "Class size", value: `Max ${E.maxClassSize} students` },
   ]
 
@@ -76,22 +78,21 @@ export default async function Enroll2027Page({ searchParams }: Props) {
     <section aria-labelledby="inquiry-heading" className="scroll-mt-4 bg-white px-5 py-10 sm:py-14" id="inquiry-form">
       <div className="mx-auto flex max-w-3xl flex-col gap-6">
         <div className="flex flex-col gap-2">
-          <p className="eyebrow blue">{preset.waitlist ? "Waitlist" : "Step 1"}</p>
+          <p className="eyebrow blue">{preset.waitlist ? "Waitlist" : "Enrollment request"}</p>
           <h2 id="inquiry-heading" className="text-balance text-2xl font-extrabold tracking-tight text-navy sm:text-3xl">
-            {preset.waitlist ? "Join this cohort's waitlist" : "Free enrollment inquiry"}
+            {preset.waitlist ? "Join this class's waitlist" : ENROLLMENT_ACTIONS.request}
           </h2>
-          <p className="text-pretty leading-relaxed text-subtle">
-            No payment is taken here. We&apos;ll contact you to confirm availability and send payment instructions.
-          </p>
+          <p className="text-pretty leading-relaxed text-subtle">No payment is taken here. {REQUEST_NOT_GUARANTEE}</p>
         </div>
         {unknownCohort && (
           <p role="alert" className="border-l-4 border-gold bg-cream p-4 text-sm font-semibold leading-relaxed text-navy">
-            We couldn&apos;t find that class. Please choose your program, season and cohort below.
+            We couldn&apos;t find that class. Please choose when to start, the program, and a schedule below.
           </p>
         )}
         <div className="border border-line bg-white p-5 sm:p-8">
           <Enrollment2027Form preset={preset} />
         </div>
+        <EnrollmentHelp location="enroll_2027_page" />
       </div>
     </section>
   )
@@ -101,26 +102,37 @@ export default async function Enroll2027Page({ searchParams }: Props) {
       <>
         <Breadcrumbs items={[{ label: "2027 Enrollment", href: PATH }, { label: cohortTitle(selected), href: `${PATH}?cohort=${selected.id}` }]} />
 
-        <section aria-labelledby="enroll-heading" className="border-b-4 border-gold bg-white px-5 pb-8 pt-8 sm:pt-12">
+        <section aria-labelledby="enroll-heading" className="bg-white px-5 pb-10 pt-6 sm:pb-14 sm:pt-10" id="inquiry-form">
           <div className="mx-auto flex max-w-3xl flex-col gap-5">
-            <div className="flex flex-col gap-2">
-              <p className="eyebrow blue">{preset.waitlist ? "Cohort full · Waitlist" : "2027 Enrollment"}</p>
-              <h1 id="enroll-heading" className="text-balance text-3xl font-extrabold leading-tight tracking-tight text-navy sm:text-4xl">
-                {cohortTitle(selected)}
+            <div className="flex flex-col gap-1">
+              <p className="eyebrow blue">{preset.waitlist ? "Class full · Waitlist" : "2027 Enrollment"}</p>
+              <h1 id="enroll-heading" className="text-balance text-2xl font-extrabold leading-tight tracking-tight text-navy sm:text-4xl">
+                {preset.waitlist ? "Join the waitlist" : ENROLLMENT_ACTIONS.request}
               </h1>
               <p className="flex items-start gap-2 text-sm leading-relaxed text-ink">
                 <MapPin size={18} aria-hidden="true" className="mt-0.5 shrink-0 text-brand" />
                 <span>{`${E.location}: ${ADDRESS_LINE_1}, ${ADDRESS_LINE_2}`}</span>
               </p>
             </div>
-            <SelectedCohortSummary cohort={selected} />
+
+            <SelectedClassSummary cohort={selected} full={preset.waitlist} />
+            <PayNowSlot cohort={selected} full={preset.waitlist} />
+
+            <div className="flex flex-col gap-1">
+              <h2 className="text-lg font-extrabold text-navy">Your details</h2>
+              <p className="text-sm leading-relaxed text-subtle">
+                {preset.waitlist ? "No payment is taken. Joining the waitlist does not reserve a seat." : `No payment is taken. ${REQUEST_NOT_GUARANTEE}`}
+              </p>
+            </div>
+            <div className="border border-line bg-white p-5 sm:p-8">
+              <Enrollment2027Form preset={preset} selectionShownAbove />
+            </div>
+            <EnrollmentHelp location="enroll_2027_selected" />
             <Link href={programsHref({ season: selected.term })} className="inline-flex min-h-11 items-center self-start text-sm font-bold text-brand underline">
-              Compare all {termName(selected.term)} cohorts
+              Compare all {termStartLabel(selected.term)} classes
             </Link>
           </div>
         </section>
-
-        {inquirySection}
 
         <div className="bg-warm px-5 py-10 sm:py-14">
           <div className="mx-auto flex max-w-5xl flex-col gap-12">
@@ -145,8 +157,8 @@ export default async function Enroll2027Page({ searchParams }: Props) {
               Enroll in 2027 SHSAT &amp; Digital SAT Prep
             </h1>
             <p className="text-pretty text-lg leading-relaxed text-subtle">
-              Winter, Spring and Summer 2027 cohorts in Astoria. Start with a free inquiry and we&apos;ll guide you through the
-              rest.
+              Classes starting January, April and July 2027 in Astoria. Request enrollment and we&apos;ll confirm availability
+              and guide you through the rest.
             </p>
           </div>
 
@@ -168,7 +180,7 @@ export default async function Enroll2027Page({ searchParams }: Props) {
               </span>
             </p>
             <a href="#inquiry-form" className="button button-gold button-lg self-start sm:self-auto">
-              Start Free Inquiry
+              {ENROLLMENT_ACTIONS.request}
             </a>
           </div>
         </div>
@@ -177,20 +189,20 @@ export default async function Enroll2027Page({ searchParams }: Props) {
       <div className="bg-warm px-5 py-10 sm:py-14">
         <div className="mx-auto flex max-w-5xl flex-col gap-12">
           <div className="flex flex-col gap-2 border-l-4 border-brand bg-white p-5 text-sm leading-relaxed text-ink">
-            <p className="font-extrabold text-navy">Choose your season</p>
-            <p>The classes and tuition below are for Winter 2027 (January start), the only season with founding-family pricing.</p>
+            <p className="font-extrabold text-navy">Choose when to start</p>
+            <p>The classes and tuition below are for January 2027 classes, the only start date with founding-family pricing.</p>
             <ul className="flex flex-col">
               {TERM_IDS.map((id) => (
                 <li key={id}>
                   <Link href={programsHref({ season: id })} className="inline-flex min-h-11 items-center font-bold text-brand underline">
-                    {`${termName(id)} cohorts, schedules and tuition`}
+                    {`${termStartLabel(id)}: schedules and tuition`}
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
           <div className="flex flex-col gap-12">
-            <p className="eyebrow blue">Winter 2027 · January start</p>
+            <p className="eyebrow blue">Classes starting January 2027</p>
             <ClassCards />
             <TuitionOptions />
           </div>

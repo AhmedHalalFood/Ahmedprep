@@ -43,7 +43,7 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
             2027 SHSAT and Digital SAT classes
           </h1>
           <p className="max-w-3xl text-pretty text-lg leading-relaxed text-subtle">
-            Choose a season, program, and schedule to see one class&apos;s dates and tuition. Small groups in Astoria, maximum {MAX_CLASS_SIZE}{" "}
+            Choose when to start, SHSAT or Digital SAT, and a schedule to see one class&apos;s dates and tuition. Small groups in Astoria, maximum {MAX_CLASS_SIZE}{" "}
             students. All times are Eastern Time.
           </p>
         </div>

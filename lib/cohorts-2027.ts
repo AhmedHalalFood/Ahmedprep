@@ -173,6 +173,18 @@ const COHORTS: readonly Cohort[] = [
 
 const TERM_NAMES: Record<TermId, string> = { winter: "Winter 2027", spring: "Spring 2027", summer: "Summer 2027" }
 
+/**
+ * Customer-facing start-period labels. Term ids ("winter", ...) and TERM_NAMES stay unchanged for URLs, the database,
+ * and confirmation emails; selection screens describe a term by the month its classes begin.
+ */
+const TERM_START_LABELS: Record<TermId, string> = {
+  winter: "January 2027 Classes",
+  spring: "April 2027 Classes",
+  summer: "July 2027 Classes",
+}
+/** "January 2027 Classes" */
+export const termStartLabel = (id: TermId) => TERM_START_LABELS[id]
+
 // ---------- Dates (pure ISO arithmetic at noon UTC, so results never depend on the server's time zone) ----------
 
 const toDate = (iso: string) => new Date(`${iso}T12:00:00Z`)

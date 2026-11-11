@@ -165,7 +165,7 @@ export function Enrollment2027({ showIntensive }: { showIntensive: boolean }) {
               eventProps={{ location: "home_enrollment_2027", cta: "request_enrollment_info" }}
               className="button button-gold button-lg"
             >
-              Request Enrollment Information <ArrowUpRight size={16} aria-hidden="true" />
+              Request Enrollment <ArrowUpRight size={16} aria-hidden="true" />
             </TrackedLink>
             <TrackedLink
               href={E.diagnosticHref}

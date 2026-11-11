@@ -129,5 +129,20 @@ export function inquiryReceivedMessage(result: unknown, parentName: string, emai
   }
 }
 
+/**
+ * Enrollment call-to-action wording and the future online-payment switch.
+ * Phase 1: families request enrollment only. `onlinePaymentsEnabled` must stay false until online tuition payment is
+ * separately implemented and approved; while false, no "Enroll & Pay Now" action is rendered anywhere.
+ */
+export const ENROLLMENT_ACTIONS = {
+  request: "Request Enrollment",
+  waitlist: "Join Waitlist",
+  payNow: "Enroll & Pay Now",
+  onlinePaymentsEnabled: false as boolean,
+} as const
+
+export const REQUEST_NOT_GUARANTEE =
+  "A request does not guarantee a seat. AhmedPrep will contact you to confirm availability, and a seat is confirmed only after full payment is received."
+
 export const ENROLLMENT_DISCLAIMER =
   "Submitting this form is an inquiry only. It does not guarantee a seat or reserve founding-family tuition, and no payment is taken. AhmedPrep will contact you to confirm availability, class dates, and tuition."
