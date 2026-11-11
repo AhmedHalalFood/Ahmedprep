@@ -48,27 +48,18 @@ export function SelectedClassSummary({ cohort, full }: { cohort: Cohort; full: b
 
       <div className="flex flex-col gap-1 border-t border-navy/10 pt-3">
         <p className="text-xs font-bold uppercase tracking-wider text-subtle">Tuition</p>
-        <ul className="flex flex-col gap-1 text-sm">
+        <ul className="flex flex-col gap-2 text-sm">
           {options.map((option) => (
-            <li key={option.id} className="flex items-baseline justify-between gap-3">
-              <span className="text-ink">{option.label}</span>
-              <span className="font-extrabold text-navy">{dollars(option.amount)}</span>
+            <li key={option.id} className="flex flex-col">
+              <span className="flex items-baseline justify-between gap-3">
+                <span className="font-semibold text-ink">{option.label}</span>
+                <span className="font-extrabold text-navy">{dollars(option.amount)}</span>
+              </span>
+              <span className="text-xs leading-relaxed text-subtle">{option.condition}</span>
             </li>
           ))}
         </ul>
-        <details className="text-sm text-subtle">
-          <summary className="inline-flex min-h-11 cursor-pointer items-center font-semibold text-navy underline underline-offset-4">
-            Discount deadlines and conditions
-          </summary>
-          <ul className="flex flex-col gap-1 pb-1 leading-relaxed">
-            {options.map((option) => (
-              <li key={option.id}>
-                <span className="font-semibold text-navy">{option.label}:</span> {option.condition}
-              </li>
-            ))}
-            <li>Discounts cannot be combined.</li>
-          </ul>
-        </details>
+        <p className="text-xs text-subtle">Discounts cannot be combined.</p>
       </div>
     </section>
   )

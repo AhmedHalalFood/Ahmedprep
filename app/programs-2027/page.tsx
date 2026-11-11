@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { ArrowUpRight, ChevronDown } from "lucide-react"
+import { ArrowUpRight } from "lucide-react"
 import { ClassFinder } from "@/components/programs/class-finder"
 import { FinderHashRestore } from "@/components/programs/finder-hash-restore"
 import {
@@ -66,11 +66,8 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
             </p>
           </div>
 
-          <details className="group rounded-2xl border border-line bg-paper">
-            <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-3 px-5 font-extrabold text-navy [&::-webkit-details-marker]:hidden">
-              Compare all 2027 classes
-              <ChevronDown size={20} aria-hidden="true" className="shrink-0 transition-transform group-open:rotate-180" />
-            </summary>
+          <div className="rounded-2xl border border-line bg-paper">
+            <h2 className="flex min-h-14 items-center px-5 text-lg font-extrabold text-navy">Compare all 2027 classes</h2>
             <div className="flex flex-col gap-6 border-t border-line px-5 pb-5 pt-4">
               {TERMS_2027.map((term) => (
                 <div key={term.id} className="overflow-x-auto">
@@ -109,7 +106,7 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
                 </div>
               ))}
             </div>
-          </details>
+          </div>
         </div>
       </section>
 
