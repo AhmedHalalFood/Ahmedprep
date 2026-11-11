@@ -9,7 +9,7 @@ import {
   dollars,
   formatLongDate,
   formatRange,
-  termName,
+  termStartLabel,
   termSummary,
   tuitionOptionsFor,
   type Cohort,
@@ -17,24 +17,18 @@ import {
   type TermId,
 } from "@/lib/cohorts-2027"
 import { WAITLIST_DISCLAIMER, enrollActionFor } from "@/lib/cohort-capacity"
+import { ENROLLMENT_ACTIONS, REQUEST_NOT_GUARANTEE } from "@/lib/enrollment-2027"
 import { FINDER_ID, FORMAT_LABEL, programsHref, type FinderState } from "@/lib/program-finder"
+import { NEUTRAL_TONE, PROGRAM_TONE } from "@/components/programs/program-tone"
+import { EnrollmentHelp } from "@/components/enroll-2027/enrollment-help"
+import { PayNowSlot } from "@/components/enroll-2027/pay-now-slot"
 
-const SEASON_ICON: Record<TermId, LucideIcon> = { winter: Snowflake, spring: Leaf, summer: Sun }
-
-const PROGRAM_META: Record<ProgramId, { subjects: string; Icon: LucideIcon; selected: string; badge: string; page: string }> = {
-  SHSAT: { subjects: "Math and ELA", Icon: BookOpen, selected: "border-brand bg-brand-soft", badge: "bg-brand", page: "/shsat-prep" },
-  "Digital SAT": {
-    subjects: "Math and Reading & Writing",
-    Icon: Laptop,
-    selected: "border-sage bg-sage-soft",
-    badge: "bg-sage",
-    page: "/digital-sat-prep",
-  },
-}
+const START_ICON: Record<TermId, LucideIcon> = { winter: Snowflake, spring: Leaf, summer: Sun }
+const PROGRAM_ICON: Record<ProgramId, LucideIcon> = { SHSAT: BookOpen, "Digital SAT": Laptop }
 
 const optionBase =
-  "group flex h-full min-h-16 items-center gap-3 rounded-xl border-2 bg-paper p-4 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
-const optionIdle = "border-line hover:border-navy/40"
+  "group relative flex h-full min-h-16 items-center gap-3 rounded-xl border-2 p-4 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
+const optionIdle = "border-line bg-paper hover:border-navy/40"
 
 function Step({ n, title, done, children }: { n: number; title: string; done: boolean; children: React.ReactNode }) {
   return (
@@ -56,17 +50,32 @@ function Step({ n, title, done, children }: { n: number; title: string; done: bo
   )
 }
 
-function OptionLink({ href, selected, className = "", children }: { href: string; selected: boolean; className?: string; children: React.ReactNode }) {
+type Tone = { selected: string; ring: string; badge: string }
+
+function OptionLink({ href, selected, tone, children }: { href: string; selected: boolean; tone: Tone; children: React.ReactNode }) {
   return (
-    <Link href={href} scroll={false} aria-current={selected ? "true" : undefined} className={`${optionBase} ${selected ? className || "border-navy bg-brand-soft" : optionIdle}`}>
+    <Link
+      href={href}
+      scroll={false}
+      aria-current={selected ? "true" : undefined}
+      className={`${optionBase} ${selected ? `${tone.selected} ${tone.ring}` : optionIdle}`}
+    >
       <span className="flex min-w-0 flex-1 flex-col gap-0.5">{children}</span>
-      <ArrowRight size={18} aria-hidden="true" className="shrink-0 text-navy transition-transform group-hover:translate-x-0.5" />
+      {selected ? (
+        <span className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-xs font-extrabold uppercase tracking-wider ${tone.badge}`}>
+          <Check size={14} aria-hidden="true" />
+          Selected
+        </span>
+      ) : (
+        <ArrowRight size={18} aria-hidden="true" className="shrink-0 text-navy transition-transform group-hover:translate-x-0.5" />
+      )}
     </Link>
   )
 }
 
 export function ClassFinder({ state, full }: { state: FinderState; full: (cohortId: string) => boolean }) {
   const { season, program, format, formats, cohort } = state
+  const programTone = program ? PROGRAM_TONE[program] : NEUTRAL_TONE
   return (
     <section id={FINDER_ID} aria-labelledby="finder-title" className="scroll-mt-28 px-5 py-10">
       <div className="mx-auto flex max-w-5xl flex-col gap-6">
@@ -74,15 +83,17 @@ export function ClassFinder({ state, full }: { state: FinderState; full: (cohort
           <h2 id="finder-title" className="font-serif text-2xl font-bold text-navy sm:text-3xl">
             Find your class
           </h2>
-          <p className="text-pretty leading-relaxed text-subtle">Four quick choices lead to the exact schedule, dates, and tuition.</p>
+          <p className="text-pretty leading-relaxed text-subtle">
+            Choose when to start, the program, and a schedule. Then review the class and request enrollment.
+          </p>
         </div>
 
         <ol className="flex flex-col gap-8">
-          <Step n={1} title="Choose a season" done={Boolean(season)}>
+          <Step n={1} title="Choose when to start" done={Boolean(season)}>
             {program && !season && (
               <p className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-xl border border-line bg-paper px-4 py-3 text-sm text-ink">
                 <span>
-                  Showing <strong className="text-navy">{program}</strong> classes ({PROGRAM_META[program].subjects}).
+                  Showing <strong className="text-navy">{program}</strong> classes ({PROGRAM_TONE[program].subjects}).
                 </span>
                 <Link href={programsHref({})} scroll={false} className="font-bold text-navy underline underline-offset-4">
                   Change program
@@ -92,13 +103,13 @@ export function ClassFinder({ state, full }: { state: FinderState; full: (cohort
             <ul className="grid gap-3 sm:grid-cols-3">
               {TERMS_2027.map((term) => {
                 const s = termSummary(term)
-                const Icon = SEASON_ICON[term.id]
+                const Icon = START_ICON[term.id]
                 return (
                   <li key={term.id}>
-                    <OptionLink href={programsHref({ season: term.id, program })} selected={season === term.id}>
+                    <OptionLink href={programsHref({ season: term.id, program })} selected={season === term.id} tone={programTone}>
                       <span className="flex items-center gap-2 font-extrabold text-navy">
-                        <Icon size={20} aria-hidden="true" className="text-brand" />
-                        {term.name}
+                        <Icon size={20} aria-hidden="true" className={program ? PROGRAM_TONE[program].text : "text-brand"} />
+                        {termStartLabel(term.id)}
                       </span>
                       <span className="text-sm text-ink">{formatRange(s.startIso, s.endIso)}</span>
                       <span className="text-sm text-subtle">
@@ -112,20 +123,21 @@ export function ClassFinder({ state, full }: { state: FinderState; full: (cohort
           </Step>
 
           {season && (
-            <Step n={2} title="Choose a program" done={Boolean(program)}>
+            <Step n={2} title="Choose SHSAT or Digital SAT" done={Boolean(program)}>
               <ul className="grid gap-3 sm:grid-cols-2">
                 {PROGRAMS_2027.map((p) => {
-                  const meta = PROGRAM_META[p]
+                  const tone = PROGRAM_TONE[p]
+                  const Icon = PROGRAM_ICON[p]
                   return (
                     <li key={p}>
-                      <OptionLink href={programsHref({ season, program: p })} selected={program === p} className={meta.selected}>
+                      <OptionLink href={programsHref({ season, program: p })} selected={program === p} tone={tone}>
                         <span className="flex items-center gap-3">
-                          <span className={`flex size-10 shrink-0 items-center justify-center rounded-lg text-paper ${meta.badge}`} aria-hidden="true">
-                            <meta.Icon size={20} />
+                          <span className={`flex size-10 shrink-0 items-center justify-center rounded-lg ${tone.badge}`} aria-hidden="true">
+                            <Icon size={20} />
                           </span>
                           <span className="flex flex-col">
                             <span className="font-extrabold text-navy">{p}</span>
-                            <span className="text-sm text-subtle">{meta.subjects}</span>
+                            <span className="text-sm text-subtle">{tone.subjects}</span>
                           </span>
                         </span>
                       </OptionLink>
@@ -137,11 +149,11 @@ export function ClassFinder({ state, full }: { state: FinderState; full: (cohort
           )}
 
           {season && program && (
-            <Step n={3} title="Choose a schedule" done={Boolean(format)}>
+            <Step n={3} title={`Choose ${formats.map((f) => FORMAT_LABEL[f.slug]).join(" or ")}`} done={Boolean(format)}>
               <ul className={`grid gap-3 ${formats.length === 2 ? "sm:grid-cols-2" : "sm:grid-cols-3"}`}>
                 {formats.map(({ slug, cohort: c }) => (
                   <li key={slug}>
-                    <OptionLink href={programsHref({ season, program, format: slug })} selected={format === slug} className={PROGRAM_META[program].selected}>
+                    <OptionLink href={programsHref({ season, program, format: slug })} selected={format === slug} tone={PROGRAM_TONE[program]}>
                       <span className="font-extrabold text-navy">{FORMAT_LABEL[slug]}</span>
                       <span className="text-sm text-ink">{cohortSchedule(c)}</span>
                       <span className="text-sm text-subtle">
@@ -159,9 +171,19 @@ export function ClassFinder({ state, full }: { state: FinderState; full: (cohort
               <CohortDetail cohort={cohort} full={full(cohort.id)} />
             </Step>
           )}
+
+          {cohort && (
+            <Step n={5} title={full(cohort.id) ? "Join the waitlist" : "Request enrollment"} done={false}>
+              <EnrollmentAction cohort={cohort} full={full(cohort.id)} />
+            </Step>
+          )}
         </ol>
 
-        {!season && <p className="text-sm text-subtle">Start with a season above. Your choices stay in the page address, so you can share or bookmark them.</p>}
+        {!season && (
+          <p className="text-sm text-subtle">
+            Start by choosing when your child&apos;s classes begin. Your choices stay in the page address, so you can share or bookmark them.
+          </p>
+        )}
       </div>
     </section>
   )
@@ -170,17 +192,16 @@ export function ClassFinder({ state, full }: { state: FinderState; full: (cohort
 function CohortDetail({ cohort, full }: { cohort: Cohort; full: boolean }) {
   const span = cohortSpan(cohort)
   const options = tuitionOptionsFor(cohort)
-  const action = enrollActionFor(cohort, full)
-  const meta = PROGRAM_META[cohort.program]
-  const title = `${termName(cohort.term)} ${cohort.program} · ${cohort.label}`
+  const tone = PROGRAM_TONE[cohort.program]
   return (
-    <article aria-labelledby="cohort-detail-title" className={`flex flex-col gap-5 rounded-2xl border-2 p-5 shadow-sm sm:p-6 ${meta.selected}`}>
+    <article aria-labelledby="cohort-detail-title" className={`flex flex-col gap-5 rounded-2xl border-2 p-5 shadow-sm sm:p-6 ${tone.selected}`}>
       <div className="flex flex-col gap-1">
+        <p className={`text-sm font-extrabold uppercase tracking-wider ${tone.text}`}>{termStartLabel(cohort.term)}</p>
         <h4 id="cohort-detail-title" className="font-serif text-xl font-bold text-navy sm:text-2xl">
-          {title}
+          {cohort.program} · {cohort.label}
         </h4>
         <p className="text-sm text-subtle">
-          <Link href={meta.page} className="font-semibold text-navy underline underline-offset-4">
+          <Link href={tone.page} className="font-semibold text-navy underline underline-offset-4">
             About {cohort.program} preparation
           </Link>
         </p>
@@ -191,7 +212,7 @@ function CohortDetail({ cohort, full }: { cohort: Cohort; full: boolean }) {
           ["Schedule", cohortSchedule(cohort)],
           ["Dates", `${formatLongDate(span.startIso)} – ${formatLongDate(span.endIso)}`],
           ["Program length", `${cohort.sessions} classes · ${cohort.hours} instructional hours`],
-          ["Class size", `Maximum ${MAX_CLASS_SIZE} students · in person in Astoria`],
+          ["Availability", full ? "Full · waitlist open" : `Accepting enrollment requests · max ${MAX_CLASS_SIZE} students, in person in Astoria`],
         ].map(([term, value]) => (
           <div key={term} className="flex flex-col gap-0.5 rounded-xl bg-paper px-4 py-3">
             <dt className="text-xs font-bold uppercase tracking-widest text-subtle">{term}</dt>
@@ -218,25 +239,37 @@ function CohortDetail({ cohort, full }: { cohort: Cohort; full: boolean }) {
         </ul>
         <p className="text-sm text-subtle">Discounts do not combine. Requesting enrollment does not reserve a seat or a discounted rate.</p>
       </div>
+    </article>
+  )
+}
 
-      {full && <p className="text-sm font-semibold text-ink">This class is full. {WAITLIST_DISCLAIMER}</p>}
-
+function EnrollmentAction({ cohort, full }: { cohort: Cohort; full: boolean }) {
+  const action = enrollActionFor(cohort, full)
+  return (
+    <div className="flex flex-col gap-4 rounded-2xl border-2 border-navy bg-paper p-5 sm:p-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <Link
           href={action.href}
           data-cohort-id={cohort.id}
-          className={`inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-6 font-extrabold transition-colors ${
+          className={`inline-flex min-h-14 items-center justify-center gap-2 rounded-full px-8 text-base font-extrabold uppercase tracking-wider transition-colors ${
             full ? "border-2 border-navy bg-paper text-navy hover:bg-navy hover:text-paper" : "bg-gold text-navy hover:bg-gold-hover"
           }`}
         >
-          {full ? "Join Waitlist" : "Request Enrollment"}
-          <span className="sr-only"> for this class</span>
+          {full ? ENROLLMENT_ACTIONS.waitlist : ENROLLMENT_ACTIONS.request}
+          <span className="sr-only"> for {cohort.program} {cohort.label}, {termStartLabel(cohort.term)}</span>
           <ArrowRight size={18} aria-hidden="true" />
         </Link>
-        <Link href={programsHref({ season: cohort.term, program: cohort.program })} scroll={false} className="inline-flex min-h-11 items-center px-2 text-sm font-bold text-navy underline underline-offset-4">
+        <PayNowSlot cohort={cohort} full={full} />
+        <Link
+          href={programsHref({ season: cohort.term, program: cohort.program })}
+          scroll={false}
+          className="inline-flex min-h-11 items-center px-2 text-sm font-bold text-navy underline underline-offset-4"
+        >
           Choose a different schedule
         </Link>
       </div>
-    </article>
+      <p className="text-sm leading-relaxed text-subtle">{full ? WAITLIST_DISCLAIMER : `No payment is taken. ${REQUEST_NOT_GUARANTEE}`}</p>
+      <EnrollmentHelp location="class_finder" />
+    </div>
   )
 }
