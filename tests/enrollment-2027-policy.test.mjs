@@ -43,18 +43,15 @@ test("tuition amounts are unchanged", () => {
   assert.equal(ENROLLMENT_2027.tuition.founding.total, "$1,080")
 })
 
-const APPROVED_CHECKOUT_DEADLINES = {
-  "2027-01-shsat-weekday": { founding: ["2026-11-30", "2026-12-01T04:59:59Z"], early: ["2026-12-21", "2026-12-22T04:59:59Z"] },
-  "2027-01-shsat-weekend": { founding: ["2026-11-28", "2026-11-29T04:59:59Z"], early: ["2026-12-19", "2026-12-20T04:59:59Z"] },
-  "2027-01-dsat-weekday": { founding: ["2026-12-01", "2026-12-02T04:59:59Z"], early: ["2026-12-22", "2026-12-23T04:59:59Z"] },
-  "2027-01-dsat-weekend": { founding: ["2026-11-28", "2026-11-29T04:59:59Z"], early: ["2026-12-19", "2026-12-20T04:59:59Z"] },
-}
+// Winter 2027: one founding-family deadline (December 12, 2026, 11:59 PM ET) and no early-payment tier.
+const WINTER_FOUNDING = ["2026-12-12", "2026-12-13T04:59:59Z"]
+const WINTER_CLASS_IDS = ["2027-01-shsat-weekday", "2027-01-shsat-weekend", "2027-01-dsat-weekday", "2027-01-dsat-weekend"]
 
-test("checkout uses each class's approved cohort deadlines at 11:59:59 PM Eastern", () => {
-  for (const [classId, expected] of Object.entries(APPROVED_CHECKOUT_DEADLINES)) {
+test("checkout uses the single Winter founding-family deadline and no Winter early tier", () => {
+  for (const classId of WINTER_CLASS_IDS) {
     const d = deadlinesForClass(classId)
-    assert.deepEqual([d.founding.dateIso, d.founding.deadlineIso], expected.founding, `${classId} founding`)
-    assert.deepEqual([d.early.dateIso, d.early.deadlineIso], expected.early, `${classId} early`)
+    assert.deepEqual([d.founding.dateIso, d.founding.deadlineIso], WINTER_FOUNDING, `${classId} founding`)
+    assert.equal(d.early, null, `${classId} early`)
   }
   assert.equal(deadlinesForClass("not-a-class"), null)
 })
@@ -66,26 +63,18 @@ test("Eastern end-of-day cutoffs are DST-aware", () => {
 })
 
 test("discount windows open and close to the second, per class", () => {
-  for (const [classId, expected] of Object.entries(APPROVED_CHECKOUT_DEADLINES)) {
-    const f = Date.parse(expected.founding[1])
-    const e = Date.parse(expected.early[1])
+  const f = Date.parse(WINTER_FOUNDING[1])
+  for (const classId of WINTER_CLASS_IDS) {
     assert.equal(isFoundingWindowOpen(classId, new Date(f)), true, classId)
     assert.equal(isFoundingWindowOpen(classId, new Date(f + 1000)), false, classId)
-    assert.equal(isEarlyWindowOpen(classId, new Date(e)), true, classId)
-    assert.equal(isEarlyWindowOpen(classId, new Date(e + 1000)), false, classId)
+    assert.equal(isEarlyWindowOpen(classId, new Date("2026-11-01T12:00:00Z")), false, `${classId} has no early tier`)
   }
-  // Weekday Digital SAT keeps founding open after the weekend groups close.
-  const nov30 = new Date("2026-11-30T12:00:00Z")
-  assert.equal(isFoundingWindowOpen("2027-01-shsat-weekend", nov30), false)
-  assert.equal(isFoundingWindowOpen("2027-01-dsat-weekday", nov30), true)
 })
 
 test("server eligibility enforces deadlines and the 5-seat founding cap", () => {
   const base = { classId: "2027-01-shsat-weekend", fullyPaidFoundingCount: 0 }
-  const beforeFounding = new Date("2026-11-29T04:59:59Z")
-  const afterFounding = new Date("2026-11-29T05:00:00Z")
-  const lastEarlySecond = new Date("2026-12-20T04:59:59Z")
-  const afterEarly = new Date("2026-12-20T05:00:00Z")
+  const beforeFounding = new Date("2026-12-13T04:59:59Z")
+  const afterFounding = new Date("2026-12-13T05:00:00Z")
 
   assert.deepEqual(checkoutEligibility({ ...base, payment: "founding-full", now: beforeFounding }), {
     ok: true,
@@ -102,25 +91,25 @@ test("server eligibility enforces deadlines and the 5-seat founding cap", () => 
     checkoutEligibility({ ...base, payment: "founding-full", now: beforeFounding, fullyPaidFoundingCount: 5 }).reason,
     "founding-full",
   )
-  assert.equal(checkoutEligibility({ ...base, payment: "early-full", now: afterFounding }).amountCents, 129_600)
-  assert.equal(checkoutEligibility({ ...base, payment: "early-full", now: lastEarlySecond }).amountCents, 129_600)
-  assert.equal(checkoutEligibility({ ...base, payment: "early-full", now: afterEarly }).reason, "early-closed")
-  assert.equal(checkoutEligibility({ ...base, payment: "founding-full", now: afterEarly }).reason, "founding-closed")
-  assert.equal(checkoutEligibility({ ...base, payment: "regular-full", now: afterEarly }).amountCents, 144_000)
+  // Winter has no early-payment tier at any time.
+  assert.equal(checkoutEligibility({ ...base, payment: "early-full", now: beforeFounding }).reason, "early-closed")
+  assert.equal(checkoutEligibility({ ...base, payment: "early-full", now: afterFounding }).reason, "early-closed")
+  assert.equal(checkoutEligibility({ ...base, payment: "regular-full", now: afterFounding }).amountCents, 144_000)
   assert.equal(checkoutEligibility({ ...base, payment: "regular-full", now: new Date("2027-01-09T05:00:00Z") }).reason, "class-started")
   assert.equal(checkoutEligibility({ ...base, payment: "half-off", now: beforeFounding }).reason, "unknown-payment")
   assert.equal(checkoutEligibility({ ...base, classId: "made-up", payment: "regular-full", now: beforeFounding }).reason, "unknown-class")
 })
 
-test("checkout copy shows each class's own deadlines", () => {
+test("checkout copy shows the approved discount rules", () => {
   assert.equal(FOUNDING_POLICY.seatsPerClass, 5)
-  assert.match(paymentOptionsFor("2027-01-dsat-weekday")["founding-full"].detail, /December 1, 2026, at 11:59:59 PM ET/)
-  assert.match(paymentOptionsFor("2027-01-shsat-weekday")["early-full"].detail, /December 21, 2026, at 11:59:59 PM ET/)
-  assert.match(
-    ENROLLMENT_2027.tuition.early.summary,
-    /December 19 \(weekend SHSAT or Digital SAT\), December 21 \(weekday SHSAT\), or December 22 \(weekday Digital SAT\), 2026/,
-  )
-  assert.match(TUITION_TIERS.find((t) => t.id === "early").condition, /December 19 \(weekend SHSAT or Digital SAT\)/)
+  for (const classId of WINTER_CLASS_IDS) {
+    assert.match(paymentOptionsFor(classId)["founding-full"].detail, /December 12, 2026, at 11:59 PM ET/)
+    assert.match(paymentOptionsFor(classId)["early-full"].detail, /Not offered for Winter 2027/)
+  }
+  assert.match(ENROLLMENT_2027.tuition.founding.summary, /December 12, 2026 at 11:59 PM ET/)
+  assert.match(ENROLLMENT_2027.tuition.early.summary, /at least 30 calendar days before the selected cohort begins/)
+  assert.match(TUITION_TIERS.find((t) => t.id === "founding").condition, /December 12, 2026, at 11:59 PM ET/)
+  assert.match(TUITION_TIERS.find((t) => t.id === "early").condition, /at least 30 calendar days before the cohort begins/)
   const action = read("app/enroll/actions.ts")
   assert.match(action, /^"use server"/)
   assert.match(action, /now: new Date\(\)/)
@@ -134,7 +123,7 @@ test("regular tuition is due before the first scheduled class, with no installme
   assert.match(TUITION_TIERS.find((t) => t.id === "regular").condition, /before the student’s first scheduled class/)
   assert.equal(
     ENROLLMENT_2027.tuition.rules,
-    "Discounts cannot be combined. Payment and installment terms will be confirmed before payment is requested.",
+    "Only one discount applies. Payment and installment terms will be confirmed before payment is requested.",
   )
 })
 

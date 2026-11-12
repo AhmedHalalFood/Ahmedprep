@@ -3,13 +3,13 @@ import { ArrowUpRight, Check } from "lucide-react"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
 import {
-  EARLY_DAYS_AFTER_FOUNDING,
   EARLY_DAYS_BEFORE_SPRING_SUMMER,
-  FOUNDING_DAYS_BEFORE,
   FOUNDING_SEATS_PER_COHORT,
   HOURLY_RATE,
   MAX_CLASS_SIZE,
   TERMS_2027,
+  WINTER_FOUNDING_DEADLINE_ISO,
+  formatDate,
   cohortInquiryHref,
   cohortSchedule,
   dollars,
@@ -90,7 +90,7 @@ export function Enrollment2027({ showIntensive }: { showIntensive: boolean }) {
                     <div key={d.group} className="flex flex-col">
                       <dt className="font-bold text-navy">{d.group}</dt>
                       {d.foundingShort && <dd>Founding-family payment deadline: {d.foundingShort}</dd>}
-                      <dd>Early-payment deadline: {d.earlyShort}</dd>
+                      {d.earlyShort && <dd>Early-payment deadline: {d.earlyShort}</dd>}
                     </div>
                   ))}
                 </dl>
@@ -119,8 +119,8 @@ export function Enrollment2027({ showIntensive }: { showIntensive: boolean }) {
             </div>
             <ul className="flex flex-col border-t border-white/20">
               {[
-                { label: "Founding-Family (Winter 2027 only)", value: "25% off", note: `First ${FOUNDING_SEATS_PER_COHORT} fully paid seats per Winter cohort, paid in full ${FOUNDING_DAYS_BEFORE} days before the first class` },
-                { label: "Early Full Payment", value: "10% off", note: `Winter: ${EARLY_DAYS_AFTER_FOUNDING} days after the founding-family deadline. Spring and Summer: ${EARLY_DAYS_BEFORE_SPRING_SUMMER} days before the first class` },
+                { label: "Founding-Family (Winter 2027 only)", value: "25% off", note: `First ${FOUNDING_SEATS_PER_COHORT} fully paid seats per Winter cohort, paid in full by ${formatDate(WINTER_FOUNDING_DEADLINE_ISO)}, subject to seat availability` },
+                { label: "Early Payment (Spring and Summer 2027)", value: "10% off", note: `Paid in full at least ${EARLY_DAYS_BEFORE_SPRING_SUMMER} calendar days before the cohort begins` },
                 { label: "Regular Tuition", value: "Full rate", note: "Paid in full before the student’s first scheduled class" },
               ].map((t) => (
                 <li key={t.label} className="flex flex-col gap-1 border-b border-white/20 py-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
@@ -133,7 +133,7 @@ export function Enrollment2027({ showIntensive }: { showIntensive: boolean }) {
               ))}
             </ul>
             <p className="text-sm leading-relaxed text-white/75">
-              <span className="font-bold text-gold">Discounts cannot be combined.</span> Deadlines end at 11:59 PM ET on each cohort&apos;s
+              <span className="font-bold text-gold">Only one discount applies.</span> Deadlines end at 11:59 PM ET on each cohort&apos;s
               published date. {E.tuition.seatNote}
             </p>
           </div>

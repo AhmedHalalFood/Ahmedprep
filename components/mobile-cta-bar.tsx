@@ -23,7 +23,7 @@ export function MobileCtaBar({ showIntensive }: { showIntensive: boolean }) {
           location="mobile_bar"
           trigger={
             <button type="button" className="mobile-cta-primary">
-              Reserve a Seat <ArrowRight size={15} aria-hidden="true" />
+              Request Enrollment <ArrowRight size={15} aria-hidden="true" />
             </button>
           }
         />

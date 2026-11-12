@@ -74,8 +74,8 @@ export function ProgramCohorts2027({ program }: { program: ProgramId }) {
                         {formatShortDate(span.startIso)} – {formatShortDate(span.endIso)} · {c.sessions} classes · {c.hours} hours
                       </span>
                       <span className="text-sm text-ink">
-                        <span className="font-bold">{dollars(price.regular)}</span> regular · {dollars(price.early)} by{" "}
-                        {formatShortDate(d.earlyIso)}
+                        <span className="font-bold">{dollars(price.regular)}</span> regular
+                        {price.early !== null && d.earlyIso ? ` · ${dollars(price.early)} early payment by ${formatShortDate(d.earlyIso)}` : null}
                         {price.founding !== null && d.foundingIso
                           ? ` · ${dollars(price.founding)} founding-family by ${formatShortDate(d.foundingIso)}`
                           : null}

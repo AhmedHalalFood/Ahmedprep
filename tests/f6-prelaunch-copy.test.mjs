@@ -36,11 +36,13 @@ test("Programs: SHSAT and Digital SAT show the approved 2027 hourly tuition", ()
       assert.ok(p.priceNote.includes(phrase), `${id} note ${phrase}`)
     }
     assert.ok(early.total && founding.total)
-    for (const date of ["December 19", "December 21", "December 22", "November 28", "November 30", "December 1 "]) {
-      assert.ok(p.priceNote.includes(date), `${id} note ${date}`)
+    for (const phrase of ["December 12, 2026 at 11:59 PM ET", "at least 30 calendar days before", "Winter has no separate early-payment tier"]) {
+      assert.ok(p.priceNote.includes(phrase), `${id} note ${phrase}`)
     }
-    assert.ok(!p.priceNote.includes("December 20, 2026") && !p.priceNote.includes("December 5, 2026"))
-    assert.ok(p.priceNote.includes("Discounts cannot be combined"))
+    for (const stale of ["November 28", "November 30", "December 19", "December 21", "December 22", "Discounts cannot be combined"]) {
+      assert.ok(!p.priceNote.includes(stale), `${id} note has no stale "${stale}"`)
+    }
+    assert.ok(p.priceNote.includes("Only one discount applies"))
     assert.ok(p.priceNote.includes("Private tutoring is priced separately"))
   }
   assert.equal(regular.total, "$1,440")
@@ -65,9 +67,10 @@ test("Home Programs & Pricing preview derives tuition centrally, does not repeat
   assert.doesNotMatch(src, /\$1,440|\$1,296|\$1,080|\$1,920|\$1,728|\$960|\$864/)
 })
 
-test("Mobile CALL | TEXT | RESERVE A SEAT bar is unchanged and rendered on every page", () => {
+test("Mobile CALL | TEXT | REQUEST ENROLLMENT bar is rendered on every page and never promises a reserved seat", () => {
   const layout = read("app/layout.tsx")
   assert.match(layout, /<MobileCtaBar showIntensive=\{showIntensive\} \/>/)
   const bar = read("components/mobile-cta-bar.tsx")
-  for (const label of [">\n        Call\n", ">\n        Text\n", "Reserve a Seat"]) assert.ok(bar.includes(label), label)
+  for (const label of [">\n        Call\n", ">\n        Text\n", "Request Enrollment"]) assert.ok(bar.includes(label), label)
+  assert.ok(!bar.includes("Reserve a Seat"), "inquiry-only action must not say Reserve a Seat")
 })

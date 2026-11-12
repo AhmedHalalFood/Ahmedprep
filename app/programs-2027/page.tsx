@@ -1,18 +1,19 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { ArrowUpRight, ChevronDown } from "lucide-react"
+import { ArrowUpRight } from "lucide-react"
 import { ClassFinder } from "@/components/programs/class-finder"
 import { FinderHashRestore } from "@/components/programs/finder-hash-restore"
 import {
   DEADLINE_TIME_LABEL,
-  EARLY_DAYS_AFTER_FOUNDING,
   EARLY_DAYS_BEFORE_SPRING_SUMMER,
   FOUNDING_SEATS_PER_COHORT,
   MAX_CLASS_SIZE,
   TERMS_2027,
+  WINTER_FOUNDING_DEADLINE_ISO,
   cohortSchedule,
   cohortSpan,
   dollars,
+  formatDate,
   formatShortDate,
   priceFor,
 } from "@/lib/cohorts-2027"
@@ -59,18 +60,16 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
               How tuition discounts work
             </h2>
             <p className="text-pretty text-sm leading-relaxed text-ink">
-              Winter 2027 only: founding-family tuition is limited to the first {FOUNDING_SEATS_PER_COHORT} fully paid enrollments per cohort, paid
-              by the founding-family deadline, while seats remain. Early-payment tuition (10% off) requires full payment by the cohort&apos;s
-              early-payment deadline: for Winter, {EARLY_DAYS_AFTER_FOUNDING} days after the founding-family deadline; for Spring and Summer,{" "}
-              {EARLY_DAYS_BEFORE_SPRING_SUMMER} days before the first class. All deadlines end at {DEADLINE_TIME_LABEL}. Discounts do not stack.
+              Winter 2027: founding-family tuition (25% off) is available only to the first {FOUNDING_SEATS_PER_COHORT} fully paid enrollments
+              per cohort, paid in full by {formatDate(WINTER_FOUNDING_DEADLINE_ISO)} at {DEADLINE_TIME_LABEL}, subject to seat availability.
+              Winter has no separate early-payment tier. Spring and Summer 2027: early-payment tuition (10% off) requires full payment at least{" "}
+              {EARLY_DAYS_BEFORE_SPRING_SUMMER} calendar days before the selected cohort begins; there is no founding-family discount. Only one
+              discount applies.
             </p>
           </div>
 
-          <details className="group rounded-2xl border border-line bg-paper">
-            <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-3 px-5 font-extrabold text-navy [&::-webkit-details-marker]:hidden">
-              Compare all 2027 classes
-              <ChevronDown size={20} aria-hidden="true" className="shrink-0 transition-transform group-open:rotate-180" />
-            </summary>
+          <div className="rounded-2xl border border-line bg-paper">
+            <h2 className="flex min-h-14 items-center px-5 text-lg font-extrabold text-navy">Compare all 2027 classes</h2>
             <div className="flex flex-col gap-6 border-t border-line px-5 pb-5 pt-4">
               {TERMS_2027.map((term) => (
                 <div key={term.id} className="overflow-x-auto">
@@ -109,7 +108,7 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
                 </div>
               ))}
             </div>
-          </details>
+          </div>
         </div>
       </section>
 

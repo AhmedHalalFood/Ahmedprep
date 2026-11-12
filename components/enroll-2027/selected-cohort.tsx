@@ -27,7 +27,9 @@ export function SelectedCohortSummary({ cohort }: { cohort: Cohort }) {
           },
         ]
       : []),
-    { label: "Early Full Payment", amount: price.early, note: `Pay in full by ${formatDeadline(earlyIso)}, ${DEADLINE_TIME_LABEL}.` },
+    ...(price.early !== null && earlyIso
+      ? [{ label: "Early Payment", amount: price.early, note: `Pay in full by ${formatDeadline(earlyIso)}, ${DEADLINE_TIME_LABEL}.` }]
+      : []),
     { label: "Regular Tuition", amount: price.regular, note: "Pay in full before the first scheduled class." },
   ]
 
@@ -63,9 +65,7 @@ export function SelectedCohortSummary({ cohort }: { cohort: Cohort }) {
           ))}
         </ul>
         <p className="text-sm leading-relaxed text-subtle">
-          {price.founding === null
-            ? "Discounts cannot be combined. Founding-family pricing applies to Winter 2027 cohorts only."
-            : "Discounts cannot be combined."}
+Only one discount applies.
         </p>
       </div>
     </div>

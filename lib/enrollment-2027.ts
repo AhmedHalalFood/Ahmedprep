@@ -22,21 +22,21 @@ export const ENROLLMENT_2027 = {
       total: "$1,080",
       savingsLabel: "Save $360",
       summary:
-        "Winter 2027 only. Save $360. First 5 fully paid enrollments per class. Full payment by the cohort-specific founding-family deadline (42 days before the first class), or before all 5 founding-family seats are filled, whichever comes first.",
+        "Winter 2027 only. Save $360 (25% off). Available only to the first 5 fully paid enrollments per cohort, paid in full by December 12, 2026 at 11:59 PM ET, subject to seat availability.",
       points: [
-        "Save $360 off regular tuition",
-        "Winter 2027 cohorts only; Spring and Summer 2027 offer Early Full Payment and Regular Tuition",
-        "Limited to the first 5 fully paid enrollments per class",
-        "Full payment by the cohort-specific deadline: November 28 (weekend SHSAT or Digital SAT), November 30 (weekday SHSAT), or December 1 (weekday Digital SAT), 2026; first five fully paid seats per cohort only",
+        "Save $360 (25% off regular tuition)",
+        "Winter 2027 cohorts only; Spring and Summer 2027 offer early-payment tuition instead",
+        "Limited to the first 5 fully paid enrollments per cohort",
+        "Full payment by December 12, 2026 at 11:59 PM ET, subject to seat availability",
       ],
       note: "Winter 2027 only. Limited to the first 5 fully paid enrollments in each class.",
     },
     early: {
-      label: "Early Full Payment",
+      label: "Early Payment (Spring and Summer 2027)",
       total: "$1,296",
       savingsLabel: "10% off",
-      summary: "10% discount. Full payment is due by the cohort-specific early-payment deadline, 21 days after its founding-family deadline: December 19 (weekend SHSAT or Digital SAT), December 21 (weekday SHSAT), or December 22 (weekday Digital SAT), 2026.",
-      points: ["10% discount ($144 off)", "Full payment by December 19 (weekend groups), December 21 (weekday SHSAT), or December 22 (weekday Digital SAT), 2026"],
+      summary: "Spring and Summer 2027 only. 10% discount when full payment is received at least 30 calendar days before the selected cohort begins. Not offered for Winter 2027.",
+      points: ["10% discount", "Full payment at least 30 calendar days before the cohort begins", "Spring and Summer 2027 only"],
     },
     regular: {
       label: "Regular Tuition",
@@ -45,7 +45,7 @@ export const ENROLLMENT_2027 = {
       summary: "Full payment is required before the student’s first scheduled class.",
       points: ["Full payment is required before the student’s first scheduled class"],
     },
-    rules: "Discounts cannot be combined. Payment and installment terms will be confirmed before payment is requested.",
+    rules: "Only one discount applies. Payment and installment terms will be confirmed before payment is requested.",
     seatNote: "Enrollment is subject to available seats. An inquiry does not reserve a seat.",
   },
   steps: [

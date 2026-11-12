@@ -9,12 +9,8 @@ export const GROUP_CAPACITY = 12
 
 export const FOUNDING_RULES = {
   seatsPerGroup: 5,
-  deadlineLabel:
-    "November 28 (weekend SHSAT or Digital SAT), November 30 (weekday SHSAT), or December 1 (weekday Digital SAT), 2026, at 11:59:59 PM ET",
+  deadlineLabel: "December 12, 2026, at 11:59 PM ET",
 } as const
-
-const EARLY_DEADLINE_LABEL =
-  "December 19 (weekend SHSAT or Digital SAT), December 21 (weekday SHSAT), or December 22 (weekday Digital SAT), 2026, at 11:59:59 PM ET"
 
 export type TuitionTier = {
   id: "founding" | "early" | "regular"
@@ -28,13 +24,13 @@ export const TUITION_TIERS: TuitionTier[] = [
     id: "founding",
     name: "Founding-family tuition",
     amount: "$1,080",
-    condition: `Full payment by ${FOUNDING_RULES.deadlineLabel}, or until the first ${FOUNDING_RULES.seatsPerGroup} qualifying seats per group are filled, whichever comes first.`,
+    condition: `Winter 2027 only. Full payment by ${FOUNDING_RULES.deadlineLabel}, for the first ${FOUNDING_RULES.seatsPerGroup} fully paid enrollments per cohort, subject to seat availability.`,
   },
   {
     id: "early",
     name: "Early payment",
     amount: "$1,296",
-    condition: `Full payment by ${EARLY_DEADLINE_LABEL}.`,
+    condition: "Spring and Summer 2027 only. Full payment at least 30 calendar days before the cohort begins.",
   },
   {
     id: "regular",
@@ -44,7 +40,7 @@ export const TUITION_TIERS: TuitionTier[] = [
   },
 ]
 
-export const TUITION_STACKING_NOTE = "Discounts cannot be combined."
+export const TUITION_STACKING_NOTE = "Only one discount applies."
 
 /** Only Astoria is published. Jamaica stays unpublished while that location is under discussion. */
 export const PUBLISHED_LOCATION = "Astoria"

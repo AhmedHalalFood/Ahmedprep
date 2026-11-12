@@ -122,13 +122,15 @@ export function cohortFacts(cohort: Cohort) {
     instruction: `${cohort.sessions} three-hour sessions, ${cohort.hours} hours of scheduled live instruction`,
     tuition: [
       `Regular tuition: ${dollars(price.regular)}, paid in full before the first class.`,
-      `Early full payment: ${dollars(price.early)} (10% off) if paid in full by ${formatDate(earlyIso)} at ${DEADLINE_TIME_LABEL}.`,
       ...(price.founding !== null && foundingIso
         ? [
-            `Founding-family tuition: ${dollars(price.founding)} (25% off) for the first ${FOUNDING_SEATS_PER_COHORT} fully paid enrollments in this cohort, if paid in full by ${formatDate(foundingIso)} at ${DEADLINE_TIME_LABEL} and while founding-family seats remain.`,
+            `Founding-family tuition: ${dollars(price.founding)} (25% off) for the first ${FOUNDING_SEATS_PER_COHORT} fully paid enrollments in this cohort, if paid in full by ${formatDate(foundingIso)} at ${DEADLINE_TIME_LABEL}, subject to seat availability.`,
           ]
         : []),
-      "Discounts cannot be combined.",
+      ...(price.early !== null && earlyIso
+        ? [`Early-payment tuition: ${dollars(price.early)} (10% off) if full payment is received by ${formatDate(earlyIso)} at ${DEADLINE_TIME_LABEL}, at least 30 calendar days before the first class.`]
+        : []),
+      "Only one discount applies.",
     ].join("\n"),
   }
 }

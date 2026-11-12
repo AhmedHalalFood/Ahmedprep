@@ -84,7 +84,7 @@ export function ClassFinder({ state, full }: { state: FinderState; full: (cohort
             Find your class
           </h2>
           <p className="text-pretty leading-relaxed text-subtle">
-            Choose when to start, the program, and a schedule. Then review the class and request enrollment.
+            Four quick steps: choose when to start, the program, and a schedule, then review your class and request enrollment.
           </p>
         </div>
 
@@ -167,14 +167,11 @@ export function ClassFinder({ state, full }: { state: FinderState; full: (cohort
           )}
 
           {cohort && (
-            <Step n={4} title="Review your class" done={false}>
-              <CohortDetail cohort={cohort} full={full(cohort.id)} />
-            </Step>
-          )}
-
-          {cohort && (
-            <Step n={5} title={full(cohort.id) ? "Join the waitlist" : "Request enrollment"} done={false}>
-              <EnrollmentAction cohort={cohort} full={full(cohort.id)} />
+            <Step n={4} title="Review your selected class" done={false}>
+              <div className="flex flex-col gap-4">
+                <CohortDetail cohort={cohort} full={full(cohort.id)} />
+                <EnrollmentAction cohort={cohort} full={full(cohort.id)} />
+              </div>
             </Step>
           )}
         </ol>

@@ -5,7 +5,7 @@
  * New cohorts (e.g. a future summer program) are added as new entries in COHORTS.
  */
 
-import { addDays, deadlinesFor, findCohort, formatDate } from "@/lib/cohorts-2027"
+import { DEADLINE_TIME_LABEL, addDays, deadlinesFor, findCohort, formatDate } from "@/lib/cohorts-2027"
 
 export type ProgramId = "shsat" | "digital-sat"
 export type PaymentOption = "founding-full" | "early-full" | "regular-full"
@@ -134,7 +134,8 @@ export const endOfDayEasternIso = (iso: string) => {
 }
 
 export type ClassDeadline = { dateIso: string; deadlineIso: string; label: string }
-export type ClassDeadlines = { founding: ClassDeadline; early: ClassDeadline }
+/** Winter 2027 has no early-payment tier, so `early` is null for every class in this (Winter-only) catalog. */
+export type ClassDeadlines = { founding: ClassDeadline; early: ClassDeadline | null }
 
 const toDeadline = (dateIso: string): ClassDeadline => ({
   dateIso,
@@ -148,7 +149,7 @@ export function deadlinesForClass(classId: string): ClassDeadlines | null {
   const { foundingIso, earlyIso } = deadlinesFor(cohort)
   // The (inactive) checkout catalog sells Winter tuition only; Spring/Summer have no founding option and stay closed here.
   if (!foundingIso) return null
-  return { founding: toDeadline(foundingIso), early: toDeadline(earlyIso) }
+  return { founding: toDeadline(foundingIso), early: earlyIso ? toDeadline(earlyIso) : null }
 }
 
 export const isFoundingWindowOpen = (classId: string, now: Date = new Date()) => {
@@ -158,25 +159,24 @@ export const isFoundingWindowOpen = (classId: string, now: Date = new Date()) =>
 
 export const isEarlyWindowOpen = (classId: string, now: Date = new Date()) => {
   const d = deadlinesForClass(classId)
-  return !!d && now.getTime() <= Date.parse(d.early.deadlineIso)
+  return !!d?.early && now.getTime() <= Date.parse(d.early.deadlineIso)
 }
 
 export type PaymentOptionDetail = { title: string; amountCents: number; detail: string }
 
 export function paymentOptionsFor(classId: string): Record<PaymentOption, PaymentOptionDetail> {
   const d = deadlinesForClass(classId)
-  const founding = d ? `${d.founding.label}, at 11:59:59 PM ET` : "the cohort’s founding-family deadline"
-  const early = d ? `${d.early.label}, at 11:59:59 PM ET` : "the cohort’s early deadline"
+  const founding = d ? `${d.founding.label}, at ${DEADLINE_TIME_LABEL}` : "the cohort’s founding-family deadline"
   return {
     "founding-full": {
       title: "Founding-Family tuition",
       amountCents: TUITION.foundingCents,
-      detail: `Full payment of $1,080 by ${founding}, for the first ${FOUNDING_POLICY.seatsPerClass} fully paid enrollments in this class, while founding-family seats remain.`,
+      detail: `Full payment of $1,080 by ${founding}, for the first ${FOUNDING_POLICY.seatsPerClass} fully paid enrollments in this class, subject to seat availability.`,
     },
     "early-full": {
       title: "Early Full Payment",
       amountCents: TUITION.earlyCents,
-      detail: `10% discount. Full payment of $1,296 must be received by ${early}.`,
+      detail: "Not offered for Winter 2027 classes. Early-payment tuition applies to Spring and Summer 2027 only.",
     },
     "regular-full": {
       title: "Regular Tuition",
@@ -225,8 +225,14 @@ export function checkoutEligibility(input: {
       return { ok: false, reason: "founding-full", message: "All founding-family seats in this class have been filled." }
     }
   }
-  if (payment === "early-full" && now > Date.parse(deadlines.early.deadlineIso)) {
-    return { ok: false, reason: "early-closed", message: `Early Full Payment for this class closed on ${deadlines.early.label}.` }
+  if (payment === "early-full" && (!deadlines.early || now > Date.parse(deadlines.early.deadlineIso))) {
+    return {
+      ok: false,
+      reason: "early-closed",
+      message: deadlines.early
+        ? `Early Full Payment for this class closed on ${deadlines.early.label}.`
+        : "Early Full Payment is not offered for Winter 2027 classes.",
+    }
   }
   return { ok: true, classId: input.classId, payment, amountCents: paymentOptionsFor(input.classId)[payment].amountCents }
 }

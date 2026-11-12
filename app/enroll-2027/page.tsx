@@ -190,7 +190,7 @@ export default async function Enroll2027Page({ searchParams }: Props) {
         <div className="mx-auto flex max-w-5xl flex-col gap-12">
           <div className="flex flex-col gap-2 border-l-4 border-brand bg-white p-5 text-sm leading-relaxed text-ink">
             <p className="font-extrabold text-navy">Choose when to start</p>
-            <p>The classes and tuition below are for January 2027 classes, the only start date with founding-family pricing.</p>
+            <p>The classes and tuition below are for January 2027 classes, the only start date with founding-family pricing (25% off, paid in full by December 12, 2026). Spring and Summer offer early-payment pricing instead.</p>
             <ul className="flex flex-col">
               {TERM_IDS.map((id) => (
                 <li key={id}>
