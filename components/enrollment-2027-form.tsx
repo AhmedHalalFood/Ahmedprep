@@ -371,7 +371,7 @@ export function Enrollment2027Form({ preset = {}, selectionShownAbove = false }:
                 {option.label}: {dollars(option.amount)}, {option.condition.charAt(0).toLowerCase() + option.condition.slice(1)}
               </li>
             ))}
-            <li>Discounts cannot be combined.</li>
+            <li>Only one discount applies.</li>
           </ul>
         </div>
       )}

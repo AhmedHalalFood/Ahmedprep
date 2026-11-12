@@ -116,7 +116,7 @@ export function CheckoutPreview({
       </div>
 
       <p className="text-sm leading-relaxed text-subtle">
-        Discounts cannot be combined. No installment plans for Winter 2027. Enrollment is subject to available seats.
+        Only one discount applies. No installment plans for Winter 2027. Enrollment is subject to available seats.
       </p>
 
       <button

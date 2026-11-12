@@ -59,7 +59,7 @@ export function SelectedClassSummary({ cohort, full }: { cohort: Cohort; full: b
             </li>
           ))}
         </ul>
-        <p className="text-xs text-subtle">Discounts cannot be combined.</p>
+        <p className="text-xs text-subtle">Only one discount applies.</p>
       </div>
     </section>
   )

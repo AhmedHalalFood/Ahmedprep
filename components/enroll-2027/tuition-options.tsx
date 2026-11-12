@@ -4,7 +4,6 @@ import { ENROLLMENT_2027 as E } from "@/lib/enrollment-2027"
 export function TuitionOptions() {
   const tiers = [
     { ...E.tuition.founding, featured: true },
-    { ...E.tuition.early, featured: false },
     { ...E.tuition.regular, featured: false },
   ]
 

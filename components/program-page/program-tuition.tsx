@@ -20,7 +20,7 @@ export function ProgramTuition({ program, note }: { program: ProgramId; note?: s
       id="schedules-tuition"
       eyebrow="2027 schedules and tuition"
       title={`${program} cohorts for Winter, Spring, and Summer 2027`}
-      intro={`Every cohort meets in person at our Astoria classroom with a maximum of ${MAX_CLASS_SIZE} students. Founding-family tuition is offered for Winter 2027 only; Spring and Summer offer an early full-payment discount. Discounts do not combine. All deadlines end at 11:59:59 PM ET.`}
+      intro={`Every cohort meets in person at our Astoria classroom with a maximum of ${MAX_CLASS_SIZE} students. Founding-family tuition (25% off) is offered for Winter 2027 only, paid in full by December 12, 2026. Spring and Summer offer a 10% early-payment discount when paid in full at least 30 calendar days before the cohort begins. Only one discount applies. All deadlines end at 11:59 PM ET.`}
     >
       {note ? <p className="-mt-4 mb-8 max-w-2xl font-bold text-navy">{note}</p> : null}
       <div className="flex flex-col gap-10">

@@ -24,7 +24,7 @@ const CONTACT_CTA = { label: "Contact AhmedPrep", href: "/contact" }
 
 const T = ENROLLMENT_2027.tuition
 export const PRICE_2027 = "$20 per scheduled instructional hour (2027 small group)"
-export const PRICE_2027_NOTE = `Winter and Spring 2027 cohorts: 72 hours, ${T.regular.total} regular tuition. Summer 2027: $1,920 weekday intensive (96 hours) or $960 weekend (48 hours). Founding-family tuition saves 25% for the first 5 fully paid enrollments per cohort, paid in full by the cohort's founding-family deadline (42 days before the first class). Early full payment saves 10% when paid in full by the cohort's early-payment deadline, 21 days after its founding-family deadline. Winter founding-family payment deadlines: November 28 (weekend groups), November 30 (weekday SHSAT), or December 1 (weekday Digital SAT), 2026. Winter early-payment deadlines: December 19 (weekend groups), December 21 (weekday SHSAT), or December 22 (weekday Digital SAT), 2026. Spring and Summer deadlines are listed with each cohort. ${T.rules} Private tutoring is priced separately.`
+export const PRICE_2027_NOTE = `Winter and Spring 2027 cohorts: 72 hours, ${T.regular.total} regular tuition. Summer 2027: $1,920 weekday intensive (96 hours) or $960 weekend (48 hours). Winter 2027: founding-family tuition saves 25% for the first 5 fully paid enrollments per cohort, paid in full by December 12, 2026 at 11:59 PM ET, subject to seat availability; Winter has no separate early-payment tier. Spring and Summer 2027: early-payment tuition saves 10% when paid in full at least 30 calendar days before the selected cohort begins; there is no founding-family discount. Only one discount applies. Private tutoring is priced separately.`
 
 export const PROGRAMS: Program[] = [
   {
