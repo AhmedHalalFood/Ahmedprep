@@ -72,7 +72,7 @@ export const CAMPAIGNS: Campaign[] = [
   },
 ]
 
-export const ACTIVE_CAMPAIGN_ID: string | null = "shsat-final-countdown"
+export const ACTIVE_CAMPAIGN_ID: string | null = null
 
 export function getActiveCampaign(now = new Date()) {
   const campaign = CAMPAIGNS.find((c) => c.id === ACTIVE_CAMPAIGN_ID && c.enabled)
