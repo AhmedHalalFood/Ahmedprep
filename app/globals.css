@@ -21,6 +21,11 @@
   --paper: #fff;
   --warm: #edf3f7;
   --cream: #faf7ef;
+  /* Digital SAT Final Intensive: coral enroll CTA (white text 4.6:1) and lavender curriculum card. */
+  --coral: #d6403a;
+  --coral-hover: #bf322d;
+  --lavender: #5b4b9a;
+  --lavender-soft: #f1eefa;
   --footer-bg: #f0f5fa;
   --footer-navy: #0d2d50;
   --footer-divider: #d3dfeb;
@@ -1504,6 +1509,17 @@ a.program-card:hover h3 {
     cursor: pointer;
   }
 
+  .mobile-cta-bar.sat-intensive-mobile-bar {
+    z-index: 51;
+  }
+
+  .mobile-cta-bar.sat-intensive-mobile-bar .mobile-cta-primary {
+    border-left: 0;
+    border-radius: 6px;
+    background: var(--coral);
+    color: #fff;
+  }
+
   .hero-stats {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -1903,6 +1919,10 @@ select {
   --color-gold-hover: #f0ca63;
   --color-gold-deep: var(--gold-deep);
   --color-cream: var(--cream);
+  --color-coral: var(--coral);
+  --color-coral-hover: var(--coral-hover);
+  --color-lavender: var(--lavender);
+  --color-lavender-soft: var(--lavender-soft);
   --color-ink: var(--ink);
   --color-subtle: var(--muted);
   --color-line: var(--line);
