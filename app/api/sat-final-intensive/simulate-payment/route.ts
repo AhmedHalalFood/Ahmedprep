@@ -2,11 +2,12 @@ import { randomBytes } from "node:crypto"
 import { NextResponse } from "next/server"
 import { pool } from "@/lib/db"
 import { internalPreviewAllowed } from "@/lib/internal-routes"
-import { SAT_INTENSIVE_CAPACITY, SAT_INTENSIVE_PROGRAM_KEY } from "@/lib/sat-final-intensive"
-import { confirmPayment, getSeatSummary, isMissingTableError, setEmailStatus } from "@/lib/sat-final-intensive-enrollment"
-import { sendEnrollmentEmails } from "@/lib/sat-final-intensive-emails"
+import { SAT_INTENSIVE_PROGRAM_KEY } from "@/lib/sat-final-intensive"
+import { confirmPayment, isMissingTableError } from "@/lib/sat-final-intensive-enrollment"
+import { drainOutboxAfterResponse } from "@/lib/sat-final-intensive-outbox-runner"
 
 export const dynamic = "force-dynamic"
+export const maxDuration = 60
 
 const REASON_MESSAGES = {
   not_found: "We could not find this registration. Please register again.",
@@ -16,8 +17,8 @@ const REASON_MESSAGES = {
 } as const
 
 /**
- * SIMULATED payment for Preview testing. No money moves and no card data is collected. A real provider has not been
- * approved; until one is, this route is the only way to confirm an enrollment and it never runs on Production.
+ * SIMULATED payment for Preview testing. No money moves and no card data is collected. It never runs on Production.
+ * Confirmation emails are queued in the same transaction as the seat and delivered by the outbox after the response.
  */
 export async function POST(request: Request) {
   if (!internalPreviewAllowed() || process.env.VERCEL_ENV === "production") {
@@ -39,13 +40,7 @@ export async function POST(request: Request) {
     if (!result.ok) {
       return NextResponse.json({ error: REASON_MESSAGES[result.reason], reason: result.reason }, { status: result.reason === "full" ? 409 : 422 })
     }
-
-    let emails = { family: "already_sent", admin: "already_sent" } as Record<"family" | "admin", string>
-    if (!result.alreadyConfirmed) {
-      const seats = await getSeatSummary(pool, SAT_INTENSIVE_PROGRAM_KEY)
-      emails = await sendEnrollmentEmails(result.record, seats.confirmed, SAT_INTENSIVE_CAPACITY)
-      await setEmailStatus(pool, result.record.publicId, emails.family, emails.admin).catch(() => {})
-    }
+    drainOutboxAfterResponse()
 
     const r = result.record
     return NextResponse.json({
@@ -57,7 +52,7 @@ export async function POST(request: Request) {
       remainingClasses: r.remainingClasses,
       remainingHours: r.remainingHours,
       tuitionCents: r.tuitionCents,
-      emails,
+      emails: { family: "queued", admin: "queued" },
     })
   } catch (error) {
     if (isMissingTableError(error)) {

@@ -18,10 +18,20 @@ import {
  * 12-seat limit (confirmed + unexpired holds) cannot be exceeded. The pool is passed in so tests can use an isolated program key.
  */
 
-export type EnrollmentStatus = "pending_payment" | "confirmed" | "expired" | "canceled"
+export type EnrollmentStatus = "pending_payment" | "confirmed" | "expired" | "canceled" | "needs_review"
+
+export type EmailKind = "family_confirmation" | "admin_notification"
+export const EMAIL_KINDS: EmailKind[] = ["family_confirmation", "admin_notification"]
+
+// Stripe Checkout sessions last at least 30 minutes. When a family starts checkout the hold is extended past the
+// session's expiry plus a grace period, so a payment completed at the last second still finds its seat held even if the
+// webhook arrives a few minutes late.
+export const CHECKOUT_SESSION_MINUTES = 30
+export const CHECKOUT_HOLD_GRACE_MINUTES = 15
 
 export type EnrollmentRecord = {
   publicId: string
+  programKey: string
   status: EnrollmentStatus
   studentName: string
   studentGrade: string
@@ -42,6 +52,8 @@ export type EnrollmentRecord = {
 
 type Row = {
   public_id: string
+  program_key: string
+  stripe_checkout_session_id?: string | null
   status: EnrollmentStatus
   student_name: string
   student_grade: string
@@ -63,6 +75,7 @@ type Row = {
 
 const toRecord = (r: Row): EnrollmentRecord => ({
   publicId: r.public_id,
+  programKey: r.program_key,
   status: r.status,
   studentName: r.student_name,
   studentGrade: r.student_grade,
@@ -242,32 +255,195 @@ export async function confirmPayment(
     if (row.status !== "pending_payment" && row.status !== "expired") return { ok: false as const, reason: "not_payable" as const }
     if (!isClassDate(row.first_class_date) || hasClassStarted(row.first_class_date, now))
       return { ok: false as const, reason: "class_started" as const }
-
-    // A late payment on a lapsed hold is accepted only if a seat is still free without counting this registration.
-    if (row.status === "expired" || row.hold_expires_at <= now) {
-      await releaseExpiredHolds(client, programKey, now)
-      const { confirmed, held } = await countSeats(client, programKey, now, publicId)
-      if (confirmed + held >= capacity) {
-        await client.query(`UPDATE sat_intensive_enrollments SET status = 'expired', updated_at = $2 WHERE public_id = $1`, [publicId, now])
-        return { ok: false as const, reason: "full" as const }
-      }
+    if (!(await seatStillAvailable(client, row, now, capacity))) {
+      await client.query(`UPDATE sat_intensive_enrollments SET status = 'expired', updated_at = $2 WHERE public_id = $1`, [publicId, now])
+      return { ok: false as const, reason: "full" as const }
     }
-
-    const updated = await client.query<Row>(
-      `UPDATE sat_intensive_enrollments
-       SET status = 'confirmed', payment_reference = $2, confirmed_at = $3, updated_at = $3
-       WHERE public_id = $1 RETURNING *`,
-      [publicId, paymentReference, now],
-    )
-    return { ok: true as const, record: toRecord(updated.rows[0]), alreadyConfirmed: false }
+    const record = await markConfirmed(client, publicId, paymentReference, now)
+    return { ok: true as const, record, alreadyConfirmed: false }
   })
 }
 
-export async function setEmailStatus(pool: Pool, publicId: string, family: string, admin: string) {
-  await pool.query(
-    `UPDATE sat_intensive_enrollments SET family_email_status = $2, admin_email_status = $3, updated_at = now() WHERE public_id = $1`,
-    [publicId, family, admin],
+/** A late payment on a lapsed hold is accepted only if a seat is still free without counting this registration. */
+async function seatStillAvailable(client: PoolClient, row: Row, now: Date, capacity: number) {
+  if (row.status === "pending_payment" && row.hold_expires_at > now) return true
+  await releaseExpiredHolds(client, row.program_key, now)
+  const { confirmed, held } = await countSeats(client, row.program_key, now, row.public_id)
+  return confirmed + held < capacity
+}
+
+async function markConfirmed(
+  client: PoolClient,
+  publicId: string,
+  paymentReference: string,
+  now: Date,
+  stripe?: { sessionId: string; paymentIntentId: string | null; amountCents: number },
+) {
+  const updated = await client.query<Row>(
+    `UPDATE sat_intensive_enrollments
+     SET status = 'confirmed', payment_reference = $2, confirmed_at = $3, updated_at = $3,
+         payment_mode = CASE WHEN $4::text IS NULL THEN payment_mode ELSE 'stripe_test' END,
+         stripe_checkout_session_id = COALESCE($4, stripe_checkout_session_id),
+         stripe_payment_intent_id = COALESCE($5, stripe_payment_intent_id),
+         amount_paid_cents = COALESCE($6, amount_paid_cents),
+         family_email_status = 'queued', admin_email_status = 'queued'
+     WHERE public_id = $1 RETURNING *`,
+    [publicId, paymentReference, now, stripe?.sessionId ?? null, stripe?.paymentIntentId ?? null, stripe?.amountCents ?? null],
   )
+  // Same transaction as the confirmation: if the job rows cannot be written the seat is not confirmed either.
+  await client.query(
+    `INSERT INTO sat_intensive_email_outbox (enrollment_public_id, kind, next_attempt_at, created_at, updated_at)
+     SELECT $1, kind, $2, $2, $2 FROM unnest($3::text[]) AS kind
+     ON CONFLICT (enrollment_public_id, kind) DO NOTHING`,
+    [publicId, now, EMAIL_KINDS],
+  )
+  return toRecord(updated.rows[0])
+}
+
+export async function getEnrollment(pool: Pool, publicId: string) {
+  if (!/^[0-9a-f-]{36}$/i.test(publicId)) return null
+  const { rows } = await pool.query<Row>(`SELECT * FROM sat_intensive_enrollments WHERE public_id = $1`, [publicId])
+  return rows[0] ? toRecord(rows[0]) : null
+}
+
+export type CheckoutHold =
+  | { ok: true; record: EnrollmentRecord; sessionExpiresAt: Date; existingSessionId: string | null }
+  | { ok: false; reason: "not_found" | "not_payable" | "class_started" | "expired" | "already_confirmed" }
+
+/**
+ * Before creating a Stripe Checkout session: proves the browser holds the payment token, that the hold is still live,
+ * and extends the hold to cover the session's lifetime. Tuition comes from the stored, server-computed row.
+ */
+export async function prepareCheckoutHold(
+  pool: Pool,
+  programKey: string,
+  publicId: string,
+  paymentToken: string,
+  now = new Date(),
+): Promise<CheckoutHold> {
+  if (!/^[0-9a-f-]{36}$/i.test(publicId) || !paymentToken) return { ok: false, reason: "not_found" }
+  return inProgramLock(pool, programKey, async (client) => {
+    const { rows } = await client.query<Row>(
+      `SELECT * FROM sat_intensive_enrollments WHERE program_key = $1 AND public_id = $2 FOR UPDATE`,
+      [programKey, publicId],
+    )
+    const row = rows[0]
+    if (!row || !tokenMatches(paymentToken, row.payment_token_hash)) return { ok: false as const, reason: "not_found" as const }
+    if (row.status === "confirmed") return { ok: false as const, reason: "already_confirmed" as const }
+    if (row.status !== "pending_payment") return { ok: false as const, reason: "not_payable" as const }
+    if (row.hold_expires_at <= now) return { ok: false as const, reason: "expired" as const }
+    if (!isClassDate(row.first_class_date) || hasClassStarted(row.first_class_date, now)) return { ok: false as const, reason: "class_started" as const }
+    const sessionExpiresAt = new Date(now.getTime() + CHECKOUT_SESSION_MINUTES * 60_000)
+    const holdUntil = new Date(sessionExpiresAt.getTime() + CHECKOUT_HOLD_GRACE_MINUTES * 60_000)
+    const updated = await client.query<Row>(
+      `UPDATE sat_intensive_enrollments SET hold_expires_at = GREATEST(hold_expires_at, $2), updated_at = $3
+       WHERE public_id = $1 RETURNING *`,
+      [publicId, holdUntil, now],
+    )
+    return {
+      ok: true as const,
+      record: toRecord(updated.rows[0]),
+      sessionExpiresAt,
+      existingSessionId: updated.rows[0].stripe_checkout_session_id ?? null,
+    }
+  })
+}
+
+export async function attachCheckoutSession(pool: Pool, publicId: string, sessionId: string) {
+  await pool.query(
+    `UPDATE sat_intensive_enrollments SET stripe_checkout_session_id = $2, updated_at = now()
+     WHERE public_id = $1 AND status = 'pending_payment'`,
+    [publicId, sessionId],
+  )
+}
+
+export type StripePaymentFacts = {
+  publicId: string
+  sessionId: string
+  paymentIntentId: string | null
+  amountTotalCents: number
+  currency: string
+}
+
+export type StripeConfirmResult =
+  | { outcome: "confirmed"; record: EnrollmentRecord }
+  | { outcome: "already_confirmed"; record: EnrollmentRecord }
+  | { outcome: "needs_review"; reason: string }
+  | { outcome: "ignored"; reason: string }
+
+/**
+ * Applies a verified checkout.session.completed event. Amount and currency must match the stored tuition exactly. If
+ * money arrived but no seat can be given, the row becomes needs_review (never counted as a seat) for a manual refund.
+ */
+export async function confirmStripePayment(
+  pool: Pool,
+  programKey: string,
+  facts: StripePaymentFacts,
+  now = new Date(),
+  capacity = SAT_INTENSIVE_CAPACITY,
+): Promise<StripeConfirmResult> {
+  if (!/^[0-9a-f-]{36}$/i.test(facts.publicId)) return { outcome: "ignored", reason: "unknown_enrollment" }
+  return inProgramLock(pool, programKey, async (client) => {
+    const { rows } = await client.query<Row>(
+      `SELECT * FROM sat_intensive_enrollments WHERE program_key = $1 AND public_id = $2 FOR UPDATE`,
+      [programKey, facts.publicId],
+    )
+    const row = rows[0]
+    if (!row) return { outcome: "ignored" as const, reason: "unknown_enrollment" }
+    if (row.status === "confirmed") return { outcome: "already_confirmed" as const, record: toRecord(row) }
+    if (row.status === "needs_review") return { outcome: "needs_review" as const, reason: "already_flagged" }
+
+    const review = async (reason: string) => {
+      await client.query(
+        `UPDATE sat_intensive_enrollments SET status = 'needs_review', review_reason = $2, payment_mode = 'stripe_test',
+           stripe_checkout_session_id = $3, stripe_payment_intent_id = $4, amount_paid_cents = $5, updated_at = $6
+         WHERE public_id = $1`,
+        [facts.publicId, reason, facts.sessionId, facts.paymentIntentId, facts.amountTotalCents, now],
+      )
+      return { outcome: "needs_review" as const, reason }
+    }
+
+    if (row.stripe_checkout_session_id && row.stripe_checkout_session_id !== facts.sessionId) return review("session_mismatch")
+    if (facts.currency !== "usd" || facts.amountTotalCents !== row.tuition_cents) return review("amount_mismatch")
+    if (row.status === "canceled") return review("registration_replaced")
+    if (!isClassDate(row.first_class_date) || hasClassStarted(row.first_class_date, now)) return review("class_started")
+    if (!(await seatStillAvailable(client, row, now, capacity))) return review("class_full")
+
+    const record = await markConfirmed(client, facts.publicId, facts.paymentIntentId ?? facts.sessionId, now, {
+      sessionId: facts.sessionId,
+      paymentIntentId: facts.paymentIntentId,
+      amountCents: facts.amountTotalCents,
+    })
+    return { outcome: "confirmed" as const, record }
+  })
+}
+
+/** checkout.session.expired: the family abandoned payment, so release the seat now instead of waiting out the hold. */
+export async function releaseCheckoutHold(pool: Pool, programKey: string, publicId: string, sessionId: string, now = new Date()) {
+  if (!/^[0-9a-f-]{36}$/i.test(publicId)) return false
+  return inProgramLock(pool, programKey, async (client) => {
+    const { rowCount } = await client.query(
+      `UPDATE sat_intensive_enrollments SET status = 'expired', updated_at = $3
+       WHERE program_key = $4 AND public_id = $1 AND status = 'pending_payment' AND stripe_checkout_session_id = $2`,
+      [publicId, sessionId, now, programKey],
+    )
+    return (rowCount ?? 0) > 0
+  })
+}
+
+/** Webhook de-duplication. Returns false when this event id was already processed. */
+export async function recordStripeEvent(pool: Pool, eventId: string, type: string, publicId: string | null, outcome: string) {
+  const { rowCount } = await pool.query(
+    `INSERT INTO sat_intensive_stripe_events (event_id, event_type, enrollment_public_id, outcome)
+     VALUES ($1, $2, $3, $4) ON CONFLICT (event_id) DO NOTHING`,
+    [eventId, type, publicId && /^[0-9a-f-]{36}$/i.test(publicId) ? publicId : null, outcome],
+  )
+  return (rowCount ?? 0) > 0
+}
+
+export async function hasStripeEvent(pool: Pool, eventId: string) {
+  const { rowCount } = await pool.query(`SELECT 1 FROM sat_intensive_stripe_events WHERE event_id = $1`, [eventId])
+  return (rowCount ?? 0) > 0
 }
 
 export const isMissingTableError = (error: unknown) =>

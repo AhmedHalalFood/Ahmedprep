@@ -1,0 +1,77 @@
+-- Digital SAT Final Intensive: durable email outbox, Stripe test-mode payment columns and webhook de-duplication.
+-- NOT APPROVED FOR PRODUCTION. Depends on 0008. Applied only to the Preview Neon branch (ep-quiet-breeze-b8qi4eg2).
+-- The `.disabled` suffix keeps scripts/migrate.mjs from picking this file up.
+--
+-- Touches only sat_intensive_* objects created by 0008. Safe to re-run: every statement is IF [NOT] EXISTS or drops and
+-- re-creates a CHECK constraint that only this program uses.
+
+-- 1. Payment columns for Stripe Checkout (test mode). 'stripe_live' is deliberately absent: enabling live payments needs
+--    a reviewed migration as well as a code change.
+ALTER TABLE sat_intensive_enrollments ADD COLUMN IF NOT EXISTS stripe_checkout_session_id text;
+ALTER TABLE sat_intensive_enrollments ADD COLUMN IF NOT EXISTS stripe_payment_intent_id text;
+ALTER TABLE sat_intensive_enrollments ADD COLUMN IF NOT EXISTS amount_paid_cents integer;
+ALTER TABLE sat_intensive_enrollments ADD COLUMN IF NOT EXISTS review_reason text;
+
+ALTER TABLE sat_intensive_enrollments DROP CONSTRAINT IF EXISTS sat_intensive_enrollments_payment_mode_check;
+ALTER TABLE sat_intensive_enrollments ADD CONSTRAINT sat_intensive_enrollments_payment_mode_check
+  CHECK (payment_mode IN ('simulated', 'stripe_test'));
+
+-- 'needs_review': money was received but no seat could be confirmed (for example the class filled after a very late
+-- webhook). Staff must refund or place the student manually; it never counts toward the 12 seats.
+ALTER TABLE sat_intensive_enrollments DROP CONSTRAINT IF EXISTS sat_intensive_enrollments_status_check;
+ALTER TABLE sat_intensive_enrollments ADD CONSTRAINT sat_intensive_enrollments_status_check
+  CHECK (status IN ('pending_payment', 'confirmed', 'expired', 'canceled', 'needs_review'));
+
+CREATE UNIQUE INDEX IF NOT EXISTS sat_intensive_enrollments_checkout_session
+  ON sat_intensive_enrollments (stripe_checkout_session_id) WHERE stripe_checkout_session_id IS NOT NULL;
+CREATE UNIQUE INDEX IF NOT EXISTS sat_intensive_enrollments_payment_intent
+  ON sat_intensive_enrollments (stripe_payment_intent_id) WHERE stripe_payment_intent_id IS NOT NULL;
+
+-- 2. Stripe delivers webhooks at least once. A row per event id makes reprocessing a no-op.
+CREATE TABLE IF NOT EXISTS sat_intensive_stripe_events (
+  event_id text PRIMARY KEY,
+  event_type text NOT NULL,
+  enrollment_public_id uuid,
+  outcome text NOT NULL,
+  received_at timestamptz NOT NULL DEFAULT now()
+);
+
+-- 3. Email outbox. Jobs are inserted in the same transaction that confirms the seat, so a confirmed enrollment always
+--    has exactly one family job and one admin job, and a repeated payment confirmation cannot add more.
+CREATE TABLE IF NOT EXISTS sat_intensive_email_outbox (
+  id bigserial PRIMARY KEY,
+  enrollment_public_id uuid NOT NULL REFERENCES sat_intensive_enrollments (public_id),
+  kind text NOT NULL CHECK (kind IN ('family_confirmation', 'admin_notification')),
+  status text NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'sending', 'sent', 'failed')),
+  -- Bumped only by an administrator resend. Retries within one generation reuse the same Resend idempotency key, so a
+  -- send that succeeded but reported an error is never delivered twice.
+  generation integer NOT NULL DEFAULT 1,
+  attempts integer NOT NULL DEFAULT 0,
+  max_attempts integer NOT NULL DEFAULT 8,
+  next_attempt_at timestamptz NOT NULL DEFAULT now(),
+  locked_until timestamptz,
+  last_error text,
+  resend_message_id text,
+  sent_at timestamptz,
+  last_admin_resend_at timestamptz,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
+  UNIQUE (enrollment_public_id, kind)
+);
+
+CREATE INDEX IF NOT EXISTS sat_intensive_email_outbox_due
+  ON sat_intensive_email_outbox (next_attempt_at) WHERE status IN ('pending', 'sending');
+
+CREATE TABLE IF NOT EXISTS sat_intensive_email_attempts (
+  id bigserial PRIMARY KEY,
+  outbox_id bigint NOT NULL REFERENCES sat_intensive_email_outbox (id),
+  generation integer NOT NULL,
+  attempt integer NOT NULL,
+  outcome text NOT NULL CHECK (outcome IN ('sent', 'retry', 'failed')),
+  error_name text,
+  status_code integer,
+  resend_message_id text,
+  attempted_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS sat_intensive_email_attempts_outbox ON sat_intensive_email_attempts (outbox_id);

@@ -128,7 +128,12 @@ const SAT_REGISTRATION_LABEL: Record<string, string> = {
   unsure: "Not sure",
 }
 
-export function adminNotificationEmail(record: EnrollmentRecord, seatsConfirmed: number, capacity: number): EmailContent {
+export function adminNotificationEmail(
+  record: EnrollmentRecord,
+  seatsConfirmed: number,
+  capacity: number,
+  emailAdminLink: string | null = null,
+): EmailContent {
   const subject = `New SAT Intensive enrollment: ${record.studentName} (${formatClassDate(record.firstClassDate)}, ${formatUsd(record.tuitionCents)})`
   const rows: [string, string][] = [
     ["Student", record.studentName],
@@ -151,9 +156,16 @@ export function adminNotificationEmail(record: EnrollmentRecord, seatsConfirmed:
 <p style="margin:8px 0 0;font-size:14px;color:${MUTED}">Payment verified. ${seatsConfirmed} of ${capacity} seats are now confirmed.</p></td></tr>
 <tr><td style="padding:12px 28px 28px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0">
 ${rows.map(([l, v]) => detailRow(l, esc(v))).join("")}</table>
-<p style="margin:16px 0 0;font-size:13px"><a href="${SITE_URL}${SAT_INTENSIVE_PATH}" style="color:#1769aa">Program page</a></p></td></tr>`,
+<p style="margin:16px 0 0;font-size:13px"><a href="${SITE_URL}${SAT_INTENSIVE_PATH}" style="color:#1769aa">Program page</a>${
+      emailAdminLink ? ` · <a href="${esc(emailAdminLink)}" style="color:#1769aa">Email delivery status and resend</a>` : ""
+    }</p></td></tr>`,
   )
-  const text = [`New Digital SAT Final Intensive enrollment`, "", ...rows.map(([l, v]) => `${l}: ${v}`)].join("\n")
+  const text = [
+    `New Digital SAT Final Intensive enrollment`,
+    "",
+    ...rows.map(([l, v]) => `${l}: ${v}`),
+    ...(emailAdminLink ? ["", `Email delivery status and resend: ${emailAdminLink}`] : []),
+  ].join("\n")
   return { subject, html, text }
 }
 
