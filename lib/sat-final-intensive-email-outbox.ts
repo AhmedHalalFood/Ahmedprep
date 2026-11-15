@@ -2,17 +2,31 @@ import type { Pool } from "pg"
 import type { CreateEmailOptions } from "resend"
 import { FAMILY_SENDER, INTERNAL_SENDER, createEmailClient } from "@/lib/email-sender"
 import { SAT_INTENSIVE_CAPACITY } from "@/lib/sat-final-intensive"
-import { ADMIN_NOTIFICATION_TO, adminNotificationEmail, familyConfirmationEmail } from "@/lib/sat-final-intensive-emails"
-import { getEnrollment, getSeatSummary } from "@/lib/sat-final-intensive-enrollment"
+import {
+  ADMIN_NOTIFICATION_TO,
+  adminNewRegistrationEmail,
+  familyConfirmationEmail,
+  familyPendingEmail,
+} from "@/lib/sat-final-intensive-emails"
+import { getEnrollment, getSeatSummary, getVerifiedPayment, type EnrollmentStatus } from "@/lib/sat-final-intensive-enrollment"
 
 /**
  * Durable delivery for enrollment emails. Jobs are rows in sat_intensive_email_outbox, written in the same transaction
- * that confirms the seat. A worker claims due jobs with SKIP LOCKED, sends them one at a time at a paced rate, and
- * reschedules transient failures with exponential backoff and jitter. Every attempt is recorded.
+ * that creates the registration (pending email + admin alert) or verifies payment (confirmation). A worker claims due
+ * jobs with SKIP LOCKED, sends them one at a time at a paced rate, and reschedules transient failures with exponential
+ * backoff and jitter. Every attempt is recorded.
  */
 
-export { EMAIL_KINDS, type EmailKind } from "@/lib/sat-final-intensive-enrollment"
+export { type EmailKind } from "@/lib/sat-final-intensive-enrollment"
 import type { EmailKind } from "@/lib/sat-final-intensive-enrollment"
+
+/** The registration status each email is valid for. A confirmation is never sent for an unverified registration. */
+const VALID_STATUS: Record<EmailKind, EnrollmentStatus[]> = {
+  family_pending: ["pending_payment"],
+  admin_new_registration: ["pending_payment", "confirmed", "canceled"],
+  family_confirmation: ["confirmed"],
+}
+export const isEmailKind = (value: string): value is EmailKind => value in VALID_STATUS
 
 // Resend's default team limit is 2 requests per second, shared by every form on the site. Pacing one worker at
 // 600 ms leaves headroom; anything above the limit comes back as 429 and is retried with backoff.
@@ -82,23 +96,28 @@ async function claimNextJob(pool: Pool, now: Date, scope: string[] | null): Prom
 
 async function buildPayload(pool: Pool, job: Job): Promise<CreateEmailOptions | null> {
   const record = await getEnrollment(pool, job.enrollment_public_id)
-  if (!record || record.status !== "confirmed") return null
-  if (job.kind === "family_confirmation") {
-    return { from: FAMILY_SENDER, to: [record.parentEmail], replyTo: ADMIN_NOTIFICATION_TO, ...familyConfirmationEmail(record) }
+  if (!record || !isEmailKind(job.kind) || !VALID_STATUS[job.kind].includes(record.status)) return null
+  if (job.kind === "family_pending") {
+    return { from: FAMILY_SENDER, to: [record.parentEmail], replyTo: ADMIN_NOTIFICATION_TO, ...familyPendingEmail(record) }
   }
-  const seats = await getSeatSummary(pool, record.programKey)
+  if (job.kind === "family_confirmation") {
+    const payment = await getVerifiedPayment(pool, record.publicId)
+    if (!payment) return null
+    return { from: FAMILY_SENDER, to: [record.parentEmail], replyTo: ADMIN_NOTIFICATION_TO, ...familyConfirmationEmail(record, payment) }
+  }
+  const seats = await getSeatSummary(pool, record.programKey, new Date(), SAT_INTENSIVE_CAPACITY)
   return {
     from: INTERNAL_SENDER,
     to: [ADMIN_NOTIFICATION_TO],
     replyTo: record.parentEmail,
-    ...adminNotificationEmail(record, seats.confirmed, SAT_INTENSIVE_CAPACITY, adminLink?.(record.publicId) ?? null),
+    ...adminNewRegistrationEmail(record, seats, adminConsoleUrl?.() ?? null),
   }
 }
 
 // Injected by the server entry point so this module stays free of server-only imports and can run under node --test.
-let adminLink: ((publicId: string) => string | null) | null = null
-export function setOutboxAdminLinkFactory(factory: (publicId: string) => string | null) {
-  adminLink = factory
+let adminConsoleUrl: (() => string | null) | null = null
+export function setOutboxAdminConsoleUrl(factory: () => string | null) {
+  adminConsoleUrl = factory
 }
 
 async function recordOutcome(pool: Pool, job: Job, outcome: SendOutcome, now: Date, random: () => number) {
@@ -175,7 +194,7 @@ export async function processEmailOutbox(
     }
     const payload = await buildPayload(pool, job)
     if (!payload) {
-      await recordOutcome(pool, job, { kind: "failed", errorName: "enrollment_not_confirmed", statusCode: null }, now(), random)
+      await recordOutcome(pool, job, { kind: "failed", errorName: "not_applicable_to_status", statusCode: null }, now(), random)
       summary.skipped++
       continue
     }
@@ -228,16 +247,18 @@ export async function getEmailJobs(pool: Pool, publicId: string): Promise<Outbox
   }))
 }
 
-export type AdminResendResult = { ok: true } | { ok: false; reason: "not_found" | "not_confirmed" | "in_progress" | "cooldown" }
+export type AdminResendResult = { ok: true } | { ok: false; reason: "not_found" | "wrong_status" | "in_progress" | "cooldown" }
 
 /**
- * Administrator resend of one confirmation email. Starts a new generation (new idempotency key) and re-queues the job.
- * It never touches payment or enrollment rows, so it cannot create a second charge, receipt transaction or seat.
+ * Administrator resend of one email. Starts a new generation (new idempotency key) and re-queues the job. It never
+ * touches payment or enrollment rows, so it cannot record a second payment or change a seat. A confirmation can only be
+ * resent for a confirmed enrollment, and a pending notice only while payment is still pending.
  */
 export async function requeueEmailForAdmin(pool: Pool, publicId: string, kind: EmailKind, now = new Date()): Promise<AdminResendResult> {
+  if (!isEmailKind(kind)) return { ok: false, reason: "not_found" }
   const record = await getEnrollment(pool, publicId)
   if (!record) return { ok: false, reason: "not_found" }
-  if (record.status !== "confirmed") return { ok: false, reason: "not_confirmed" }
+  if (!VALID_STATUS[kind].includes(record.status)) return { ok: false, reason: "wrong_status" }
   const { rows } = await pool.query<{ id: string }>(
     `UPDATE sat_intensive_email_outbox SET
        status = 'pending', generation = generation + 1, attempts = 0, next_attempt_at = $3, locked_until = NULL,

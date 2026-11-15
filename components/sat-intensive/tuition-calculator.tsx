@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react"
 import {
   CLASS_DATES,
   HOURS_PER_CLASS,
+  OFFLINE_PAYMENT_STATEMENT,
   PRICE_PER_CLASS_CENTS,
   formatClassDate,
   formatClassDateLong,
@@ -34,7 +35,10 @@ export function TuitionCalculator({
             </h2>
             <p className="mx-auto max-w-2xl text-pretty leading-relaxed text-subtle">
               Tuition is {formatUsd(PRICE_PER_CLASS_CENTS)} per student per 3-hour class. Choose your student’s first class and pay
-              only for the classes that remain, in full and upfront. No installments or individual drop-in classes.
+              only for the classes that remain. Full tuition is due before enrollment is confirmed. No installments or individual drop-in classes.
+            </p>
+            <p className="mx-auto max-w-2xl rounded-lg bg-cream px-4 py-3 text-pretty font-extrabold leading-relaxed text-navy">
+              {OFFLINE_PAYMENT_STATEMENT}
             </p>
           </div>
 

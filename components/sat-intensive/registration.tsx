@@ -1,14 +1,20 @@
 "use client"
 
 import { useState, type FormEvent, type ReactNode } from "react"
-import { AlertTriangle, CheckCircle2, Loader2, Lock } from "lucide-react"
+import { AlertTriangle, Clock, Loader2 } from "lucide-react"
 import { ADDRESS_LINE_1, ADDRESS_LINE_2, BUSINESS } from "@/lib/business"
 import {
   CLASS_DATES,
   CLASS_TIME_LABEL,
   GRADE_OPTIONS,
+  OFFLINE_PAYMENT_STATEMENT,
   PAYMENT_HOLD_MINUTES,
+  PAYMENT_METHODS,
+  PAYMENT_METHOD_INSTRUCTIONS,
+  PAYMENT_METHOD_LABELS,
+  PENDING_SEAT_STATEMENT,
   POLICY_PENDING_NOTE,
+  REGISTRATION_RECEIVED_STATEMENT,
   SAT_REGISTRATION_OPTIONS,
   formatClassDate,
   formatClassDateLong,
@@ -16,12 +22,22 @@ import {
   quoteFor,
   validateRegistration,
   type ClassDate,
+  type PaymentMethod,
   type RegistrationErrors,
   type RegistrationInput,
 } from "@/lib/sat-final-intensive"
 
-type Hold = { enrollmentId: string; paymentToken: string; holdExpiresAt: string; tuitionCents: number; remainingClasses: number; remainingHours: number; firstClassDate: ClassDate }
-type Confirmed = { paymentReference: string; studentName: string; parentEmail: string; firstClassDate: ClassDate; remainingClasses: number; tuitionCents: number; emails: { family: string; admin: string } }
+type Received = {
+  referenceCode: string
+  studentName: string
+  paymentMethod: PaymentMethod
+  holdExpiresAt: string
+  firstClassDate: ClassDate
+  remainingDates: ClassDate[]
+  remainingClasses: number
+  remainingHours: number
+  tuitionCents: number
+}
 
 const EMPTY: Omit<RegistrationInput, "firstClassDate"> = {
   studentName: "",
@@ -29,17 +45,14 @@ const EMPTY: Omit<RegistrationInput, "firstClassDate"> = {
   parentName: "",
   parentEmail: "",
   parentPhone: "",
+  paymentMethod: "",
   previousScore: "",
   targetScore: "",
   satRegistration: "",
   policyAcknowledged: false,
 }
 
-async function postJson(url: string, body: unknown) {
-  const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
-  const data = await res.json().catch(() => ({}))
-  return { ok: res.ok, data }
-}
+const EMAIL = "tariq@ahmedprep.com"
 
 export function Registration({
   available,
@@ -54,8 +67,7 @@ export function Registration({
   const [errors, setErrors] = useState<RegistrationErrors>({})
   const [formError, setFormError] = useState("")
   const [busy, setBusy] = useState(false)
-  const [hold, setHold] = useState<Hold | null>(null)
-  const [confirmed, setConfirmed] = useState<Confirmed | null>(null)
+  const [received, setReceived] = useState<Received | null>(null)
 
   const quote = selected ? quoteFor(selected) : null
   const set = <K extends keyof typeof EMPTY>(key: K, value: (typeof EMPTY)[K]) => {
@@ -72,34 +84,30 @@ export function Registration({
     setErrors(found)
     setFormError("")
     if (Object.keys(found).length) {
-      document.getElementById(`reg-${Object.keys(found)[0]}`)?.focus()
+      const first = Object.keys(found)[0]
+      document.getElementById(first === "paymentMethod" ? "reg-paymentMethod-zelle" : `reg-${first}`)?.focus()
       return
     }
     setBusy(true)
-    const { ok, data } = await postJson("/api/sat-final-intensive/register", { ...input, website })
-    setBusy(false)
-    if (!ok) {
-      setErrors(data.errors ?? {})
-      setFormError(data.error ?? "Something went wrong. Please try again.")
-      return
+    try {
+      const res = await fetch("/api/sat-final-intensive/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...input, website }),
+      })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        setErrors(data.errors ?? {})
+        setFormError(data.error ?? "Something went wrong. Please try again.")
+        return
+      }
+      setReceived(data)
+      requestAnimationFrame(() => document.getElementById("register")?.scrollIntoView({ behavior: "smooth", block: "start" }))
+    } catch {
+      setFormError(`We could not reach the server. Please try again or call ${BUSINESS.phoneDisplay}.`)
+    } finally {
+      setBusy(false)
     }
-    setHold(data)
-  }
-
-  async function pay() {
-    if (!hold || busy) return
-    setBusy(true)
-    setFormError("")
-    const { ok, data } = await postJson("/api/sat-final-intensive/simulate-payment", {
-      enrollmentId: hold.enrollmentId,
-      paymentToken: hold.paymentToken,
-    })
-    setBusy(false)
-    if (!ok) {
-      setFormError(data.error ?? "Payment could not be recorded. Please try again.")
-      return
-    }
-    setConfirmed(data)
   }
 
   return (
@@ -112,21 +120,21 @@ export function Registration({
               Enroll your student
             </h2>
             <p className="text-pretty leading-relaxed text-subtle">
-              For parents and guardians. Full tuition for all remaining classes is paid upfront to confirm a seat. Seats are limited to 12 students.
+              For parents and guardians. Submitting this form reserves a temporary seat hold; it does not mean tuition has been paid. Seats are limited
+              to 12 students.
             </p>
+            <p className="font-bold text-navy">{OFFLINE_PAYMENT_STATEMENT}</p>
           </div>
 
           <p className="flex items-start gap-3 rounded-lg border border-gold bg-cream p-4 text-sm leading-relaxed text-ink">
             <AlertTriangle size={18} className="mt-0.5 shrink-0 text-gold-deep" aria-hidden="true" />
             <span>
-              <strong>Preview test mode.</strong> Payment is simulated: no card is collected and no money is charged. Emails go only to a test inbox.
+              <strong>Preview test mode.</strong> No payment is collected on this website. Emails go only to a test inbox.
             </span>
           </p>
 
-          {confirmed ? (
-            <ConfirmedPanel confirmed={confirmed} />
-          ) : hold ? (
-            <PaymentPanel hold={hold} busy={busy} error={formError} onPay={pay} onBack={() => setHold(null)} />
+          {received ? (
+            <ReceivedPanel received={received} />
           ) : (
             <form noValidate onSubmit={submit} className="flex flex-col gap-8" aria-describedby={formError ? "reg-form-error" : undefined}>
               <input type="text" name="website" tabIndex={-1} autoComplete="off" className="sr-only" aria-hidden="true" />
@@ -201,7 +209,7 @@ export function Registration({
                       <p className="text-3xl font-extrabold tabular-nums text-sage-deep">{formatUsd(quote.tuitionCents)}</p>
                     </div>
                     <p className="text-sm text-ink">
-                      Due in full upfront. {quote.remainingClasses} × {formatUsd(7500)} per class.
+                      Full tuition due before enrollment is confirmed. {quote.remainingClasses} × {formatUsd(7500)} per class. No installment plan.
                     </p>
                     <p className="text-sm leading-relaxed text-subtle">
                       Classes: {quote.remainingDates.map((d) => formatClassDate(d)).join(", ")}
@@ -209,6 +217,47 @@ export function Registration({
                   </div>
                 )}
               </Fieldset>
+
+              <fieldset className="flex flex-col gap-3" aria-describedby={errors.paymentMethod ? "reg-paymentMethod-error" : "reg-paymentMethod-hint"}>
+                <legend className="mb-1 text-lg font-extrabold text-navy">Preferred payment method</legend>
+                <p id="reg-paymentMethod-hint" className="text-sm leading-relaxed text-subtle">
+                  {OFFLINE_PAYMENT_STATEMENT} Online card payments are not accepted.
+                </p>
+                <div className="grid gap-3 sm:grid-cols-3" role="radiogroup" aria-invalid={Boolean(errors.paymentMethod)}>
+                  {PAYMENT_METHODS.map((method) => {
+                    const checked = fields.paymentMethod === method
+                    return (
+                      <label
+                        key={method}
+                        className={`flex min-h-12 cursor-pointer items-center gap-3 rounded-lg border-2 px-4 py-3 font-bold transition-colors ${
+                          checked ? "border-navy bg-warm text-navy" : errors.paymentMethod ? "border-error" : "border-line text-ink hover:border-navy/40"
+                        }`}
+                      >
+                        <input
+                          id={`reg-paymentMethod-${method}`}
+                          type="radio"
+                          name="paymentMethod"
+                          value={method}
+                          checked={checked}
+                          onChange={() => set("paymentMethod", method)}
+                          className="size-5 shrink-0 accent-navy"
+                        />
+                        {PAYMENT_METHOD_LABELS[method]}
+                      </label>
+                    )
+                  })}
+                </div>
+                {fields.paymentMethod && (
+                  <p className="rounded-lg bg-warm p-4 text-sm leading-relaxed text-ink" aria-live="polite">
+                    {PAYMENT_METHOD_INSTRUCTIONS[fields.paymentMethod as PaymentMethod]}
+                  </p>
+                )}
+                {errors.paymentMethod && (
+                  <p id="reg-paymentMethod-error" className="text-sm font-semibold text-error">
+                    {errors.paymentMethod}
+                  </p>
+                )}
+              </fieldset>
 
               <div className="flex flex-col gap-2">
                 <label className={`flex cursor-pointer items-start gap-3 rounded-lg border-2 p-4 ${errors.policyAcknowledged ? "border-error bg-error-soft" : "border-line"}`}>
@@ -222,9 +271,10 @@ export function Registration({
                     className="mt-1 size-5 shrink-0 accent-navy"
                   />
                   <span className="text-sm leading-relaxed text-ink">
-                    I understand that tuition is {formatUsd(7500)} per 3-hour class and that{" "}
-                    <strong>{quote ? formatUsd(quote.tuitionCents) : "the full tuition"}</strong> for all remaining classes is due in full upfront, with no
-                    installments or individual drop-in classes. I agree to AhmedPrep’s refund and cancellation policy.
+                    I understand that tuition is {formatUsd(7500)} per 3-hour class, that{" "}
+                    <strong>{quote ? formatUsd(quote.tuitionCents) : "the full tuition"}</strong> for all remaining classes is due in full before
+                    enrollment is confirmed, with no installments or individual drop-in classes, and that the seat is confirmed only after AhmedPrep
+                    verifies payment.
                   </span>
                 </label>
                 <p id="reg-policy-note" className="text-xs leading-relaxed text-subtle">
@@ -239,14 +289,17 @@ export function Registration({
                 </p>
               )}
 
-              <button
-                type="submit"
-                disabled={busy || !selected}
-                className="inline-flex min-h-14 items-center justify-center gap-2 rounded-md bg-coral px-8 text-base font-extrabold uppercase tracking-wide text-white transition-colors hover:bg-coral-hover disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                {busy ? <Loader2 size={18} className="animate-spin" aria-hidden="true" /> : null}
-                {busy ? "Saving…" : `Continue to payment${quote ? ` · ${formatUsd(quote.tuitionCents)}` : ""}`}
-              </button>
+              <div className="flex flex-col gap-2">
+                <button
+                  type="submit"
+                  disabled={busy || !selected}
+                  className="inline-flex min-h-14 items-center justify-center gap-2 rounded-md bg-coral px-8 text-base font-extrabold uppercase tracking-wide text-white transition-colors hover:bg-coral-hover disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {busy ? <Loader2 size={18} className="animate-spin" aria-hidden="true" /> : null}
+                  {busy ? "Submitting…" : "Submit registration"}
+                </button>
+                <p className="text-center text-xs text-subtle">No payment is taken on this website. We hold a seat for {PAYMENT_HOLD_MINUTES} minutes after you submit.</p>
+              </div>
             </form>
           )}
         </div>
@@ -255,74 +308,70 @@ export function Registration({
   )
 }
 
-function PaymentPanel({ hold, busy, error, onPay, onBack }: { hold: Hold; busy: boolean; error: string; onPay: () => void; onBack: () => void }) {
-  const expires = new Date(hold.holdExpiresAt).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "America/New_York" })
+function ReceivedPanel({ received }: { received: Received }) {
+  const holdTime = new Date(received.holdExpiresAt).toLocaleString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    timeZone: "America/New_York",
+  })
   return (
-    <div className="flex flex-col gap-6 rounded-xl border-2 border-navy/15 p-6 md:p-8">
-      <div className="flex flex-col gap-1">
-        <p className="text-xs font-extrabold uppercase tracking-wider text-gold-deep">Step 2 of 2 · Payment</p>
-        <h3 className="text-2xl font-extrabold text-navy">Your seat is held until {expires} ET</h3>
-        <p className="text-sm leading-relaxed text-subtle">
-          We hold seats for {PAYMENT_HOLD_MINUTES} minutes while you complete payment. Status: <strong className="text-ink">Awaiting payment</strong>
-        </p>
+    <div role="status" className="flex flex-col gap-6 rounded-xl border-2 border-gold bg-cream p-6 md:p-8">
+      <div className="flex flex-col gap-2">
+        <p className="text-xs font-extrabold uppercase tracking-wider text-gold-deep">Payment pending</p>
+        <h3 className="text-balance text-2xl font-extrabold text-navy md:text-3xl">Registration Request Received!</h3>
+        <p className="font-bold leading-relaxed text-ink">{REGISTRATION_RECEIVED_STATEMENT}</p>
+        <p className="rounded-lg border-2 border-coral bg-white p-3 text-sm font-extrabold leading-relaxed text-navy">{PENDING_SEAT_STATEMENT}</p>
       </div>
-      <dl className="grid gap-3 rounded-lg bg-warm p-5 text-sm sm:grid-cols-2">
-        <Summary label="First class" value={formatClassDateLong(hold.firstClassDate)} />
-        <Summary label="Classes / hours" value={`${hold.remainingClasses} classes · ${hold.remainingHours} hours`} />
-        <Summary label="Class time" value={CLASS_TIME_LABEL} />
-        <Summary label="Tuition due now" value={formatUsd(hold.tuitionCents)} strong />
-      </dl>
-      {error && (
-        <p role="alert" className="rounded-lg bg-error-soft p-4 text-sm font-semibold text-error">
-          {error}
-        </p>
-      )}
-      <button
-        type="button"
-        onClick={onPay}
-        disabled={busy}
-        className="inline-flex min-h-14 items-center justify-center gap-2 rounded-md bg-coral px-8 text-base font-extrabold uppercase tracking-wide text-white transition-colors hover:bg-coral-hover disabled:opacity-60"
-      >
-        {busy ? <Loader2 size={18} className="animate-spin" aria-hidden="true" /> : <Lock size={18} aria-hidden="true" />}
-        {busy ? "Processing…" : `Complete test payment · ${formatUsd(hold.tuitionCents)}`}
-      </button>
-      <p className="text-center text-xs text-subtle">Simulated payment for Preview testing. No card details are requested and no charge is made.</p>
-      <button type="button" onClick={onBack} disabled={busy} className="text-sm font-bold text-brand underline underline-offset-4">
-        Edit registration details
-      </button>
-    </div>
-  )
-}
 
-function ConfirmedPanel({ confirmed }: { confirmed: Confirmed }) {
-  const quote = quoteFor(confirmed.firstClassDate)
-  return (
-    <div role="status" className="flex flex-col gap-6 rounded-xl border-2 border-sage bg-sage-soft p-6 md:p-8">
-      <div className="flex items-start gap-4">
-        <CheckCircle2 size={36} className="shrink-0 text-sage-deep" aria-hidden="true" />
-        <div className="flex flex-col gap-1">
-          <h3 className="text-2xl font-extrabold text-navy">{confirmed.studentName} is enrolled</h3>
-          <p className="text-sm text-ink">
-            Status: <strong>Confirmed · Paid {formatUsd(confirmed.tuitionCents)}</strong> · Confirmation #{confirmed.paymentReference}
-          </p>
-        </div>
-      </div>
+      <dl className="grid gap-4 rounded-lg bg-white p-5 text-sm sm:grid-cols-2">
+        <Summary label="Registration #" value={received.referenceCode} />
+        <Summary label="Student" value={received.studentName} />
+        <Summary label="Starting date" value={formatClassDateLong(received.firstClassDate)} />
+        <Summary label="Classes / hours" value={`${received.remainingClasses} classes · ${received.remainingHours} hours`} />
+        <Summary label="Total tuition due" value={formatUsd(received.tuitionCents)} strong />
+        <Summary label="Payment method" value={PAYMENT_METHOD_LABELS[received.paymentMethod]} />
+      </dl>
+
+      <p className="flex items-start gap-3 text-sm leading-relaxed text-ink">
+        <Clock size={18} className="mt-0.5 shrink-0 text-gold-deep" aria-hidden="true" />
+        <span>
+          <strong>Temporary seat hold until {holdTime} ET.</strong> After the hold lapses your registration stays on file, but the seat is guaranteed only
+          once payment is verified and a seat is still available.
+        </span>
+      </p>
+
       <div className="flex flex-col gap-2 text-sm leading-relaxed text-ink">
+        <h4 className="font-extrabold text-navy">How to pay</h4>
+        <p>{PAYMENT_METHOD_INSTRUCTIONS[received.paymentMethod]}</p>
+      </div>
+
+      <div className="flex flex-col gap-2 text-sm leading-relaxed text-ink">
+        <h4 className="font-extrabold text-navy">Your class dates</h4>
+        <p>{received.remainingDates.map((d) => formatClassDate(d)).join(", ")}</p>
+        <p className="text-subtle">{CLASS_TIME_LABEL} · No class Thursday, November 26 (Thanksgiving)</p>
+      </div>
+
+      <div className="flex flex-col gap-1 text-sm leading-relaxed text-ink">
+        <h4 className="font-extrabold text-navy">Classroom</h4>
         <p>
-          <strong>First class:</strong> {formatClassDateLong(confirmed.firstClassDate)}, {CLASS_TIME_LABEL}
-        </p>
-        <p>
-          <strong>All class dates:</strong> {quote.remainingDates.map((d) => formatClassDate(d)).join(", ")}
-        </p>
-        <p>
-          <strong>Location:</strong> {ADDRESS_LINE_1}, {ADDRESS_LINE_2}
-        </p>
-        <p>
-          A confirmation email has been prepared for {confirmed.parentEmail}
-          {confirmed.emails.family === "test_inbox" ? " (Preview: delivered to the test inbox only)" : ""}. Questions? Call or text{" "}
-          <a href={BUSINESS.phoneHref} className="font-bold text-brand underline">{BUSINESS.phoneDisplay}</a>.
+          {ADDRESS_LINE_1}, {ADDRESS_LINE_2} (in person only)
         </p>
       </div>
+
+      <p className="text-sm leading-relaxed text-ink">
+        A copy of these details has been emailed to you. Questions? Call or text{" "}
+        <a href={BUSINESS.phoneHref} className="font-bold text-brand underline">
+          {BUSINESS.phoneDisplay}
+        </a>{" "}
+        or email{" "}
+        <a href={`mailto:${EMAIL}`} className="font-bold text-brand underline">
+          {EMAIL}
+        </a>
+        .
+      </p>
     </div>
   )
 }

@@ -1,18 +1,10 @@
 import "server-only"
 
 import { after } from "next/server"
-import { createSatIntensiveEmailsLink } from "@/lib/admin-links"
 import { pool } from "@/lib/db"
-import { SITE_URL } from "@/lib/business"
-import { processEmailOutbox, setOutboxAdminLinkFactory } from "@/lib/sat-final-intensive-email-outbox"
+import { processEmailOutbox } from "@/lib/sat-final-intensive-email-outbox"
 
-function adminOrigin() {
-  if (process.env.VERCEL_ENV === "production") return SITE_URL
-  const host = process.env.VERCEL_BRANCH_URL ?? process.env.VERCEL_URL
-  return host ? `https://${host}` : "http://localhost:3000"
-}
-
-setOutboxAdminLinkFactory((publicId) => createSatIntensiveEmailsLink(adminOrigin(), publicId))
+// No administrator console link is set: the console is blocked until real administrator authentication exists.
 
 /**
  * Drains the outbox after the response is sent, so a slow or rate-limited Resend never delays the family's

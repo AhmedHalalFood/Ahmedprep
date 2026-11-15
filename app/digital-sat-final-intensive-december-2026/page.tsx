@@ -102,7 +102,7 @@ export default function DigitalSatFinalIntensivePage() {
   return (
     <>
       <p className="bg-gold px-4 py-2 text-center text-xs font-extrabold uppercase tracking-wider text-navy">
-        Preview only · Not public · Enrollment and payments are simulated
+        Preview only · Not public · Test registrations only, no payment collected
       </p>
       <Breadcrumbs items={[{ label: "Digital SAT Final Intensive", href: SAT_INTENSIVE_PATH }]} />
       <SatIntensiveHero />

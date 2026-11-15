@@ -1,0 +1,85 @@
+-- Digital SAT Final Intensive: offline (Zelle / cash / check) payments verified by an administrator.
+-- NOT APPROVED FOR PRODUCTION. Depends on 0008 and 0009. Applied only to the Preview Neon branch (ep-quiet-breeze-b8qi4eg2).
+-- The `.disabled` suffix keeps scripts/migrate.mjs from picking this file up.
+--
+-- Touches only sat_intensive_* objects. Safe to re-run. Registration, payment records, verification (audit log),
+-- confirmation and email delivery live in separate tables so an online provider can be added later by writing payment
+-- rows with source 'stripe' or 'square' without changing how registrations or confirmations work.
+
+-- 1. Registration: the family's preferred offline method and a short reference they can quote on the phone.
+ALTER TABLE sat_intensive_enrollments ADD COLUMN IF NOT EXISTS payment_method text;
+ALTER TABLE sat_intensive_enrollments ADD COLUMN IF NOT EXISTS reference_code text;
+ALTER TABLE sat_intensive_enrollments ADD COLUMN IF NOT EXISTS canceled_at timestamptz;
+ALTER TABLE sat_intensive_enrollments ADD COLUMN IF NOT EXISTS cancel_reason text;
+
+ALTER TABLE sat_intensive_enrollments DROP CONSTRAINT IF EXISTS sat_intensive_enrollments_payment_method_check;
+ALTER TABLE sat_intensive_enrollments ADD CONSTRAINT sat_intensive_enrollments_payment_method_check
+  CHECK (payment_method IS NULL OR payment_method IN ('zelle', 'cash', 'check', 'card'));
+
+ALTER TABLE sat_intensive_enrollments DROP CONSTRAINT IF EXISTS sat_intensive_enrollments_payment_mode_check;
+ALTER TABLE sat_intensive_enrollments ADD CONSTRAINT sat_intensive_enrollments_payment_mode_check
+  CHECK (payment_mode IN ('simulated', 'stripe_test', 'manual', 'provider'));
+
+CREATE UNIQUE INDEX IF NOT EXISTS sat_intensive_enrollments_reference_code
+  ON sat_intensive_enrollments (reference_code) WHERE reference_code IS NOT NULL;
+
+-- A student can have at most one live registration (pending or confirmed). Requires no existing duplicates; the
+-- Preview table was verified empty before this was applied, and the Production table does not exist yet.
+CREATE UNIQUE INDEX IF NOT EXISTS sat_intensive_enrollments_one_active_per_student
+  ON sat_intensive_enrollments (program_key, student_key)
+  WHERE status IN ('pending_payment', 'confirmed');
+
+-- 2. Payment records. Today only source = 'manual' is written, by an authenticated administrator. A future provider
+--    writes source 'stripe' / 'square' with its own transaction id, de-duplicated by the unique index below.
+CREATE TABLE IF NOT EXISTS sat_intensive_payments (
+  id bigserial PRIMARY KEY,
+  public_id uuid NOT NULL DEFAULT gen_random_uuid() UNIQUE,
+  enrollment_public_id uuid NOT NULL REFERENCES sat_intensive_enrollments (public_id),
+  source text NOT NULL CHECK (source IN ('manual', 'stripe', 'square')),
+  method text NOT NULL CHECK (method IN ('zelle', 'cash', 'check', 'card')),
+  status text NOT NULL CHECK (status IN ('pending', 'verified', 'failed', 'refunded', 'canceled')),
+  amount_cents integer NOT NULL CHECK (amount_cents > 0),
+  currency text NOT NULL DEFAULT 'usd' CHECK (currency = 'usd'),
+  received_on date,
+  -- Zelle confirmation, check number or internal receipt number. Never bank credentials or account numbers.
+  reference text CHECK (reference IS NULL OR length(reference) <= 80),
+  provider_transaction_id text,
+  -- One per submitted admin form (or provider event), so a double-click or retry cannot record a second payment.
+  idempotency_key text NOT NULL UNIQUE,
+  recorded_by text NOT NULL,
+  notes text CHECK (notes IS NULL OR length(notes) <= 500),
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS sat_intensive_payments_provider_txn
+  ON sat_intensive_payments (source, provider_transaction_id) WHERE provider_transaction_id IS NOT NULL;
+CREATE UNIQUE INDEX IF NOT EXISTS sat_intensive_payments_one_verified
+  ON sat_intensive_payments (enrollment_public_id) WHERE status = 'verified';
+
+-- 3. Append-only audit trail of payment verification and enrollment changes.
+CREATE TABLE IF NOT EXISTS sat_intensive_audit_log (
+  id bigserial PRIMARY KEY,
+  enrollment_public_id uuid REFERENCES sat_intensive_enrollments (public_id),
+  payment_public_id uuid REFERENCES sat_intensive_payments (public_id),
+  actor text NOT NULL,
+  action text NOT NULL,
+  details jsonb NOT NULL DEFAULT '{}'::jsonb,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS sat_intensive_audit_log_enrollment ON sat_intensive_audit_log (enrollment_public_id, created_at);
+
+-- 4. Administrator sign-in attempts, for lockout after repeated failures. Stores only a salted hash of the client address.
+CREATE TABLE IF NOT EXISTS sat_intensive_admin_auth_attempts (
+  id bigserial PRIMARY KEY,
+  client_hash text NOT NULL,
+  succeeded boolean NOT NULL,
+  attempted_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS sat_intensive_admin_auth_attempts_recent
+  ON sat_intensive_admin_auth_attempts (client_hash, attempted_at);
+
+-- 5. Email kinds: a pending-registration email and admin alert on submission, a confirmation after verification.
+ALTER TABLE sat_intensive_email_outbox DROP CONSTRAINT IF EXISTS sat_intensive_email_outbox_kind_check;
+ALTER TABLE sat_intensive_email_outbox ADD CONSTRAINT sat_intensive_email_outbox_kind_check
+  CHECK (kind IN ('family_pending', 'admin_new_registration', 'family_confirmation', 'admin_notification'));

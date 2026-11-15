@@ -134,9 +134,31 @@ export const WHAT_TO_BRING = [
   "A water bottle and a light snack",
 ] as const
 
-/** Shown wherever the family acknowledges policies. AhmedPrep has not yet approved a written refund/cancellation policy. */
+/**
+ * AhmedPrep has not yet approved written refund, withdrawal or cancellation terms for this program. While this is
+ * null the form shows no policy checkbox and no policy terms; once approved text is supplied it becomes a required
+ * acknowledgment.
+ */
+export const APPROVED_REFUND_POLICY: string | null = null
 export const POLICY_PENDING_NOTE =
-  "AhmedPrep’s written refund and cancellation policy for this program will be provided before payment is collected."
+  "AhmedPrep’s refund, withdrawal and cancellation terms for this program will be provided before tuition is collected."
+
+export const PAYMENT_METHODS = ["zelle", "cash", "check"] as const
+export type PaymentMethod = (typeof PAYMENT_METHODS)[number]
+export const PAYMENT_METHOD_LABELS: Record<PaymentMethod, string> = { zelle: "Zelle", cash: "Cash", check: "Check" }
+export const isPaymentMethod = (value: string): value is PaymentMethod => (PAYMENT_METHODS as readonly string[]).includes(value)
+
+export const OFFLINE_PAYMENT_STATEMENT = "Pay by Zelle, cash, or check. Enrollment is confirmed after payment verification."
+export const REGISTRATION_RECEIVED_STATEMENT =
+  "Registration received. Your seat will be confirmed after AhmedPrep verifies your tuition payment."
+export const PENDING_SEAT_STATEMENT = "Your registration is pending payment verification. Your seat is not confirmed yet."
+
+/** No recipient, account or payee details are shown until AhmedPrep supplies and approves them. */
+export const PAYMENT_METHOD_INSTRUCTIONS: Record<PaymentMethod, string> = {
+  zelle: "AhmedPrep will contact you directly with Zelle payment instructions. Please do not send a payment until you receive them from AhmedPrep.",
+  cash: "Payment arrangements can be made with AhmedPrep at the classroom. Contact AhmedPrep to arrange a time before the first class.",
+  check: "Payment arrangements can be made with AhmedPrep at the classroom. Contact AhmedPrep for check details before writing a check.",
+}
 
 export type RegistrationInput = {
   studentName: string
@@ -145,9 +167,11 @@ export type RegistrationInput = {
   parentEmail: string
   parentPhone: string
   firstClassDate: string
+  paymentMethod: string
   previousScore: string
   targetScore: string
   satRegistration: string
+  /** The family confirms the approved tuition terms (seat confirmed only after full payment is verified). */
   policyAcknowledged: boolean
 }
 
@@ -188,7 +212,8 @@ export function validateRegistration(input: RegistrationInput, now: Date): Regis
   if (target) errors.targetScore = target
   if (!SAT_REGISTRATION_OPTIONS.some((o) => o.value === input.satRegistration))
     errors.satRegistration = "Tell us whether the student is registered for the December 5 SAT."
-  if (!input.policyAcknowledged) errors.policyAcknowledged = "Please confirm the tuition and policy acknowledgment."
+  if (!isPaymentMethod(input.paymentMethod)) errors.paymentMethod = "Choose how you plan to pay: Zelle, cash, or check."
+  if (!input.policyAcknowledged) errors.policyAcknowledged = "Please confirm that you understand how tuition and seat confirmation work."
   return errors
 }
 
