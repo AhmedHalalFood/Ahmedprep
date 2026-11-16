@@ -36,6 +36,32 @@ export function createLeadResendLink(origin: string, id: number, now = Date.now(
   return `${origin}${LEAD_RESEND_PATH}?${params}`
 }
 
+export const SAT_INTENSIVE_EMAILS_PATH = "/admin/sat-intensive-emails"
+// Separate purpose string again, and keyed by the enrollment's public UUID rather than a numeric id.
+const signIntensive = (key: string, id: string, expires: number) =>
+  createHmac("sha256", key).update(`sat-intensive-emails:${id}:${expires}`).digest("base64url")
+
+/** Admin-only link to view delivery status and resend SAT Final Intensive emails. Null without ADMIN_ACTION_SECRET. */
+export function createSatIntensiveEmailsLink(origin: string, publicId: string, now = Date.now()) {
+  const key = secret()
+  if (!key) return null
+  const expires = now + LINK_LIFETIME_MS
+  const params = new URLSearchParams({ id: publicId, exp: String(expires), sig: signIntensive(key, publicId, expires) })
+  return `${origin}${SAT_INTENSIVE_EMAILS_PATH}?${params}`
+}
+
+export function verifySatIntensiveEmailsToken(id: unknown, exp: unknown, sig: unknown, now = Date.now()) {
+  const key = secret()
+  if (!key || typeof id !== "string" || typeof exp !== "string" || typeof sig !== "string") return null
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)) return null
+  const expires = Number(exp)
+  if (!Number.isSafeInteger(expires) || expires < now) return null
+  const expected = Buffer.from(signIntensive(key, id, expires))
+  const given = Buffer.from(sig)
+  if (expected.length !== given.length || !timingSafeEqual(expected, given)) return null
+  return id
+}
+
 export function verifyLeadResendToken(id: unknown, exp: unknown, sig: unknown, now = Date.now()) {
   return verifyWith(signLead, id, exp, sig, now)
 }

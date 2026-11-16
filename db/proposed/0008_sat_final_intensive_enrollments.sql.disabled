@@ -1,0 +1,48 @@
+-- Digital SAT Final Intensive (December 5, 2026 SAT): seat holds, payment status and confirmed enrollments.
+-- NOT APPROVED FOR PRODUCTION. Applied only to the Preview Neon branch (ep-quiet-breeze-b8qi4eg2) for testing.
+-- The `.disabled` suffix keeps scripts/migrate.mjs from picking this file up.
+--
+-- Additive only and safe to re-run. No existing table, row, column, constraint or index is changed.
+-- Capacity (12) is enforced in application code under a per-program advisory lock: confirmed rows plus unexpired
+-- pending_payment holds can never exceed it. The partial unique index below is the final guard against a student
+-- being confirmed twice.
+
+CREATE TABLE IF NOT EXISTS sat_intensive_enrollments (
+  id bigserial PRIMARY KEY,
+  public_id uuid NOT NULL DEFAULT gen_random_uuid() UNIQUE,
+  program_key text NOT NULL,
+  status text NOT NULL DEFAULT 'pending_payment'
+    CHECK (status IN ('pending_payment', 'confirmed', 'expired', 'canceled')),
+  student_name text NOT NULL,
+  student_grade text NOT NULL,
+  parent_name text NOT NULL,
+  parent_email text NOT NULL,
+  parent_phone text NOT NULL,
+  student_key text NOT NULL,
+  -- Always calculated by the server from the class calendar, never taken from the browser.
+  first_class_date text NOT NULL CHECK (first_class_date ~ '^\d{4}-\d{2}-\d{2}$'),
+  remaining_classes integer NOT NULL CHECK (remaining_classes BETWEEN 1 AND 11),
+  remaining_hours integer NOT NULL CHECK (remaining_hours = remaining_classes * 3),
+  tuition_cents integer NOT NULL CHECK (tuition_cents = remaining_classes * 7500),
+  previous_score text,
+  target_score text,
+  sat_registration_status text NOT NULL,
+  policy_acknowledged_at timestamptz NOT NULL,
+  payment_token_hash text NOT NULL,
+  -- 'simulated' is the only mode in use. A real provider must be approved before any other value is written.
+  payment_mode text NOT NULL DEFAULT 'simulated' CHECK (payment_mode IN ('simulated')),
+  payment_reference text,
+  hold_expires_at timestamptz NOT NULL,
+  confirmed_at timestamptz,
+  family_email_status text NOT NULL DEFAULT 'not_sent',
+  admin_email_status text NOT NULL DEFAULT 'not_sent',
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS sat_intensive_enrollments_one_confirmed_per_student
+  ON sat_intensive_enrollments (program_key, student_key)
+  WHERE status = 'confirmed';
+
+CREATE INDEX IF NOT EXISTS sat_intensive_enrollments_active
+  ON sat_intensive_enrollments (program_key, status, hold_expires_at);

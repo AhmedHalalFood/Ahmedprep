@@ -14,6 +14,7 @@ import {
 } from "lucide-react"
 import { TERMS_2027, type TermId, termSummary } from "@/lib/cohorts-2027"
 import { ProgramsPreview } from "@/components/landing/programs-preview"
+import { SatIntensiveAnnouncement } from "@/components/sat-intensive/announcement"
 import { ToolsResources } from "@/components/landing/tools-resources"
 import { WhyFamilies } from "@/components/landing/why-families"
 import { TrackedLink } from "@/components/tracked-link"
@@ -142,6 +143,8 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      <SatIntensiveAnnouncement />
 
       {showIntensive && (
         <aside aria-label="2026 SHSAT Final Intensive" className="border-b border-gold/40 bg-cream">
