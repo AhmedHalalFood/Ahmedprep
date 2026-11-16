@@ -217,6 +217,37 @@ export function validateRegistration(input: RegistrationInput, now: Date): Regis
   return errors
 }
 
+/** Launch registration: an inquiry only. Nothing is reserved, held, or charged when it is submitted. */
+export const INQUIRY_RECEIVED_STATEMENT =
+  "Registration request received. AhmedPrep will contact you to confirm availability and arrange payment."
+export const INQUIRY_PAYMENT_STATEMENT =
+  "Payment is accepted by Zelle, cash, or check after instructions are confirmed directly with AhmedPrep. No card payments are taken on this website."
+export const INQUIRY_NOT_RESERVED_STATEMENT =
+  "Submitting this form does not reserve or confirm a seat. Seats are limited to 12 students."
+
+export type InquiryInput = Pick<
+  RegistrationInput,
+  "studentName" | "studentGrade" | "parentName" | "parentEmail" | "parentPhone" | "firstClassDate" | "paymentMethod"
+>
+export type InquiryErrors = Partial<Record<keyof InquiryInput, string>>
+
+/** Used by both the browser form and the server; the server's clock decides which start dates are still open. */
+export function validateInquiry(input: InquiryInput, now: Date): InquiryErrors {
+  const all = validateRegistration(
+    { ...input, previousScore: "", targetScore: "", satRegistration: SAT_REGISTRATION_OPTIONS[0].value, policyAcknowledged: true },
+    now,
+  )
+  const errors: InquiryErrors = {}
+  for (const key of ["studentName", "studentGrade", "parentName", "parentEmail", "parentPhone", "firstClassDate", "paymentMethod"] as const) {
+    if (all[key]) errors[key] = all[key]
+  }
+  if (errors.paymentMethod) errors.paymentMethod = "Choose your preferred payment method: Zelle, cash, or check."
+  return errors
+}
+
+/** Public promotion (sitemap, homepage, Digital SAT page) runs while at least one class has not started. */
+export const isSatIntensiveEnrollmentOpen = (now = new Date()) => availableStartDates(now).length > 0
+
 /** Same student + same parent email is one enrollment, regardless of capitalisation or extra spaces. */
 export function studentKey(parentEmail: string, studentName: string) {
   return `${parentEmail.trim().toLowerCase()}|${studentName.trim().toLowerCase().replace(/\s+/g, " ")}`

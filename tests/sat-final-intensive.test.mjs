@@ -55,6 +55,7 @@ const valid = {
   previousScore: "",
   targetScore: "1400",
   satRegistration: "registered",
+  paymentMethod: "zelle",
   policyAcknowledged: true,
 }
 const before = new Date("2026-11-14T12:00:00Z")
@@ -70,14 +71,19 @@ test("required fields, policy acknowledgment, and started classes are rejected",
   assert.ok(validateRegistration(valid, new Date("2026-11-24T00:00:00Z")).firstClassDate)
 })
 
-test("page and APIs fail closed on Production and are never indexed", () => {
+test("the launched page is public and indexable; it submits inquiries, never payments", () => {
   const page = readFileSync("app/digital-sat-final-intensive-december-2026/page.tsx", "utf8")
-  assert.match(page, /if \(!internalPreviewAllowed\(\)\) notFound\(\)/)
-  assert.match(page, /index: false/)
-  for (const route of ["register", "simulate-payment"]) {
-    const src = readFileSync(`app/api/sat-final-intensive/${route}/route.ts`, "utf8")
-    assert.match(src, /if \(!internalPreviewAllowed\(\)[^)]*\)\s*(return )?[\s\S]{0,20}NextResponse\.json\(\{ error: "Not found" \}, \{ status: 404 \}\)/)
-  }
+  assert.doesNotMatch(page, /internalPreviewAllowed|notFound\(\)/)
+  assert.doesNotMatch(page, /index: false/)
+  const form = readFileSync("components/sat-intensive/registration.tsx", "utf8")
+  assert.match(form, /\/api\/sat-final-intensive\/inquiry/)
+  assert.doesNotMatch(form, /\/api\/sat-final-intensive\/(register|simulate-payment)/)
+})
+
+test("seat-hold and simulated-payment APIs stay Preview-only (404 on Production)", () => {
+  const src = readFileSync("app/api/sat-final-intensive/register/route.ts", "utf8")
+  assert.match(src, /if \(!internalPreviewAllowed\(\)[^)]*\)\s*(return )?[\s\S]{0,20}NextResponse\.json\(\{ error: "Not found" \}, \{ status: 404 \}\)/)
+  assert.throws(() => readFileSync("app/api/sat-final-intensive/simulate-payment/route.ts"), "no simulated-payment route exists")
 })
 
 test("the migration stays out of the automatic migration runner", () => {

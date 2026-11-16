@@ -10,6 +10,7 @@ import { ProgramHero } from "@/components/landing/program-hero"
 import { courseInstances2027 } from "@/components/landing/program-cohorts-2027"
 import { SuccessStories } from "@/components/landing/success-stories"
 import { ThisSundayStrip } from "@/components/sunday-classes/this-sunday-strip"
+import { SatIntensiveAnnouncement } from "@/components/sat-intensive/announcement"
 import { TeachingVideos } from "@/components/videos/teaching-videos"
 import { ClassStructure } from "@/components/program-page/class-structure"
 import { EnrollmentSteps } from "@/components/program-page/enrollment-steps"
@@ -131,6 +132,8 @@ export default function DigitalSatPrepPage() {
         ctaEvent={EVENTS.digitalSatCtaClick}
         actions={<ProgramCtas program="Digital SAT" location="digital_sat_hero" diagnosticEvent={EVENTS.digitalSatCtaClick} />}
       />
+
+      <SatIntensiveAnnouncement />
 
       <Section
         id="overview"

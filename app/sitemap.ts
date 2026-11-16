@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next"
 import { SITE_URL } from "@/lib/business"
 import { RESOURCES } from "@/lib/resources"
+import { SAT_INTENSIVE_PATH, isSatIntensiveEnrollmentOpen } from "@/lib/sat-final-intensive"
 import { INTENSIVE_PATH, isIntensivePromoActive } from "@/lib/shsat-intensive"
 import { FREE_TOOLS, toolPath } from "@/lib/tools"
 import { UPDATES, latestUpdateModified } from "@/lib/updates"
@@ -14,6 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/enroll-2027", priority: 0.9 },
     { path: "/programs-2027", priority: 0.9 },
     { path: "/digital-sat-prep", priority: 0.9 },
+    ...(isSatIntensiveEnrollmentOpen() ? [{ path: SAT_INTENSIVE_PATH, priority: 0.9 }] : []),
     { path: "/free-sunday-classes", priority: 0.8 },
     { path: "/free-diagnostic", priority: 0.8 },
     { path: "/results", priority: 0.7 },

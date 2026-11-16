@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import { notFound } from "next/navigation"
 import { Faq, type FaqItem } from "@/components/landing/faq"
 import { LocationSection } from "@/components/landing/location-section"
 import { Breadcrumbs, JsonLd } from "@/components/landing/primitives"
@@ -10,7 +9,6 @@ import { SatIntensiveMobileBar } from "@/components/sat-intensive/mobile-enroll-
 import { SatIntensiveDetails } from "@/components/sat-intensive/program-details"
 import { SatIntensiveTimeline } from "@/components/sat-intensive/timeline"
 import { BUSINESS, NOT_AFFILIATED_NOTE } from "@/lib/business"
-import { internalPreviewAllowed } from "@/lib/internal-routes"
 import {
   CLASS_DATES,
   PRICE_PER_CLASS_CENTS,
@@ -21,7 +19,7 @@ import {
   formatUsd,
   quoteFor,
 } from "@/lib/sat-final-intensive"
-import { absoluteUrl } from "@/lib/seo"
+import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 
 export const dynamic = "force-dynamic"
 
@@ -30,12 +28,11 @@ const DESCRIPTION =
   "In-person Digital SAT Final Intensive in Astoria, Queens for the December 5, 2026 SAT. Nov 16–Dec 3, Mon–Thu 6–9 PM, max 12 students. Rolling enrollment: $75 per remaining class."
 const PAGE_URL = absoluteUrl(SAT_INTENSIVE_PATH)
 
-// Preview-only until the owner approves launch: never indexed, and the route itself 404s on Production.
 export const metadata: Metadata = {
   title: { absolute: TITLE },
   description: DESCRIPTION,
   alternates: { canonical: PAGE_URL },
-  robots: { index: false, follow: false, nocache: true, googleBot: { index: false, follow: false } },
+  openGraph: { ...baseOpenGraph, url: PAGE_URL, title: TITLE, description: DESCRIPTION },
 }
 
 const FULL = quoteFor(CLASS_DATES[0])
@@ -97,13 +94,8 @@ const courseSchema = {
 }
 
 export default function DigitalSatFinalIntensivePage() {
-  if (!internalPreviewAllowed()) notFound()
-
   return (
     <>
-      <p className="bg-gold px-4 py-2 text-center text-xs font-extrabold uppercase tracking-wider text-navy">
-        Preview only · Not public · Test registrations only, no payment collected
-      </p>
       <Breadcrumbs items={[{ label: "Digital SAT Final Intensive", href: SAT_INTENSIVE_PATH }]} />
       <SatIntensiveHero />
       <SatIntensiveDetails />

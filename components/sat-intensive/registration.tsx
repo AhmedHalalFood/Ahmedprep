@@ -1,58 +1,44 @@
 "use client"
 
-import { useState, type FormEvent, type ReactNode } from "react"
-import { AlertTriangle, Clock, Loader2 } from "lucide-react"
+import { useRef, useState, type FormEvent, type ReactNode } from "react"
+import { Loader2, MessageSquare, Phone } from "lucide-react"
 import { ADDRESS_LINE_1, ADDRESS_LINE_2, BUSINESS } from "@/lib/business"
 import {
   CLASS_DATES,
   CLASS_TIME_LABEL,
   GRADE_OPTIONS,
-  OFFLINE_PAYMENT_STATEMENT,
-  PAYMENT_HOLD_MINUTES,
+  INQUIRY_NOT_RESERVED_STATEMENT,
+  INQUIRY_PAYMENT_STATEMENT,
+  INQUIRY_RECEIVED_STATEMENT,
   PAYMENT_METHODS,
-  PAYMENT_METHOD_INSTRUCTIONS,
   PAYMENT_METHOD_LABELS,
-  PENDING_SEAT_STATEMENT,
-  POLICY_PENDING_NOTE,
-  REGISTRATION_RECEIVED_STATEMENT,
-  SAT_REGISTRATION_OPTIONS,
+  PRICE_PER_CLASS_CENTS,
   formatClassDate,
   formatClassDateLong,
   formatUsd,
   quoteFor,
-  validateRegistration,
+  validateInquiry,
   type ClassDate,
+  type InquiryErrors,
+  type InquiryInput,
   type PaymentMethod,
-  type RegistrationErrors,
-  type RegistrationInput,
 } from "@/lib/sat-final-intensive"
 
-type Received = {
-  referenceCode: string
-  studentName: string
-  paymentMethod: PaymentMethod
-  holdExpiresAt: string
-  firstClassDate: ClassDate
-  remainingDates: ClassDate[]
-  remainingClasses: number
-  remainingHours: number
-  tuitionCents: number
-}
+type Received = { studentName: string; firstClassDate: ClassDate; paymentMethod: PaymentMethod }
 
-const EMPTY: Omit<RegistrationInput, "firstClassDate"> = {
+const EMPTY: Omit<InquiryInput, "firstClassDate"> = {
   studentName: "",
   studentGrade: "",
   parentName: "",
   parentEmail: "",
   parentPhone: "",
   paymentMethod: "",
-  previousScore: "",
-  targetScore: "",
-  satRegistration: "",
-  policyAcknowledged: false,
 }
 
-const EMAIL = "tariq@ahmedprep.com"
+const SMS_HREF = BUSINESS.phoneHref.replace(/^tel:/, "sms:")
+
+const newSubmissionId = () =>
+  typeof crypto !== "undefined" && "randomUUID" in crypto ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`
 
 export function Registration({
   available,
@@ -64,13 +50,18 @@ export function Registration({
   onSelect: (date: ClassDate) => void
 }) {
   const [fields, setFields] = useState(EMPTY)
-  const [errors, setErrors] = useState<RegistrationErrors>({})
+  const [errors, setErrors] = useState<InquiryErrors>({})
   const [formError, setFormError] = useState("")
   const [busy, setBusy] = useState(false)
   const [received, setReceived] = useState<Received | null>(null)
+  const startedAt = useRef<number | null>(null)
+  const submissionId = useRef<string | null>(null)
 
   const quote = selected ? quoteFor(selected) : null
   const set = <K extends keyof typeof EMPTY>(key: K, value: (typeof EMPTY)[K]) => {
+    startedAt.current ??= Date.now()
+    // A changed form is a new submission; retries of an unchanged form reuse the same id so they are not duplicated.
+    submissionId.current = null
     setFields((f) => ({ ...f, [key]: value }))
     setErrors((e) => ({ ...e, [key]: undefined }))
   }
@@ -79,8 +70,8 @@ export function Registration({
     event.preventDefault()
     if (busy) return
     const website = (new FormData(event.currentTarget).get("website") as string) ?? ""
-    const input: RegistrationInput = { ...fields, firstClassDate: selected ?? "" }
-    const found = validateRegistration(input, new Date())
+    const input: InquiryInput = { ...fields, firstClassDate: selected ?? "" }
+    const found = validateInquiry(input, new Date())
     setErrors(found)
     setFormError("")
     if (Object.keys(found).length) {
@@ -88,23 +79,33 @@ export function Registration({
       document.getElementById(first === "paymentMethod" ? "reg-paymentMethod-zelle" : `reg-${first}`)?.focus()
       return
     }
+    submissionId.current ??= newSubmissionId()
     setBusy(true)
     try {
-      const res = await fetch("/api/sat-final-intensive/register", {
+      const res = await fetch("/api/sat-final-intensive/inquiry", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...input, website }),
+        body: JSON.stringify({
+          ...input,
+          website,
+          submissionId: submissionId.current,
+          elapsedMs: Date.now() - (startedAt.current ?? Date.now()),
+        }),
       })
       const data = await res.json().catch(() => ({}))
-      if (!res.ok) {
+      if (!res.ok || data.success === false) {
         setErrors(data.errors ?? {})
-        setFormError(data.error ?? "Something went wrong. Please try again.")
+        setFormError(
+          res.status === 429
+            ? `Too many attempts. Please call or text ${BUSINESS.phoneDisplay} and we will help right away.`
+            : (data.error ?? `Something went wrong. Please try again or call or text ${BUSINESS.phoneDisplay}.`),
+        )
         return
       }
-      setReceived(data)
+      setReceived({ studentName: input.studentName, firstClassDate: input.firstClassDate as ClassDate, paymentMethod: input.paymentMethod as PaymentMethod })
       requestAnimationFrame(() => document.getElementById("register")?.scrollIntoView({ behavior: "smooth", block: "start" }))
     } catch {
-      setFormError(`We could not reach the server. Please try again or call ${BUSINESS.phoneDisplay}.`)
+      setFormError(`We could not reach the server. Please try again or call or text ${BUSINESS.phoneDisplay}.`)
     } finally {
       setBusy(false)
     }
@@ -117,21 +118,15 @@ export function Registration({
           <div className="flex flex-col gap-3">
             <p className="eyebrow blue">Registration</p>
             <h2 id="register-title" className="text-balance text-3xl font-extrabold tracking-tight text-navy md:text-4xl">
-              Enroll your student
+              Request a seat for your student
             </h2>
             <p className="text-pretty leading-relaxed text-subtle">
-              For parents and guardians. Submitting this form reserves a temporary seat hold; it does not mean tuition has been paid. Seats are limited
-              to 12 students.
+              For parents and guardians. {INQUIRY_NOT_RESERVED_STATEMENT} AhmedPrep will contact you to confirm availability.
             </p>
-            <p className="font-bold text-navy">{OFFLINE_PAYMENT_STATEMENT}</p>
+            <p className="font-bold leading-relaxed text-navy">{INQUIRY_PAYMENT_STATEMENT}</p>
           </div>
 
-          <p className="flex items-start gap-3 rounded-lg border border-gold bg-cream p-4 text-sm leading-relaxed text-ink">
-            <AlertTriangle size={18} className="mt-0.5 shrink-0 text-gold-deep" aria-hidden="true" />
-            <span>
-              <strong>Preview test mode.</strong> No payment is collected on this website. Emails go only to a test inbox.
-            </span>
-          </p>
+          <ContactOptions />
 
           {received ? (
             <ReceivedPanel received={received} />
@@ -151,20 +146,6 @@ export function Registration({
                     ))}
                   </select>
                 </Field>
-                <Field id="reg-previousScore" label="Previous SAT/PSAT score" optional error={errors.previousScore}>
-                  <input id="reg-previousScore" inputMode="numeric" maxLength={4} placeholder="e.g. 1180" value={fields.previousScore} onChange={(e) => set("previousScore", e.target.value)} {...aria("previousScore", errors)} className={inputClass(errors.previousScore)} />
-                </Field>
-                <Field id="reg-targetScore" label="Target SAT score" optional error={errors.targetScore}>
-                  <input id="reg-targetScore" inputMode="numeric" maxLength={4} placeholder="e.g. 1350" value={fields.targetScore} onChange={(e) => set("targetScore", e.target.value)} {...aria("targetScore", errors)} className={inputClass(errors.targetScore)} />
-                </Field>
-                <Field id="reg-satRegistration" label="Registered for the December 5, 2026 SAT?" error={errors.satRegistration} wide>
-                  <select id="reg-satRegistration" value={fields.satRegistration} onChange={(e) => set("satRegistration", e.target.value)} {...aria("satRegistration", errors)} className={inputClass(errors.satRegistration)}>
-                    <option value="">Select one</option>
-                    {SAT_REGISTRATION_OPTIONS.map((o) => (
-                      <option key={o.value} value={o.value}>{o.label}</option>
-                    ))}
-                  </select>
-                </Field>
               </Fieldset>
 
               <Fieldset legend="Parent or guardian">
@@ -174,17 +155,19 @@ export function Registration({
                 <Field id="reg-parentEmail" label="Parent email" error={errors.parentEmail}>
                   <input id="reg-parentEmail" type="email" autoComplete="email" value={fields.parentEmail} onChange={(e) => set("parentEmail", e.target.value)} {...aria("parentEmail", errors)} className={inputClass(errors.parentEmail)} />
                 </Field>
-                <Field id="reg-parentPhone" label="Parent phone number" error={errors.parentPhone}>
+                <Field id="reg-parentPhone" label="Phone number" error={errors.parentPhone}>
                   <input id="reg-parentPhone" type="tel" autoComplete="tel" placeholder="(347) 555-0123" value={fields.parentPhone} onChange={(e) => set("parentPhone", e.target.value)} {...aria("parentPhone", errors)} className={inputClass(errors.parentPhone)} />
                 </Field>
               </Fieldset>
 
-              <Fieldset legend="First class and tuition">
-                <Field id="reg-firstClassDate" label="Starting date" error={errors.firstClassDate} wide>
+              <Fieldset legend="Preferred start and tuition">
+                <Field id="reg-firstClassDate" label="Preferred start date" error={errors.firstClassDate} wide>
                   <select
                     id="reg-firstClassDate"
                     value={selected ?? ""}
                     onChange={(e) => {
+                      startedAt.current ??= Date.now()
+                      submissionId.current = null
                       onSelect(e.target.value as ClassDate)
                       setErrors((er) => ({ ...er, firstClassDate: undefined }))
                     }}
@@ -209,11 +192,9 @@ export function Registration({
                       <p className="text-3xl font-extrabold tabular-nums text-sage-deep">{formatUsd(quote.tuitionCents)}</p>
                     </div>
                     <p className="text-sm text-ink">
-                      Full tuition due before enrollment is confirmed. {quote.remainingClasses} × {formatUsd(7500)} per class. No installment plan.
+                      {quote.remainingClasses} × {formatUsd(PRICE_PER_CLASS_CENTS)} per class, paid upfront. No installments or drop-in classes.
                     </p>
-                    <p className="text-sm leading-relaxed text-subtle">
-                      Classes: {quote.remainingDates.map((d) => formatClassDate(d)).join(", ")}
-                    </p>
+                    <p className="text-sm leading-relaxed text-subtle">Classes: {quote.remainingDates.map((d) => formatClassDate(d)).join(", ")}</p>
                   </div>
                 )}
               </Fieldset>
@@ -221,7 +202,7 @@ export function Registration({
               <fieldset className="flex flex-col gap-3" aria-describedby={errors.paymentMethod ? "reg-paymentMethod-error" : "reg-paymentMethod-hint"}>
                 <legend className="mb-1 text-lg font-extrabold text-navy">Preferred payment method</legend>
                 <p id="reg-paymentMethod-hint" className="text-sm leading-relaxed text-subtle">
-                  {OFFLINE_PAYMENT_STATEMENT} Online card payments are not accepted.
+                  AhmedPrep will send payment instructions directly after confirming availability. Please do not send payment before then.
                 </p>
                 <div className="grid gap-3 sm:grid-cols-3" role="radiogroup" aria-invalid={Boolean(errors.paymentMethod)}>
                   {PAYMENT_METHODS.map((method) => {
@@ -247,41 +228,12 @@ export function Registration({
                     )
                   })}
                 </div>
-                {fields.paymentMethod && (
-                  <p className="rounded-lg bg-warm p-4 text-sm leading-relaxed text-ink" aria-live="polite">
-                    {PAYMENT_METHOD_INSTRUCTIONS[fields.paymentMethod as PaymentMethod]}
-                  </p>
-                )}
                 {errors.paymentMethod && (
                   <p id="reg-paymentMethod-error" className="text-sm font-semibold text-error">
                     {errors.paymentMethod}
                   </p>
                 )}
               </fieldset>
-
-              <div className="flex flex-col gap-2">
-                <label className={`flex cursor-pointer items-start gap-3 rounded-lg border-2 p-4 ${errors.policyAcknowledged ? "border-error bg-error-soft" : "border-line"}`}>
-                  <input
-                    id="reg-policyAcknowledged"
-                    type="checkbox"
-                    checked={fields.policyAcknowledged}
-                    onChange={(e) => set("policyAcknowledged", e.target.checked)}
-                    aria-describedby="reg-policy-note"
-                    aria-invalid={Boolean(errors.policyAcknowledged)}
-                    className="mt-1 size-5 shrink-0 accent-navy"
-                  />
-                  <span className="text-sm leading-relaxed text-ink">
-                    I understand that tuition is {formatUsd(7500)} per 3-hour class, that{" "}
-                    <strong>{quote ? formatUsd(quote.tuitionCents) : "the full tuition"}</strong> for all remaining classes is due in full before
-                    enrollment is confirmed, with no installments or individual drop-in classes, and that the seat is confirmed only after AhmedPrep
-                    verifies payment.
-                  </span>
-                </label>
-                <p id="reg-policy-note" className="text-xs leading-relaxed text-subtle">
-                  {POLICY_PENDING_NOTE}
-                </p>
-                {errors.policyAcknowledged && <p className="text-sm font-semibold text-error">{errors.policyAcknowledged}</p>}
-              </div>
 
               {formError && (
                 <p id="reg-form-error" role="alert" className="rounded-lg bg-error-soft p-4 text-sm font-semibold text-error">
@@ -296,9 +248,11 @@ export function Registration({
                   className="inline-flex min-h-14 items-center justify-center gap-2 rounded-md bg-coral px-8 text-base font-extrabold uppercase tracking-wide text-white transition-colors hover:bg-coral-hover disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {busy ? <Loader2 size={18} className="animate-spin" aria-hidden="true" /> : null}
-                  {busy ? "Submitting…" : "Submit registration"}
+                  {busy ? "Sending…" : "Send registration request"}
                 </button>
-                <p className="text-center text-xs text-subtle">No payment is taken on this website. We hold a seat for {PAYMENT_HOLD_MINUTES} minutes after you submit.</p>
+                <p className="text-center text-xs leading-relaxed text-subtle">
+                  No payment is taken on this website and no card details are collected.
+                </p>
               </div>
             </form>
           )}
@@ -308,67 +262,59 @@ export function Registration({
   )
 }
 
+function ContactOptions() {
+  return (
+    <div className="flex flex-col gap-3 rounded-xl border-2 border-line bg-warm p-5">
+      <p className="text-sm font-bold leading-relaxed text-navy">Prefer to register by phone? Call or text AhmedPrep.</p>
+      <div className="grid grid-cols-2 gap-3">
+        <a
+          href={BUSINESS.phoneHref}
+          className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md border-2 border-navy bg-white px-4 font-extrabold text-navy transition-colors hover:bg-navy hover:text-white"
+        >
+          <Phone size={18} aria-hidden="true" />
+          Call
+        </a>
+        <a
+          href={SMS_HREF}
+          className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md border-2 border-navy bg-white px-4 font-extrabold text-navy transition-colors hover:bg-navy hover:text-white"
+        >
+          <MessageSquare size={18} aria-hidden="true" />
+          Text
+        </a>
+      </div>
+      <p className="text-center text-sm font-bold tabular-nums text-ink">{BUSINESS.phoneDisplay}</p>
+    </div>
+  )
+}
+
 function ReceivedPanel({ received }: { received: Received }) {
-  const holdTime = new Date(received.holdExpiresAt).toLocaleString("en-US", {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-    timeZone: "America/New_York",
-  })
+  const quote = quoteFor(received.firstClassDate)
   return (
     <div role="status" className="flex flex-col gap-6 rounded-xl border-2 border-gold bg-cream p-6 md:p-8">
       <div className="flex flex-col gap-2">
-        <p className="text-xs font-extrabold uppercase tracking-wider text-gold-deep">Payment pending</p>
-        <h3 className="text-balance text-2xl font-extrabold text-navy md:text-3xl">Registration Request Received!</h3>
-        <p className="font-bold leading-relaxed text-ink">{REGISTRATION_RECEIVED_STATEMENT}</p>
-        <p className="rounded-lg border-2 border-coral bg-white p-3 text-sm font-extrabold leading-relaxed text-navy">{PENDING_SEAT_STATEMENT}</p>
-      </div>
-
-      <dl className="grid gap-4 rounded-lg bg-white p-5 text-sm sm:grid-cols-2">
-        <Summary label="Registration #" value={received.referenceCode} />
-        <Summary label="Student" value={received.studentName} />
-        <Summary label="Starting date" value={formatClassDateLong(received.firstClassDate)} />
-        <Summary label="Classes / hours" value={`${received.remainingClasses} classes · ${received.remainingHours} hours`} />
-        <Summary label="Total tuition due" value={formatUsd(received.tuitionCents)} strong />
-        <Summary label="Payment method" value={PAYMENT_METHOD_LABELS[received.paymentMethod]} />
-      </dl>
-
-      <p className="flex items-start gap-3 text-sm leading-relaxed text-ink">
-        <Clock size={18} className="mt-0.5 shrink-0 text-gold-deep" aria-hidden="true" />
-        <span>
-          <strong>Temporary seat hold until {holdTime} ET.</strong> After the hold lapses your registration stays on file, but the seat is guaranteed only
-          once payment is verified and a seat is still available.
-        </span>
-      </p>
-
-      <div className="flex flex-col gap-2 text-sm leading-relaxed text-ink">
-        <h4 className="font-extrabold text-navy">How to pay</h4>
-        <p>{PAYMENT_METHOD_INSTRUCTIONS[received.paymentMethod]}</p>
-      </div>
-
-      <div className="flex flex-col gap-2 text-sm leading-relaxed text-ink">
-        <h4 className="font-extrabold text-navy">Your class dates</h4>
-        <p>{received.remainingDates.map((d) => formatClassDate(d)).join(", ")}</p>
-        <p className="text-subtle">{CLASS_TIME_LABEL} · No class Thursday, November 26 (Thanksgiving)</p>
-      </div>
-
-      <div className="flex flex-col gap-1 text-sm leading-relaxed text-ink">
-        <h4 className="font-extrabold text-navy">Classroom</h4>
-        <p>
-          {ADDRESS_LINE_1}, {ADDRESS_LINE_2} (in person only)
+        <h3 className="text-balance text-2xl font-extrabold text-navy md:text-3xl">Thank you</h3>
+        <p className="text-lg font-bold leading-relaxed text-ink">{INQUIRY_RECEIVED_STATEMENT}</p>
+        <p className="text-sm leading-relaxed text-ink">
+          Your seat is not reserved or confirmed yet. Please do not send any payment until AhmedPrep contacts you with instructions.
         </p>
       </div>
 
+      <dl className="grid gap-4 rounded-lg bg-white p-5 text-sm sm:grid-cols-2">
+        <Summary label="Student" value={received.studentName} />
+        <Summary label="Preferred start" value={formatClassDateLong(received.firstClassDate)} />
+        <Summary label="Remaining classes" value={`${quote.remainingClasses} classes · ${quote.remainingHours} hours`} />
+        <Summary label="Tuition for remaining classes" value={formatUsd(quote.tuitionCents)} strong />
+        <Summary label="Preferred payment method" value={PAYMENT_METHOD_LABELS[received.paymentMethod]} />
+        <Summary label="Class time" value={CLASS_TIME_LABEL} />
+      </dl>
+
       <p className="text-sm leading-relaxed text-ink">
-        A copy of these details has been emailed to you. Questions? Call or text{" "}
+        In person at {ADDRESS_LINE_1}, {ADDRESS_LINE_2}. No class Thursday, November 26 (Thanksgiving).
+      </p>
+      <p className="text-sm leading-relaxed text-ink">
+        Questions or need to reach us sooner? Call or text{" "}
         <a href={BUSINESS.phoneHref} className="font-bold text-brand underline">
           {BUSINESS.phoneDisplay}
-        </a>{" "}
-        or email{" "}
-        <a href={`mailto:${EMAIL}`} className="font-bold text-brand underline">
-          {EMAIL}
         </a>
         .
       </p>
@@ -394,11 +340,11 @@ function Fieldset({ legend, children }: { legend: string; children: ReactNode })
   )
 }
 
-function Field({ id, label, error, optional = false, wide = false, children }: { id: string; label: string; error?: string; optional?: boolean; wide?: boolean; children: ReactNode }) {
+function Field({ id, label, error, wide = false, children }: { id: string; label: string; error?: string; wide?: boolean; children: ReactNode }) {
   return (
     <div className={`flex flex-col gap-1.5 ${wide ? "sm:col-span-2" : ""}`}>
       <label htmlFor={id} className="text-sm font-bold text-navy">
-        {label} {optional && <span className="font-semibold text-subtle">(optional)</span>}
+        {label}
       </label>
       {children}
       {error && (
@@ -410,7 +356,7 @@ function Field({ id, label, error, optional = false, wide = false, children }: {
   )
 }
 
-const aria = (key: keyof RegistrationErrors, errors: RegistrationErrors) => ({
+const aria = (key: keyof InquiryErrors, errors: InquiryErrors) => ({
   "aria-invalid": Boolean(errors[key]),
   "aria-describedby": errors[key] ? `reg-${key}-error` : undefined,
 })
