@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Link from "next/link"
 import { Faq, type FaqItem } from "@/components/landing/faq"
 import { LocationSection } from "@/components/landing/location-section"
 import { Breadcrumbs, JsonLd } from "@/components/landing/primitives"
@@ -102,6 +103,12 @@ export default function DigitalSatFinalIntensivePage() {
       <SatIntensiveEnrollment renderedAt={new Date().toISOString()} />
       <Faq title="Digital SAT Final Intensive FAQ" items={FAQS} />
       <LocationSection location="sat_intensive_page" />
+      <p className="container pt-8 text-base leading-relaxed text-ink">
+        Planning past December?{" "}
+        <Link href="/digital-sat-prep" className="text-link">
+          See Winter, Spring, and Summer 2027 Digital SAT prep in Astoria, Queens
+        </Link>
+      </p>
       <p className="container py-6 text-xs leading-relaxed text-subtle">
         SAT is a registered trademark of the College Board, which is not affiliated with AhmedPrep. {NOT_AFFILIATED_NOTE}
       </p>

@@ -15,7 +15,7 @@ import {
   type ProgramId,
 } from "@/lib/cohorts-2027"
 import { programsHref } from "@/lib/program-finder"
-import { SITE_URL } from "@/lib/business"
+import { BUSINESS, SITE_URL } from "@/lib/business"
 
 /** Schema.org CourseInstance entries for every 2027 cohort of one program. */
 export function courseInstances2027(program: ProgramId) {
@@ -31,7 +31,18 @@ export function courseInstances2027(program: ProgramId) {
           startDate: span.startIso,
           endDate: span.endIso,
           courseSchedule: { "@type": "Schedule", description: cohortSchedule(c) },
-          location: { "@type": "Place", name: "AhmedPrep, Astoria, Queens" },
+          location: {
+            "@type": "Place",
+            name: "AhmedPrep, Astoria, Queens",
+            address: {
+              "@type": "PostalAddress",
+              streetAddress: BUSINESS.address.street,
+              addressLocality: BUSINESS.address.city,
+              addressRegion: BUSINESS.address.region,
+              postalCode: BUSINESS.address.postalCode,
+              addressCountry: BUSINESS.address.country,
+            },
+          },
           offers: {
             "@type": "Offer",
             price: priceFor(c).regular,
