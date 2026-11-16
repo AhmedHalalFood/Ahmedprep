@@ -1,0 +1,46 @@
+.hero-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 700px;
+  margin-top: 18px;
+}
+
+.hero-exam-toggle {
+  display: inline-flex;
+  align-self: flex-start;
+  gap: 4px;
+  padding: 4px;
+  border: 1.5px solid rgba(13, 74, 143, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.85);
+  animation: hero-fade-in 0.9s 0.08s ease-out both;
+}
+
+.hero-exam-option {
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: 999px;
+  color: var(--hero-royal);
+  font-size: 0.875rem;
+  font-weight: 800;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.hero-exam-option:hover {
+  background: rgba(13, 74, 143, 0.08);
+}
+
+.hero-exam-option[aria-pressed="true"] {
+  background: var(--hero-royal);
+  color: #fff;
+}
+
+.hero-exam-option:focus-visible {
+  outline: 3px solid var(--hero-royal);
+  outline-offset: 2px;
+}
+
+.hero-picker .hero-seasons {
+  margin-top: 0;
+}

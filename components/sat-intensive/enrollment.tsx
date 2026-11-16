@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from "react"
 import { availableStartDates, type ClassDate } from "@/lib/sat-final-intensive"
 import { Registration } from "@/components/sat-intensive/registration"
-import { TuitionCalculator } from "@/components/sat-intensive/tuition-calculator"
 
 /** Shares the chosen first class between the calculator and the form, and closes dates as their 6 PM ET start passes. */
 export function SatIntensiveEnrollment({ renderedAt }: { renderedAt: string }) {
@@ -18,10 +17,5 @@ export function SatIntensiveEnrollment({ renderedAt }: { renderedAt: string }) {
 
   const selected = chosen && available.includes(chosen) ? chosen : (available[0] ?? null)
 
-  return (
-    <>
-      <TuitionCalculator available={available} selected={selected} onSelect={setChosen} />
-      <Registration available={available} selected={selected} onSelect={setChosen} />
-    </>
-  )
+  return <Registration available={available} selected={selected} onSelect={setChosen} />
 }

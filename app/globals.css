@@ -411,7 +411,6 @@ h3 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
   max-width: 700px;
-  margin-top: 18px;
   list-style: none;
   animation: hero-fade-in 0.9s 0.1s ease-out both;
 }

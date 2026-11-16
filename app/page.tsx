@@ -1,18 +1,7 @@
 import type { Metadata } from "next"
 import Image from "next/image"
-import {
-  ArrowRight,
-  ArrowUpRight,
-  CalendarDays,
-  Clock,
-  Leaf,
-  List,
-  type LucideIcon,
-  Snowflake,
-  Star,
-  Sun,
-} from "lucide-react"
-import { TERMS_2027, type TermId, termSummary } from "@/lib/cohorts-2027"
+import { ArrowRight, ArrowUpRight, CalendarDays, List, Star } from "lucide-react"
+import { TERMS_2027, termSummary } from "@/lib/cohorts-2027"
 import { ProgramsPreview } from "@/components/landing/programs-preview"
 import { SatIntensiveAnnouncement } from "@/components/sat-intensive/announcement"
 import { ToolsResources } from "@/components/landing/tools-resources"
@@ -21,7 +10,7 @@ import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
 import { ENROLLMENT_2027 } from "@/lib/enrollment-2027"
 import { intensiveSitewidePromoActive } from "@/lib/intensive-promo"
-import { programsHref } from "@/lib/program-finder"
+import { HeroSeasonPicker } from "@/components/landing/hero-season-picker"
 import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 
 export const metadata: Metadata = {
@@ -41,7 +30,6 @@ export const metadata: Metadata = {
 // Hourly so the "Next free Sunday class" card rolls over shortly after each Sunday class ends.
 export const revalidate = 3600
 
-const SEASON_ICONS: Record<TermId, LucideIcon> = { winter: Snowflake, spring: Leaf, summer: Sun }
 
 const longDay = (iso: string) =>
   new Date(`${iso}T12:00:00Z`).toLocaleDateString("en-US", { timeZone: "UTC", month: "long", day: "numeric" })
@@ -54,7 +42,6 @@ const HERO_SEASONS = TERMS_2027.map((term) => {
     name: `${term.name} Programs`,
     dates: `${longDay(summary.startIso)} – ${longDay(summary.endIso)}, ${summary.endIso.slice(0, 4)}`,
     hours: `${summary.hoursLabel.replace(" hours", "")} scheduled hours${hoursVary ? ", depending on cohort" : ""}`,
-    Icon: SEASON_ICONS[term.id],
   }
 })
 
@@ -91,38 +78,7 @@ export default async function Home() {
             <br className="hero-support-break" />
             Math, ELA, and Reading &amp; Writing instruction. Maximum 12 students per class.
           </p>
-          <nav aria-label="2027 seasons">
-            <ul className="hero-seasons">
-              {HERO_SEASONS.map((season) => (
-                <li key={season.id}>
-                  <a
-                    href={programsHref({ season: season.id })}
-                    className="hero-season-card"
-                    data-season={season.id}
-                  >
-                    <span className="hero-season-head">
-                      <span className="hero-season-icon" aria-hidden="true">
-                        <season.Icon size={26} strokeWidth={2.2} />
-                      </span>
-                      <span className="hero-season-name">{season.name}</span>
-                    </span>
-                    <span className="hero-season-row hero-season-dates">
-                      <CalendarDays size={16} aria-hidden="true" />
-                      {season.dates}
-                    </span>
-                    <span className="hero-season-row hero-season-hours">
-                      <Clock size={16} aria-hidden="true" />
-                      {season.hours}
-                    </span>
-                    <span className="hero-season-cta">
-                      View Programs
-                      <ArrowRight size={15} aria-hidden="true" />
-                    </span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
+          <HeroSeasonPicker seasons={HERO_SEASONS} />
           <div className="hero-actions">
             <TrackedLink
               href="/programs-2027"

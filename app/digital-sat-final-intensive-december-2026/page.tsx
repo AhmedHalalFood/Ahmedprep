@@ -6,7 +6,6 @@ import { SatIntensiveCurriculum } from "@/components/sat-intensive/curriculum"
 import { SatIntensiveEnrollment } from "@/components/sat-intensive/enrollment"
 import { SatIntensiveHero } from "@/components/sat-intensive/hero"
 import { SatIntensiveMobileBar } from "@/components/sat-intensive/mobile-enroll-bar"
-import { SatIntensiveDetails } from "@/components/sat-intensive/program-details"
 import { SatIntensiveTimeline } from "@/components/sat-intensive/timeline"
 import { BUSINESS, NOT_AFFILIATED_NOTE } from "@/lib/business"
 import {
@@ -98,7 +97,6 @@ export default function DigitalSatFinalIntensivePage() {
     <>
       <Breadcrumbs items={[{ label: "Digital SAT Final Intensive", href: SAT_INTENSIVE_PATH }]} />
       <SatIntensiveHero />
-      <SatIntensiveDetails />
       <SatIntensiveCurriculum />
       <SatIntensiveTimeline />
       <SatIntensiveEnrollment renderedAt={new Date().toISOString()} />
