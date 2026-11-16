@@ -34,7 +34,7 @@ export function webPageSchema({
 export const baseOpenGraph = {
   title: "SHSAT & Digital SAT Prep in Astoria, Queens | AhmedPrep",
   description:
-    "SHSAT and Digital SAT preparation center in Astoria, Queens serving NYC and Long Island. Book a free diagnostic.",
+    "In-person SHSAT and Digital SAT prep in Astoria, Queens for students from across NYC and Long Island. Book a free diagnostic.",
   type: "website",
   siteName: "AhmedPrep",
   locale: "en_US",

@@ -9,7 +9,7 @@ import { DraftNotice } from "@/components/curriculum/draft-notice"
 import { PrintButton } from "@/components/curriculum/print-button"
 
 export const metadata: Metadata = {
-  title: "Draft 2027 Curriculum and Assessment Plan | AhmedPrep",
+  title: "Draft 2027 Curriculum and Assessment Plan",
   description: "Internal draft of the 2027 SHSAT and Digital SAT curriculum for owner review.",
   robots: { index: false, follow: false },
 }

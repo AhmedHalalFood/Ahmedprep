@@ -25,6 +25,8 @@ const nextConfig = {
       { source: "/who-are-we/about-me", destination: "https://ahmedprep.com/about", statusCode: 301 },
       { source: "/satact", destination: "https://ahmedprep.com/digital-sat-prep", statusCode: 301 },
       { source: "/sat", destination: "https://ahmedprep.com/digital-sat-prep", statusCode: 301 },
+      // The 2026 SHSAT Final Intensive ended Nov. 12, 2026; its enrollment API already returns 410 and lead records stay in the database.
+      { source: "/shsat-final-intensive-2026", destination: "https://ahmedprep.com/shsat-prep", statusCode: 301 },
       {
         source: "/:path*",
         has: [{ type: "host", value: "www.ahmedprep.com" }],

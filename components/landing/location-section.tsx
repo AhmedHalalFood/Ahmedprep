@@ -18,7 +18,8 @@ export function LocationSection({ location }: { location: string }) {
           </address>
           <p className="leading-relaxed text-subtle">
             Our Astoria classroom is easy to reach from across Queens, including Long Island City, Sunnyside, Woodside, Jackson Heights, and
-            Ditmars, and from neighboring boroughs.
+            Ditmars. Families also come from Brooklyn, Manhattan, the Bronx, Staten Island, and Long Island. Every paid class and tutoring
+            session meets here in person.
           </p>
           <div className="flex flex-wrap items-center gap-4">
             <a

@@ -143,7 +143,7 @@ export default async function ResourcePage({ params }: { params: Promise<{ slug:
           description: resource.description,
           url,
           mainEntityOfPage: { "@type": "WebPage", "@id": url },
-          image: `${SITE_URL}/ahmedprep-hero.png`,
+          image: `${SITE_URL}/ahmedprep-hero.jpg`,
           inLanguage: "en-US",
           ...(resource.datePublished && {
             datePublished: resource.datePublished,
