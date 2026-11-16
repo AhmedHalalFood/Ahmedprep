@@ -23,7 +23,7 @@ import { getProgram } from "@/lib/programs"
 import { absoluteUrl } from "@/lib/seo"
 
 export const metadata: Metadata = {
-  title: "2027 Programs & Pricing: SHSAT and Digital SAT Classes | AhmedPrep",
+  title: "2027 Programs & Pricing: SHSAT and Digital SAT Classes",
   description:
     "AhmedPrep's Winter, Spring, and Summer 2027 SHSAT and Digital SAT cohorts in Astoria: class schedules, dates, hours, tuition, discount deadlines, and enrollment.",
   alternates: { canonical: absoluteUrl("/programs-2027") },

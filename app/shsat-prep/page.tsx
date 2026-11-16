@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { absoluteUrl } from "@/lib/seo"
+import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
 import { DiagnosticSection } from "@/components/landing/diagnostic-section"
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   description: DESCRIPTION,
   alternates: { canonical: absoluteUrl(PATH) },
   robots: { index: true, follow: true },
-  openGraph: { title: TITLE, description: DESCRIPTION, url: absoluteUrl(PATH), type: "website" },
+  openGraph: { ...baseOpenGraph, title: TITLE, description: DESCRIPTION, url: absoluteUrl(PATH) },
 }
 
 const benefits = [

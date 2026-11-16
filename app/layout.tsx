@@ -16,9 +16,10 @@ const organizationSchema = {
   '@id': `${SITE_URL}/#organization`,
   name: BUSINESS.name,
   url: SITE_URL,
-  logo: `${SITE_URL}/ahmedprep-logo.png`,
-  image: `${SITE_URL}/ahmedprep-hero.png`,
-  description: 'SHSAT and Digital SAT preparation in Astoria, Queens for students across New York City, led by Tariq Ahmed.',
+  logo: `${SITE_URL}/ahmedprep-logo-512.png`,
+  image: `${SITE_URL}/ahmedprep-hero.jpg`,
+  description:
+    'In-person SHSAT and Digital SAT preparation in Astoria, Queens for students from across New York City and Long Island, led by Tariq Ahmed.',
   telephone: BUSINESS.phoneE164,
   email: BUSINESS.email,
   hasMap: MAPS_URL,
@@ -35,6 +36,11 @@ const organizationSchema = {
     { '@type': 'Place', name: 'Astoria, Queens' },
     { '@type': 'Place', name: 'Queens, NY' },
     { '@type': 'City', name: 'New York City' },
+    { '@type': 'Place', name: 'Brooklyn, NY' },
+    { '@type': 'Place', name: 'Manhattan, NY' },
+    { '@type': 'Place', name: 'Bronx, NY' },
+    { '@type': 'Place', name: 'Staten Island, NY' },
+    { '@type': 'Place', name: 'Long Island, NY' },
   ],
   knowsAbout: ['SHSAT preparation', 'Digital SAT preparation', 'Test preparation'],
 }
@@ -50,7 +56,7 @@ export const metadata: Metadata = {
     template: '%s | AhmedPrep',
   },
   description:
-    'SHSAT and Digital SAT preparation center in Astoria, Queens serving NYC and Long Island. Book a free diagnostic with AhmedPrep.',
+    'In-person SHSAT and Digital SAT prep in Astoria, Queens for students from across NYC and Long Island. Book a free diagnostic with AhmedPrep.',
   keywords: [
     'SHSAT prep Queens',
     'SHSAT tutoring Astoria',

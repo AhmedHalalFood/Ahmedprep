@@ -17,14 +17,14 @@ import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 export const metadata: Metadata = {
   title: { absolute: "AhmedPrep | SHSAT & Digital SAT Prep in Astoria, Queens — Serving NYC & Long Island" },
   description:
-    "AhmedPrep is an SHSAT and Digital SAT preparation center in Astoria, Queens serving NYC and Long Island. Winter, Spring & Summer 2027 small-group classes, max 12 students, $20 per class hour, free diagnostic.",
+    "AhmedPrep offers in-person SHSAT and Digital SAT prep in Astoria, Queens for students from across NYC and Long Island. Winter, Spring & Summer 2027 small-group classes, max 12 students, $20 per class hour, free diagnostic.",
   alternates: { canonical: absoluteUrl("/") },
   openGraph: {
     ...baseOpenGraph,
     url: absoluteUrl("/"),
-    title: "AhmedPrep | SHSAT & Digital SAT Prep — NYC & Long Island",
+    title: "AhmedPrep | In-Person SHSAT & Digital SAT Prep in Astoria, Queens",
     description:
-      "SHSAT and Digital SAT preparation center in Astoria, Queens serving NYC and Long Island. Small-group 2027 classes, max 12 students. Book a free diagnostic.",
+      "In-person SHSAT and Digital SAT prep in Astoria, Queens for students from across NYC and Long Island. Small-group 2027 classes, max 12 students. Book a free diagnostic.",
   },
 }
 

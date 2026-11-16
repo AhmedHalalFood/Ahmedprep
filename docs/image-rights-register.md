@@ -26,6 +26,8 @@ Last updated: November 16, 2026
 | 7 | `public/favicon.ico`, `favicon-16x16/32x32/48x48/96x96/192x192.png`, `apple-touch-icon.png`, `icon-512x512.png` | Browser tab icons, PWA manifest, RSS feed icon | Unknown; likely resized from #6 | Before Nov 10, 2026 | Unknown | Unknown (inherits #6 if derived from it) | None (metadata stripped) | **Needs documentation** |
 | 8 | Lucide icons (`lucide-react` 0.564.0) | UI icons site-wide | Open-source icon library | n/a | n/a | ISC license (Feather portions MIT); commercial use permitted with notice retained | `node_modules/lucide-react/LICENSE`, `package.json` license field | **Verified** |
 | 9 | YouTube thumbnails (`i.ytimg.com`) | `components/videos/lite-youtube.tsx` | Third-party hosted | n/a | n/a | Owned by video uploader | **Inactive**: no videos configured in `lib/teaching-videos.ts` | **Needs documentation** before enabling (use AhmedPrep-owned uploads only) |
+| 10 | `public/ahmedprep-hero.jpg` (1376x768, 129 KB) | JSON-LD `image` in `app/layout.tsx`, `free-sunday-classes`, `resources/[slug]`, `updates/[slug]` (replaces #4 in structured data; #4 still used for the homepage hero) | Same-size JPEG re-encode of #4 (sharp). No new content. | Nov 16, 2026 | Derivative; inherits #4 | Inherits #4 | Derived from `ahmedprep-hero.png` | **Needs documentation** (inherits #4) |
+| 11 | `public/ahmedprep-logo-512.png` (512x512, 71 KB) | JSON-LD `Organization.logo` (`app/layout.tsx`), `Article.publisher.logo` (`updates/[slug]`) (replaces #6 in structured data) | Resized derivative of #6 (sharp). Branding unchanged. | Nov 16, 2026 | Derivative; inherits #6 | Inherits #6 | Derived from `ahmedprep-logo.png` | **Needs documentation** (inherits #6) |
 
 ## Replaced (no longer referenced; kept pending review)
 

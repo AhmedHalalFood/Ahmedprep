@@ -179,7 +179,7 @@ export default async function UpdatePage({ params }: { params: Promise<{ slug: s
           description: update.description,
           url,
           mainEntityOfPage: { "@type": "WebPage", "@id": url },
-          image: [`${SITE_URL}/ahmedprep-hero.png`],
+          image: [`${SITE_URL}/ahmedprep-hero.jpg`],
           inLanguage: "en-US",
           datePublished: update.datePublished,
           dateModified: update.dateModified,
@@ -190,7 +190,7 @@ export default async function UpdatePage({ params }: { params: Promise<{ slug: s
             "@id": `${SITE_URL}/#organization`,
             name: BUSINESS.name,
             url: SITE_URL,
-            logo: { "@type": "ImageObject", url: `${SITE_URL}/ahmedprep-logo.png` },
+            logo: { "@type": "ImageObject", url: `${SITE_URL}/ahmedprep-logo-512.png` },
           },
           ...(source.official && { citation: { "@type": "WebPage", name: source.name, url: source.url } }),
         }}

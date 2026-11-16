@@ -276,6 +276,7 @@ export default async function FreeSundayClassesPage({ searchParams }: { searchPa
 
       <Faq id="free-class-faq" title="Free Sunday class questions" items={faqs(summary.paused ? SCHEDULE_FAQ_PAUSED : summary.schedule === "weekly_2026" ? SCHEDULE_FAQ_2026 : SCHEDULE_FAQ_2027)} />
 
+      {classes.length > 0 && (
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -291,7 +292,7 @@ export default async function FreeSundayClassesPage({ searchParams }: { searchPa
             eventAttendanceMode: "https://schema.org/OnlineEventAttendanceMode",
             isAccessibleForFree: true,
             inLanguage: "en-US",
-            image: [`${SITE_URL}/ahmedprep-hero.png`],
+            image: [`${SITE_URL}/ahmedprep-hero.jpg`],
             location: { "@type": "VirtualLocation", url: pageUrl },
             offers: {
               "@type": "Offer",
@@ -305,6 +306,7 @@ export default async function FreeSundayClassesPage({ searchParams }: { searchPa
           })),
         }}
       />
+      )}
     </>
   )
 }
