@@ -33,8 +33,8 @@ const ATTENDANCE_FAQS: FaqItem[] = [
     a: "Parents may request missed assignments and available class materials. Individual makeup classes are not guaranteed.",
   },
   {
-    q: "What happens during severe weather?",
-    a: "Classes may move online or be rescheduled. Parents will receive instructions from AhmedPrep.",
+    q: "What happens if classes are canceled due to severe weather?",
+    a: "If severe weather or an emergency prevents an in-person class from taking place, AhmedPrep will arrange a makeup session. Families will be notified of any schedule changes. All paid instruction remains in person.",
   },
   {
     q: "Will my child receive all 72 program hours?",
