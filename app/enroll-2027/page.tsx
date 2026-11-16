@@ -30,7 +30,7 @@ const ATTENDANCE_FAQS: FaqItem[] = [
   },
   {
     q: "What if my child misses a class?",
-    a: "Parents may request missed assignments and available class materials. Individual makeup classes are not guaranteed.",
+    a: "Parents may request missed assignments and available class materials. Individual makeup sessions are not guaranteed when a student misses a regularly scheduled class. If AhmedPrep cancels a class because of severe weather or an emergency, a replacement session will be arranged.",
   },
   {
     q: "What happens if classes are canceled due to severe weather?",
