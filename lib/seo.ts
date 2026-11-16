@@ -38,5 +38,5 @@ export const baseOpenGraph = {
   type: "website",
   siteName: "AhmedPrep",
   locale: "en_US",
-  images: [{ url: "/ahmedprep-hero.png", width: 1376, height: 768, alt: "Students studying with an instructor at AhmedPrep" }],
+  images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "Illustrative image of a small-group study session for AhmedPrep, SHSAT and Digital SAT prep in Astoria, Queens" }],
 } satisfies NonNullable<Metadata["openGraph"]>

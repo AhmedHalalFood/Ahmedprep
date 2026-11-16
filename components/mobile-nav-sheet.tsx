@@ -31,10 +31,10 @@ export default function MobileNavSheet({
       >
         <div className="flex items-center gap-4 border-b border-white/15 px-6 pb-5 pt-6">
           <Image
-            src="/ahmedprep-logo.png"
+            src="/ahmedprep-logo-256.png"
             alt="Ahmed Prep logo"
-            width={1254}
-            height={1254}
+            width={256}
+            height={256}
             sizes="56px"
             className="size-14 shrink-0 object-contain"
           />

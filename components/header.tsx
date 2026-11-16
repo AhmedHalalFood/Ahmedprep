@@ -24,10 +24,10 @@ export async function Header() {
         <div className="brand-group">
           <Link href="/" className="brand" aria-label="AhmedPrep home">
             <Image
-              src="/ahmedprep-logo.png"
+              src="/ahmedprep-logo-256.png"
               alt="Ahmed Prep logo"
-              width={1254}
-              height={1254}
+              width={256}
+              height={256}
               priority
               sizes="(max-width: 800px) 46px, 68px"
               className="brand-logo"

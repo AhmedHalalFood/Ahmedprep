@@ -103,8 +103,8 @@ export function SatIntensiveHero() {
 
         <div className="relative aspect-[16/10] overflow-hidden rounded-xl border-4 border-gold/70 shadow-lg lg:aspect-[4/3]">
           <Image
-            src="/images/sat-intensive/hero-students.png"
-            alt="High school students working on SAT practice with laptops and printed questions in a small Astoria classroom"
+            src="/images/sat-intensive/study-table-illustration.jpg"
+            alt="Illustration of an empty study room set up for SAT practice, with laptops, calculators, and worksheets on a long table beside windows overlooking a Queens street"
             fill
             priority
             sizes="(min-width: 1024px) 520px, 100vw"
