@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { ChartNoAxesColumn, ClipboardCheck, GraduationCap, Users } from "lucide-react"
 import { MAX_CLASS_SIZE } from "@/lib/cohorts-2027"
 
@@ -36,6 +37,9 @@ export function WhyFamilies() {
           >
             Why Choose AhmedPrep?
           </h2>
+          <Link href="/about" className="text-link text-sm font-semibold">
+            Learn about AhmedPrep
+          </Link>
         </div>
         <ul className="grid flex-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0">
           {REASONS.map(({ icon: Icon, title, body }) => (
