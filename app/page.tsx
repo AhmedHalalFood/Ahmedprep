@@ -62,6 +62,8 @@ export default async function Home() {
   const showIntensive = await intensiveSitewidePromoActive()
   return (
     <>
+      <SatIntensiveAnnouncement />
+
       <section id="top" className="hero-section" aria-labelledby="hero-title">
         <div className="hero-image" aria-hidden="true">
           <Image
@@ -143,8 +145,6 @@ export default async function Home() {
           </div>
         </div>
       </section>
-
-      <SatIntensiveAnnouncement />
 
       {showIntensive && (
         <aside aria-label="2026 SHSAT Final Intensive" className="border-b border-gold/40 bg-cream">
