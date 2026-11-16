@@ -75,7 +75,7 @@ export const UPDATES: Update[] = [
         heading: "After registration",
         paragraphs: [
           "Once registration is done, the focus shifts to preparation. Our [2026 SHSAT dates guide](/resources/2026-shsat-dates-registration-deadline) explains the full fall timeline, and a [free diagnostic](/free-diagnostic) shows where your child stands in Math and ELA right now.",
-          "Families looking for structured help can review our [SHSAT prep program](/shsat), the [final 5-week intensive](/shsat-final-intensive-2026), or join the [free Sunday SHSAT class](/free-sunday-classes).",
+          "Families looking for structured help can review our [SHSAT prep program](/shsat), the [final 5-week intensive](/shsat-prep), or join the [free Sunday SHSAT class](/free-sunday-classes).",
         ],
       },
     ],
@@ -114,7 +114,7 @@ export const UPDATES: Update[] = [
         heading: "Planning the final weeks",
         paragraphs: [
           "Students testing on November 14 have less time than students testing on November 21, so build a study plan around the earliest likely date. Our guide to [how the digital SHSAT works](/resources/digital-shsat-2026) covers the test format, and [how to use SHSAT practice tests](/resources/how-to-use-shsat-practice-tests) explains how to review timed work.",
-          "AhmedPrep's [2026 SHSAT Final 5-Week Intensive](/shsat-final-intensive-2026) is scheduled to finish before the last test date. You can also start with a [free diagnostic](/free-diagnostic) or learn more about our [SHSAT preparation](/shsat).",
+          "AhmedPrep's [2026 SHSAT Final 5-Week Intensive](/shsat-prep) is scheduled to finish before the last test date. You can also start with a [free diagnostic](/free-diagnostic) or learn more about our [SHSAT preparation](/shsat).",
         ],
       },
     ],

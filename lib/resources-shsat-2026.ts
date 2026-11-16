@@ -98,7 +98,7 @@ export const SHSAT_2026_GUIDES: Resource[] = [
         heading: "Making the most of the weeks before the test",
         body: [
           `With registration open, there are only a few weeks left before test day. That window is best used for targeted review, not for learning everything from scratch. A [free SHSAT diagnostic](/free-diagnostic) can show which Math and ELA areas will move the score most in the time remaining.`,
-          `For students who want structured, test-focused practice in the final stretch, AhmedPrep runs the [2026 SHSAT Final 5-Week Intensive](/shsat-final-intensive-2026) at our location in Astoria, Queens, and we serve students from across NYC.`,
+          `For students who want structured, test-focused practice in the final stretch, AhmedPrep runs the [2026 SHSAT Final 5-Week Intensive](/shsat-prep) at our location in Astoria, Queens, and we serve students from across NYC.`,
         ],
       },
     ],
