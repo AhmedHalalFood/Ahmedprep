@@ -1,96 +1,108 @@
 import Link from "next/link"
-import { ArrowRight, MessageSquare, Phone } from "lucide-react"
+import { ArrowRight, Clock, MapPin, Phone } from "lucide-react"
 import { BUSINESS } from "@/lib/business"
 import {
   CLASS_DATES,
-  HOURS_PER_CLASS,
-  PRICE_PER_CLASS_CENTS,
   SAT_INTENSIVE_CAPACITY,
   SAT_INTENSIVE_PATH,
-  formatClassDate,
+  formatClassDateLong,
   formatUsd,
   quoteFor,
   satIntensiveUrgency,
 } from "@/lib/sat-final-intensive"
 
-const iconLinkClass =
-  "inline-flex size-11 shrink-0 items-center justify-center rounded-md border border-gold/60 text-gold transition-colors hover:bg-gold hover:text-navy focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
-
 const FULL_PROGRAM_CENTS = quoteFor(CLASS_DATES[0]).tuitionCents
+
+function ExamDateBadge({ className = "" }: { className?: string }) {
+  return (
+    <div
+      aria-hidden="true"
+      className={`flex shrink-0 flex-col items-center overflow-hidden rounded-lg border-2 border-gold bg-cream text-navy shadow-md ${className}`}
+    >
+      <span className="w-full bg-gold py-0.5 text-center text-[10px] font-extrabold uppercase tracking-widest text-navy">
+        Dec
+      </span>
+      <span className="text-3xl font-black leading-none md:text-4xl">5</span>
+      <span className="pb-1 text-[10px] font-extrabold uppercase tracking-widest">SAT</span>
+    </div>
+  )
+}
 
 /** Temporary promotion for the December 2026 intensive. Renders nothing once the last class has started. */
 export function SatIntensiveAnnouncement() {
   const urgency = satIntensiveUrgency()
   if (!urgency) return null
   const { quote, isFirstClass } = urgency
-  const classWord = quote.remainingClasses === 1 ? "class" : "classes"
-
-  const details = [
-    { primary: "Nov 16 – Dec 3, 2026", secondary: "Rolling enrollment" },
-    { primary: "Mon – Thu, 6–9 PM ET", secondary: "No class Nov 26" },
-    { primary: "In person, Astoria", secondary: BUSINESS.address.street },
-    { primary: `Max ${SAT_INTENSIVE_CAPACITY} students`, secondary: "Per class" },
-  ]
+  const startLabel = isFirstClass ? "Start" : "Next class"
 
   return (
-    <section aria-labelledby="sat-intensive-announcement-title" className="border-b-2 border-gold bg-navy text-cream">
-      <div className="container flex flex-col gap-3 py-3 md:flex-row md:items-center md:justify-between md:gap-8 md:py-4">
-        <div className="flex min-w-0 flex-1 flex-col gap-2">
-          <div className="flex flex-col gap-0.5">
-            <p className="text-xs font-bold uppercase tracking-wider text-gold">{urgency.examCountdown}</p>
+    <section aria-labelledby="sat-intensive-announcement-title" className="border-b-4 border-gold bg-navy text-cream">
+      <div className="container flex flex-col gap-4 py-4 lg:flex-row lg:items-center lg:gap-6">
+        <div className="flex min-w-0 flex-1 items-start gap-4">
+          <ExamDateBadge className="w-14 md:w-16" />
+
+          <div className="flex min-w-0 flex-col gap-1.5">
             <h2
               id="sat-intensive-announcement-title"
-              className="text-balance text-base font-extrabold leading-snug text-cream md:text-lg"
+              className="text-balance text-lg font-extrabold leading-tight text-cream md:text-2xl"
             >
-              Digital SAT Final Intensive: <span className="text-gold">{urgency.nextClassLabel}</span>
+              December 5 <span className="text-gold">Digital SAT Final Intensive</span>
             </h2>
-          </div>
-
-          <ul className="grid grid-cols-1 gap-x-4 gap-y-1.5 text-sm leading-snug min-[360px]:grid-cols-2 lg:grid-cols-4">
-            {details.map((d) => (
-              <li key={d.primary} className="flex min-w-0 flex-col">
-                <span className="whitespace-nowrap font-semibold text-cream">{d.primary}</span>
-                <span className="whitespace-nowrap text-cream/75">{d.secondary}</span>
+            <p className="text-sm font-bold leading-snug text-cream md:text-base">
+              {startLabel}: {formatClassDateLong(quote.firstClassDate)}
+            </p>
+            <ul className="flex flex-col gap-1 text-sm leading-snug text-cream/85 sm:flex-row sm:flex-wrap sm:gap-x-4">
+              <li className="flex items-center gap-1.5">
+                <Clock size={16} aria-hidden="true" className="shrink-0 text-gold" />
+                Mon – Thu, 6:00 – 9:00 PM
               </li>
-            ))}
-          </ul>
-
-          <div className="flex flex-col gap-0.5 border-t border-gold/30 pt-2 text-sm leading-snug">
-            <p className="font-bold text-cream">
-              <span className="text-gold">{formatUsd(PRICE_PER_CLASS_CENTS)}</span> per {HOURS_PER_CLASS}-hour class, per
-              student
-            </p>
-            <p className="text-cream/85">
-              Full {CLASS_DATES.length}-class program: <span className="font-semibold text-cream">{formatUsd(FULL_PROGRAM_CENTS)}</span>
-            </p>
-            {!isFirstClass && (
-              <p className="text-cream/85">
-                Starting {formatClassDate(quote.firstClassDate)}:{" "}
-                <span className="font-semibold text-gold">
-                  {formatUsd(quote.tuitionCents)} for {quote.remainingClasses} remaining {classWord}
-                </span>
-              </p>
-            )}
-            <p className="text-pretty text-cream/75">
-              Rolling enrollment available. Pay upfront for remaining classes; seats are confirmed after full payment.
-            </p>
+              <li className="flex items-center gap-1.5">
+                <MapPin size={16} aria-hidden="true" className="shrink-0 text-gold" />
+                In person, Astoria, Queens
+              </li>
+            </ul>
           </div>
         </div>
 
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex flex-col gap-1 border-t border-gold/30 pt-3 lg:w-48 lg:shrink-0 lg:items-center lg:border-x lg:border-t-0 lg:px-6 lg:pt-0 lg:text-center">
+          {isFirstClass ? (
+            <>
+              <p className="flex items-baseline gap-2 lg:flex-col lg:items-center lg:gap-0">
+                <span className="text-3xl font-black leading-none text-gold md:text-4xl">
+                  {formatUsd(FULL_PROGRAM_CENTS)}
+                </span>
+                <span className="text-sm font-semibold text-cream">Upfront tuition</span>
+              </p>
+              <p className="text-xs text-cream/75">For students starting Nov 16</p>
+            </>
+          ) : (
+            <p className="text-pretty text-sm font-semibold leading-snug text-cream">
+              Rolling enrollment available. Contact AhmedPrep for remaining sessions and tuition details.
+            </p>
+          )}
+          <span className="mt-1 inline-flex w-fit rounded-full bg-cream/15 px-3 py-0.5 text-xs font-bold text-cream">
+            Max {SAT_INTENSIVE_CAPACITY} students
+          </span>
+        </div>
+
+        <div className="flex flex-col gap-2 lg:w-72 lg:shrink-0">
           <Link
             href={`${SAT_INTENSIVE_PATH}#register`}
-            className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-md bg-coral px-5 text-sm font-extrabold uppercase tracking-wide text-white shadow-md transition-colors hover:bg-coral-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold md:flex-none"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-gold px-4 text-center text-sm font-extrabold text-navy shadow-md transition-colors hover:bg-gold/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cream"
           >
-            Request Enrollment
-            <ArrowRight size={18} aria-hidden="true" />
+            View Intensive & Request Enrollment
+            <ArrowRight size={18} aria-hidden="true" className="shrink-0" />
           </Link>
-          <a href={BUSINESS.phoneHref} aria-label={`Call AhmedPrep at ${BUSINESS.phoneDisplay}`} className={iconLinkClass}>
-            <Phone size={18} aria-hidden="true" />
+          <a
+            href={BUSINESS.phoneHref}
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-cream/70 px-4 text-sm font-bold text-cream transition-colors hover:bg-cream hover:text-navy focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+          >
+            <Phone size={16} aria-hidden="true" className="shrink-0" />
+            Call or Text {BUSINESS.phoneDisplay}
           </a>
-          <a href={BUSINESS.smsHref} aria-label={`Text AhmedPrep at ${BUSINESS.phoneDisplay}`} className={iconLinkClass}>
-            <MessageSquare size={18} aria-hidden="true" />
-          </a>
+          {isFirstClass && (
+            <p className="text-center text-xs italic text-cream/75">Rolling enrollment available after Nov 16</p>
+          )}
         </div>
       </div>
     </section>
