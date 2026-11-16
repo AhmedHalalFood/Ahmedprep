@@ -1,7 +1,14 @@
 import Image from "next/image"
-import { ArrowRight, CalendarDays, Clock, MapPin, Phone, Tag, Users } from "lucide-react"
+import { ArrowRight, CalendarDays, Clock, MapPin, MessageSquare, Phone, Tag, Users } from "lucide-react"
 import { ADDRESS_LINE_1, ADDRESS_LINE_2, BUSINESS, DIRECTIONS_URL } from "@/lib/business"
-import { CLASS_DATES, PRICE_PER_CLASS_CENTS, SAT_INTENSIVE_CAPACITY, formatUsd, quoteFor } from "@/lib/sat-final-intensive"
+import {
+  CLASS_DATES,
+  PRICE_PER_CLASS_CENTS,
+  SAT_INTENSIVE_CAPACITY,
+  formatUsd,
+  quoteFor,
+  satIntensiveUrgency,
+} from "@/lib/sat-final-intensive"
 
 const FULL = quoteFor(CLASS_DATES[0])
 
@@ -13,20 +20,22 @@ const FACTS = [
 ] as const
 
 export function SatIntensiveHero() {
+  const urgency = satIntensiveUrgency()
   return (
     <section aria-labelledby="sat-intensive-title" className="border-b border-line bg-cream">
       <div className="container grid items-center gap-6 py-6 md:py-10 lg:grid-cols-[1.15fr_1fr] lg:gap-10">
         <div className="flex flex-col gap-4">
           <p className="inline-flex w-fit items-center gap-2 rounded-full bg-navy px-3 py-1 text-xs font-extrabold uppercase tracking-wider text-gold">
-            For the December 5, 2026 SAT · Enrollment open
+            {urgency ? `${urgency.examCountdown} · ${urgency.nextClassLabel}` : "For the December 5, 2026 SAT · Enrollment closed"}
           </p>
           <div className="flex flex-col gap-2">
             <h1 id="sat-intensive-title" className="text-balance text-3xl font-extrabold leading-tight tracking-tight text-navy sm:text-4xl lg:text-5xl">
               Digital SAT Final Intensive
             </h1>
             <p className="max-w-xl text-pretty leading-relaxed text-ink">
-              In-person Math and Reading &amp; Writing review with Bluebook-style timed practice and personal feedback. Join on any
-              upcoming class date and pay only for the classes that remain.
+              In-person Math and Reading &amp; Writing review with timed SAT modules, Desmos strategies, and targeted error
+              correction. Rolling enrollment: join on any upcoming class date and pay only for the classes that remain.
+              Students bring their own laptops.
             </p>
           </div>
 
@@ -55,8 +64,8 @@ export function SatIntensiveHero() {
                 Tuition
               </dt>
               <dd className="text-sm font-bold">
-                <span className="text-lg font-extrabold text-cream">{formatUsd(PRICE_PER_CLASS_CENTS)}</span> per class ·{" "}
-                {formatUsd(FULL.tuitionCents)} for all {FULL.remainingClasses}
+                <span className="text-lg font-extrabold text-cream">{formatUsd(FULL.tuitionCents)} upfront</span> for all{" "}
+                {FULL.remainingClasses} classes · {formatUsd(PRICE_PER_CLASS_CENTS)} per remaining class if joining later
               </dd>
             </div>
           </dl>
@@ -66,14 +75,28 @@ export function SatIntensiveHero() {
               href="#register"
               className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-coral px-7 text-base font-extrabold uppercase tracking-wide text-white shadow-md transition-colors hover:bg-coral-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
             >
-              Enroll Now <ArrowRight size={18} aria-hidden="true" />
+              Request Enrollment <ArrowRight size={18} aria-hidden="true" />
             </a>
+            <div className="flex gap-2">
+              <a
+                href={BUSINESS.phoneHref}
+                aria-label={`Call AhmedPrep at ${BUSINESS.phoneDisplay}`}
+                className="inline-flex min-h-12 flex-1 items-center justify-center gap-1.5 rounded-md border-2 border-navy px-5 text-sm font-extrabold uppercase tracking-wide text-navy transition-colors hover:bg-navy hover:text-cream"
+              >
+                <Phone size={16} aria-hidden="true" />
+                Call
+              </a>
+              <a
+                href={BUSINESS.smsHref}
+                aria-label={`Text AhmedPrep at ${BUSINESS.phoneDisplay}`}
+                className="inline-flex min-h-12 flex-1 items-center justify-center gap-1.5 rounded-md border-2 border-navy px-5 text-sm font-extrabold uppercase tracking-wide text-navy transition-colors hover:bg-navy hover:text-cream"
+              >
+                <MessageSquare size={16} aria-hidden="true" />
+                Text
+              </a>
+            </div>
             <a href="#tuition" className="inline-flex min-h-12 items-center justify-center px-2 text-sm font-bold text-navy underline decoration-gold decoration-2 underline-offset-4 hover:text-brand">
               Calculate my tuition
-            </a>
-            <a href={BUSINESS.phoneHref} className="inline-flex min-h-12 items-center justify-center gap-1.5 px-2 text-sm font-bold text-navy hover:text-brand sm:ml-auto">
-              <Phone size={16} aria-hidden="true" />
-              {BUSINESS.phoneDisplay}
             </a>
           </div>
         </div>

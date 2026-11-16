@@ -127,7 +127,7 @@ export const formatClassDateLong = (iso: string) =>
   })
 
 export const WHAT_TO_BRING = [
-  "A fully charged laptop or tablet (bring a charger), with the College Board Bluebook app installed if possible",
+  "Your own fully charged laptop and charger, with the College Board Bluebook app installed if possible",
   "A graphing or scientific calculator, if your student uses one",
   "Pencils and scratch paper",
   "Any recent SAT or PSAT score report",
@@ -247,6 +247,26 @@ export function validateInquiry(input: InquiryInput, now: Date): InquiryErrors {
 
 /** Public promotion (sitemap, homepage, Digital SAT page) runs while at least one class has not started. */
 export const isSatIntensiveEnrollmentOpen = (now = new Date()) => availableStartDates(now).length > 0
+
+const DAY_MS = 86_400_000
+
+/** Promotion urgency derived only from the class calendar and the exam date, never from enrollment numbers. */
+export function satIntensiveUrgency(now = new Date()) {
+  const open = availableStartDates(now)
+  const next = open[0]
+  if (!next) return null
+  const today = newYorkWallClock(now).slice(0, 10)
+  const daysToExam = Math.round((Date.parse(`${SAT_TEST_DATE_ISO}T00:00:00Z`) - Date.parse(`${today}T00:00:00Z`)) / DAY_MS)
+  const isFirstClass = next === CLASS_DATES[0]
+  const when = next === today ? "tonight at 6 PM" : `${formatClassDate(next)}, 6 PM`
+  return {
+    quote: quoteFor(next),
+    isFirstClass,
+    daysToExam,
+    examCountdown: `December 5 SAT is ${daysToExam} ${daysToExam === 1 ? "day" : "days"} away`,
+    nextClassLabel: `${isFirstClass ? "Classes begin" : "Next class"} ${when}`,
+  }
+}
 
 /** Same student + same parent email is one enrollment, regardless of capitalisation or extra spaces. */
 export function studentKey(parentEmail: string, studentName: string) {

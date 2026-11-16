@@ -24,7 +24,7 @@ export const dynamic = "force-dynamic"
 
 const TITLE = "Digital SAT Final Intensive | December 5, 2026 SAT | AhmedPrep Astoria"
 const DESCRIPTION =
-  "In-person Digital SAT Final Intensive in Astoria, Queens for the December 5, 2026 SAT. Nov 16–Dec 3, Mon–Thu 6–9 PM, max 12 students. Rolling enrollment: $75 per remaining class."
+  "In-person Digital SAT Final Intensive in Astoria, Queens for the December 5, 2026 SAT. Nov 16–Dec 3, Mon–Thu 6–9 PM, max 12 students. $825 upfront for all 11 classes; rolling enrollment at $75 per remaining class."
 const PAGE_URL = absoluteUrl(SAT_INTENSIVE_PATH)
 
 export const metadata: Metadata = {
