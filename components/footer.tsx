@@ -51,10 +51,10 @@ export function Footer() {
           <div className="flex flex-col gap-4 lg:pr-10">
             <Link href="/" className="brand self-start" aria-label="AhmedPrep home">
               <Image
-                src="/ahmedprep-logo.png"
+                src="/ahmedprep-logo-256.png"
                 alt="AhmedPrep logo"
-                width={1254}
-                height={1254}
+                width={256}
+                height={256}
                 sizes="68px"
                 className="brand-logo"
               />

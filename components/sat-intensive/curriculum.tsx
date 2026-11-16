@@ -64,8 +64,8 @@ export function SatIntensiveCurriculum() {
           ))}
           <div className="relative hidden overflow-hidden rounded-xl lg:block">
             <Image
-              src="/images/sat-intensive/instructor-feedback.png"
-              alt="An instructor gives a student one-on-one feedback on a practice problem while classmates work"
+              src="/images/sat-intensive/practice-review-illustration.jpg"
+              alt="Illustration of a reviewed math practice worksheet with circled answers beside a pencil and calculator"
               fill
               sizes="300px"
               className="object-cover"
