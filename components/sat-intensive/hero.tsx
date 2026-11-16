@@ -1,97 +1,92 @@
 import Image from "next/image"
-import { ArrowDown, ArrowRight, Check } from "lucide-react"
-import { BUSINESS } from "@/lib/business"
+import { ArrowRight, CalendarDays, Clock, MapPin, Phone, Tag, Users } from "lucide-react"
+import { ADDRESS_LINE_1, ADDRESS_LINE_2, BUSINESS, DIRECTIONS_URL } from "@/lib/business"
+import { CLASS_DATES, PRICE_PER_CLASS_CENTS, SAT_INTENSIVE_CAPACITY, formatUsd, quoteFor } from "@/lib/sat-final-intensive"
 
-const BENEFITS = [
-  "Targeted SAT Math and Reading & Writing review",
-  "Realistic SAT practice questions",
-  "Bluebook-style timed practice",
-  "Personalized feedback",
-  "Small-group instruction, maximum 12 students",
-  "In-person classes in Astoria, Queens",
-] as const
+const FULL = quoteFor(CLASS_DATES[0])
 
 const FACTS = [
-  { label: "Dates", value: "Nov 16 – Dec 3" },
-  { label: "Schedule", value: "Mon–Thu, 6–9 PM" },
-  { label: "Program", value: "11 classes · 33 hrs" },
-  { label: "Class size", value: "Max 12 students" },
+  { icon: CalendarDays, label: "Dates", value: "Nov 16 – Dec 3, 2026", note: "Mon–Thu · no class Nov 26" },
+  { icon: Clock, label: "Time", value: "6:00–9:00 PM ET", note: `${FULL.remainingClasses} classes · ${FULL.remainingHours} hours` },
+  { icon: MapPin, label: "Location", value: ADDRESS_LINE_1, note: ADDRESS_LINE_2, href: DIRECTIONS_URL },
+  { icon: Users, label: "Class size", value: `Max ${SAT_INTENSIVE_CAPACITY} students`, note: "In person only" },
 ] as const
 
 export function SatIntensiveHero() {
   return (
-    <section aria-labelledby="sat-intensive-title" className="relative overflow-hidden bg-navy text-white">
-      <div className="container grid items-center gap-10 py-12 md:py-16 lg:grid-cols-[1.05fr_1fr] lg:gap-14 lg:py-20">
-        <div className="flex flex-col gap-6">
-          <p className="inline-flex w-fit items-center gap-2 rounded-full border border-gold/60 bg-gold/10 px-4 py-1.5 text-xs font-extrabold uppercase tracking-[0.18em] text-gold">
-            December 5, 2026 SAT
+    <section aria-labelledby="sat-intensive-title" className="border-b border-line bg-cream">
+      <div className="container grid items-center gap-6 py-6 md:py-10 lg:grid-cols-[1.15fr_1fr] lg:gap-10">
+        <div className="flex flex-col gap-4">
+          <p className="inline-flex w-fit items-center gap-2 rounded-full bg-navy px-3 py-1 text-xs font-extrabold uppercase tracking-wider text-gold">
+            For the December 5, 2026 SAT · Enrollment open
           </p>
-          <div className="flex flex-col gap-3">
-            <h1
-              id="sat-intensive-title"
-              className="text-balance text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl"
-            >
-              Digital SAT <span className="text-gold">Final Intensive</span>
+          <div className="flex flex-col gap-2">
+            <h1 id="sat-intensive-title" className="text-balance text-3xl font-extrabold leading-tight tracking-tight text-navy sm:text-4xl lg:text-5xl">
+              Digital SAT Final Intensive
             </h1>
-            <p className="text-xl font-extrabold text-gold sm:text-2xl">Rolling Enrollment Now Open!</p>
-            <p className="text-lg font-bold">Join anytime. Pay only for the remaining classes.</p>
+            <p className="max-w-xl text-pretty leading-relaxed text-ink">
+              In-person Math and Reading &amp; Writing review with Bluebook-style timed practice and personal feedback. Join on any
+              upcoming class date and pay only for the classes that remain.
+            </p>
           </div>
-          <p className="max-w-xl text-pretty leading-relaxed text-white/80">
-            Make your final weeks count with focused, in-person Digital SAT preparation in Astoria, Queens.
-          </p>
 
-          <ul className="grid gap-x-6 gap-y-3 sm:grid-cols-2" aria-label="Program benefits">
-            {BENEFITS.map((benefit) => (
-              <li key={benefit} className="flex items-start gap-3 text-sm font-semibold leading-snug text-white/90">
-                <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-gold text-navy">
-                  <Check size={13} strokeWidth={3} aria-hidden="true" />
-                </span>
-                {benefit}
-              </li>
+          <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-line bg-line">
+            {FACTS.map(({ icon: Icon, label, value, note, ...rest }) => (
+              <div key={label} className="flex gap-2.5 bg-paper p-3">
+                <Icon size={18} className="mt-0.5 shrink-0 text-gold-deep" aria-hidden="true" />
+                <div className="flex min-w-0 flex-col">
+                  <dt className="text-[11px] font-extrabold uppercase tracking-wider text-subtle">{label}</dt>
+                  <dd className="text-sm font-extrabold leading-snug text-navy">
+                    {"href" in rest ? (
+                      <a href={rest.href} target="_blank" rel="noopener noreferrer" className="underline decoration-gold underline-offset-4 hover:text-brand">
+                        {value}
+                      </a>
+                    ) : (
+                      value
+                    )}
+                  </dd>
+                  <dd className="text-xs leading-snug text-subtle">{note}</dd>
+                </div>
+              </div>
             ))}
-          </ul>
+            <div className="col-span-2 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 bg-navy px-4 py-3 text-cream">
+              <dt className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-gold">
+                <Tag size={16} aria-hidden="true" />
+                Tuition
+              </dt>
+              <dd className="text-sm font-bold">
+                <span className="text-lg font-extrabold text-cream">{formatUsd(PRICE_PER_CLASS_CENTS)}</span> per class ·{" "}
+                {formatUsd(FULL.tuitionCents)} for all {FULL.remainingClasses}
+              </dd>
+            </div>
+          </dl>
 
-          <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
             <a
               href="#register"
-              className="inline-flex min-h-14 items-center justify-center gap-2 rounded-md bg-coral px-8 text-base font-extrabold uppercase tracking-wide text-white shadow-lg shadow-black/20 transition-colors hover:bg-coral-hover focus-visible:outline-gold"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-coral px-7 text-base font-extrabold uppercase tracking-wide text-white shadow-md transition-colors hover:bg-coral-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
             >
               Enroll Now <ArrowRight size={18} aria-hidden="true" />
             </a>
-            <a
-              href="#tuition"
-              className="inline-flex min-h-14 items-center justify-center gap-2 rounded-md border-2 border-white/30 px-6 text-sm font-bold text-white transition-colors hover:border-gold hover:text-gold"
-            >
-              Calculate my tuition <ArrowDown size={16} aria-hidden="true" />
+            <a href="#tuition" className="inline-flex min-h-12 items-center justify-center px-2 text-sm font-bold text-navy underline decoration-gold decoration-2 underline-offset-4 hover:text-brand">
+              Calculate my tuition
             </a>
-          </div>
-          <p className="text-sm text-white/70">
-            Questions? Call or text{" "}
-            <a href={BUSINESS.phoneHref} className="font-bold text-white underline decoration-gold underline-offset-4">
+            <a href={BUSINESS.phoneHref} className="inline-flex min-h-12 items-center justify-center gap-1.5 px-2 text-sm font-bold text-navy hover:text-brand sm:ml-auto">
+              <Phone size={16} aria-hidden="true" />
               {BUSINESS.phoneDisplay}
             </a>
-          </p>
+          </div>
         </div>
 
-        <div className="relative">
-          <div className="relative aspect-[4/3] overflow-hidden rounded-xl border-4 border-gold/80 shadow-2xl shadow-black/40">
-            <Image
-              src="/images/sat-intensive/hero-students.png"
-              alt="High school students working on SAT practice with laptops and printed questions in a small Astoria classroom"
-              fill
-              priority
-              sizes="(min-width: 1024px) 560px, 100vw"
-              className="object-cover"
-            />
-          </div>
-          <dl className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4 lg:-mt-10 lg:mx-4 lg:relative">
-            {FACTS.map((fact) => (
-              <div key={fact.label} className="rounded-lg bg-white px-3 py-3 text-center shadow-lg">
-                <dt className="text-[11px] font-extrabold uppercase tracking-wider text-gold-deep">{fact.label}</dt>
-                <dd className="mt-1 text-sm font-extrabold text-navy">{fact.value}</dd>
-              </div>
-            ))}
-          </dl>
+        <div className="relative aspect-[16/10] overflow-hidden rounded-xl border-4 border-gold/70 shadow-lg lg:aspect-[4/3]">
+          <Image
+            src="/images/sat-intensive/hero-students.png"
+            alt="High school students working on SAT practice with laptops and printed questions in a small Astoria classroom"
+            fill
+            priority
+            sizes="(min-width: 1024px) 520px, 100vw"
+            className="object-cover"
+          />
         </div>
       </div>
     </section>

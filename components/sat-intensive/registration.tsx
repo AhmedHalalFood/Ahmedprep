@@ -3,17 +3,13 @@
 import { useRef, useState, type FormEvent, type ReactNode } from "react"
 import { Loader2, MessageSquare, Phone } from "lucide-react"
 import { ADDRESS_LINE_1, ADDRESS_LINE_2, BUSINESS } from "@/lib/business"
+import { TuitionCalculator } from "@/components/sat-intensive/tuition-calculator"
 import {
-  CLASS_DATES,
   CLASS_TIME_LABEL,
   GRADE_OPTIONS,
-  INQUIRY_NOT_RESERVED_STATEMENT,
-  INQUIRY_PAYMENT_STATEMENT,
   INQUIRY_RECEIVED_STATEMENT,
   PAYMENT_METHODS,
   PAYMENT_METHOD_LABELS,
-  PRICE_PER_CLASS_CENTS,
-  formatClassDate,
   formatClassDateLong,
   formatUsd,
   quoteFor,
@@ -66,6 +62,12 @@ export function Registration({
     setErrors((e) => ({ ...e, [key]: undefined }))
   }
 
+  const selectDate = (date: ClassDate) => {
+    submissionId.current = null
+    onSelect(date)
+    setErrors((e) => ({ ...e, firstClassDate: undefined }))
+  }
+
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (busy) return
@@ -112,27 +114,39 @@ export function Registration({
   }
 
   return (
-    <section id="register" aria-labelledby="register-title" className="scroll-mt-4 bg-white py-16 md:py-20">
-      <div className="container">
-        <div className="mx-auto flex max-w-3xl flex-col gap-8">
-          <div className="flex flex-col gap-3">
-            <p className="eyebrow blue">Registration</p>
-            <h2 id="register-title" className="text-balance text-3xl font-extrabold tracking-tight text-navy md:text-4xl">
-              Request a seat for your student
+    <section id="register" aria-labelledby="register-title" className="scroll-mt-4 bg-warm py-10 md:py-14">
+      <div className="container flex flex-col gap-6">
+        <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+          <div className="flex max-w-2xl flex-col gap-2">
+            <p className="eyebrow">Enrollment</p>
+            <h2 id="register-title" className="text-balance text-2xl font-extrabold tracking-tight text-navy md:text-3xl">
+              Calculate tuition and request a seat
             </h2>
-            <p className="text-pretty leading-relaxed text-subtle">
-              For parents and guardians. {INQUIRY_NOT_RESERVED_STATEMENT} AhmedPrep will contact you to confirm availability.
-            </p>
-            <p className="font-bold leading-relaxed text-navy">{INQUIRY_PAYMENT_STATEMENT}</p>
+            <p className="text-pretty leading-relaxed text-subtle">For parents and guardians. AhmedPrep will contact you to confirm availability.</p>
           </div>
-
           <ContactOptions />
+        </div>
 
-          {received ? (
-            <ReceivedPanel received={received} />
-          ) : (
-            <form noValidate onSubmit={submit} className="flex flex-col gap-8" aria-describedby={formError ? "reg-form-error" : undefined}>
+        {received ? (
+          <ReceivedPanel received={received} />
+        ) : (
+          <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
+            <TuitionCalculator available={available} selected={selected} onSelect={selectDate} error={errors.firstClassDate} />
+
+            <form
+              noValidate
+              onSubmit={submit}
+              aria-labelledby="reg-form-title"
+              aria-describedby={formError ? "reg-form-error" : undefined}
+              className="flex flex-col gap-6 rounded-2xl border border-line bg-paper p-5 shadow-sm sm:p-6"
+            >
               <input type="text" name="website" tabIndex={-1} autoComplete="off" className="sr-only" aria-hidden="true" />
+              <div className="flex flex-col gap-1">
+                <p className="text-xs font-extrabold uppercase tracking-wider text-gold-deep">Step 2 · Your details</p>
+                <h3 id="reg-form-title" className="text-xl font-extrabold text-navy">
+                  Registration request
+                </h3>
+              </div>
 
               <Fieldset legend="Student">
                 <Field id="reg-studentName" label="Student full name" error={errors.studentName}>
@@ -160,58 +174,16 @@ export function Registration({
                 </Field>
               </Fieldset>
 
-              <Fieldset legend="Preferred start and tuition">
-                <Field id="reg-firstClassDate" label="Preferred start date" error={errors.firstClassDate} wide>
-                  <select
-                    id="reg-firstClassDate"
-                    value={selected ?? ""}
-                    onChange={(e) => {
-                      startedAt.current ??= Date.now()
-                      submissionId.current = null
-                      onSelect(e.target.value as ClassDate)
-                      setErrors((er) => ({ ...er, firstClassDate: undefined }))
-                    }}
-                    {...aria("firstClassDate", errors)}
-                    className={inputClass(errors.firstClassDate)}
-                  >
-                    {!selected && <option value="">No upcoming classes</option>}
-                    {CLASS_DATES.map((d) => (
-                      <option key={d} value={d} disabled={!available.includes(d)}>
-                        {formatClassDateLong(d)}
-                        {available.includes(d) ? "" : " (class started)"}
-                      </option>
-                    ))}
-                  </select>
-                </Field>
-                {quote && (
-                  <div className="flex flex-col gap-3 rounded-xl border-2 border-sage bg-sage-soft p-5 sm:col-span-2" aria-live="polite">
-                    <div className="flex flex-wrap items-baseline justify-between gap-2">
-                      <p className="font-extrabold text-navy">
-                        {quote.remainingClasses} {quote.remainingClasses === 1 ? "class" : "classes"} · {quote.remainingHours} hours
-                      </p>
-                      <p className="text-3xl font-extrabold tabular-nums text-sage-deep">{formatUsd(quote.tuitionCents)}</p>
-                    </div>
-                    <p className="text-sm text-ink">
-                      {quote.remainingClasses} × {formatUsd(PRICE_PER_CLASS_CENTS)} per class, paid upfront. No installments or drop-in classes.
-                    </p>
-                    <p className="text-sm leading-relaxed text-subtle">Classes: {quote.remainingDates.map((d) => formatClassDate(d)).join(", ")}</p>
-                  </div>
-                )}
-              </Fieldset>
-
-              <fieldset className="flex flex-col gap-3" aria-describedby={errors.paymentMethod ? "reg-paymentMethod-error" : "reg-paymentMethod-hint"}>
-                <legend className="mb-1 text-lg font-extrabold text-navy">Preferred payment method</legend>
-                <p id="reg-paymentMethod-hint" className="text-sm leading-relaxed text-subtle">
-                  AhmedPrep will send payment instructions directly after confirming availability. Please do not send payment before then.
-                </p>
-                <div className="grid gap-3 sm:grid-cols-3" role="radiogroup" aria-invalid={Boolean(errors.paymentMethod)}>
+              <fieldset className="flex flex-col gap-2" aria-describedby={errors.paymentMethod ? "reg-paymentMethod-error" : undefined}>
+                <legend className="mb-2 text-base font-extrabold text-navy">Preferred payment method</legend>
+                <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-invalid={Boolean(errors.paymentMethod)}>
                   {PAYMENT_METHODS.map((method) => {
                     const checked = fields.paymentMethod === method
                     return (
                       <label
                         key={method}
-                        className={`flex min-h-12 cursor-pointer items-center gap-3 rounded-lg border-2 px-4 py-3 font-bold transition-colors ${
-                          checked ? "border-navy bg-warm text-navy" : errors.paymentMethod ? "border-error" : "border-line text-ink hover:border-navy/40"
+                        className={`flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-lg border-2 px-2 text-sm font-bold transition-colors sm:text-base ${
+                          checked ? "border-navy bg-cream text-navy" : errors.paymentMethod ? "border-error" : "border-line text-ink hover:border-navy/40"
                         }`}
                       >
                         <input
@@ -221,7 +193,7 @@ export function Registration({
                           value={method}
                           checked={checked}
                           onChange={() => set("paymentMethod", method)}
-                          className="size-5 shrink-0 accent-navy"
+                          className="size-4 shrink-0 accent-navy"
                         />
                         {PAYMENT_METHOD_LABELS[method]}
                       </label>
@@ -241,48 +213,37 @@ export function Registration({
                 </p>
               )}
 
-              <div className="flex flex-col gap-2">
-                <button
-                  type="submit"
-                  disabled={busy || !selected}
-                  className="inline-flex min-h-14 items-center justify-center gap-2 rounded-md bg-coral px-8 text-base font-extrabold uppercase tracking-wide text-white transition-colors hover:bg-coral-hover disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  {busy ? <Loader2 size={18} className="animate-spin" aria-hidden="true" /> : null}
-                  {busy ? "Sending…" : "Send registration request"}
-                </button>
-                <p className="text-center text-xs leading-relaxed text-subtle">
-                  No payment is taken on this website and no card details are collected.
-                </p>
-              </div>
+              <button
+                type="submit"
+                disabled={busy || !selected}
+                className="inline-flex min-h-14 items-center justify-center gap-2 rounded-md bg-coral px-8 text-base font-extrabold uppercase tracking-wide text-white transition-colors hover:bg-coral-hover disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {busy ? <Loader2 size={18} className="animate-spin" aria-hidden="true" /> : null}
+                {busy ? "Sending…" : quote ? `Request a seat · ${formatUsd(quote.tuitionCents)}` : "Send registration request"}
+              </button>
             </form>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </section>
   )
 }
 
 function ContactOptions() {
+  const linkClass =
+    "inline-flex min-h-11 items-center justify-center gap-2 rounded-md border-2 border-navy/20 bg-paper px-4 text-sm font-extrabold text-navy transition-colors hover:border-navy"
   return (
-    <div className="flex flex-col gap-3 rounded-xl border-2 border-line bg-warm p-5">
-      <p className="text-sm font-bold leading-relaxed text-navy">Prefer to register by phone? Call or text AhmedPrep.</p>
-      <div className="grid grid-cols-2 gap-3">
-        <a
-          href={BUSINESS.phoneHref}
-          className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md border-2 border-navy bg-white px-4 font-extrabold text-navy transition-colors hover:bg-navy hover:text-white"
-        >
-          <Phone size={18} aria-hidden="true" />
-          Call
-        </a>
-        <a
-          href={SMS_HREF}
-          className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md border-2 border-navy bg-white px-4 font-extrabold text-navy transition-colors hover:bg-navy hover:text-white"
-        >
-          <MessageSquare size={18} aria-hidden="true" />
-          Text
-        </a>
-      </div>
-      <p className="text-center text-sm font-bold tabular-nums text-ink">{BUSINESS.phoneDisplay}</p>
+    <div className="flex flex-wrap items-center gap-2">
+      <span className="text-sm font-semibold text-subtle">Prefer the phone?</span>
+      <a href={BUSINESS.phoneHref} className={linkClass} aria-label={`Call AhmedPrep at ${BUSINESS.phoneDisplay}`}>
+        <Phone size={16} aria-hidden="true" />
+        Call
+      </a>
+      <a href={SMS_HREF} className={linkClass} aria-label={`Text AhmedPrep at ${BUSINESS.phoneDisplay}`}>
+        <MessageSquare size={16} aria-hidden="true" />
+        Text
+      </a>
+      <span className="text-sm font-bold tabular-nums text-navy">{BUSINESS.phoneDisplay}</span>
     </div>
   )
 }
@@ -290,7 +251,7 @@ function ContactOptions() {
 function ReceivedPanel({ received }: { received: Received }) {
   const quote = quoteFor(received.firstClassDate)
   return (
-    <div role="status" className="flex flex-col gap-6 rounded-xl border-2 border-gold bg-cream p-6 md:p-8">
+    <div role="status" className="mx-auto flex w-full max-w-3xl flex-col gap-6 rounded-xl border-2 border-gold bg-paper p-6 md:p-8">
       <div className="flex flex-col gap-2">
         <h3 className="text-balance text-2xl font-extrabold text-navy md:text-3xl">Thank you</h3>
         <p className="text-lg font-bold leading-relaxed text-ink">{INQUIRY_RECEIVED_STATEMENT}</p>
@@ -299,7 +260,7 @@ function ReceivedPanel({ received }: { received: Received }) {
         </p>
       </div>
 
-      <dl className="grid gap-4 rounded-lg bg-white p-5 text-sm sm:grid-cols-2">
+      <dl className="grid gap-4 rounded-lg bg-cream p-5 text-sm sm:grid-cols-2">
         <Summary label="Student" value={received.studentName} />
         <Summary label="Preferred start" value={formatClassDateLong(received.firstClassDate)} />
         <Summary label="Remaining classes" value={`${quote.remainingClasses} classes · ${quote.remainingHours} hours`} />
@@ -333,9 +294,9 @@ function Summary({ label, value, strong = false }: { label: string; value: strin
 
 function Fieldset({ legend, children }: { legend: string; children: ReactNode }) {
   return (
-    <fieldset className="flex flex-col gap-4">
-      <legend className="mb-4 text-lg font-extrabold text-navy">{legend}</legend>
-      <div className="grid gap-4 sm:grid-cols-2">{children}</div>
+    <fieldset className="flex flex-col">
+      <legend className="mb-3 text-base font-extrabold text-navy">{legend}</legend>
+      <div className="grid gap-3 sm:grid-cols-2">{children}</div>
     </fieldset>
   )
 }
@@ -362,4 +323,4 @@ const aria = (key: keyof InquiryErrors, errors: InquiryErrors) => ({
 })
 
 const inputClass = (error?: string) =>
-  `min-h-12 w-full rounded-lg border-2 bg-white px-4 text-base text-ink ${error ? "border-error" : "border-line focus:border-navy"}`
+  `min-h-12 w-full rounded-lg border-2 bg-paper px-4 text-base text-ink ${error ? "border-error" : "border-line focus:border-navy"}`
