@@ -21,6 +21,8 @@ import { EVENTS } from "@/lib/analytics"
 import { SITE_URL } from "@/lib/business"
 import { MAX_CLASS_SIZE } from "@/lib/cohorts-2027"
 
+export const revalidate = 3600
+
 const PATH = "/digital-sat-prep"
 const TITLE = "Digital SAT Prep in Astoria, Queens | AhmedPrep"
 const DESCRIPTION =

@@ -17,7 +17,7 @@ export function SatIntensiveMobileBar() {
         Text
       </a>
       <a href="#register" className="mobile-cta-primary">
-        Enroll Now <ArrowRight size={15} aria-hidden="true" />
+        Request Enrollment <ArrowRight size={15} aria-hidden="true" />
       </a>
     </nav>
   )
