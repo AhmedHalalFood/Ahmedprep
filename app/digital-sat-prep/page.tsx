@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { absoluteUrl } from "@/lib/seo"
+import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 import Link from "next/link"
 import { ArrowUpRight, Laptop } from "lucide-react"
 import { DiagnosticSection } from "@/components/landing/diagnostic-section"
@@ -18,22 +18,21 @@ import { FeatureGrid, ResourceLinks } from "@/components/program-page/feature-gr
 import { ProgramCtas } from "@/components/program-page/program-ctas"
 import { ProgramTuition } from "@/components/program-page/program-tuition"
 import { EVENTS } from "@/lib/analytics"
-import { SITE_URL } from "@/lib/business"
+import { BUSINESS, SITE_URL } from "@/lib/business"
 import { MAX_CLASS_SIZE } from "@/lib/cohorts-2027"
 
 export const revalidate = 3600
 
 const PATH = "/digital-sat-prep"
-const TITLE = "Digital SAT Prep in Astoria, Queens | AhmedPrep"
-const DESCRIPTION =
-  "Digital SAT tutoring in Astoria, Queens. Small-group Math and Reading & Writing classes, Bluebook practice, Desmos strategies, and 2027 enrollment."
+const TITLE = "Digital SAT Prep & Tutoring in Astoria, Queens | AhmedPrep"
+const DESCRIPTION = `In-person Digital SAT prep and SAT tutoring in Astoria, Queens for NYC high school students. Max ${MAX_CLASS_SIZE} students per class, Bluebook practice, free diagnostic.`
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
   description: DESCRIPTION,
   alternates: { canonical: absoluteUrl(PATH) },
   robots: { index: true, follow: true },
-  openGraph: { title: TITLE, description: DESCRIPTION, url: absoluteUrl(PATH), type: "website" },
+  openGraph: { ...baseOpenGraph, title: TITLE, description: DESCRIPTION, url: absoluteUrl(PATH) },
 }
 
 const LAPTOP_NOTE = "Digital SAT students must bring their own laptop to every class."
@@ -101,6 +100,10 @@ const faqs: FaqItem[] = [
   {
     q: "When should my child take the SAT?",
     a: "Many students take the SAT for the first time in the spring of junior year, which leaves time for a second attempt. The diagnostic helps choose a test date that fits your child's starting point and goals.",
+  },
+  {
+    q: "Where are Digital SAT classes and tutoring held?",
+    a: `All Digital SAT classes and private tutoring are held in person at ${BUSINESS.address.street}, ${BUSINESS.address.city}, ${BUSINESS.address.region} ${BUSINESS.address.postalCode}. AhmedPrep does not offer online Digital SAT classes or tutoring; only the free Sunday classes are held live online. The classroom is easy to reach from across Queens, including Long Island City, Sunnyside, Woodside, Jackson Heights, and Ditmars.`,
   },
   {
     q: "Is AhmedPrep affiliated with the College Board?",

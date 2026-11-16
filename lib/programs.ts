@@ -69,7 +69,7 @@ export const PROGRAMS: Program[] = [
     href: "/digital-sat-prep",
     summary: "Reading & Writing and Math preparation for the adaptive Digital SAT.",
     audience: "High school students preparing for the Digital SAT.",
-    format: "Winter, Spring, and Summer 2027 small-group classes meet in person in Astoria, Queens. Private tutoring is available in person or online.",
+    format: "Winter, Spring, and Summer 2027 small-group classes and private tutoring meet in person in Astoria, Queens.",
     benefits: ["Starts from a baseline practice score", "Desmos and adaptive-test strategy", "Practice testing with score analysis"],
     price: PRICE_2027,
     priceNote: PRICE_2027_NOTE,

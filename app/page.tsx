@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import Image from "next/image"
+import Link from "next/link"
 import { ArrowRight, ArrowUpRight, CalendarDays, List, Star } from "lucide-react"
 import { TERMS_2027, termSummary } from "@/lib/cohorts-2027"
 import { ProgramsPreview } from "@/components/landing/programs-preview"
@@ -99,6 +100,12 @@ export default async function Home() {
               Book Free Diagnostic <ArrowRight size={18} aria-hidden="true" />
             </TrackedLink>
           </div>
+          <p className="mt-4 text-sm leading-relaxed text-ink">
+            High school students:{" "}
+            <Link href="/digital-sat-prep" className="text-link">
+              Digital SAT prep in Astoria, Queens
+            </Link>
+          </p>
         </div>
       </section>
 
