@@ -155,7 +155,7 @@ export default function DigitalSatPrepPage() {
               changes most likely to raise it.
             </p>
             <p className="leading-relaxed text-subtle">
-              Classes are led by founder Tariq Ahmed, an NYC DOE educator with 12+ years of teaching and test-prep
+              Classes are led by founder Tariq Ahmed, who has 12+ years of teaching and test-prep
               experience, in groups of {MAX_CLASS_SIZE} or fewer.
             </p>
             <p className="flex items-start gap-3 border border-line bg-warm p-4 font-bold leading-relaxed text-navy">

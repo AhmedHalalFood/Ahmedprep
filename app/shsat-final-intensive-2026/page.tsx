@@ -178,7 +178,7 @@ export default async function ShsatFinalIntensivePage() {
         title="NYC SHSAT preparation from a local educator"
         intro={
           <>
-            Classes are led by founder Tariq Ahmed, an NYC DOE educator with 12+ years of teaching and test-prep
+            Classes are led by founder Tariq Ahmed, who has 12+ years of teaching and test-prep
             experience. Parents receive progress updates throughout the five weeks, so you always know where your child stands. If you are
             comparing options for SHSAT prep in Queens, call or text us. We&apos;re happy to answer questions.
           </>

@@ -57,7 +57,7 @@ const approach = [
   },
   {
     title: "Founder-led instruction",
-    body: "Classes are led by founder Tariq Ahmed, an NYC DOE educator with 12+ years of teaching and test-prep experience.",
+    body: "Classes are led by founder Tariq Ahmed, who has 12+ years of teaching and test-prep experience.",
   },
 ]
 
