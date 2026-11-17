@@ -1,23 +1,30 @@
-import Link from "next/link"
 import { ArrowRight, Megaphone } from "lucide-react"
+import { TrackedLink } from "@/components/tracked-link"
+import { EVENTS } from "@/lib/analytics"
 import { SAT_INTENSIVE_PATH, satIntensiveUrgency } from "@/lib/sat-final-intensive"
 
-/** One homepage announcement for the December 2026 intensive. Automatically disappears after the last class starts. */
+/** Single clickable December intensive announcement, automatically removed when all classes have begun. */
 export function SatIntensiveAnnouncementBar() {
   const urgency = satIntensiveUrgency()
   if (!urgency) return null
 
   return (
-    <aside aria-label="December 5th Digital SAT Final Intensive enrollment" className="border-y border-[#E9D7A2] bg-[#FFF8E8] text-navy">
+    <aside aria-label="December 5th Digital SAT Final Intensive enrollment" className="border-y border-[#E7D8B9] bg-[#FFF8E8] text-navy">
       <div className="container py-2.5 md:py-3">
-        <div className="flex flex-col gap-3 rounded-xl border border-[#E5D4AB] bg-[#FFFCF5] px-4 py-3 shadow-sm lg:flex-row lg:items-center lg:justify-between lg:gap-6">
+        <TrackedLink
+          href={`${SAT_INTENSIVE_PATH}#register`}
+          event={EVENTS.programCtaClick}
+          eventProps={{ location: "home_dec_sat_announcement", cta: "join_remaining_classes" }}
+          className="group flex min-w-0 flex-col gap-3 rounded-xl border border-[#DFC99E] bg-[#FFFCF5] px-4 py-3 shadow-sm transition-all hover:border-[#C9A968] hover:bg-white hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#16476A] lg:flex-row lg:items-center lg:justify-between lg:gap-6"
+        >
           <div className="flex min-w-0 flex-col gap-1.5">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-gold px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-wider text-navy">
-                <Megaphone size={14} aria-hidden="true" />
-                December 5th SAT
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-gold px-3 py-1 text-navy">
+                <Megaphone size={15} aria-hidden="true" className="shrink-0" />
+                <span className="text-[11px] font-extrabold uppercase tracking-wide">December 5th</span>
+                <strong className="text-base font-black uppercase leading-none tracking-tight">SAT</strong>
               </span>
-              <span className="inline-flex items-center gap-2 rounded-full border border-emerald-300 bg-[#DBF7E7] px-3 py-1.5 text-xs font-extrabold text-[#07583C] shadow-sm">
+              <span className="inline-flex items-center gap-2 rounded-full border border-emerald-400 bg-[#D7F6E4] px-3 py-1.5 text-xs font-extrabold text-[#07583C]">
                 <span aria-hidden="true" className="size-2.5 shrink-0 rounded-full bg-emerald-600 ring-[3px] ring-emerald-200 motion-safe:animate-pulse" />
                 {urgency.isFirstClass ? "Classes Starting · Enrollment Open" : "Classes Underway · Enrollment Open Now"}
               </span>
@@ -29,13 +36,13 @@ export function SatIntensiveAnnouncementBar() {
               </p>
             </div>
           </div>
-          <Link
-            href={`${SAT_INTENSIVE_PATH}#register`}
-            className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 self-start rounded-lg bg-gold px-5 py-2.5 text-sm font-extrabold shadow-sm transition-colors hover:bg-gold-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy lg:self-center" style={{ color: "#102F51" }}
+          <span
+            aria-hidden="true"
+            className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 self-start rounded-lg bg-gold px-5 py-2.5 text-sm font-extrabold text-[#102F51] shadow-sm transition-colors group-hover:bg-[#F5CF62] lg:self-center"
           >
-            <span style={{ color: "#102F51" }}>Join Remaining Classes</span><ArrowRight size={16} aria-hidden="true" style={{ color: "#102F51" }} />
-          </Link>
-        </div>
+            Join Remaining Classes <ArrowRight size={16} aria-hidden="true" />
+          </span>
+        </TrackedLink>
       </div>
     </aside>
   )
