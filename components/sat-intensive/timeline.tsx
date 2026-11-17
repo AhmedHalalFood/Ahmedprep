@@ -5,7 +5,7 @@ const PHASE_DATES = [CLASS_DATES.slice(0, 7), CLASS_DATES.slice(7)]
 
 export function SatIntensiveTimeline() {
   return (
-    <section id="timeline" aria-labelledby="timeline-title" className="scroll-mt-4 bg-cream py-8 md:py-10">
+    <section id="timeline" aria-labelledby="timeline-title" className="scroll-mt-4 bg-site-canvas py-8 md:py-10">
       <div className="container">
         <details className="group rounded-xl border border-line bg-paper">
           <summary className="flex cursor-pointer list-none flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between [&::-webkit-details-marker]:hidden">
