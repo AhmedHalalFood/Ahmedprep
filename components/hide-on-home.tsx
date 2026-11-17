@@ -8,3 +8,9 @@ export function HideOnHome({ children }: { children: ReactNode }) {
   if (pathname === "/") return null
   return <>{children}</>
 }
+
+export function ShowOnHome({ children }: { children: ReactNode }) {
+  const pathname = usePathname()
+  if (pathname !== "/") return null
+  return <>{children}</>
+}

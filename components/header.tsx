@@ -1,7 +1,8 @@
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowUpRight, MapPin, Star } from "lucide-react"
-import { HideOnHome } from "@/components/hide-on-home"
+import { HideOnHome, ShowOnHome } from "@/components/hide-on-home"
+import { SatIntensiveAnnouncementBar } from "@/components/sat-intensive/announcement-bar"
 import { MainNav } from "@/components/main-nav"
 import { MobileNav } from "@/components/mobile-nav"
 import { ReviewLink } from "@/components/review-link"
@@ -70,6 +71,9 @@ export async function Header() {
         </div>
         <MobileNav showIntensive={showIntensive} />
       </div>
+      <ShowOnHome>
+        <SatIntensiveAnnouncementBar />
+      </ShowOnHome>
       <div className="site-nav-bar">
         <div className="container nav-inner">
           <MainNav showIntensive={showIntensive} />
