@@ -34,98 +34,83 @@ const STATS = [
 
 export function Winter2027Promo() {
   return (
-    <section
-      id="top"
-      aria-labelledby="winter-2027-promo-title"
-      className="overflow-hidden border-b border-[#C5DCEB] bg-gradient-to-br from-[#DDECF6] via-[#EEF6FB] to-[#F8F7F1] text-navy"
-    >
-      <div className="mx-auto grid w-full max-w-[1200px] overflow-hidden rounded-2xl border border-[#B9D6E9] bg-[#F9FCFE] shadow-sm my-5 sm:my-7 lg:grid-cols-2">
+    <section id="top" aria-labelledby="winter-2027-promo-title" className="overflow-hidden bg-navy text-cream">
+      <div className="mx-auto grid w-full max-w-[1200px] items-center gap-6 px-4 py-6 sm:px-6 md:py-8 lg:grid-cols-[minmax(0,1.12fr)_minmax(320px,0.88fr)] lg:gap-8">
         <TrackedLink
           href="/programs-2027"
           event={EVENTS.programCtaClick}
           eventProps={{ location: "home_winter_promo", cta: "explore_winter_programs" }}
-          aria-label="Explore Winter 2027 SHSAT and Digital SAT classes, schedules and tuition"
-          className="group flex min-w-0 flex-col justify-between gap-5 bg-[#F4FAFE] px-5 py-5 text-navy transition-colors hover:bg-[#EAF5FC] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[#16476A] sm:px-7 sm:py-6"
+          aria-label="Explore Winter 2027 SHSAT and Digital SAT class schedules"
+          className="flex min-w-0 flex-col gap-4 rounded-lg transition-colors hover:bg-white/5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold"
         >
-          <div className="space-y-4">
-            <span className="inline-flex w-fit items-center gap-2 rounded-full border border-[#A6CDE4] bg-[#D8EBF7] px-3 py-1.5 text-xs font-extrabold uppercase tracking-wider text-[#16476A]">
-              <Snowflake size={15} aria-hidden="true" />
-              Winter 2027 · Enrolling now
-            </span>
-            <div className="space-y-3">
-              <h1
-                id="winter-2027-promo-title"
-                className="text-balance text-3xl font-extrabold leading-tight tracking-tight text-navy sm:text-4xl lg:text-[2.5rem]"
-              >
-                Winter SHSAT &amp; Digital SAT Prep
-              </h1>
-              <p className="text-pretty text-base leading-relaxed text-[#37536A]">
-                Personally taught by AhmedPrep’s founder. Focused SHSAT and Digital SAT preparation in small groups in Astoria, Queens.
-              </p>
-            </div>
+          <span className="inline-flex w-fit items-center gap-2 rounded-full bg-gold px-3 py-1 text-xs font-extrabold uppercase tracking-wider text-navy">
+            <Snowflake size={14} aria-hidden="true" />
+            Winter 2027 · Enrolling now
+          </span>
+          <div className="space-y-2">
+            <h1 id="winter-2027-promo-title" className="text-balance text-3xl font-extrabold leading-tight tracking-tight text-cream sm:text-4xl lg:text-[2.7rem]">
+              Winter SHSAT &amp; Digital SAT Prep
+            </h1>
+            <p className="text-pretty text-sm leading-relaxed text-cream/85 sm:text-base">
+              Personally taught by AhmedPrep’s founder. Focused SHSAT and Digital SAT preparation in small groups in Astoria, Queens.
+            </p>
           </div>
 
-          <div className="space-y-3">
-            <p className="text-sm font-extrabold text-navy">Focused instruction. Personal attention.</p>
-            <ul className="grid min-w-0 grid-cols-3 gap-2 border-t border-[#C8DBE8] pt-4 sm:gap-4">
-              {STATS.map(({ icon: Icon, value, detail }) => (
-                <li key={value} className="flex min-w-0 items-start gap-2">
-                  <Icon size={17} className="mt-0.5 hidden shrink-0 text-[#2171A2] sm:block" aria-hidden="true" />
-                  <div className="min-w-0">
-                    <span className="block break-words text-sm font-extrabold leading-tight text-navy sm:text-base">{value}</span>
-                    <span className="block text-xs leading-snug text-[#526E84]">{detail}</span>
-                  </div>
-                </li>
-              ))}
-            </ul>
-            <span className="inline-flex items-center gap-1 text-xs font-extrabold text-[#16476A] underline underline-offset-4 group-hover:text-[#0F5C8F]">
-              Explore Winter classes and schedules <ArrowRight size={14} aria-hidden="true" />
-            </span>
-          </div>
+          <ul className="grid min-w-0 grid-cols-3 gap-2 border-y border-gold/25 py-3 sm:gap-4">
+            {STATS.map(({ icon: Icon, value, detail }) => (
+              <li key={value} className="flex min-w-0 items-start gap-2">
+                <Icon size={17} className="mt-0.5 hidden shrink-0 text-gold sm:block" aria-hidden="true" />
+                <div className="min-w-0">
+                  <span className="block break-words text-sm font-extrabold leading-tight text-cream sm:text-base">{value}</span>
+                  <span className="block text-xs leading-snug text-cream/70">{detail}</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+
+
         </TrackedLink>
 
-        <div className="flex min-w-0 flex-col border-t border-[#B9D6E9] bg-[#FFFCF5] px-5 py-5 text-navy sm:px-7 sm:py-6 lg:border-l lg:border-t-0">
+        <div className="relative min-w-0 rounded-xl border border-gold/45 bg-cream px-5 py-4 text-navy shadow-lg sm:px-5">
           <TrackedLink
             href="/enroll-2027"
             event={EVENTS.programCtaClick}
             eventProps={{ location: "home_winter_promo", cta: "founding_offer_details" }}
-            aria-label="Explore Winter 2027 founding-family tuition and request enrollment"
-            className="group block rounded-lg p-1 -m-1 transition-colors hover:bg-[#FFF4D9] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#16476A]"
+            aria-label="Review Winter 2027 founding-family tuition and enrollment"
+            className="absolute inset-0 z-0 rounded-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
           >
+            <span className="sr-only">Review the Winter 2027 founding-family offer and enrollment</span>
+          </TrackedLink>
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <p className="text-xs font-extrabold uppercase tracking-wide text-[#526E84]">Founding-family offer</p>
-            <span className="rounded-full bg-[#FBE7B4] px-3 py-1 text-xs font-extrabold text-[#805506]">Save {savingsPercent}%</span>
+            <p className="text-xs font-extrabold uppercase tracking-wide text-navy/70">Founding-family offer</p>
+            <span className="rounded-full bg-gold/30 px-3 py-1 text-xs font-extrabold text-navy">Save {savingsPercent}%</span>
           </div>
-          <div className="mt-3 flex flex-wrap items-end gap-x-4 gap-y-1">
-            <span className="text-4xl font-black leading-none tracking-tight text-navy sm:text-5xl">{dollars(founding)}</span>
-            <span className="pb-1 text-sm text-[#546B7B]">Regular <span className="line-through">{dollars(price.regular)}</span></span>
+          <div className="mt-2 flex flex-wrap items-end gap-x-4 gap-y-1">
+            <span className="text-4xl font-black leading-none tracking-tight sm:text-5xl">{dollars(founding)}</span>
+            <span className="pb-1 text-sm text-navy/75">Regular <span className="line-through">{dollars(price.regular)}</span></span>
           </div>
           <p className="mt-2 text-sm font-semibold text-navy">SHSAT or Digital SAT · 12-week small-group program</p>
-          <div className="mt-4 grid grid-cols-2 gap-2 border-y border-[#E9DDC8] py-3 text-sm">
-            <div className="border-r border-[#E9DDC8] pr-2">
-              <p className="font-extrabold text-[#194D79]">SHSAT Prep</p>
-              <p className="text-xs text-[#526E84]">Math + ELA</p>
+          <div className="mt-3 grid grid-cols-2 gap-2 border-y border-navy/15 py-2 text-sm">
+            <div className="border-r border-navy/15 pr-2">
+              <p className="font-extrabold">SHSAT Prep</p>
+              <p className="text-xs text-navy/70">Math + ELA</p>
             </div>
             <div className="pl-2">
-              <p className="font-extrabold text-[#146B60]">Digital SAT Prep</p>
-              <p className="text-xs text-[#526E84]">Math + Reading/Writing</p>
+              <p className="font-extrabold">Digital SAT Prep</p>
+              <p className="text-xs text-navy/70">Math + Reading/Writing</p>
             </div>
           </div>
-          <p className="mt-3 flex items-start gap-2 text-xs leading-relaxed text-[#37536A] sm:text-sm">
-            <Check size={17} className="mt-0.5 shrink-0 text-[#168064]" aria-hidden="true" />
+          <p className="mt-2 flex items-start gap-2 text-xs leading-snug text-navy/85 sm:text-sm">
+            <Check size={16} className="mt-0.5 shrink-0 text-blue" aria-hidden="true" />
             First {FOUNDING_SEATS_PER_COHORT} fully paid students per class. Full-payment deadline: {deadline}, {DEADLINE_TIME_LABEL}.
           </p>
-          <span className="mt-2 inline-flex items-center gap-1 text-xs font-bold text-[#16476A] underline underline-offset-4 group-hover:text-[#0F5C8F]">
-            See offer and enrollment details <ArrowRight size={14} aria-hidden="true" />
-          </span>
-          </TrackedLink>
-          <div className="mt-auto flex flex-col gap-2 pt-5 sm:flex-row">
+          <div className="relative z-10 mt-3 flex flex-col gap-2 border-t border-navy/15 pt-3 sm:flex-row">
             <TrackedLink
               href="/enroll-2027"
               event={EVENTS.programCtaClick}
               eventProps={{ location: "home_winter_promo", cta: "enroll_winter_2027" }}
-              className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-lg bg-gold px-3 py-2.5 text-center text-sm font-extrabold shadow-sm transition-colors hover:bg-gold-hover"
-              style={{ color: "#102F51" }}
+              className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg bg-gold px-3 py-2 text-center text-sm font-extrabold transition-colors hover:bg-gold-hover"
+              style={{ color: "var(--navy)" }}
             >
               Enroll for Winter 2027
               <ArrowRight size={16} className="shrink-0" aria-hidden="true" />
@@ -134,14 +119,16 @@ export function Winter2027Promo() {
               href="/free-diagnostic"
               event={EVENTS.diagnosticCtaClick}
               eventProps={{ location: "home_winter_promo" }}
-              className="inline-flex min-h-12 flex-1 items-center justify-center rounded-lg border border-[#A7BFCE] bg-white px-3 py-2.5 text-center text-sm font-bold text-navy transition-colors hover:bg-[#EAF3F9]"
-              style={{ color: "#102F51" }}
+              className="inline-flex min-h-11 flex-1 items-center justify-center rounded-lg border border-navy px-3 py-2 text-center text-sm font-semibold text-navy transition-colors hover:bg-navy/5"
+              style={{ color: "var(--navy)" }}
             >
               Free Diagnostic
             </TrackedLink>
           </div>
         </div>
       </div>
+
+
     </section>
   )
 }
