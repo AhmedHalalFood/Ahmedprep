@@ -30,11 +30,11 @@ export function SatIntensiveHero() {
           <p className="flex w-fit flex-wrap items-center gap-x-2 gap-y-0.5 rounded-2xl bg-navy px-3 py-1.5 text-xs font-extrabold uppercase leading-snug tracking-wider text-gold">
             {urgency ? (
               <>
-                <span className="whitespace-nowrap">{urgency.examCountdown}</span>
+                <span className="break-words">{urgency.examCountdown}</span>
                 <span aria-hidden="true" className="hidden min-[420px]:inline">
                   ·
                 </span>
-                <span className="whitespace-nowrap text-cream">{urgency.nextClassLabel}</span>
+                <span className="break-words text-cream">{urgency.nextClassLabel}</span>
               </>
             ) : (
               "For the December 5, 2026 SAT · Enrollment closed"
@@ -57,7 +57,7 @@ export function SatIntensiveHero() {
                 <Icon size={18} className="mt-0.5 shrink-0 text-gold-deep" aria-hidden="true" />
                 <div className="flex min-w-0 flex-col gap-0.5">
                   <dt className="whitespace-nowrap text-[11px] font-extrabold uppercase tracking-wider text-subtle">{label}</dt>
-                  <dd className="whitespace-nowrap text-sm font-extrabold leading-snug text-navy">
+                  <dd className="break-words text-sm font-extrabold leading-snug text-navy">
                     {"href" in rest ? (
                       <a href={rest.href} target="_blank" rel="noopener noreferrer" className="underline decoration-gold underline-offset-4 hover:text-brand">
                         {value}
@@ -66,7 +66,7 @@ export function SatIntensiveHero() {
                       value
                     )}
                   </dd>
-                  <dd className="whitespace-nowrap text-xs leading-snug text-subtle">{note}</dd>
+                  <dd className="break-words text-xs leading-snug text-subtle">{note}</dd>
                 </div>
               </div>
             ))}
