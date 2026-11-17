@@ -87,8 +87,15 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
                       {term.cohorts.map((c) => {
                         const span = cohortSpan(c)
                         return (
-                          <tr key={c.id} className="border-b border-line last:border-b-0">
-                            <th scope="row" className="py-2 pr-3 font-bold text-navy">
+                          <tr
+                            key={c.id}
+                            className={`border-b border-line last:border-b-0 ${
+                              c.program === "SHSAT" ? "bg-blue-50/60 hover:bg-blue-50" : "bg-emerald-50/60 hover:bg-emerald-50"
+                            }`}
+                          >
+                            <th scope="row" className={`border-l-4 py-2 pl-3 pr-3 font-bold ${
+                              c.program === "SHSAT" ? "border-blue-500 text-blue-900" : "border-emerald-600 text-emerald-900"
+                            }`}>
                               <Link href={cohortHref(c)} className="underline underline-offset-4">
                                 {c.program} · {c.label}
                               </Link>
