@@ -127,6 +127,7 @@ export default function DigitalSatPrepPage() {
       <Breadcrumbs items={[{ label: "Digital SAT Prep", href: PATH }]} />
       <ProgramHero
         location="digital_sat"
+        balancedActions
         eyebrow="SAT tutoring in NYC · Astoria, Queens"
         title="Digital SAT Prep in Astoria, Queens"
         serviceArea={`Small-group, in-person Digital SAT prep in Astoria for high school students across Queens and NYC. Maximum ${MAX_CLASS_SIZE} students per class.`}
@@ -135,7 +136,7 @@ export default function DigitalSatPrepPage() {
         benefits={benefits}
         ctaLabel="Book Free Diagnostic"
         ctaEvent={EVENTS.digitalSatCtaClick}
-        actions={<ProgramCtas program="Digital SAT" location="digital_sat_hero" diagnosticEvent={EVENTS.digitalSatCtaClick} />}
+        actions={<ProgramCtas program="Digital SAT" location="digital_sat_hero" diagnosticEvent={EVENTS.digitalSatCtaClick} compact />}
       />
 
       <SatIntensiveAnnouncement />
@@ -143,21 +144,24 @@ export default function DigitalSatPrepPage() {
       <Section
         id="overview"
         eyebrow="Digital SAT overview"
-        title="How the computer-based Digital SAT works"
+        title="How the Digital SAT works"
         intro="Students take the Digital SAT on a laptop or tablet in the College Board's Bluebook app. Both sections adapt by module: how a student performs on the first module determines the difficulty of the second."
       >
-        <div className="grid gap-8 lg:grid-cols-2">
-          <dl className="flex flex-col border-t-2 border-navy">
-            {testFacts.map((f) => (
-              <div key={f.label} className="flex flex-col gap-1 border-b border-line py-4 sm:flex-row sm:justify-between sm:gap-6">
-                <dt className="font-extrabold text-navy">{f.label}</dt>
-                <dd className="text-pretty leading-relaxed text-ink sm:text-right">{f.value}</dd>
-              </div>
-            ))}
-          </dl>
-          <div className="flex flex-col gap-4">
+        <div className="grid items-stretch gap-6 lg:grid-cols-2">
+          <div className="rounded-2xl border border-[#D7E4EE] border-t-4 border-t-brand bg-[#F5FAFE] p-5 sm:p-6">
+            <h3 className="mb-4 text-lg font-extrabold text-navy">Digital SAT format at a glance</h3>
+            <dl className="grid gap-3 sm:grid-cols-2">
+              {testFacts.map((f) => (
+                <div key={f.label} className="flex min-h-28 flex-col gap-2 rounded-xl border border-[#DCE8F1] bg-white p-4">
+                  <dt className="text-sm font-extrabold text-navy">{f.label}</dt>
+                  <dd className="text-pretty text-sm leading-relaxed text-ink">{f.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+          <div className="flex h-full flex-col gap-4 rounded-2xl border border-[#E6E1D5] border-t-4 border-t-gold bg-[#FFFCF6] p-5 sm:p-6">
             <h3 className="text-xl font-extrabold text-navy">Why preparation starts with a diagnostic</h3>
-            <p className="leading-relaxed text-subtle">
+            <p className="leading-relaxed text-ink">
               Because the second module depends on the first, small accuracy gains early in each section matter. A
               timed diagnostic shows which skills and question types hold a score back, so class time focuses on the
               changes most likely to raise it.
@@ -166,10 +170,12 @@ export default function DigitalSatPrepPage() {
               Classes are led by founder Tariq Ahmed, who has 12+ years of teaching and test-prep
               experience, in groups of {MAX_CLASS_SIZE} or fewer.
             </p>
-            <p className="flex items-start gap-3 border border-line bg-warm p-4 font-bold leading-relaxed text-navy">
+            <div className="mt-auto flex items-start gap-3 rounded-xl border border-[#D7E4EE] bg-white p-4">
               <Laptop size={20} aria-hidden="true" className="mt-0.5 shrink-0 text-brand" />
-              {LAPTOP_NOTE} AhmedPrep does not supply devices.
-            </p>
+              <p className="font-bold leading-relaxed text-navy">
+                {LAPTOP_NOTE} AhmedPrep does not supply devices.
+              </p>
+            </div>
           </div>
         </div>
       </Section>
