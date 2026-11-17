@@ -14,6 +14,25 @@ import {
 } from "@/lib/cohorts-2027"
 import { programsHref } from "@/lib/program-finder"
 
+// Seasonal accents are intentionally subtle so program schedules and tuition remain readable.
+const SEASON_CARD_TONE = {
+  winter: {
+    header: "border-blue-200 bg-blue-100 text-blue-900",
+    card: "border-blue-200 bg-blue-50/50 hover:border-blue-500 hover:bg-blue-50",
+    link: "text-blue-800",
+  },
+  spring: {
+    header: "border-emerald-200 bg-emerald-100 text-emerald-900",
+    card: "border-emerald-200 bg-emerald-50/50 hover:border-emerald-500 hover:bg-emerald-50",
+    link: "text-emerald-800",
+  },
+  summer: {
+    header: "border-amber-200 bg-amber-100 text-amber-900",
+    card: "border-amber-200 bg-amber-50/50 hover:border-amber-500 hover:bg-amber-50",
+    link: "text-amber-800",
+  },
+} as const
+
 export function ProgramTuition({ program, note }: { program: ProgramId; note?: string }) {
   return (
     <Section
@@ -26,10 +45,11 @@ export function ProgramTuition({ program, note }: { program: ProgramId; note?: s
       <div className="flex flex-col gap-10">
         {TERMS_2027.map((term) => {
           const cohorts = term.cohorts.filter((c) => c.program === program)
+          const tone = SEASON_CARD_TONE[term.id]
           return (
             <div key={term.id} id={`${program === "SHSAT" ? "shsat" : "dsat"}-${term.id}`} className="scroll-mt-4">
-              <div className="flex flex-wrap items-baseline justify-between gap-2 border-b-2 border-navy pb-2">
-                <h3 className="text-2xl font-extrabold text-navy">{term.name}</h3>
+              <div className={`flex flex-wrap items-baseline justify-between gap-2 rounded-lg border px-4 py-3 ${tone.header}`}>
+                <h3 className="text-2xl font-extrabold">{term.name}</h3>
                 <Link
                   href={programsHref({ season: term.id })}
                   className="text-sm font-semibold text-subtle underline underline-offset-4 hover:text-brand"
@@ -42,7 +62,7 @@ export function ProgramTuition({ program, note }: { program: ProgramId; note?: s
                   const span = cohortSpan(c)
                   const options = tuitionOptionsFor(c)
                   return (
-                    <article key={c.id} className="flex flex-col gap-4 border border-line bg-background p-5 md:p-6">
+                    <article key={c.id} className={`group relative flex cursor-pointer flex-col gap-4 rounded-lg border p-5 transition-colors md:p-6 ${tone.card}`}>
                       <div className="flex flex-col gap-1">
                         <h4 className="text-lg font-extrabold text-navy">
                           {program} {c.label}
@@ -72,7 +92,7 @@ export function ProgramTuition({ program, note }: { program: ProgramId; note?: s
                       </dl>
                       <Link
                         href={cohortInquiryHref(c)}
-                        className="mt-auto inline-flex min-h-11 items-center gap-1.5 self-start font-bold text-brand underline-offset-4 hover:underline"
+                        className={`mt-auto inline-flex min-h-11 items-center gap-1.5 self-start font-bold underline-offset-4 after:absolute after:inset-0 after:rounded-lg group-hover:underline focus-visible:outline-none focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:-outline-offset-2 focus-visible:after:outline-navy ${tone.link}`}
                       >
                         Send an enrollment inquiry <ArrowRight size={16} aria-hidden="true" />
                         <span className="sr-only">
