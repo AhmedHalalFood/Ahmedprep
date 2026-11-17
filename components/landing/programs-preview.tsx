@@ -11,7 +11,7 @@ const lowestTuition = dollars(
 
 export function ProgramsPreview() {
   return (
-    <section id="programs-pricing" aria-labelledby="programs-pricing-title" className="scroll-mt-4 bg-cream py-6">
+    <section id="programs-pricing" aria-labelledby="programs-pricing-title" className="scroll-mt-4 border-b border-line bg-site-canvas py-6">
       <div className="container flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-0">
         <div className="flex shrink-0 flex-col gap-1 lg:w-96 lg:border-r lg:border-line lg:pr-6">
           <p className="eyebrow">Our 2027 programs</p>
