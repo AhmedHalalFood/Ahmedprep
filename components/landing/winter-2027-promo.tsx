@@ -27,113 +27,107 @@ const deadline = new Date(`${WINTER_FOUNDING_DEADLINE_ISO}T12:00:00Z`).toLocaleD
 })
 
 const STATS = [
-  { icon: CalendarDays, value: `${weeks} weeks`, detail: `${meetings} meetings` },
+  { icon: CalendarDays, value: `${weeks} weeks`, detail: `${meetings} classes` },
   { icon: Clock, value: `${cohort.hours} hours`, detail: "of instruction" },
-  { icon: Users, value: `Max ${MAX_CLASS_SIZE}`, detail: "students per class" },
+  { icon: Users, value: `Max ${MAX_CLASS_SIZE}`, detail: "per class" },
 ]
 
 export function Winter2027Promo() {
   return (
-    <section aria-labelledby="winter-2027-promo-title" className="relative overflow-hidden bg-navy text-cream">
-      <div className="min-w-0 lg:grid lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
-        <div className="container flex min-w-0 w-full max-w-full flex-col gap-6 py-8 md:py-10 lg:w-auto lg:max-w-none lg:py-12 lg:pl-[max(16px,calc((100vw-1180px)/2))] lg:pr-10">
-          <div className="flex min-w-0 flex-col gap-3">
-            <span className="inline-flex w-fit items-center gap-2 rounded-full bg-gold px-3 py-1 text-xs font-extrabold uppercase tracking-[0.16em] text-navy">
-              <Snowflake size={14} aria-hidden="true" />
-              Enrolling now
-            </span>
-            <h2 id="winter-2027-promo-title" className="text-balance text-3xl font-extrabold leading-tight text-cream md:text-4xl">
-              {"Winter 2027 SHSAT & Digital SAT Prep"}
-            </h2>
-            <p className="min-w-0 max-w-full text-pretty text-base leading-relaxed text-cream/85 md:text-lg">
-              Small-group, in-person preparation in Astoria, Queens.
+    <section id="top" aria-labelledby="winter-2027-promo-title" className="overflow-hidden bg-navy text-cream">
+      <div className="mx-auto grid w-full max-w-[1200px] items-center gap-6 px-4 py-6 sm:px-6 md:py-8 lg:grid-cols-[minmax(0,1.12fr)_minmax(320px,0.88fr)] lg:gap-8">
+        <div className="flex min-w-0 flex-col gap-4">
+          <span className="inline-flex w-fit items-center gap-2 rounded-full bg-gold px-3 py-1 text-xs font-extrabold uppercase tracking-wider text-navy">
+            <Snowflake size={14} aria-hidden="true" />
+            Winter 2027 · Enrolling now
+          </span>
+          <div className="space-y-2">
+            <h1 id="winter-2027-promo-title" className="text-balance text-3xl font-extrabold leading-tight tracking-tight text-cream sm:text-4xl lg:text-[2.7rem]">
+              Winter SHSAT &amp; Digital SAT Prep
+            </h1>
+            <p className="text-pretty text-sm leading-relaxed text-cream/85 sm:text-base">
+              Expert-guided Math, ELA &amp; Reading/Writing preparation. Small in-person classes in Astoria, Queens.
             </p>
           </div>
 
-          <ul className="grid min-w-0 grid-cols-3 gap-2 sm:gap-3 md:max-w-xl">
+          <ul className="grid min-w-0 grid-cols-3 gap-2 border-y border-gold/25 py-3 sm:gap-4">
             {STATS.map(({ icon: Icon, value, detail }) => (
-              <li key={value} className="flex min-w-0 flex-col gap-1 border-l-2 border-gold/60 pl-2 sm:pl-3">
-                <Icon size={20} aria-hidden="true" className="text-gold" />
-                <span className="break-words text-sm font-extrabold leading-tight text-cream sm:text-base md:text-lg">{value}</span>
-                <span className="break-words text-xs leading-snug text-cream/75 md:text-sm">{detail}</span>
+              <li key={value} className="flex min-w-0 items-start gap-2">
+                <Icon size={17} className="mt-0.5 hidden shrink-0 text-gold sm:block" aria-hidden="true" />
+                <div className="min-w-0">
+                  <span className="block break-words text-sm font-extrabold leading-tight text-cream sm:text-base">{value}</span>
+                  <span className="block text-xs leading-snug text-cream/70">{detail}</span>
+                </div>
               </li>
             ))}
           </ul>
 
-          <div className="flex flex-col gap-4 rounded-xl bg-cream p-5 text-ink shadow-lg md:max-w-xl md:flex-row md:items-center md:gap-6">
-            <div className="flex shrink-0 flex-col">
-              <span className="text-sm font-bold text-navy">Founding-family tuition</span>
-              <span className="text-4xl font-extrabold leading-none text-navy md:text-5xl">{dollars(founding)}</span>
-              <span className="mt-1 text-sm text-ink/75">
-                Regular tuition <span className="line-through">{dollars(price.regular)}</span>
-              </span>
-            </div>
-            <ul className="flex flex-col gap-2 border-t border-navy/15 pt-4 text-sm leading-snug md:border-l md:border-t-0 md:pl-6 md:pt-0">
-              <li className="flex gap-2">
-                <Check size={16} aria-hidden="true" className="mt-0.5 shrink-0 text-blue" />
-                Save {dollars(savings)} ({savingsPercent}% off)
-              </li>
-              <li className="flex gap-2">
-                <Check size={16} aria-hidden="true" className="mt-0.5 shrink-0 text-blue" />
-                First {FOUNDING_SEATS_PER_COHORT} fully paid students per class qualify
-              </li>
-              <li className="flex gap-2 font-bold text-navy">
-                <Check size={16} aria-hidden="true" className="mt-0.5 shrink-0 text-blue" />
-                Deadline: {deadline}, at {DEADLINE_TIME_LABEL}
-              </li>
-            </ul>
-          </div>
-
-          <div className="flex flex-col gap-3 sm:flex-row">
+          <div className="flex flex-wrap gap-2">
             <TrackedLink
               href="/enroll-2027"
               event={EVENTS.programCtaClick}
               eventProps={{ location: "home_winter_promo", cta: "enroll_winter_2027" }}
+              className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg bg-gold px-4 py-2.5 text-center text-sm font-extrabold text-navy transition-colors hover:bg-gold-hover sm:flex-none sm:px-6 sm:text-base"
               style={{ color: "var(--navy)" }}
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-gold px-6 text-base font-extrabold shadow-md transition-colors hover:bg-gold-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cream"
             >
-              Enroll in Winter 2027
-              <ArrowRight size={18} aria-hidden="true" className="shrink-0" />
+              Enroll for Winter 2027
+              <ArrowRight size={17} className="shrink-0" aria-hidden="true" />
             </TrackedLink>
             <TrackedLink
               href="/free-diagnostic"
               event={EVENTS.diagnosticCtaClick}
               eventProps={{ location: "home_winter_promo" }}
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border-2 border-cream/80 px-6 text-base font-bold text-cream transition-colors hover:bg-cream/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cream"
+              className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg border border-cream/70 px-4 py-2.5 text-center text-sm font-semibold text-cream hover:bg-cream/10 sm:flex-none"
             >
-              <CalendarDays size={18} aria-hidden="true" className="shrink-0" />
-              Book Free Diagnostic
+              Free Diagnostic
             </TrackedLink>
           </div>
         </div>
 
-        <div className="relative hidden min-h-[580px] overflow-hidden border-l border-gold/25 bg-[#09243f] lg:flex lg:items-center lg:justify-center lg:px-10 lg:py-12">
-          <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-30" style={{ backgroundImage: "radial-gradient(circle at 80% 15%, rgba(236,190,67,.30), transparent 40%), linear-gradient(rgba(236,190,67,.12) 1px, transparent 1px), linear-gradient(90deg, rgba(236,190,67,.12) 1px, transparent 1px)", backgroundSize: "auto, 44px 44px, 44px 44px" }} />
-          <div aria-hidden="true" className="absolute -right-16 -top-20 h-72 w-72 rounded-full border border-gold/20" />
-          <div aria-hidden="true" className="absolute -bottom-24 -left-12 h-64 w-64 rounded-full border border-gold/20" />
-          <div className="relative z-10 w-full max-w-md space-y-5">
-            <div className="text-center">
-              <p className="text-xs font-extrabold uppercase tracking-[0.24em] text-gold">Your next chapter starts here</p>
-              <p className="mt-3 text-3xl font-extrabold leading-tight text-cream">Two goals. One focused plan.</p>
-              <p className="mt-2 text-sm leading-relaxed text-cream/75">Choose the preparation that fits your student.</p>
-            </div>
-            <div className="rounded-2xl border border-gold/45 bg-[#12395c] p-6 shadow-xl">
-              <div className="mb-4 flex items-center justify-between gap-3">
-                <span className="rounded-full bg-gold px-3 py-1 text-xs font-extrabold uppercase tracking-wide text-navy">Winter 2027</span>
-                <span className="text-xs font-semibold text-cream/75">Enrolling now</span>
-              </div>
-              <p className="text-2xl font-extrabold text-cream">SHSAT Prep</p>
-              <p className="mt-1 text-sm text-cream/80">Math + ELA · Small-group instruction</p>
-              <div className="my-4 h-px bg-gold/30" />
-              <p className="text-2xl font-extrabold text-cream">Digital SAT Prep</p>
-              <p className="mt-1 text-sm text-cream/80">Math + Reading & Writing</p>
-              <div className="mt-5 flex items-center justify-between border-t border-gold/30 pt-4 text-sm font-semibold text-cream">
-                <span>12 weeks · 72 hours</span>
-                <span className="text-gold">Max 12 per class</span>
-              </div>
-            </div>
-            <p className="text-center text-sm font-medium text-cream/80">Astoria, Queens · In-person classes</p>
+        <div className="min-w-0 rounded-xl border border-gold/45 bg-cream px-5 py-5 text-navy shadow-lg sm:px-6">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <p className="text-xs font-extrabold uppercase tracking-wide text-navy/70">Founding-family offer</p>
+            <span className="rounded-full bg-gold/30 px-3 py-1 text-xs font-extrabold text-navy">Save {savingsPercent}%</span>
           </div>
+          <div className="mt-2 flex flex-wrap items-end gap-x-4 gap-y-1">
+            <span className="text-4xl font-black leading-none tracking-tight sm:text-5xl">{dollars(founding)}</span>
+            <span className="pb-1 text-sm text-navy/75">Regular <span className="line-through">{dollars(price.regular)}</span></span>
+          </div>
+          <p className="mt-2 text-sm font-semibold text-navy">SHSAT or Digital SAT · 12-week small-group program</p>
+          <div className="mt-4 grid grid-cols-2 gap-2 border-y border-navy/15 py-3 text-sm">
+            <div className="border-r border-navy/15 pr-2">
+              <p className="font-extrabold">SHSAT Prep</p>
+              <p className="text-xs text-navy/70">Math + ELA</p>
+            </div>
+            <div className="pl-2">
+              <p className="font-extrabold">Digital SAT Prep</p>
+              <p className="text-xs text-navy/70">Math + Reading/Writing</p>
+            </div>
+          </div>
+          <p className="mt-3 flex items-start gap-2 text-xs leading-relaxed text-navy/85 sm:text-sm">
+            <Check size={16} className="mt-0.5 shrink-0 text-blue" aria-hidden="true" />
+            First {FOUNDING_SEATS_PER_COHORT} fully paid students per class. Full-payment deadline: {deadline}, {DEADLINE_TIME_LABEL}.
+          </p>
+        </div>
+      </div>
+
+      <div className="border-t border-gold/30 bg-[#092744]">
+        <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-2 px-4 py-3 sm:px-6 md:flex-row md:items-center md:justify-between md:gap-5">
+          <div className="min-w-0">
+            <p className="text-sm font-extrabold text-gold">Also enrolling: December 5 Digital SAT Final Intensive</p>
+            <p className="text-xs leading-relaxed text-cream/85 sm:text-sm">
+              Rolling admission · Mon–Thu, 6–9 PM · $75 per 3-hour class · Astoria
+            </p>
+          </div>
+          <TrackedLink
+            href="/digital-sat-final-intensive-december-2026"
+            event={EVENTS.programCtaClick}
+            eventProps={{ location: "home_winter_promo", cta: "december_sat_intensive" }}
+            className="inline-flex min-h-10 shrink-0 items-center justify-center gap-1.5 rounded-md border border-gold px-4 text-sm font-extrabold text-gold hover:bg-gold/10"
+          >
+            View SAT Intensive
+            <ArrowRight size={16} aria-hidden="true" />
+          </TrackedLink>
         </div>
       </div>
     </section>
