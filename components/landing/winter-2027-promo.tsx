@@ -62,26 +62,7 @@ export function Winter2027Promo() {
             ))}
           </ul>
 
-          <div className="flex flex-wrap gap-2">
-            <TrackedLink
-              href="/enroll-2027"
-              event={EVENTS.programCtaClick}
-              eventProps={{ location: "home_winter_promo", cta: "enroll_winter_2027" }}
-              className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg bg-gold px-4 py-2.5 text-center text-sm font-extrabold text-navy transition-colors hover:bg-gold-hover sm:flex-none sm:px-6 sm:text-base"
-              style={{ color: "var(--navy)" }}
-            >
-              Enroll for Winter 2027
-              <ArrowRight size={17} className="shrink-0" aria-hidden="true" />
-            </TrackedLink>
-            <TrackedLink
-              href="/free-diagnostic"
-              event={EVENTS.diagnosticCtaClick}
-              eventProps={{ location: "home_winter_promo" }}
-              className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg border border-cream/70 px-4 py-2.5 text-center text-sm font-semibold text-cream hover:bg-cream/10 sm:flex-none"
-            >
-              Free Diagnostic
-            </TrackedLink>
-          </div>
+
         </div>
 
         <div className="min-w-0 rounded-xl border border-gold/45 bg-cream px-5 py-5 text-navy shadow-lg sm:px-6">
@@ -108,6 +89,27 @@ export function Winter2027Promo() {
             <Check size={16} className="mt-0.5 shrink-0 text-blue" aria-hidden="true" />
             First {FOUNDING_SEATS_PER_COHORT} fully paid students per class. Full-payment deadline: {deadline}, {DEADLINE_TIME_LABEL}.
           </p>
+          <div className="mt-4 flex flex-col gap-2 border-t border-navy/15 pt-4 sm:flex-row">
+            <TrackedLink
+              href="/enroll-2027"
+              event={EVENTS.programCtaClick}
+              eventProps={{ location: "home_winter_promo", cta: "enroll_winter_2027" }}
+              className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg bg-gold px-3 py-2 text-center text-sm font-extrabold transition-colors hover:bg-gold-hover"
+              style={{ color: "var(--navy)" }}
+            >
+              Enroll for Winter 2027
+              <ArrowRight size={16} className="shrink-0" aria-hidden="true" />
+            </TrackedLink>
+            <TrackedLink
+              href="/free-diagnostic"
+              event={EVENTS.diagnosticCtaClick}
+              eventProps={{ location: "home_winter_promo" }}
+              className="inline-flex min-h-11 flex-1 items-center justify-center rounded-lg border border-navy px-3 py-2 text-center text-sm font-semibold text-navy transition-colors hover:bg-navy/5"
+              style={{ color: "var(--navy)" }}
+            >
+              Free Diagnostic
+            </TrackedLink>
+          </div>
         </div>
       </div>
 
