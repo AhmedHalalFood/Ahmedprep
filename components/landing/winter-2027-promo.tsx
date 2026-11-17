@@ -36,9 +36,9 @@ const STATS = [
 export function Winter2027Promo() {
   return (
     <section aria-labelledby="winter-2027-promo-title" className="relative overflow-hidden bg-navy text-cream">
-      <div className="lg:grid lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
-        <div className="container flex flex-col gap-6 py-8 md:py-10 lg:w-auto lg:max-w-none lg:py-12 lg:pl-[max(16px,calc((100vw-1180px)/2))] lg:pr-10">
-          <div className="flex flex-col gap-3">
+      <div className="min-w-0 lg:grid lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
+        <div className="container flex min-w-0 w-full max-w-full flex-col gap-6 py-8 md:py-10 lg:w-auto lg:max-w-none lg:py-12 lg:pl-[max(16px,calc((100vw-1180px)/2))] lg:pr-10">
+          <div className="flex min-w-0 flex-col gap-3">
             <span className="inline-flex w-fit items-center gap-2 rounded-full bg-gold px-3 py-1 text-xs font-extrabold uppercase tracking-[0.16em] text-navy">
               <Snowflake size={14} aria-hidden="true" />
               Enrolling now
@@ -46,17 +46,17 @@ export function Winter2027Promo() {
             <h2 id="winter-2027-promo-title" className="text-balance text-3xl font-extrabold leading-tight text-cream md:text-4xl">
               {"Winter 2027 SHSAT & Digital SAT Prep"}
             </h2>
-            <p className="text-pretty text-base leading-relaxed text-cream/85 md:text-lg">
+            <p className="min-w-0 max-w-full text-pretty text-base leading-relaxed text-cream/85 md:text-lg">
               Small-group, in-person preparation in Astoria, Queens.
             </p>
           </div>
 
-          <ul className="grid grid-cols-3 gap-3 md:max-w-xl">
+          <ul className="grid min-w-0 grid-cols-3 gap-2 sm:gap-3 md:max-w-xl">
             {STATS.map(({ icon: Icon, value, detail }) => (
-              <li key={value} className="flex flex-col gap-1 border-l-2 border-gold/60 pl-3">
+              <li key={value} className="flex min-w-0 flex-col gap-1 border-l-2 border-gold/60 pl-2 sm:pl-3">
                 <Icon size={20} aria-hidden="true" className="text-gold" />
-                <span className="text-base font-extrabold leading-tight text-cream md:text-lg">{value}</span>
-                <span className="text-xs leading-snug text-cream/75 md:text-sm">{detail}</span>
+                <span className="break-words text-sm font-extrabold leading-tight text-cream sm:text-base md:text-lg">{value}</span>
+                <span className="break-words text-xs leading-snug text-cream/75 md:text-sm">{detail}</span>
               </li>
             ))}
           </ul>
