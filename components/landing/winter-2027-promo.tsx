@@ -65,7 +65,7 @@ export function Winter2027Promo() {
 
         </div>
 
-        <div className="min-w-0 rounded-xl border border-gold/45 bg-cream px-5 py-5 text-navy shadow-lg sm:px-6">
+        <div className="min-w-0 rounded-xl border border-gold/45 bg-cream px-5 py-4 text-navy shadow-lg sm:px-5">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <p className="text-xs font-extrabold uppercase tracking-wide text-navy/70">Founding-family offer</p>
             <span className="rounded-full bg-gold/30 px-3 py-1 text-xs font-extrabold text-navy">Save {savingsPercent}%</span>
@@ -75,7 +75,7 @@ export function Winter2027Promo() {
             <span className="pb-1 text-sm text-navy/75">Regular <span className="line-through">{dollars(price.regular)}</span></span>
           </div>
           <p className="mt-2 text-sm font-semibold text-navy">SHSAT or Digital SAT · 12-week small-group program</p>
-          <div className="mt-4 grid grid-cols-2 gap-2 border-y border-navy/15 py-3 text-sm">
+          <div className="mt-3 grid grid-cols-2 gap-2 border-y border-navy/15 py-2 text-sm">
             <div className="border-r border-navy/15 pr-2">
               <p className="font-extrabold">SHSAT Prep</p>
               <p className="text-xs text-navy/70">Math + ELA</p>
@@ -85,11 +85,11 @@ export function Winter2027Promo() {
               <p className="text-xs text-navy/70">Math + Reading/Writing</p>
             </div>
           </div>
-          <p className="mt-3 flex items-start gap-2 text-xs leading-relaxed text-navy/85 sm:text-sm">
+          <p className="mt-2 flex items-start gap-2 text-xs leading-snug text-navy/85 sm:text-sm">
             <Check size={16} className="mt-0.5 shrink-0 text-blue" aria-hidden="true" />
             First {FOUNDING_SEATS_PER_COHORT} fully paid students per class. Full-payment deadline: {deadline}, {DEADLINE_TIME_LABEL}.
           </p>
-          <div className="mt-4 flex flex-col gap-2 border-t border-navy/15 pt-4 sm:flex-row">
+          <div className="mt-3 flex flex-col gap-2 border-t border-navy/15 pt-3 sm:flex-row">
             <TrackedLink
               href="/enroll-2027"
               event={EVENTS.programCtaClick}
