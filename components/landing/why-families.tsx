@@ -27,7 +27,7 @@ const REASONS = [
 
 export function WhyFamilies() {
   return (
-    <section id="why-families" aria-labelledby="why-families-title" className="border-b border-line bg-brand-soft/60 py-6">
+    <section id="why-families" aria-labelledby="why-families-title" className="border-b border-line bg-site-canvas py-6">
       <div className="container flex flex-col gap-5 lg:flex-row lg:items-stretch lg:gap-0">
         <div className="flex shrink-0 flex-col gap-1 lg:w-64 lg:justify-center lg:border-r lg:border-line lg:pr-6">
           <p className="eyebrow blue">For parents</p>
