@@ -35,15 +35,16 @@ const STATS = [
 export function Winter2027Promo() {
   return (
     <section id="top" aria-labelledby="winter-2027-promo-title" className="overflow-hidden bg-navy text-cream">
-      <div className="mx-auto grid w-full max-w-[1200px] items-center gap-6 px-4 py-6 sm:px-6 md:py-8 lg:grid-cols-[minmax(0,1.12fr)_minmax(320px,0.88fr)] lg:gap-8">
+      <div className="mx-auto grid w-full max-w-[1200px] items-stretch gap-6 px-4 py-6 sm:px-6 md:py-8 lg:grid-cols-[minmax(0,1.06fr)_minmax(0,0.94fr)] lg:gap-7">
         <TrackedLink
           href="/programs-2027"
           event={EVENTS.programCtaClick}
           eventProps={{ location: "home_winter_promo", cta: "explore_winter_programs" }}
           aria-label="Explore Winter 2027 SHSAT and Digital SAT class schedules"
-          className="flex min-w-0 flex-col gap-4 rounded-lg transition-colors hover:bg-white/5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold"
+          className="flex min-w-0 flex-col justify-between gap-5 rounded-lg py-1 transition-colors hover:bg-white/5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold lg:py-3"
         >
-          <span className="inline-flex w-fit items-center gap-2 rounded-full bg-gold px-3 py-1 text-xs font-extrabold uppercase tracking-wider text-navy">
+          <div className="flex flex-col gap-4">
+            <span className="inline-flex w-fit items-center gap-2 rounded-full bg-gold px-3 py-1 text-xs font-extrabold uppercase tracking-wider text-navy">
             <Snowflake size={14} aria-hidden="true" />
             Winter 2027 · Enrolling now
           </span>
@@ -54,6 +55,7 @@ export function Winter2027Promo() {
             <p className="text-pretty text-sm leading-relaxed text-cream/85 sm:text-base">
               Personally taught by AhmedPrep’s founder. Focused SHSAT and Digital SAT preparation in small groups in Astoria, Queens.
             </p>
+          </div>
           </div>
 
           <ul className="grid min-w-0 grid-cols-3 gap-2 border-y border-gold/25 py-3 sm:gap-4">
@@ -71,7 +73,7 @@ export function Winter2027Promo() {
 
         </TrackedLink>
 
-        <div className="relative min-w-0 rounded-xl border border-gold/45 bg-cream px-5 py-4 text-navy shadow-lg sm:px-5">
+        <div className="relative flex min-w-0 flex-col rounded-xl border border-gold/45 bg-cream px-5 py-5 text-navy shadow-lg sm:px-6">
           <TrackedLink
             href="/enroll-2027"
             event={EVENTS.programCtaClick}
@@ -109,7 +111,7 @@ export function Winter2027Promo() {
               <strong className="block font-extrabold"> Pay in full by {deadline}, {DEADLINE_TIME_LABEL}.</strong>
             </span>
           </p>
-          <div className="relative z-10 mt-3 flex flex-col gap-2 border-t border-navy/15 pt-3 sm:flex-row">
+          <div className="relative z-10 mt-auto flex flex-col gap-2 border-t border-navy/15 pt-4 sm:flex-row">
             <TrackedLink
               href="/enroll-2027"
               event={EVENTS.programCtaClick}
