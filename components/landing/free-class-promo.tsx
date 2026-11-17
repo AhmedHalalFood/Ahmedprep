@@ -9,7 +9,7 @@ export function FreeClassPromo() {
   const day = getNextClassDay()
   const summary = scheduleSummary()
   return (
-    <section id="free-sunday-classes" aria-labelledby="free-class-promo-title" className="scroll-mt-4 border-y border-line bg-cream py-10 md:py-12">
+    <section id="free-sunday-classes" aria-labelledby="free-class-promo-title" className="scroll-mt-4 border-y border-line bg-site-canvas py-10 md:py-12">
       <div className="container grid items-center gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:gap-14">
         <div className="flex flex-col gap-3">
           <p className="eyebrow blue">Free live Sunday test prep</p>
