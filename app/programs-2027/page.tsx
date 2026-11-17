@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { ArrowUpRight } from "lucide-react"
+import { ArrowUpRight, CalendarDays, ClipboardCheck, Info, Laptop, UserRound, Video } from "lucide-react"
 import { ClassFinder } from "@/components/programs/class-finder"
 import { FinderHashRestore } from "@/components/programs/finder-hash-restore"
 import {
@@ -158,34 +158,90 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
       </section>
 
       <section aria-labelledby="more-options-title" id="more-options" className="scroll-mt-28 border-t border-line px-5 py-10">
-        <div className="mx-auto flex max-w-5xl flex-col gap-4">
-          <h2 id="more-options-title" className="text-xl font-extrabold text-navy">
-            Other ways to work with AhmedPrep
-          </h2>
-          <ul className="grid gap-3 md:grid-cols-3">
-            {SECONDARY_OPTIONS.map((option) => (
-              <li key={option.id} className="flex flex-col gap-2 rounded-2xl border border-line bg-paper p-4">
-                <h3 className="font-extrabold text-navy">{option.name}</h3>
-                <p className="text-sm leading-relaxed text-subtle">{option.summary}</p>
-                <p className="text-sm font-semibold text-ink">{option.price ?? "Priced separately — contact AhmedPrep for a quote"}</p>
-                <Link href={option.cta.href} className="mt-auto inline-flex min-h-11 items-center gap-1 text-sm font-bold text-brand underline">
-                  {option.cta.label} <ArrowUpRight size={14} aria-hidden="true" />
-                </Link>
-              </li>
-            ))}
+        <div className="mx-auto flex max-w-5xl flex-col gap-5">
+          <div className="flex flex-col gap-1">
+            <p className="text-xs font-extrabold uppercase tracking-widest text-brand">More ways to get started</p>
+            <h2 id="more-options-title" className="text-xl font-extrabold text-navy">
+              Other ways to work with AhmedPrep
+            </h2>
+          </div>
+          <ul className="grid gap-4 md:grid-cols-3">
+            {SECONDARY_OPTIONS.map((option) => {
+              const Icon = option.id === "free_diagnostic" ? ClipboardCheck : option.id === "free_sunday" ? Video : UserRound
+              const tone =
+                option.id === "free_diagnostic"
+                  ? "border-blue-200 bg-blue-50/50"
+                  : option.id === "free_sunday"
+                    ? "border-amber-200 bg-amber-50/60"
+                    : "border-emerald-200 bg-emerald-50/50"
+              const iconTone =
+                option.id === "free_diagnostic"
+                  ? "bg-blue-100 text-blue-800"
+                  : option.id === "free_sunday"
+                    ? "bg-amber-100 text-amber-900"
+                    : "bg-emerald-100 text-emerald-900"
+              return (
+                <li key={option.id} className={`flex h-full flex-col gap-3 rounded-2xl border p-5 shadow-sm sm:p-6 ${tone}`}>
+                  <span aria-hidden="true" className={`flex size-11 items-center justify-center rounded-xl ${iconTone}`}>
+                    <Icon size={23} />
+                  </span>
+                  <h3 className="text-lg font-extrabold text-navy">{option.name}</h3>
+                  <p className="text-sm leading-relaxed text-ink">{option.summary}</p>
+                  <p className="text-sm font-bold text-navy">{option.price ?? "Priced separately — contact AhmedPrep for a quote"}</p>
+                  <Link href={option.cta.href} className="mt-auto inline-flex min-h-11 items-center gap-2 self-start pt-2 text-sm font-extrabold text-navy underline underline-offset-4 hover:text-brand">
+                    {option.cta.label} <ArrowUpRight size={16} aria-hidden="true" />
+                  </Link>
+                </li>
+              )
+            })}
           </ul>
         </div>
       </section>
 
-      <section className="px-5 pb-12">
-        <div className="mx-auto flex max-w-5xl flex-col gap-4">
-          <div className="flex flex-col gap-3 rounded-2xl border border-line bg-paper p-5">
-            <h2 className="text-xl font-extrabold text-navy">Holiday makeups and free Sunday Zoom</h2>
-            <p className="text-sm text-ink">Winter and Spring makeup instruction is scheduled on select Saturdays from 5:30–8:30 PM. The summer weekend makeup is a daytime session on August 28. Sunday, August 29 is the required final instructional session for both summer intensive cohorts (SHSAT 10 AM–1 PM ET; Digital SAT 2–5 PM ET). Exact makeup assignments remain subject to final curriculum sequencing and calendar verification before publication.</p>
-            <p className="text-sm text-ink">Free Sunday Zoom classes continue every other Sunday in Winter and Spring. Free SHSAT preparation (6:00–6:45 PM ET): focused Math and ELA practice. Free Digital SAT preparation (7:00–7:45 PM ET): focused Math and Reading/Writing practice. A separate RSVP is required for each program. The last session before summer break is June 27, 2027; there are no free Sunday sessions in July or August 2027, and Fall 2027 restart dates have not been announced.</p>
-            <p className="text-sm text-ink">Summer break begins August 30, 2027. Digital SAT students bring their own laptops.</p>
+      <section aria-labelledby="calendar-details-title" className="px-5 pb-12">
+        <div className="mx-auto flex max-w-5xl flex-col gap-5">
+          <h2 id="calendar-details-title" className="text-xl font-extrabold text-navy">
+            Class calendars and free Sunday Zoom
+          </h2>
+          <div className="grid items-stretch gap-4 md:grid-cols-2">
+            <article className="rounded-2xl border border-blue-200 bg-[#F3F8FC] p-5 shadow-sm sm:p-6">
+              <div className="mb-4 flex items-center gap-3">
+                <span aria-hidden="true" className="flex size-10 items-center justify-center rounded-lg bg-blue-100 text-blue-800">
+                  <CalendarDays size={21} />
+                </span>
+                <h3 className="text-lg font-extrabold text-navy">Holiday makeups and summer dates</h3>
+              </div>
+              <div className="space-y-3 text-sm leading-relaxed text-ink">
+                <p><strong className="text-navy">Winter and Spring:</strong> Makeup instruction is scheduled on select Saturdays from 5:30–8:30 PM.</p>
+                <p><strong className="text-navy">Summer weekend makeup:</strong> A daytime session on August 28.</p>
+                <p><strong className="text-navy">Sunday, August 29:</strong> Required final instructional session for both summer intensive cohorts (SHSAT 10 AM–1 PM ET; Digital SAT 2–5 PM ET).</p>
+                <p className="text-subtle">Exact makeup assignments remain subject to final curriculum sequencing and calendar verification before publication.</p>
+              </div>
+            </article>
+            <article className="rounded-2xl border border-amber-200 bg-[#FFFAED] p-5 shadow-sm sm:p-6">
+              <div className="mb-4 flex items-center gap-3">
+                <span aria-hidden="true" className="flex size-10 items-center justify-center rounded-lg bg-amber-100 text-amber-900">
+                  <Video size={21} />
+                </span>
+                <h3 className="text-lg font-extrabold text-navy">Free Sunday Zoom classes</h3>
+              </div>
+              <p className="mb-3 text-sm leading-relaxed text-ink">Free Sunday Zoom classes continue every other Sunday in Winter and Spring.</p>
+              <div className="space-y-2 rounded-xl border border-amber-200 bg-white/85 p-3 text-sm text-ink">
+                <p><strong className="text-navy">SHSAT · 6:00–6:45 PM ET:</strong> Focused Math and ELA practice.</p>
+                <p><strong className="text-navy">Digital SAT · 7:00–7:45 PM ET:</strong> Focused Math and Reading/Writing practice.</p>
+              </div>
+              <p className="mt-3 text-sm font-semibold leading-relaxed text-navy">A separate RSVP is required for each program.</p>
+              <p className="mt-3 text-sm leading-relaxed text-subtle">The last session before summer break is June 27, 2027; there are no free Sunday sessions in July or August 2027, and Fall 2027 restart dates have not been announced.</p>
+            </article>
           </div>
-          <p className="text-sm text-subtle">Submitting an inquiry does not reserve a seat or a discounted tuition rate. Payment, cancellation, and refund terms will be provided before enrollment is finalized.</p>
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 rounded-xl border border-line bg-paper px-4 py-3 text-sm font-semibold text-ink">
+            <span className="inline-flex items-center gap-2"><CalendarDays size={17} aria-hidden="true" className="text-brand" /> Summer break begins August 30, 2027.</span>
+            <span className="inline-flex items-center gap-2"><Laptop size={17} aria-hidden="true" className="text-brand" /> Digital SAT students bring their own laptops.</span>
+          </div>
+          <p className="flex items-start gap-2 text-sm leading-relaxed text-subtle">
+            <Info size={17} aria-hidden="true" className="mt-0.5 shrink-0 text-brand" />
+            Submitting an inquiry does not reserve a seat or a discounted tuition rate. Payment, cancellation, and refund terms will be provided before enrollment is finalized.
+          </p>
         </div>
       </section>
     </div>
