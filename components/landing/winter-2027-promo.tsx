@@ -111,10 +111,10 @@ export function Winter2027Promo() {
         </div>
       </div>
 
-      <div className="border-t-2 border-gold bg-cream text-navy">
-        <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-3 px-4 py-3 sm:px-6 md:flex-row md:items-center md:justify-between md:gap-6">
+      <div className="border-y-2 border-[#dcae36] bg-[#fff0c4] text-navy">
+        <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-3 px-4 py-4 sm:px-6 md:flex-row md:items-center md:justify-between md:gap-6">
           <div className="min-w-0">
-            <p className="text-[11px] font-extrabold uppercase tracking-wider text-blue">Also enrolling now · December 2026</p>
+            <p className="text-[11px] font-extrabold uppercase tracking-wider text-navy/80">Also enrolling now · December 2026</p>
             <p className="mt-0.5 text-base font-extrabold leading-snug text-navy sm:text-lg">Digital SAT Final Intensive</p>
             <p className="mt-0.5 text-xs leading-relaxed text-ink/80 sm:text-sm">
               For the December 5 SAT · Rolling enrollment · Mon–Thu, 6–9 PM ET · $75 per 3-hour class
