@@ -18,7 +18,7 @@ import {
   priceFor,
 } from "@/lib/cohorts-2027"
 import { isCohortFull } from "@/lib/cohort-capacity"
-import { cohortHref, parseFinder } from "@/lib/program-finder"
+import { parseFinder } from "@/lib/program-finder"
 import { getProgram } from "@/lib/programs"
 import { absoluteUrl } from "@/lib/seo"
 
@@ -100,14 +100,18 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
                         return (
                           <tr
                             key={c.id}
-                            className={`border-b border-line last:border-b-0 ${
-                              c.program === "SHSAT" ? "bg-blue-50/60 hover:bg-blue-50" : "bg-emerald-50/60 hover:bg-emerald-50"
+                            className={`relative cursor-pointer border-b border-line last:border-b-0 ${
+                              c.program === "SHSAT" ? "bg-blue-50/60 hover:bg-blue-100/70" : "bg-emerald-50/60 hover:bg-emerald-100/70"
                             }`}
                           >
                             <th scope="row" className={`border-l-4 py-2 pl-3 pr-3 font-bold ${
                               c.program === "SHSAT" ? "border-blue-500 text-blue-900" : "border-emerald-600 text-emerald-900"
                             }`}>
-                              <Link href={cohortHref(c)} className="underline underline-offset-4">
+                              <Link
+                                href={`/enroll-2027?cohort=${encodeURIComponent(c.id)}`}
+                                aria-label={`Review and request enrollment for ${c.program} ${c.label}, ${term.name}`}
+                                className="underline underline-offset-4 after:absolute after:inset-0 after:z-10 focus-visible:outline-none focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:-outline-offset-2 focus-visible:after:outline-navy"
+                              >
                                 {c.program} · {c.label}
                               </Link>
                             </th>
