@@ -11,7 +11,8 @@ const DETAILS = [
 
 /** Temporary promotion for the December 2026 intensive. Renders nothing once the last class has started. */
 export function SatIntensiveAnnouncement() {
-  if (!satIntensiveUrgency()) return null
+  const urgency = satIntensiveUrgency()
+  if (!urgency) return null
 
   return (
     <section aria-labelledby="sat-intensive-announcement-title" className="bg-cream py-3 md:py-4">
@@ -21,9 +22,15 @@ export function SatIntensiveAnnouncement() {
 
           <div className="flex flex-col gap-4 px-5 py-5 md:px-8 md:py-6 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
             <div className="flex min-w-0 flex-col gap-3">
-              <span className="inline-flex w-fit items-center rounded-full bg-gold px-3 py-1 text-xs font-extrabold uppercase tracking-[0.18em] text-navy">
-                Dec 5 SAT
-              </span>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-100 px-3 py-1.5 text-xs font-extrabold uppercase tracking-wide text-emerald-900">
+                  <span aria-hidden="true" className="size-2 rounded-full bg-emerald-600" />
+                  {urgency.isFirstClass ? "Enrollment Open" : "Classes Underway · Enrollment Open"}
+                </span>
+                <span className="inline-flex items-center rounded-full bg-gold px-3 py-1.5 text-xs font-extrabold uppercase tracking-wider text-navy">
+                  Dec 5 SAT
+                </span>
+              </div>
               <div className="flex flex-col gap-1">
                 <h2
                   id="sat-intensive-announcement-title"
@@ -31,9 +38,12 @@ export function SatIntensiveAnnouncement() {
                 >
                   Digital SAT Final Intensive
                 </h2>
-                <p className="text-pretty text-sm leading-relaxed text-ink md:text-base">
-                  Focused preparation for the December 5, 2026 SAT.
+                <p className="text-pretty text-sm font-semibold leading-relaxed text-ink md:text-base">
+                  {urgency.isFirstClass
+                    ? "Starting November 16. Rolling enrollment is open for the December 5 SAT."
+                    : "Classes started November 16. New students can request to join the remaining sessions for the December 5 SAT."}
                 </p>
+                <p className="text-sm font-extrabold text-blue-800">{urgency.nextClassLabel}</p>
               </div>
               <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-ink">
                 {DETAILS.map(({ icon: Icon, label }) => (
@@ -50,11 +60,11 @@ export function SatIntensiveAnnouncement() {
                 href={`${SAT_INTENSIVE_PATH}#register`}
                 className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-gold px-6 text-base font-extrabold text-navy shadow-sm transition-colors hover:bg-gold/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
               >
-                Request Enrollment
+                Request to Join
                 <ArrowRight size={18} aria-hidden="true" className="shrink-0" />
               </Link>
               <p className="text-pretty text-xs leading-relaxed text-subtle lg:max-w-56">
-                Rolling enrollment available. Contact AhmedPrep for remaining sessions.
+                Rolling enrollment for remaining classes. Seat availability is confirmed by AhmedPrep.
               </p>
             </div>
           </div>
