@@ -19,12 +19,42 @@ import {
 import { WAITLIST_DISCLAIMER, enrollActionFor } from "@/lib/cohort-capacity"
 import { ENROLLMENT_ACTIONS, REQUEST_NOT_GUARANTEE } from "@/lib/enrollment-2027"
 import { FINDER_ID, FORMAT_LABEL, programsHref, type FinderState } from "@/lib/program-finder"
-import { NEUTRAL_TONE, PROGRAM_TONE } from "@/components/programs/program-tone"
+import { PROGRAM_TONE } from "@/components/programs/program-tone"
 import { EnrollmentHelp } from "@/components/enroll-2027/enrollment-help"
 import { PayNowSlot } from "@/components/enroll-2027/pay-now-slot"
 
 const START_ICON: Record<TermId, LucideIcon> = { winter: Snowflake, spring: Leaf, summer: Sun }
 const PROGRAM_ICON: Record<ProgramId, LucideIcon> = { SHSAT: BookOpen, "Digital SAT": Laptop }
+
+// Each season has its own subtle tint; program colors remain blue for SHSAT and sage for Digital SAT.
+const SEASON_TONE: Record<TermId, Tone & { idle: string; icon: string }> = {
+  winter: {
+    selected: "border-blue-600 bg-blue-50",
+    ring: "ring-2 ring-blue-200",
+    badge: "bg-blue-700 text-white",
+    idle: "border-blue-200 bg-blue-50/70 hover:border-blue-500",
+    icon: "text-blue-700",
+  },
+  spring: {
+    selected: "border-emerald-600 bg-emerald-50",
+    ring: "ring-2 ring-emerald-200",
+    badge: "bg-emerald-700 text-white",
+    idle: "border-emerald-200 bg-emerald-50/70 hover:border-emerald-500",
+    icon: "text-emerald-700",
+  },
+  summer: {
+    selected: "border-amber-600 bg-amber-50",
+    ring: "ring-2 ring-amber-200",
+    badge: "bg-amber-700 text-white",
+    idle: "border-amber-200 bg-amber-50/70 hover:border-amber-500",
+    icon: "text-amber-700",
+  },
+}
+
+const PROGRAM_IDLE: Record<ProgramId, string> = {
+  SHSAT: "border-brand/30 bg-brand-soft/50 hover:border-brand",
+  "Digital SAT": "border-sage/40 bg-sage-soft/60 hover:border-sage",
+}
 
 const optionBase =
   "group relative flex h-full min-h-16 items-center gap-3 rounded-xl border-2 p-4 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
@@ -52,13 +82,13 @@ function Step({ n, title, done, children }: { n: number; title: string; done: bo
 
 type Tone = { selected: string; ring: string; badge: string }
 
-function OptionLink({ href, selected, tone, children }: { href: string; selected: boolean; tone: Tone; children: React.ReactNode }) {
+function OptionLink({ href, selected, tone, idleTone = optionIdle, children }: { href: string; selected: boolean; tone: Tone; idleTone?: string; children: React.ReactNode }) {
   return (
     <Link
       href={href}
       scroll={false}
       aria-current={selected ? "true" : undefined}
-      className={`${optionBase} ${selected ? `${tone.selected} ${tone.ring}` : optionIdle}`}
+      className={`${optionBase} ${selected ? `${tone.selected} ${tone.ring}` : idleTone}`}
     >
       <span className="flex min-w-0 flex-1 flex-col gap-0.5">{children}</span>
       {selected ? (
@@ -75,7 +105,6 @@ function OptionLink({ href, selected, tone, children }: { href: string; selected
 
 export function ClassFinder({ state, full }: { state: FinderState; full: (cohortId: string) => boolean }) {
   const { season, program, format, formats, cohort } = state
-  const programTone = program ? PROGRAM_TONE[program] : NEUTRAL_TONE
   return (
     <section id={FINDER_ID} aria-labelledby="finder-title" className="scroll-mt-28 px-5 py-10">
       <div className="mx-auto flex max-w-5xl flex-col gap-6">
@@ -106,9 +135,9 @@ export function ClassFinder({ state, full }: { state: FinderState; full: (cohort
                 const Icon = START_ICON[term.id]
                 return (
                   <li key={term.id}>
-                    <OptionLink href={programsHref({ season: term.id, program })} selected={season === term.id} tone={programTone}>
+                    <OptionLink href={programsHref({ season: term.id, program })} selected={season === term.id} tone={SEASON_TONE[term.id]} idleTone={SEASON_TONE[term.id].idle}>
                       <span className="flex items-center gap-2 font-extrabold text-navy">
-                        <Icon size={20} aria-hidden="true" className={program ? PROGRAM_TONE[program].text : "text-brand"} />
+                        <Icon size={20} aria-hidden="true" className={SEASON_TONE[term.id].icon} />
                         {termStartLabel(term.id)}
                       </span>
                       <span className="text-sm text-ink">{formatRange(s.startIso, s.endIso)}</span>
@@ -130,7 +159,7 @@ export function ClassFinder({ state, full }: { state: FinderState; full: (cohort
                   const Icon = PROGRAM_ICON[p]
                   return (
                     <li key={p}>
-                      <OptionLink href={programsHref({ season, program: p })} selected={program === p} tone={tone}>
+                      <OptionLink href={programsHref({ season, program: p })} selected={program === p} tone={tone} idleTone={PROGRAM_IDLE[p]}>
                         <span className="flex items-center gap-3">
                           <span className={`flex size-10 shrink-0 items-center justify-center rounded-lg ${tone.badge}`} aria-hidden="true">
                             <Icon size={20} />
@@ -153,7 +182,7 @@ export function ClassFinder({ state, full }: { state: FinderState; full: (cohort
               <ul className={`grid gap-3 ${formats.length === 2 ? "sm:grid-cols-2" : "sm:grid-cols-3"}`}>
                 {formats.map(({ slug, cohort: c }) => (
                   <li key={slug}>
-                    <OptionLink href={programsHref({ season, program, format: slug })} selected={format === slug} tone={PROGRAM_TONE[program]}>
+                    <OptionLink href={programsHref({ season, program, format: slug })} selected={format === slug} tone={PROGRAM_TONE[program]} idleTone={PROGRAM_IDLE[program]}>
                       <span className="font-extrabold text-navy">{FORMAT_LABEL[slug]}</span>
                       <span className="text-sm text-ink">{cohortSchedule(c)}</span>
                       <span className="text-sm text-subtle">
