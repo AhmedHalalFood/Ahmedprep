@@ -82,27 +82,32 @@ export function Winter2027Promo() {
             <span className="sr-only">Review the Winter 2027 founding-family offer and enrollment</span>
           </TrackedLink>
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <p className="text-xs font-extrabold uppercase tracking-wide text-navy/70">Founding-family offer</p>
-            <span className="rounded-full bg-gold/30 px-3 py-1 text-xs font-extrabold text-navy">Save {savingsPercent}%</span>
+            <p className="text-base font-extrabold text-navy">Founding-family tuition</p>
+            <span className="rounded-full border border-[#D9A42B] bg-[#F5CC59] px-3 py-1.5 text-xs font-black text-[#102F51] shadow-sm">
+              Save {dollars(savings)} ({savingsPercent}%)
+            </span>
           </div>
           <div className="mt-2 flex flex-wrap items-end gap-x-4 gap-y-1">
             <span className="text-4xl font-black leading-none tracking-tight sm:text-5xl">{dollars(founding)}</span>
             <span className="pb-1 text-sm text-navy/75">Regular <span className="line-through">{dollars(price.regular)}</span></span>
           </div>
-          <p className="mt-2 text-sm font-semibold text-navy">SHSAT or Digital SAT · 12-week small-group program</p>
+          <p className="mt-2 text-sm font-semibold text-navy">For SHSAT or Digital SAT · 72 hours of instruction</p>
           <div className="mt-3 grid grid-cols-2 gap-2 border-y border-navy/15 py-2 text-sm">
-            <div className="border-r border-navy/15 pr-2">
-              <p className="font-extrabold">SHSAT Prep</p>
-              <p className="text-xs text-navy/70">Math + ELA</p>
+            <div className="rounded-lg border border-[#B7D5E7] bg-[#E8F2FA] px-3 py-2">
+              <p className="font-extrabold text-[#174D7C]">SHSAT Prep</p>
+              <p className="text-xs font-medium text-[#375C79]">Math + ELA</p>
             </div>
-            <div className="pl-2">
-              <p className="font-extrabold">Digital SAT Prep</p>
-              <p className="text-xs text-navy/70">Math + Reading/Writing</p>
+            <div className="rounded-lg border border-[#A9D5C5] bg-[#E6F4ED] px-3 py-2">
+              <p className="font-extrabold text-[#086347]">Digital SAT Prep</p>
+              <p className="text-xs font-medium text-[#275C4B]">Math + Reading/Writing</p>
             </div>
           </div>
-          <p className="mt-2 flex items-start gap-2 text-xs leading-snug text-navy/85 sm:text-sm">
-            <Check size={16} className="mt-0.5 shrink-0 text-blue" aria-hidden="true" />
-            First {FOUNDING_SEATS_PER_COHORT} fully paid students per class. Full-payment deadline: {deadline}, {DEADLINE_TIME_LABEL}.
+          <p className="mt-3 flex items-start gap-2 text-xs font-medium leading-snug text-navy sm:text-sm">
+            <Check size={16} className="mt-0.5 shrink-0 text-[#087850]" aria-hidden="true" />
+            <span>
+              For the first {FOUNDING_SEATS_PER_COHORT} fully paid students per class.
+              <strong className="block font-extrabold"> Pay in full by {deadline}, {DEADLINE_TIME_LABEL}.</strong>
+            </span>
           </p>
           <div className="relative z-10 mt-3 flex flex-col gap-2 border-t border-navy/15 pt-3 sm:flex-row">
             <TrackedLink
@@ -119,10 +124,10 @@ export function Winter2027Promo() {
               href="/free-diagnostic"
               event={EVENTS.diagnosticCtaClick}
               eventProps={{ location: "home_winter_promo" }}
-              className="inline-flex min-h-11 flex-1 items-center justify-center rounded-lg border border-navy px-3 py-2 text-center text-sm font-semibold text-navy transition-colors hover:bg-navy/5"
-              style={{ color: "var(--navy)" }}
+              className="inline-flex min-h-11 flex-1 items-center justify-center rounded-lg border-2 border-[#153D64] bg-[#153D64] px-3 py-2 text-center text-sm font-extrabold transition-colors hover:bg-[#285781] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#153D64]"
+              style={{ color: "#FFFFFF" }}
             >
-              Free Diagnostic
+              <span style={{ color: "#FFFFFF" }}>Free Diagnostic</span>
             </TrackedLink>
           </div>
         </div>
