@@ -62,29 +62,10 @@ export function Winter2027Promo() {
             ))}
           </ul>
 
-          <div className="flex flex-wrap gap-2">
-            <TrackedLink
-              href="/enroll-2027"
-              event={EVENTS.programCtaClick}
-              eventProps={{ location: "home_winter_promo", cta: "enroll_winter_2027" }}
-              className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg bg-gold px-4 py-2.5 text-center text-sm font-extrabold text-navy transition-colors hover:bg-gold-hover sm:flex-none sm:px-6 sm:text-base"
-              style={{ color: "var(--navy)" }}
-            >
-              Enroll for Winter 2027
-              <ArrowRight size={17} className="shrink-0" aria-hidden="true" />
-            </TrackedLink>
-            <TrackedLink
-              href="/free-diagnostic"
-              event={EVENTS.diagnosticCtaClick}
-              eventProps={{ location: "home_winter_promo" }}
-              className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg border border-cream/70 px-4 py-2.5 text-center text-sm font-semibold text-cream hover:bg-cream/10 sm:flex-none"
-            >
-              Free Diagnostic
-            </TrackedLink>
-          </div>
+
         </div>
 
-        <div className="min-w-0 rounded-xl border border-gold/45 bg-cream px-5 py-5 text-navy shadow-lg sm:px-6">
+        <div className="min-w-0 rounded-xl border border-gold/45 bg-cream px-5 py-4 text-navy shadow-lg sm:px-5">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <p className="text-xs font-extrabold uppercase tracking-wide text-navy/70">Founding-family offer</p>
             <span className="rounded-full bg-gold/30 px-3 py-1 text-xs font-extrabold text-navy">Save {savingsPercent}%</span>
@@ -94,7 +75,7 @@ export function Winter2027Promo() {
             <span className="pb-1 text-sm text-navy/75">Regular <span className="line-through">{dollars(price.regular)}</span></span>
           </div>
           <p className="mt-2 text-sm font-semibold text-navy">SHSAT or Digital SAT · 12-week small-group program</p>
-          <div className="mt-4 grid grid-cols-2 gap-2 border-y border-navy/15 py-3 text-sm">
+          <div className="mt-3 grid grid-cols-2 gap-2 border-y border-navy/15 py-2 text-sm">
             <div className="border-r border-navy/15 pr-2">
               <p className="font-extrabold">SHSAT Prep</p>
               <p className="text-xs text-navy/70">Math + ELA</p>
@@ -104,17 +85,38 @@ export function Winter2027Promo() {
               <p className="text-xs text-navy/70">Math + Reading/Writing</p>
             </div>
           </div>
-          <p className="mt-3 flex items-start gap-2 text-xs leading-relaxed text-navy/85 sm:text-sm">
+          <p className="mt-2 flex items-start gap-2 text-xs leading-snug text-navy/85 sm:text-sm">
             <Check size={16} className="mt-0.5 shrink-0 text-blue" aria-hidden="true" />
             First {FOUNDING_SEATS_PER_COHORT} fully paid students per class. Full-payment deadline: {deadline}, {DEADLINE_TIME_LABEL}.
           </p>
+          <div className="mt-3 flex flex-col gap-2 border-t border-navy/15 pt-3 sm:flex-row">
+            <TrackedLink
+              href="/enroll-2027"
+              event={EVENTS.programCtaClick}
+              eventProps={{ location: "home_winter_promo", cta: "enroll_winter_2027" }}
+              className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg bg-gold px-3 py-2 text-center text-sm font-extrabold transition-colors hover:bg-gold-hover"
+              style={{ color: "var(--navy)" }}
+            >
+              Enroll for Winter 2027
+              <ArrowRight size={16} className="shrink-0" aria-hidden="true" />
+            </TrackedLink>
+            <TrackedLink
+              href="/free-diagnostic"
+              event={EVENTS.diagnosticCtaClick}
+              eventProps={{ location: "home_winter_promo" }}
+              className="inline-flex min-h-11 flex-1 items-center justify-center rounded-lg border border-navy px-3 py-2 text-center text-sm font-semibold text-navy transition-colors hover:bg-navy/5"
+              style={{ color: "var(--navy)" }}
+            >
+              Free Diagnostic
+            </TrackedLink>
+          </div>
         </div>
       </div>
 
-      <div className="border-t-2 border-gold bg-cream text-navy">
-        <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-3 px-4 py-3 sm:px-6 md:flex-row md:items-center md:justify-between md:gap-6">
+      <div className="border-y-2 border-[#dcae36] bg-[#fff0c4] text-navy">
+        <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-3 px-4 py-4 sm:px-6 md:flex-row md:items-center md:justify-between md:gap-6">
           <div className="min-w-0">
-            <p className="text-[11px] font-extrabold uppercase tracking-wider text-blue">Also enrolling now · December 2026</p>
+            <p className="text-[11px] font-extrabold uppercase tracking-wider text-navy/80">Also enrolling now · December 2026</p>
             <p className="mt-0.5 text-base font-extrabold leading-snug text-navy sm:text-lg">Digital SAT Final Intensive</p>
             <p className="mt-0.5 text-xs leading-relaxed text-ink/80 sm:text-sm">
               For the December 5 SAT · Rolling enrollment · Mon–Thu, 6–9 PM ET · $75 per 3-hour class

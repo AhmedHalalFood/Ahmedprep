@@ -52,14 +52,18 @@ export function SatIntensiveCurriculum() {
                 </span>
                 {title}
               </h3>
-              <ul className="grid gap-x-4 gap-y-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-                {topics.map((topic) => (
-                  <li key={topic} className="flex items-start gap-2 text-sm font-semibold leading-snug text-ink">
-                    <Check size={16} strokeWidth={3} className="mt-0.5 shrink-0 text-gold-deep" aria-hidden="true" />
-                    {topic}
-                  </li>
+              <div className="grid gap-x-4 gap-y-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+                {[0, 1].map((column) => (
+                  <ul key={column} className="flex min-w-0 flex-col gap-2">
+                    {topics.filter((_, index) => index % 2 === column).map((topic) => (
+                      <li key={topic} className="flex items-start gap-2 text-sm font-semibold leading-snug text-ink">
+                        <Check size={16} strokeWidth={3} className="mt-0.5 shrink-0 text-gold-deep" aria-hidden="true" />
+                        <span>{topic}</span>
+                      </li>
+                    ))}
+                  </ul>
                 ))}
-              </ul>
+              </div>
             </article>
           ))}
           <div className="relative hidden overflow-hidden rounded-xl lg:block">
