@@ -46,7 +46,7 @@ export function Winter2027Promo() {
               Winter SHSAT &amp; Digital SAT Prep
             </h1>
             <p className="text-pretty text-sm leading-relaxed text-cream/85 sm:text-base">
-              Structured Math, ELA &amp; Reading &amp; Writing instruction with guided practice and progress checks. Small in-person classes in Astoria, Queens.
+              Classes personally taught by Tariq Ahmed. Focused SHSAT and Digital SAT preparation in small groups in Astoria, Queens.
             </p>
           </div>
 
