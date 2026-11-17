@@ -12,11 +12,11 @@ export function ThisSundayStrip({ location }: { location: string }) {
   const single = day.sessions.length === 1
   const headingId = `this-sunday-${location}`
   return (
-    <section aria-labelledby={headingId} className="border-y border-line bg-warm py-8">
-      <div className="container flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+    <section aria-labelledby={headingId} className="border-y border-line bg-white py-8 md:py-10">
+      <div className="container relative flex flex-col gap-5 overflow-hidden rounded-2xl border border-[#E8D8AA] bg-[#FFF9EB] px-5 py-6 shadow-sm md:px-8 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex flex-col gap-3">
           <div className="flex flex-wrap items-center gap-3">
-            <p id={headingId} className="text-xs font-extrabold uppercase tracking-[0.2em] text-gold-deep">
+            <p id={headingId} className="text-xs font-extrabold uppercase tracking-[0.16em] text-[#8A5C08]">
               {isTodayInNewYork(day.isoDate) ? "Today" : "Next class Sunday"} at AhmedPrep
             </p>
             {day.sessions.map((s) => (
@@ -59,10 +59,10 @@ export function ThisSundayStrip({ location }: { location: string }) {
 function PausedStrip({ location }: { location: string }) {
   const headingId = `this-sunday-${location}`
   return (
-    <section aria-labelledby={headingId} className="border-y border-line bg-warm py-8">
-      <div className="container flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+    <section aria-labelledby={headingId} className="border-y border-line bg-white py-8 md:py-10">
+      <div className="container relative flex flex-col gap-5 overflow-hidden rounded-2xl border border-[#E8D8AA] bg-[#FFF9EB] px-5 py-6 shadow-sm md:px-8 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex flex-col gap-2">
-          <p id={headingId} className="text-xs font-extrabold uppercase tracking-[0.2em] text-gold-deep">
+          <p id={headingId} className="text-xs font-extrabold uppercase tracking-[0.16em] text-[#8A5C08]">
             Free Sunday classes at AhmedPrep
           </p>
           <p className="text-pretty text-xl font-extrabold leading-snug text-navy">{PAUSE_ANNOUNCEMENT}</p>
@@ -72,7 +72,7 @@ function PausedStrip({ location }: { location: string }) {
           href={FREE_CLASS.path}
           event={EVENTS.sundayClassCtaClick}
           eventProps={{ location: `this_sunday_strip_${location}`, class_date: "paused" }}
-          className="button button-outline shrink-0 justify-center"
+          className="button button-gold min-h-12 shrink-0 justify-center rounded-lg px-6 font-extrabold shadow-sm"
         >
           See the January Schedule <ArrowUpRight size={17} aria-hidden="true" />
         </TrackedLink>
