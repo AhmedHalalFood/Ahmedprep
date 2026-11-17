@@ -15,8 +15,10 @@ export function ProgramHero({
   location,
   serviceArea,
   actions,
+  balancedActions = false,
 }: {
   actions?: ReactNode
+  balancedActions?: boolean
   eyebrow: string
   title: string
   intro: string
@@ -29,7 +31,7 @@ export function ProgramHero({
 }) {
   return (
     <section aria-labelledby={`${location}-hero-title`} className="border-b border-line bg-white">
-      <div className="container grid gap-10 py-14 md:py-20 lg:grid-cols-[1.25fr_1fr] lg:items-center lg:gap-16">
+      <div className={`container grid gap-8 py-14 md:py-20 lg:items-center ${balancedActions ? "lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] lg:gap-8" : "lg:grid-cols-[1.25fr_1fr] lg:gap-16"}`}>
         <div className="flex flex-col gap-6">
           <p className="eyebrow blue">{eyebrow}</p>
           <h1
