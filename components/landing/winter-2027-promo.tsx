@@ -124,10 +124,11 @@ export function Winter2027Promo() {
             href="/digital-sat-final-intensive-december-2026"
             event={EVENTS.programCtaClick}
             eventProps={{ location: "home_winter_promo", cta: "december_sat_intensive" }}
-            className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-md bg-navy px-5 py-2.5 text-sm font-extrabold text-cream transition-colors hover:bg-blue"
+            className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-md bg-navy px-5 py-2.5 text-sm font-extrabold transition-colors hover:bg-blue"
+            style={{ color: "#ffffff" }}
           >
-            View Intensive &amp; Enroll
-            <ArrowRight size={16} aria-hidden="true" />
+            <span style={{ color: "#ffffff" }}>View Intensive &amp; Enroll</span>
+            <ArrowRight size={16} aria-hidden="true" style={{ color: "#ffffff" }} />
           </TrackedLink>
         </div>
       </div>
