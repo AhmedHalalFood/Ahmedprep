@@ -30,7 +30,7 @@ export function ProgramHero({
   location: string
 }) {
   return (
-    <section aria-labelledby={`${location}-hero-title`} className="border-b border-line bg-white">
+    <section aria-labelledby={`${location}-hero-title`} className="border-b border-line bg-site-canvas">
       <div className={`container grid gap-8 py-14 md:py-20 lg:items-center ${balancedActions ? "lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] lg:gap-8" : "lg:grid-cols-[1.25fr_1fr] lg:gap-16"}`}>
         <div className="flex flex-col gap-6">
           <p className="eyebrow blue">{eyebrow}</p>
@@ -58,7 +58,7 @@ export function ProgramHero({
             </div>
           )}
         </div>
-        <div className="border border-line border-t-4 border-t-gold bg-warm p-6 md:p-8">
+        <div className="border border-line border-t-4 border-t-gold bg-paper p-6 md:p-8">
           <h2 className="text-lg font-extrabold text-navy">{benefitsTitle}</h2>
           <ul className="mt-5 flex flex-col gap-4">
             {benefits.map((benefit) => (
