@@ -1,34 +1,48 @@
-import Link from "next/link"
 import { ArrowRight, Megaphone } from "lucide-react"
+import { TrackedLink } from "@/components/tracked-link"
+import { EVENTS } from "@/lib/analytics"
 import { SAT_INTENSIVE_PATH, satIntensiveUrgency } from "@/lib/sat-final-intensive"
 
-/** Slim homepage bar for the December 2026 intensive. Renders nothing once the last class has started. */
+/** Single clickable December intensive announcement, automatically removed when all classes have begun. */
 export function SatIntensiveAnnouncementBar() {
-  if (!satIntensiveUrgency()) return null
+  const urgency = satIntensiveUrgency()
+  if (!urgency) return null
 
   return (
-    <aside aria-label="December 5 Digital SAT Final Intensive" className="border-y border-gold-deep/20 bg-gold text-navy">
-      <div className="container flex flex-wrap items-center justify-between gap-x-6 gap-y-2 py-2">
-        <div className="flex min-w-0 flex-wrap items-center gap-x-4 gap-y-1">
-          <p className="flex items-center gap-2 text-sm font-extrabold leading-snug md:text-base">
-            <Megaphone size={18} aria-hidden="true" className="shrink-0" />
-            Dec 5 Digital SAT Final Intensive
-          </p>
-          <p className="text-xs font-semibold leading-snug text-navy/85 md:border-l md:border-navy/30 md:pl-4 md:text-sm">
-            Rolling enrollment
-            <span aria-hidden="true"> · </span>
-            <span className="sr-only">, </span>
-            Mon – Thu, 6:00 – 9:00 PM
-          </p>
-        </div>
-        <Link
+    <aside aria-label="December 5th Digital SAT Final Intensive enrollment" className="border-y border-[#E7D8B9] bg-[#FFF8E8] text-navy">
+      <div className="container py-2.5 md:py-3">
+        <TrackedLink
           href={`${SAT_INTENSIVE_PATH}#register`}
-          style={{ color: "var(--cream)" }}
-          className="inline-flex min-h-9 items-center gap-1.5 rounded-md bg-navy px-3 text-sm font-bold transition-colors hover:bg-navy/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
+          event={EVENTS.programCtaClick}
+          eventProps={{ location: "home_dec_sat_announcement", cta: "join_remaining_classes" }}
+          className="group flex min-w-0 flex-col gap-3 rounded-xl border border-[#DFC99E] bg-[#FFFCF5] px-4 py-3 shadow-sm transition-all hover:border-[#C9A968] hover:bg-white hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#16476A] lg:flex-row lg:items-center lg:justify-between lg:gap-6"
         >
-          Request Enrollment
-          <ArrowRight size={15} aria-hidden="true" className="shrink-0" />
-        </Link>
+          <div className="flex min-w-0 flex-col gap-1.5">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-gold px-3 py-1 text-navy">
+                <Megaphone size={15} aria-hidden="true" className="shrink-0" />
+                <span className="text-[11px] font-extrabold uppercase tracking-wide">December 5th</span>
+                <strong className="text-base font-black uppercase leading-none tracking-tight">SAT</strong>
+              </span>
+              <span className="inline-flex items-center gap-2 rounded-full border border-emerald-400 bg-[#D7F6E4] px-3 py-1.5 text-xs font-extrabold text-[#07583C]">
+                <span aria-hidden="true" className="size-2.5 shrink-0 rounded-full bg-emerald-600 ring-[3px] ring-emerald-200 motion-safe:animate-pulse" />
+                {urgency.isFirstClass ? "Classes Starting · Enrollment Open" : "Classes Underway · Enrollment Open Now"}
+              </span>
+            </div>
+            <div className="flex flex-col gap-0.5 sm:flex-row sm:flex-wrap sm:items-baseline sm:gap-x-4">
+              <p className="text-base font-extrabold leading-snug text-navy md:text-lg">Digital SAT Final Intensive</p>
+              <p className="text-xs font-medium leading-relaxed text-ink md:text-sm">
+                Mon–Thu, 6–9 PM · Astoria, Queens · $75 per 3-hour class
+              </p>
+            </div>
+          </div>
+          <span
+            aria-hidden="true"
+            className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 self-start rounded-lg bg-gold px-5 py-2.5 text-sm font-extrabold text-[#102F51] shadow-sm transition-colors group-hover:bg-[#F5CF62] lg:self-center"
+          >
+            Join Remaining Classes <ArrowRight size={16} aria-hidden="true" />
+          </span>
+        </TrackedLink>
       </div>
     </aside>
   )
