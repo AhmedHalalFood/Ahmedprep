@@ -127,6 +127,7 @@ export default function DigitalSatPrepPage() {
       <Breadcrumbs items={[{ label: "Digital SAT Prep", href: PATH }]} />
       <ProgramHero
         location="digital_sat"
+        balancedActions
         eyebrow="SAT tutoring in NYC · Astoria, Queens"
         title="Digital SAT Prep in Astoria, Queens"
         serviceArea={`Small-group, in-person Digital SAT prep in Astoria for high school students across Queens and NYC. Maximum ${MAX_CLASS_SIZE} students per class.`}
@@ -135,7 +136,7 @@ export default function DigitalSatPrepPage() {
         benefits={benefits}
         ctaLabel="Book Free Diagnostic"
         ctaEvent={EVENTS.digitalSatCtaClick}
-        actions={<ProgramCtas program="Digital SAT" location="digital_sat_hero" diagnosticEvent={EVENTS.digitalSatCtaClick} />}
+        actions={<ProgramCtas program="Digital SAT" location="digital_sat_hero" diagnosticEvent={EVENTS.digitalSatCtaClick} compact />}
       />
 
       <SatIntensiveAnnouncement />
