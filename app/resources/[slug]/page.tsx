@@ -82,6 +82,36 @@ export default async function ResourcePage({ params }: { params: Promise<{ slug:
               <p className="text-pretty text-lg leading-relaxed text-subtle">{resource.description}</p>
             )}
             </div>
+            {resource.slug === "shsat-math-practice" && (
+              <section aria-labelledby="math-winter-enrollment-title" className="mt-8 rounded-xl border border-gold/50 bg-warm p-5 sm:p-6">
+                <p className="text-xs font-extrabold uppercase tracking-wider text-brand">Winter 2027 · Enrollment open</p>
+                <h2 id="math-winter-enrollment-title" className="mt-1 text-xl font-extrabold text-navy">
+                  Build SHSAT Math skills with small-group instruction
+                </h2>
+                <p className="mt-2 text-sm leading-relaxed text-ink">
+                  In-person SHSAT preparation in Astoria, personally taught by AhmedPrep&apos;s founder.
+                  12 weeks, 72 instructional hours, maximum 12 students per class.
+                </p>
+                <div className="mt-4 flex flex-wrap gap-3">
+                  <TrackedLink
+                    href="/enroll-2027"
+                    event={EVENTS.programCtaClick}
+                    eventProps={{ location: "resource_shsat_math_practice_winter_2027", cta: "winter_enrollment" }}
+                    className="button button-gold"
+                  >
+                    Explore Winter Classes <ArrowUpRight size={15} aria-hidden="true" />
+                  </TrackedLink>
+                  <TrackedLink
+                    href="/free-diagnostic"
+                    event={EVENTS.diagnosticCtaClick}
+                    eventProps={{ location: "resource_shsat_math_practice_winter_2027" }}
+                    className="button button-outline"
+                  >
+                    Free Diagnostic
+                  </TrackedLink>
+                </div>
+              </section>
+            )}
             <div className="mt-10 flex flex-col gap-10">
               {resource.sections.map((section) => (
                 <section key={section.heading}>
