@@ -82,6 +82,36 @@ export default async function ResourcePage({ params }: { params: Promise<{ slug:
               <p className="text-pretty text-lg leading-relaxed text-subtle">{resource.description}</p>
             )}
             </div>
+            {resource.category === "Digital SAT" && (
+              <section aria-labelledby="sat-winter-enrollment-title" className="mt-8 rounded-xl border border-gold/50 bg-warm p-5 sm:p-6">
+                <p className="text-xs font-extrabold uppercase tracking-wider text-brand">Winter 2027 · Digital SAT classes</p>
+                <h2 id="sat-winter-enrollment-title" className="mt-1 text-xl font-extrabold text-navy">
+                  Turn SAT practice into a structured study plan
+                </h2>
+                <p className="mt-2 text-sm leading-relaxed text-ink">
+                  In-person Digital SAT preparation in Astoria, Queens, personally taught by AhmedPrep&apos;s founder.
+                  Small groups of up to 12 students, with Math and Reading &amp; Writing practice.
+                </p>
+                <div className="mt-4 flex flex-wrap gap-3">
+                  <TrackedLink
+                    href="/digital-sat-prep"
+                    event={EVENTS.digitalSatCtaClick}
+                    eventProps={{ location: `resource_${resource.slug}_winter_2027` }}
+                    className="button button-gold"
+                  >
+                    Explore Digital SAT Classes <ArrowUpRight size={15} aria-hidden="true" />
+                  </TrackedLink>
+                  <TrackedLink
+                    href="/enroll-2027"
+                    event={EVENTS.programCtaClick}
+                    eventProps={{ location: `resource_${resource.slug}_winter_2027`, cta: "winter_enrollment" }}
+                    className="button button-outline"
+                  >
+                    Winter 2027 Enrollment
+                  </TrackedLink>
+                </div>
+              </section>
+            )}
             {resource.slug === "shsat-math-practice" && (
               <section aria-labelledby="math-winter-enrollment-title" className="mt-8 rounded-xl border border-gold/50 bg-warm p-5 sm:p-6">
                 <p className="text-xs font-extrabold uppercase tracking-wider text-brand">Winter 2027 · Enrollment open</p>
