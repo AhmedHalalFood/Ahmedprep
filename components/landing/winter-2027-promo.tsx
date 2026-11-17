@@ -113,27 +113,7 @@ export function Winter2027Promo() {
         </div>
       </div>
 
-      <div className="border-y-2 border-[#dcae36] bg-[#fff0c4] text-navy">
-        <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-3 px-4 py-4 sm:px-6 md:flex-row md:items-center md:justify-between md:gap-6">
-          <div className="min-w-0">
-            <p className="text-[11px] font-extrabold uppercase tracking-wider text-navy/80">Also enrolling now · December 2026</p>
-            <p className="mt-0.5 text-base font-extrabold leading-snug text-navy sm:text-lg">Digital SAT Final Intensive</p>
-            <p className="mt-0.5 text-xs leading-relaxed text-ink/80 sm:text-sm">
-              For the December 5 SAT · Rolling enrollment · Mon–Thu, 6–9 PM ET · $75 per 3-hour class
-            </p>
-          </div>
-          <TrackedLink
-            href="/digital-sat-final-intensive-december-2026"
-            event={EVENTS.programCtaClick}
-            eventProps={{ location: "home_winter_promo", cta: "december_sat_intensive" }}
-            className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-md bg-navy px-5 py-2.5 text-sm font-extrabold transition-colors hover:bg-blue"
-            style={{ color: "#ffffff" }}
-          >
-            <span style={{ color: "#ffffff" }}>View Intensive &amp; Enroll</span>
-            <ArrowRight size={16} aria-hidden="true" style={{ color: "#ffffff" }} />
-          </TrackedLink>
-        </div>
-      </div>
+
     </section>
   )
 }
