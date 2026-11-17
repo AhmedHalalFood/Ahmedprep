@@ -155,6 +155,36 @@ export default function ShsatPracticeTestsPage() {
         </div>
       </section>
 
+      <section aria-labelledby="winter-shsat-invitation-title" className="border-b border-line bg-cream py-6">
+        <div className="container flex flex-col gap-4 rounded-xl border border-gold/50 bg-white p-5 md:flex-row md:items-center md:justify-between md:p-6">
+          <div className="max-w-2xl">
+            <p className="text-xs font-extrabold uppercase tracking-wider text-brand">Winter 2027 · Enrollment open</p>
+            <h2 id="winter-shsat-invitation-title" className="mt-1 text-xl font-extrabold text-navy">Ready for more structured SHSAT preparation?</h2>
+            <p className="mt-2 text-sm leading-relaxed text-ink">
+              Small-group SHSAT classes in Astoria, personally taught by AhmedPrep&apos;s founder. 12 weeks, 72 instructional hours, maximum 12 students per class.
+            </p>
+          </div>
+          <div className="flex shrink-0 flex-col gap-2 sm:flex-row md:flex-col lg:flex-row">
+            <TrackedLink
+              href="/enroll-2027"
+              event={EVENTS.programCtaClick}
+              eventProps={{ location: "shsat_practice_library_winter_2027", cta: "winter_enrollment" }}
+              className="button button-gold justify-center"
+            >
+              Explore Winter Classes <ArrowRight size={16} aria-hidden="true" />
+            </TrackedLink>
+            <TrackedLink
+              href="/free-diagnostic"
+              event={EVENTS.diagnosticCtaClick}
+              eventProps={{ location: "shsat_practice_library_winter_2027" }}
+              className="button button-outline justify-center"
+            >
+              Free Diagnostic
+            </TrackedLink>
+          </div>
+        </div>
+      </section>
+
       <section aria-labelledby="official-tests-title" className="bg-warm py-14">
         <div className="container flex flex-col gap-8">
           <SectionHeading id="official-tests-title" eyebrow="From NYC Public Schools" title="Official Digital SHSAT Practice Tests">
