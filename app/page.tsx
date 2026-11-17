@@ -1,8 +1,5 @@
 import type { Metadata } from "next"
-import Image from "next/image"
-import Link from "next/link"
-import { ArrowRight, ArrowUpRight, CalendarDays, List, Star } from "lucide-react"
-import { TERMS_2027, termSummary } from "@/lib/cohorts-2027"
+import { ArrowUpRight } from "lucide-react"
 import { ProgramsPreview } from "@/components/landing/programs-preview"
 import { Winter2027Promo } from "@/components/landing/winter-2027-promo"
 import { ToolsResources } from "@/components/landing/tools-resources"
@@ -11,7 +8,6 @@ import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
 import { ENROLLMENT_2027 } from "@/lib/enrollment-2027"
 import { intensiveSitewidePromoActive } from "@/lib/intensive-promo"
-import { HeroSeasonPicker } from "@/components/landing/hero-season-picker"
 import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 
 export const metadata: Metadata = {
@@ -32,82 +28,12 @@ export const metadata: Metadata = {
 export const revalidate = 3600
 
 
-const longDay = (iso: string) =>
-  new Date(`${iso}T12:00:00Z`).toLocaleDateString("en-US", { timeZone: "UTC", month: "long", day: "numeric" })
-
-const HERO_SEASONS = TERMS_2027.map((term) => {
-  const summary = termSummary(term)
-  const hoursVary = new Set(term.cohorts.map((c) => c.hours)).size > 1
-  return {
-    id: term.id,
-    name: `${term.name} Programs`,
-    dates: `${longDay(summary.startIso)} – ${longDay(summary.endIso)}, ${summary.endIso.slice(0, 4)}`,
-    hours: `${summary.hoursLabel.replace(" hours", "")} scheduled hours${hoursVary ? ", depending on cohort" : ""}`,
-  }
-})
-
 export default async function Home() {
   const showIntensive = await intensiveSitewidePromoActive()
   return (
     <>
       <Winter2027Promo />
 
-      <section id="top" className="hero-section" aria-labelledby="hero-title">
-        <div className="hero-image" aria-hidden="true">
-          <Image
-            src="/ahmedprep-hero.png"
-            alt=""
-            fill
-            preload
-            fetchPriority="high"
-            sizes="(max-width: 800px) 970px, 100vw"
-          />
-        </div>
-        <div className="hero-panel">
-          <p className="hero-announce">
-            <span className="hero-stars" aria-hidden="true">
-              <Star size={14} fill="currentColor" strokeWidth={0} />
-              <Star size={14} fill="currentColor" strokeWidth={0} />
-            </span>
-            AhmedPrep · Astoria, Queens
-          </p>
-          <h1 id="hero-title" className="hero-headline">
-            SHSAT &amp; Digital SAT Prep
-          </h1>
-          <p className="hero-support">
-            Small-group SHSAT and Digital SAT preparation in Astoria, Queens.{" "}
-            <br className="hero-support-break" />
-            Math, ELA, and Reading &amp; Writing instruction. Maximum 12 students per class.
-          </p>
-          <HeroSeasonPicker seasons={HERO_SEASONS} />
-          <div className="hero-actions">
-            <TrackedLink
-              href="/programs-2027"
-              event={EVENTS.programCtaClick}
-              eventProps={{ location: "home_hero", cta: "view_programs_pricing" }}
-              className="button button-lg hero-cta"
-            >
-              <List size={20} aria-hidden="true" />
-              View Programs &amp; Pricing <ArrowRight size={18} aria-hidden="true" />
-            </TrackedLink>
-            <TrackedLink
-              href="/free-diagnostic"
-              event={EVENTS.diagnosticCtaClick}
-              eventProps={{ location: "home_hero" }}
-              className="hero-secondary"
-            >
-              <CalendarDays size={20} aria-hidden="true" />
-              Book Free Diagnostic <ArrowRight size={18} aria-hidden="true" />
-            </TrackedLink>
-          </div>
-          <p className="mt-4 text-sm leading-relaxed text-ink">
-            High school students:{" "}
-            <Link href="/digital-sat-prep" className="text-link">
-              Digital SAT prep in Astoria, Queens
-            </Link>
-          </p>
-        </div>
-      </section>
 
       {showIntensive && (
         <aside aria-label="2026 SHSAT Final Intensive" className="border-b border-gold/40 bg-cream">
