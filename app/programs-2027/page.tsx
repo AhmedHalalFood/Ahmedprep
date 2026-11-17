@@ -72,9 +72,20 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
             <h2 className="flex min-h-14 items-center px-5 text-lg font-extrabold text-navy">Compare all 2027 classes</h2>
             <div className="flex flex-col gap-6 border-t border-line px-5 pb-5 pt-4">
               {TERMS_2027.map((term) => (
-                <div key={term.id} className="overflow-x-auto">
+                <div
+                  key={term.id}
+                  className={`overflow-x-auto rounded-xl border ${
+                    term.id === "winter" ? "border-blue-200" : term.id === "spring" ? "border-emerald-200" : "border-amber-200"
+                  }`}
+                >
                   <table className="w-full min-w-[560px] text-left text-sm">
-                    <caption className="pb-2 text-left font-extrabold text-navy">{term.name}</caption>
+                    <caption className={`border-b px-4 py-3 text-left text-base font-extrabold ${
+                      term.id === "winter"
+                        ? "border-blue-200 bg-blue-100 text-blue-900"
+                        : term.id === "spring"
+                          ? "border-emerald-200 bg-emerald-100 text-emerald-900"
+                          : "border-amber-200 bg-amber-100 text-amber-900"
+                    }`}>{term.name}</caption>
                     <thead>
                       <tr className="border-b border-line text-xs uppercase tracking-wider text-subtle">
                         <th scope="col" className="py-2 pr-3 font-bold">Class</th>
