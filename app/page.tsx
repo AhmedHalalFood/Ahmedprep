@@ -4,7 +4,7 @@ import Link from "next/link"
 import { ArrowRight, ArrowUpRight, CalendarDays, List, Star } from "lucide-react"
 import { TERMS_2027, termSummary } from "@/lib/cohorts-2027"
 import { ProgramsPreview } from "@/components/landing/programs-preview"
-import { SatIntensiveAnnouncement } from "@/components/sat-intensive/announcement"
+import { Winter2027Promo } from "@/components/landing/winter-2027-promo"
 import { ToolsResources } from "@/components/landing/tools-resources"
 import { WhyFamilies } from "@/components/landing/why-families"
 import { TrackedLink } from "@/components/tracked-link"
@@ -50,7 +50,7 @@ export default async function Home() {
   const showIntensive = await intensiveSitewidePromoActive()
   return (
     <>
-      <SatIntensiveAnnouncement />
+      <Winter2027Promo />
 
       <section id="top" className="hero-section" aria-labelledby="hero-title">
         <div className="hero-image" aria-hidden="true">
