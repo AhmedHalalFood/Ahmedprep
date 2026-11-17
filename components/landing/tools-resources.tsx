@@ -17,7 +17,7 @@ const ITEMS: { title: string; href: string; event: EventName; Icon: LucideIcon }
 
 export function ToolsResources() {
   return (
-    <section id="resources" aria-labelledby="resources-heading" className="scroll-mt-4 bg-background py-6">
+    <section id="resources" aria-labelledby="resources-heading" className="scroll-mt-4 bg-site-canvas py-6">
       <div className="container flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-5">
         <div className="flex shrink-0 flex-col gap-1 lg:w-56 xl:w-64">
           <p className="eyebrow blue">Free resources</p>
