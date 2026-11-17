@@ -1,4 +1,3 @@
-import Image from "next/image"
 import { ArrowRight, CalendarDays, Check, Clock, Snowflake, Users } from "lucide-react"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
@@ -87,13 +86,13 @@ export function Winter2027Promo() {
 
           <div className="flex flex-col gap-3 sm:flex-row">
             <TrackedLink
-              href="/programs-2027"
+              href="/enroll-2027"
               event={EVENTS.programCtaClick}
-              eventProps={{ location: "home_winter_promo", cta: "explore_winter_programs" }}
+              eventProps={{ location: "home_winter_promo", cta: "enroll_winter_2027" }}
               style={{ color: "var(--navy)" }}
               className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-gold px-6 text-base font-extrabold shadow-md transition-colors hover:bg-gold-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cream"
             >
-              Explore Winter Programs
+              Enroll in Winter 2027
               <ArrowRight size={18} aria-hidden="true" className="shrink-0" />
             </TrackedLink>
             <TrackedLink
@@ -108,17 +107,32 @@ export function Winter2027Promo() {
           </div>
         </div>
 
-        <div aria-hidden="true" className="relative hidden lg:block">
-          <div className="absolute inset-0 bg-gold" style={{ clipPath: "polygon(10% 0, 100% 0, 100% 100%, 0 100%)" }} />
-          <div className="absolute inset-0" style={{ clipPath: "polygon(11.5% 0, 100% 0, 100% 100%, 1.5% 100%)" }}>
-            <Image
-              src="/images/winter-2027-classroom.png"
-              alt=""
-              fill
-              preload
-              sizes="(min-width: 1024px) 46vw, 0px"
-              className="object-cover object-[60%_20%]"
-            />
+        <div className="relative hidden min-h-[580px] overflow-hidden border-l border-gold/25 bg-[#09243f] lg:flex lg:items-center lg:justify-center lg:px-10 lg:py-12">
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-30" style={{ backgroundImage: "radial-gradient(circle at 80% 15%, rgba(236,190,67,.30), transparent 40%), linear-gradient(rgba(236,190,67,.12) 1px, transparent 1px), linear-gradient(90deg, rgba(236,190,67,.12) 1px, transparent 1px)", backgroundSize: "auto, 44px 44px, 44px 44px" }} />
+          <div aria-hidden="true" className="absolute -right-16 -top-20 h-72 w-72 rounded-full border border-gold/20" />
+          <div aria-hidden="true" className="absolute -bottom-24 -left-12 h-64 w-64 rounded-full border border-gold/20" />
+          <div className="relative z-10 w-full max-w-md space-y-5">
+            <div className="text-center">
+              <p className="text-xs font-extrabold uppercase tracking-[0.24em] text-gold">Your next chapter starts here</p>
+              <p className="mt-3 text-3xl font-extrabold leading-tight text-cream">Two goals. One focused plan.</p>
+              <p className="mt-2 text-sm leading-relaxed text-cream/75">Choose the preparation that fits your student.</p>
+            </div>
+            <div className="rounded-2xl border border-gold/45 bg-[#12395c] p-6 shadow-xl">
+              <div className="mb-4 flex items-center justify-between gap-3">
+                <span className="rounded-full bg-gold px-3 py-1 text-xs font-extrabold uppercase tracking-wide text-navy">Winter 2027</span>
+                <span className="text-xs font-semibold text-cream/75">Enrolling now</span>
+              </div>
+              <p className="text-2xl font-extrabold text-cream">SHSAT Prep</p>
+              <p className="mt-1 text-sm text-cream/80">Math + ELA · Small-group instruction</p>
+              <div className="my-4 h-px bg-gold/30" />
+              <p className="text-2xl font-extrabold text-cream">Digital SAT Prep</p>
+              <p className="mt-1 text-sm text-cream/80">Math + Reading & Writing</p>
+              <div className="mt-5 flex items-center justify-between border-t border-gold/30 pt-4 text-sm font-semibold text-cream">
+                <span>12 weeks · 72 hours</span>
+                <span className="text-gold">Max 12 per class</span>
+              </div>
+            </div>
+            <p className="text-center text-sm font-medium text-cream/80">Astoria, Queens · In-person classes</p>
           </div>
         </div>
       </div>
