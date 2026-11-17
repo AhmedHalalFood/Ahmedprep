@@ -39,8 +39,14 @@ export function Winter2027Promo() {
       aria-labelledby="winter-2027-promo-title"
       className="overflow-hidden border-b border-[#C5DCEB] bg-gradient-to-br from-[#DDECF6] via-[#EEF6FB] to-[#F8F7F1] text-navy"
     >
-      <div className="mx-auto grid w-full max-w-[1200px] items-stretch gap-4 px-4 py-6 sm:px-6 md:py-8 lg:grid-cols-2 lg:gap-5">
-        <div className="flex min-w-0 flex-col justify-between gap-5 rounded-2xl border border-[#B9D6E9] bg-white/70 px-5 py-5 shadow-sm sm:px-7 sm:py-6">
+      <div className="mx-auto grid w-full max-w-[1200px] overflow-hidden rounded-2xl border border-[#B9D6E9] bg-[#F9FCFE] shadow-sm my-5 sm:my-7 lg:grid-cols-2">
+        <TrackedLink
+          href="/programs-2027"
+          event={EVENTS.programCtaClick}
+          eventProps={{ location: "home_winter_promo", cta: "explore_winter_programs" }}
+          aria-label="Explore Winter 2027 SHSAT and Digital SAT classes, schedules and tuition"
+          className="group flex min-w-0 flex-col justify-between gap-5 bg-[#F4FAFE] px-5 py-5 text-navy transition-colors hover:bg-[#EAF5FC] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[#16476A] sm:px-7 sm:py-6"
+        >
           <div className="space-y-4">
             <span className="inline-flex w-fit items-center gap-2 rounded-full border border-[#A6CDE4] bg-[#D8EBF7] px-3 py-1.5 text-xs font-extrabold uppercase tracking-wider text-[#16476A]">
               <Snowflake size={15} aria-hidden="true" />
@@ -73,9 +79,16 @@ export function Winter2027Promo() {
               ))}
             </ul>
           </div>
-        </div>
+        </TrackedLink>
 
-        <div className="flex min-w-0 flex-col rounded-2xl border border-[#E7D8B4] bg-[#FFFCF5] px-5 py-5 text-navy shadow-sm sm:px-7 sm:py-6">
+        <div className="flex min-w-0 flex-col border-t border-[#B9D6E9] bg-[#FFFCF5] px-5 py-5 text-navy sm:px-7 sm:py-6 lg:border-l lg:border-t-0">
+          <TrackedLink
+            href="/enroll-2027"
+            event={EVENTS.programCtaClick}
+            eventProps={{ location: "home_winter_promo", cta: "founding_offer_details" }}
+            aria-label="Explore Winter 2027 founding-family tuition and request enrollment"
+            className="group block rounded-lg p-1 -m-1 transition-colors hover:bg-[#FFF4D9] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#16476A]"
+          >
           <div className="flex flex-wrap items-center justify-between gap-2">
             <p className="text-xs font-extrabold uppercase tracking-wide text-[#526E84]">Founding-family offer</p>
             <span className="rounded-full bg-[#FBE7B4] px-3 py-1 text-xs font-extrabold text-[#805506]">Save {savingsPercent}%</span>
@@ -99,6 +112,10 @@ export function Winter2027Promo() {
             <Check size={17} className="mt-0.5 shrink-0 text-[#168064]" aria-hidden="true" />
             First {FOUNDING_SEATS_PER_COHORT} fully paid students per class. Full-payment deadline: {deadline}, {DEADLINE_TIME_LABEL}.
           </p>
+          <span className="mt-2 inline-flex items-center gap-1 text-xs font-bold text-[#16476A] underline underline-offset-4 group-hover:text-[#0F5C8F]">
+            See offer and enrollment details <ArrowRight size={14} aria-hidden="true" />
+          </span>
+          </TrackedLink>
           <div className="mt-auto flex flex-col gap-2 pt-5 sm:flex-row">
             <TrackedLink
               href="/enroll-2027"
