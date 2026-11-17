@@ -174,6 +174,10 @@ export function Enrollment2027Form({ preset = {}, selectionShownAbove = false }:
       previewFull: waitlist && preset.previewFull ? "1" : "",
     },
     validate,
+    onStart: () => trackEvent(EVENTS.enrollment2027FormStarted, {
+      location: LOCATION,
+      lead_stage: waitlist ? "waitlist_start" : "inquiry_start",
+    }),
     onSuccess: (sent) => {
       setSubmitted(sent)
       trackEvent(EVENTS.enrollment2027Lead, {
