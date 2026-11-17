@@ -44,11 +44,12 @@ Owner-approved: Sunday, August 29, 2027 is the required final instructional sess
 - Fall: evaluate whether to resume; no restart date approved.
 
 ## Tuition and enrollment policy (owner-approved November 8, 2026)
-- Winter/Spring 72h regular $1,440; 10% early-payment $1,296. Winter-only founding-family $1,080 (25% off regular).
+- Winter 72h regular $1,440; Winter-only founding-family $1,080 (25% off regular). Winter has no early-payment tier.
+- Spring 72h regular $1,440; 10% early-payment $1,296.
 - Summer intensive 96h regular $1,920; 10% early-payment $1,728.
 - Summer weekend 48h regular $960; 10% early-payment $864.
 - **Founding-family offer applies to Winter 2027 only**, limited to the first five fully paid enrollments per Winter cohort and its published founding deadline. Do not advertise or apply a founding-family tier for Spring or Summer unless the owner separately approves a future promotion after Winter enrollment review.
-- **Winter early-payment deadlines remain as currently published**, 21 calendar days after founding-family deadlines: Winter weekend founding Nov 28, 2026 / early Dec 19; Winter weekday SHSAT founding Nov 30 / early Dec 21; Winter weekday Digital SAT founding Dec 1 / early Dec 22.
+- **Winter 2027 founding-family deadline is December 12, 2026 at 11:59 PM ET for every Winter cohort** (weekend, weekday SHSAT, and weekday Digital SAT). Winter has no separate early-payment tier or early-payment deadline.
 - **Spring and Summer early-payment discount requires full payment 28 calendar days before cohort start** (replaces the prior 21-day gap after a hypothetical founding deadline): Spring weekend Mar 6, 2027; Spring weekday SHSAT Mar 8; Spring weekday Digital SAT Mar 9; Summer weekend Jun 5; Summer intensive Jun 8.
 - All listed payment deadlines end 11:59:59 PM America/New_York on the listed date. Discounts do not stack. The regular tuition is unchanged.
 - **Summer $250 seat deposit: concept approved, payment-policy approval pending.** Proposed credit against tuition, for Summer intensive and weekend cohorts; do not collect deposits, promise guaranteed seats, or change payment flows until owner approves refundability, cancellation/withdrawal terms, balance due date, deposit handling, and capacity verification. A deposit alone does not satisfy the existing full-payment requirement for the 10% early discount.

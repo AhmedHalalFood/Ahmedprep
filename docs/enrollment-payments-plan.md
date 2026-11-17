@@ -52,7 +52,7 @@ Card numbers, CVCs, and bank details are never stored. Only Stripe IDs are.
 ## 5. Founding-family rules enforced on the server
 
 - Founding tuition is full payment only, `$1,080`, for the first 5 qualifying **fully paid** students per class.
-- The deadline (`2026-11-30 23:59:59 America/New_York`) is checked when the session is created **and** again in the
+- The deadline (`2026-12-12 23:59:59 America/New_York`) is checked when the session is created **and** again in the
   webhook. A payment completed after the deadline on a session started before it follows a written policy that needs approval.
 - A hold counts toward the 5 seats only while it is unexpired. Abandoned checkouts free the seat when they expire.
 - An inquiry (`lead_submissions`) never creates a claim.
