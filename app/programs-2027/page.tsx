@@ -157,7 +157,7 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
         </div>
       </section>
 
-      <section aria-labelledby="more-options-title" id="more-options" className="scroll-mt-28 border-t border-line px-5 py-10">
+      <section aria-labelledby="more-options-title" id="more-options" className="scroll-mt-28 border-t border-line px-5 py-8">
         <div className="mx-auto flex max-w-5xl flex-col gap-5">
           <div className="flex flex-col gap-1">
             <p className="text-xs font-extrabold uppercase tracking-widest text-brand">More ways to get started</p>
@@ -181,14 +181,16 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
                     ? "bg-amber-100 text-amber-900"
                     : "bg-emerald-100 text-emerald-900"
               return (
-                <li key={option.id} className={`flex h-full flex-col gap-3 rounded-2xl border p-5 shadow-sm sm:p-6 ${tone}`}>
-                  <span aria-hidden="true" className={`flex size-11 items-center justify-center rounded-xl ${iconTone}`}>
-                    <Icon size={23} />
-                  </span>
-                  <h3 className="text-lg font-extrabold text-navy">{option.name}</h3>
+                <li key={option.id} className={`flex h-full flex-col gap-2 rounded-xl border p-4 ${tone}`}>
+                  <div className="flex items-center gap-3">
+                    <span aria-hidden="true" className={`flex size-9 shrink-0 items-center justify-center rounded-lg ${iconTone}`}>
+                      <Icon size={19} />
+                    </span>
+                    <h3 className="text-base font-extrabold leading-snug text-navy">{option.name}</h3>
+                  </div>
                   <p className="text-sm leading-relaxed text-ink">{option.summary}</p>
-                  <p className="text-sm font-bold text-navy">{option.price ?? "Priced separately — contact AhmedPrep for a quote"}</p>
-                  <Link href={option.cta.href} className="mt-auto inline-flex min-h-11 items-center gap-2 self-start pt-2 text-sm font-extrabold text-navy underline underline-offset-4 hover:text-brand">
+                  <p className="text-xs font-bold leading-snug text-navy">{option.price ?? "Priced separately — contact AhmedPrep for a quote"}</p>
+                  <Link href={option.cta.href} className="mt-auto inline-flex min-h-9 items-center gap-2 self-start pt-1 text-sm font-extrabold text-navy underline underline-offset-4 hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy">
                     {option.cta.label} <ArrowUpRight size={16} aria-hidden="true" />
                   </Link>
                 </li>
