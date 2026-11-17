@@ -78,6 +78,9 @@ export function Winter2027Promo() {
                 </li>
               ))}
             </ul>
+            <span className="inline-flex items-center gap-1 text-xs font-extrabold text-[#16476A] underline underline-offset-4 group-hover:text-[#0F5C8F]">
+              Explore Winter classes and schedules <ArrowRight size={14} aria-hidden="true" />
+            </span>
           </div>
         </TrackedLink>
 
