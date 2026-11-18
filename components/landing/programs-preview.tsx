@@ -9,7 +9,7 @@ const SEASONS = [
     id: "winter" as const,
     title: "Winter 2027",
     detail: "12 weeks · 72 hours",
-    note: "Founding-family offer available",
+    note: "Enrollment open · Founding-family offer",
     icon: Snowflake,
     tone: "border-[#B7D5E7] bg-[#E8F2FA] text-[#174D7C]",
   },
@@ -33,11 +33,11 @@ const SEASONS = [
 
 export function ProgramsPreview() {
   return (
-    <section id="programs-pricing" aria-labelledby="programs-pricing-title" className="scroll-mt-4 border-b border-line bg-site-canvas py-10 md:py-12">
-      <div className="container rounded-2xl border border-line bg-white p-5 shadow-sm sm:p-7 md:p-8">
-        <div className="mb-5 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+    <section id="programs-pricing" aria-labelledby="programs-pricing-title" className="scroll-mt-4 border-b border-line bg-site-canvas py-5 md:py-6">
+      <div className="container rounded-2xl border border-line border-t-4 border-t-gold bg-white p-5 shadow-sm sm:p-6 md:p-7">
+        <div className="mb-5 flex flex-col justify-between gap-4 md:flex-row md:items-center">
           <div className="space-y-2">
-            <p className="eyebrow blue">2027 SHSAT & Digital SAT programs</p>
+            <p className="eyebrow blue">Explore the 2027 class calendar</p>
             <h2 id="programs-pricing-title" className="text-balance text-2xl font-extrabold leading-tight text-navy md:text-3xl">
               Find the right class for your student
             </h2>
@@ -49,9 +49,9 @@ export function ProgramsPreview() {
             href="/programs-2027"
             event={EVENTS.programCtaClick}
             eventProps={{ location: "home_programs_preview", cta: "compare_all" }}
-            className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 self-start rounded-lg bg-navy px-5 text-sm font-extrabold text-white transition-colors hover:bg-[#214C77] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
+            className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 self-start rounded-lg border border-[#D8A326] bg-[#E9B83E] px-5 text-sm font-extrabold shadow-sm transition-colors hover:bg-[#F3CB61] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy" style={{ color: "#102F51" }}
           >
-            Compare programs & pricing <ArrowRight size={17} aria-hidden="true" />
+            <span style={{ color: "#102F51" }}>Compare programs & pricing</span> <ArrowRight size={17} aria-hidden="true" style={{ color: "#102F51" }} />
           </TrackedLink>
         </div>
         <div className="grid gap-3 md:grid-cols-3">
@@ -61,7 +61,7 @@ export function ProgramsPreview() {
               href={programsHref({ season: id })}
               event={EVENTS.programCtaClick}
               eventProps={{ location: "home_programs_preview", cta: `season_${id}` }}
-              className={`group flex min-h-32 flex-col justify-between gap-2 rounded-xl border p-4 transition-shadow hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy ${tone}`}
+              className={`group flex min-h-32 flex-col justify-between gap-2 rounded-xl border p-4 transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy ${tone}`}
             >
               <div className="flex items-center gap-2">
                 <Icon size={20} strokeWidth={1.8} aria-hidden="true" className="shrink-0" />
