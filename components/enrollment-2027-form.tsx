@@ -315,7 +315,7 @@ export function Enrollment2027Form({ preset = {}, selectionShownAbove = false }:
         }}
         options={TERMS_2027.map((t) => {
           const starts = (data.program ? cohortsFor(data.program, t.id) : t.cohorts).map((c) => c.firstIso).sort()
-          return { value: t.id, title: termStartLabel(t.id), detail: starts[0] ? `First class ${formatShortDate(starts[0])}` : undefined }
+          return { value: t.id, title: termStartLabel(t.id), detail: t.id === "winter" ? "Classes begin Jan 9–12, depending on schedule." : starts[0] ? `First class ${formatShortDate(starts[0])}` : undefined }
         })}
       />
 
