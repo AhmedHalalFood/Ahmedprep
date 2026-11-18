@@ -26,7 +26,7 @@ const SEASONS = [
   {
     id: "summer" as const,
     title: "Summer 2027",
-    detail: "8 weeks of instruction",
+    detail: "8-week program",
     note: "Weekend and weekday intensive options",
     formats: "Weekend and weekday intensive",
     icon: Sun,
@@ -73,6 +73,7 @@ export function ProgramsPreview() {
               {id === "summer" ? (
                 <div className="self-start space-y-1.5 pt-3 text-xs leading-relaxed">
                   <p className="text-sm font-extrabold">{detail}</p>
+                  <p>July 3 – August 29, 2027 · Tuition from $960</p>
                   <p><strong>Weekend (Sat–Sun):</strong> 16 classes · 48 hours</p>
                   <p><strong>Weekday intensive (Mon–Thu):</strong> 32 classes · 96 hours</p>
                 </div>
