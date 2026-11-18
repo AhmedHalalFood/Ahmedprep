@@ -45,7 +45,7 @@ export const ENROLLMENT_2027 = {
       summary: "Full payment is required before the student’s first scheduled class.",
       points: ["Full payment is required before the student’s first scheduled class"],
     },
-    rules: "Only one discount applies. Payment and installment terms will be confirmed before payment is requested.",
+    rules: "Only one discount applies. Full tuition payment is required before enrollment is confirmed. AhmedPrep will provide payment instructions after confirming availability.",
     seatNote: "Enrollment is subject to available seats. An inquiry does not reserve a seat.",
   },
   steps: [
