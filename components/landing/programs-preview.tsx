@@ -10,6 +10,7 @@ const SEASONS = [
     title: "Winter 2027",
     detail: "12 weeks · 72 hours",
     note: "Enrollment open · Founding-family offer",
+    formats: "Weekday and weekend classes",
     icon: Snowflake,
     tone: "border-[#B7D5E7] bg-[#E8F2FA] text-[#174D7C]",
   },
@@ -18,6 +19,7 @@ const SEASONS = [
     title: "Spring 2027",
     detail: "12 weeks · 72 hours",
     note: "Early-payment discount available",
+    formats: "Weekday and weekend classes",
     icon: Leaf,
     tone: "border-[#A9D5C5] bg-[#E6F4ED] text-[#086347]",
   },
@@ -26,6 +28,7 @@ const SEASONS = [
     title: "Summer 2027",
     detail: "8 weeks of instruction",
     note: "Weekend and weekday intensive options",
+    formats: "Weekend and weekday intensive",
     icon: Sun,
     tone: "border-[#F0D991] bg-[#FFF4D6] text-[#865500]",
   },
@@ -55,31 +58,32 @@ export function ProgramsPreview() {
           </TrackedLink>
         </div>
         <div className="grid gap-3 md:grid-cols-3">
-          {SEASONS.map(({ id, title, detail, note, icon: Icon, tone }) => (
+          {SEASONS.map(({ id, title, detail, note, formats, icon: Icon, tone }) => (
             <TrackedLink
               key={id}
               href={programsHref({ season: id })}
               event={EVENTS.programCtaClick}
               eventProps={{ location: "home_programs_preview", cta: `season_${id}` }}
-              className={`group flex min-h-40 flex-col justify-between gap-3 rounded-xl border p-4 transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy ${tone}`}
+              className={`group grid h-full min-h-[200px] grid-rows-[auto_1fr_auto] gap-2 rounded-xl border p-4 transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy ${tone}`}
             >
-              <div className="flex items-center gap-2">
+              <div className="flex min-h-7 items-center gap-2">
                 <Icon size={20} strokeWidth={1.8} aria-hidden="true" className="shrink-0" />
                 <h3 className="text-base font-extrabold">{title}</h3>
               </div>
               {id === "summer" ? (
-                <div className="space-y-1.5 text-xs leading-relaxed">
+                <div className="self-start space-y-1.5 pt-3 text-xs leading-relaxed">
                   <p className="text-sm font-extrabold">{detail}</p>
                   <p><strong>Weekend (Sat–Sun):</strong> 16 classes · 48 hours</p>
                   <p><strong>Weekday intensive (Mon–Thu):</strong> 32 classes · 96 hours</p>
                 </div>
               ) : (
-                <div>
-                  <p className="text-sm font-semibold">{detail}</p>
+                <div className="self-start space-y-1.5 pt-3">
+                  <p className="text-sm font-extrabold">{detail}</p>
+                  <p className="text-xs font-medium leading-relaxed">{formats}</p>
                   <p className="text-xs leading-relaxed opacity-85">{note}</p>
                 </div>
               )
-              <span className="inline-flex items-center gap-1 text-xs font-extrabold underline underline-offset-4">
+              <span className="inline-flex items-center gap-1 self-end pt-2 text-xs font-extrabold underline underline-offset-4">
                 View class options <ArrowRight size={14} aria-hidden="true" />
               </span>
             </TrackedLink>
