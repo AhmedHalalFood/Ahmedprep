@@ -138,11 +138,11 @@ export function ClassFinder({ state, full }: { state: FinderState; full: (cohort
                     <OptionLink href={programsHref({ season: term.id, program })} selected={season === term.id} tone={SEASON_TONE[term.id]} idleTone={SEASON_TONE[term.id].idle}>
                       <span className="flex items-center gap-2 font-extrabold text-navy">
                         <Icon size={20} aria-hidden="true" className={SEASON_TONE[term.id].icon} />
-                        {termStartLabel(term.id)}
+                        {term.id === "summer" ? term.name : termStartLabel(term.id)}
                       </span>
                       <span className="text-sm text-ink">{formatRange(s.startIso, s.endIso)}</span>
                       <span className="text-sm text-subtle">
-                        {s.hoursLabel} · from {s.regularLabel.split("–")[0]}
+                        {term.id === "summer" ? "8-week program · " : ""}{s.hoursLabel} · Tuition from {s.regularLabel.split("–")[0]}
                       </span>
                     </OptionLink>
                   </li>
