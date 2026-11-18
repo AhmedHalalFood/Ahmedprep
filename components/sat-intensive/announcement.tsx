@@ -43,7 +43,7 @@ export function SatIntensiveAnnouncement() {
                     ? "Starting November 16. Rolling enrollment is open for the December 5 SAT."
                     : "Classes started November 16. New students can request to join the remaining sessions for the December 5 SAT."}
                 </p>
-                <p className="text-sm font-extrabold text-blue-800">{urgency.nextClassLabel}</p>
+                <p className="text-sm font-extrabold text-blue-800">Contact AhmedPrep for the next available remaining session.</p>
               </div>
               <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-ink">
                 {DETAILS.map(({ icon: Icon, label }) => (
