@@ -24,8 +24,8 @@ const SEASONS = [
   {
     id: "summer" as const,
     title: "Summer 2027",
-    detail: "48–96 hours",
-    note: "Weekend and intensive options",
+    detail: "8 weeks of instruction",
+    note: "Weekend and weekday intensive options",
     icon: Sun,
     tone: "border-[#F0D991] bg-[#FFF4D6] text-[#865500]",
   },
@@ -61,16 +61,24 @@ export function ProgramsPreview() {
               href={programsHref({ season: id })}
               event={EVENTS.programCtaClick}
               eventProps={{ location: "home_programs_preview", cta: `season_${id}` }}
-              className={`group flex min-h-32 flex-col justify-between gap-2 rounded-xl border p-4 transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy ${tone}`}
+              className={`group flex min-h-40 flex-col justify-between gap-3 rounded-xl border p-4 transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy ${tone}`}
             >
               <div className="flex items-center gap-2">
                 <Icon size={20} strokeWidth={1.8} aria-hidden="true" className="shrink-0" />
                 <h3 className="text-base font-extrabold">{title}</h3>
               </div>
-              <div>
-                <p className="text-sm font-semibold">{detail}</p>
-                <p className="text-xs leading-relaxed opacity-85">{note}</p>
-              </div>
+              {id === "summer" ? (
+                <div className="space-y-1.5 text-xs leading-relaxed">
+                  <p className="text-sm font-extrabold">{detail}</p>
+                  <p><strong>Weekend (Sat–Sun):</strong> 16 classes · 48 hours</p>
+                  <p><strong>Weekday intensive (Mon–Thu):</strong> 32 classes · 96 hours</p>
+                </div>
+              ) : (
+                <div>
+                  <p className="text-sm font-semibold">{detail}</p>
+                  <p className="text-xs leading-relaxed opacity-85">{note}</p>
+                </div>
+              )
               <span className="inline-flex items-center gap-1 text-xs font-extrabold underline underline-offset-4">
                 View class options <ArrowRight size={14} aria-hidden="true" />
               </span>
