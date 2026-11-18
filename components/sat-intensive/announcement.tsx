@@ -15,7 +15,7 @@ export function SatIntensiveAnnouncement() {
   if (!urgency) return null
 
   return (
-    <section aria-labelledby="sat-intensive-announcement-title" className="bg-cream py-3 md:py-4">
+    <section aria-labelledby="sat-intensive-announcement-title" className="bg-site-canvas py-3 md:py-4">
       <div className="container">
         <div className="relative overflow-hidden rounded-2xl border border-[#C7DCE9] bg-[#ECF5FA] text-navy shadow-sm">
           <div aria-hidden="true" className="absolute inset-x-0 top-0 h-1 bg-gold" />

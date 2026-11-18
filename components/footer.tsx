@@ -1,7 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
 import { ChevronRight, Mail, MapPin, Phone, Star } from "lucide-react"
-import { ReviewInvite } from "@/components/landing/review-invite"
 import { ReviewLink } from "@/components/review-link"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
@@ -45,7 +44,6 @@ function ColumnHeading({ id, children }: { id: string; children: string }) {
 export function Footer() {
   return (
     <>
-      <ReviewInvite location="footer_review_banner" />
       <footer className="site-footer bg-footer text-sm">
         <div className="container grid gap-8 py-10 md:grid-cols-2 lg:grid-cols-[1.1fr_1.5fr_1fr] lg:gap-0 lg:py-12">
           <div className="flex flex-col gap-4 lg:pr-10">

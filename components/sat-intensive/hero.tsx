@@ -24,7 +24,7 @@ export function SatIntensiveHero() {
   const urgency = satIntensiveUrgency()
   const lateStart = urgency && !urgency.isFirstClass ? urgency.quote : null
   return (
-    <section aria-labelledby="sat-intensive-title" className="border-b border-line bg-cream">
+    <section aria-labelledby="sat-intensive-title" className="border-b border-line bg-site-canvas">
       <div className="container grid items-center gap-6 py-6 md:py-10 lg:grid-cols-[1.15fr_1fr] lg:gap-10">
         <div className="flex min-w-0 flex-col gap-4">
           <p className="flex w-fit flex-wrap items-center gap-x-2 gap-y-0.5 rounded-2xl bg-navy px-3 py-1.5 text-xs font-extrabold uppercase leading-snug tracking-wider text-gold">

@@ -19,6 +19,8 @@
   --muted: #556779;
   --line: #d8e0e7;
   --paper: #fff;
+  /* Page canvas sampled from the supplied MyERAS dashboard screenshot: RGB(242,242,242). */
+  --site-canvas: #f2f2f2;
   --warm: #edf3f7;
   --cream: #faf7ef;
   /* Digital SAT Final Intensive: coral enroll CTA (white text 4.6:1) and lavender curriculum card. */
@@ -46,9 +48,13 @@ html {
 body {
   margin: 0;
   min-width: 320px;
-  background: #fff;
+  background: var(--site-canvas);
   color: var(--ink);
   font-family: var(--font-inter), Arial, sans-serif;
+}
+
+main#main {
+  background: var(--site-canvas);
 }
 
 a {
@@ -1900,6 +1906,7 @@ select {
   --font-sans: var(--font-inter);
   --font-serif: var(--font-playfair);
   --color-background: var(--background);
+  --color-site-canvas: var(--site-canvas);
   --color-foreground: var(--foreground);
   --color-primary: var(--navy);
   --color-primary-foreground: #fff;

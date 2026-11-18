@@ -36,7 +36,7 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
   const previewFull = params.previewFull === "1"
   const state = parseFinder(params)
   return (
-    <div className="bg-cream">
+    <div className="bg-site-canvas">
       <section aria-labelledby="programs-2027-title" className="border-b border-line px-5 pb-8 pt-10 sm:pt-14">
         <div className="mx-auto flex max-w-5xl flex-col gap-3">
           <p className="eyebrow blue">Programs &amp; Pricing</p>

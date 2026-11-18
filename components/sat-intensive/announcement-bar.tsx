@@ -34,6 +34,7 @@ export function SatIntensiveAnnouncementBar() {
               <p className="text-xs font-medium leading-relaxed text-ink md:text-sm">
                 Mon–Thu, 6–9 PM · Astoria, Queens · $75 per 3-hour class
               </p>
+              <p className="text-xs font-semibold leading-snug text-navy/80">Full upfront payment required for all remaining classes.</p>
             </div>
           </div>
           <span

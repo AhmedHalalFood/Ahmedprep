@@ -105,7 +105,7 @@ export default async function RootLayout({
 }>) {
   const showIntensive = await intensiveSitewidePromoActive()
   return (
-    <html lang="en" className="bg-background">
+    <html lang="en" className="bg-site-canvas">
       <body className={`${inter.variable} ${playfair.variable} font-sans antialiased`}>
         <a href="#main" className="skip-link">
           Skip to content

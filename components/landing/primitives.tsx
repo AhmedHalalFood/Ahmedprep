@@ -54,8 +54,8 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
 
 type Tone = "white" | "warm" | "navy"
 const toneClass: Record<Tone, string> = {
-  white: "bg-white",
-  warm: "bg-warm",
+  white: "bg-site-canvas",
+  warm: "bg-site-canvas",
   navy: "bg-navy text-white",
 }
 
