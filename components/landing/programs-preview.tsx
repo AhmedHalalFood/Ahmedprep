@@ -82,7 +82,7 @@ export function ProgramsPreview() {
                   <p className="text-xs font-medium leading-relaxed">{formats}</p>
                   <p className="text-xs leading-relaxed opacity-85">{note}</p>
                 </div>
-              )
+              )}
               <span className="inline-flex items-center gap-1 self-end pt-2 text-xs font-extrabold underline underline-offset-4">
                 View class options <ArrowRight size={14} aria-hidden="true" />
               </span>
