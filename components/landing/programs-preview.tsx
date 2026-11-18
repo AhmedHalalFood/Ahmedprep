@@ -64,7 +64,7 @@ export function ProgramsPreview() {
               href={programsHref({ season: id })}
               event={EVENTS.programCtaClick}
               eventProps={{ location: "home_programs_preview", cta: `season_${id}` }}
-              className={`group grid h-full min-h-[200px] grid-rows-[auto_1fr_auto] gap-2 rounded-xl border p-4 transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy ${tone}`}
+              className={`group grid h-auto min-h-0 grid-rows-[auto_auto_auto] gap-2 rounded-xl border p-4 transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy md:h-full md:min-h-[200px] md:grid-rows-[auto_1fr_auto] ${tone}`}
             >
               <div className="flex min-h-7 items-center gap-2">
                 <Icon size={20} strokeWidth={1.8} aria-hidden="true" className="shrink-0" />
