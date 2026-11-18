@@ -19,13 +19,13 @@ import { ProgramCtas } from "@/components/program-page/program-ctas"
 import { ProgramTuition } from "@/components/program-page/program-tuition"
 import { EVENTS } from "@/lib/analytics"
 import { BUSINESS, SITE_URL } from "@/lib/business"
-import { MAX_CLASS_SIZE } from "@/lib/cohorts-2027"
+import { MAX_CLASS_SIZE, cohortsFor, cohortInquiryHref, priceFor, dollars } from "@/lib/cohorts-2027"
 
 export const revalidate = 3600
 
 const PATH = "/digital-sat-prep"
 const TITLE = "Digital SAT Prep & Tutoring in Astoria, Queens | AhmedPrep"
-const DESCRIPTION = `In-person Digital SAT prep and SAT tutoring in Astoria, Queens for NYC high school students. Max ${MAX_CLASS_SIZE} students per class, Bluebook practice, free diagnostic.`
+const DESCRIPTION = `Digital SAT prep and tutoring in Astoria, Queens for NYC students. Winter 2027 classes, max ${MAX_CLASS_SIZE} students, Bluebook practice and free diagnostic.`
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
@@ -140,6 +140,44 @@ export default function DigitalSatPrepPage() {
       />
 
       <SatIntensiveAnnouncement />
+
+      <section aria-labelledby="dsat-winter-enrollment" className="bg-site-canvas py-6 md:py-8">
+        <div className="container">
+          <div className="rounded-2xl border border-[#D7E4EE] bg-white p-5 shadow-sm sm:p-7">
+            <p className="text-xs font-extrabold uppercase tracking-widest text-brand">Winter 2027 · Now enrolling</p>
+            <h2 id="dsat-winter-enrollment" className="mt-2 text-2xl font-extrabold text-navy md:text-3xl">
+              Winter Digital SAT classes in Astoria, Queens
+            </h2>
+            <p className="mt-2 text-ink">
+              In-person weekday or weekend classes. 12 weeks, 24 meetings, 72 instructional hours, maximum {MAX_CLASS_SIZE} students per class.
+            </p>
+            <div className="mt-5 grid gap-3 md:grid-cols-2">
+              {cohortsFor("Digital SAT", "winter").map((cohort) => {
+                const tuition = priceFor(cohort)
+                return (
+                  <article key={cohort.id} className="rounded-xl border border-[#D7E4EE] bg-[#F5FAFE] p-4">
+                    <h3 className="text-lg font-extrabold text-navy">Digital SAT {cohort.label}</h3>
+                    <p className="mt-1 font-semibold text-ink">{cohort.days}, {cohort.time} ET</p>
+                    <p className="mt-1 text-sm text-subtle">Starts {cohort.firstIso === "2027-01-09" ? "January 9" : "January 12"}, 2027</p>
+                    <p className="mt-3 text-sm text-ink">
+                      Regular tuition: {dollars(tuition.regular)} · Founding-family: {dollars(tuition.founding!)}
+                    </p>
+                    <Link href={cohortInquiryHref(cohort)} className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-lg bg-gold px-5 py-2 font-extrabold text-navy hover:bg-gold/90">
+                      Request {cohort.label.toLowerCase()} enrollment <ArrowUpRight size={17} aria-hidden="true" />
+                    </Link>
+                  </article>
+                )
+              })}
+            </div>
+            <p className="mt-4 text-sm leading-relaxed text-subtle">
+              Founding-family tuition is limited to the first five fully paid students per class, with full payment by December 12, 2026 at 11:59 PM ET, subject to seat availability. Regular tuition is paid in full before enrollment is confirmed. An inquiry does not reserve a seat.
+            </p>
+            <Link href="/enroll-2027" className="mt-3 inline-flex items-center gap-2 font-bold text-brand underline underline-offset-4">
+              Compare all 2027 class schedules and tuition <ArrowUpRight size={16} aria-hidden="true" />
+            </Link>
+          </div>
+        </div>
+      </section>
 
       <Section
         id="overview"
