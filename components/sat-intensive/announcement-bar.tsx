@@ -26,7 +26,7 @@ export function SatIntensiveAnnouncementBar() {
               </span>
               <span className="inline-flex items-center gap-2 rounded-full border border-emerald-400 bg-[#D7F6E4] px-3 py-1.5 text-xs font-extrabold text-[#07583C]">
                 <span aria-hidden="true" className="size-2.5 shrink-0 rounded-full bg-emerald-600 ring-[3px] ring-emerald-200 motion-safe:animate-pulse" />
-                {urgency.isFirstClass ? "Classes Starting · Enrollment Open" : "Classes Underway · Enrollment Open Now"}
+                Rolling Enrollment Open
               </span>
             </div>
             <div className="flex flex-col gap-0.5 sm:flex-row sm:flex-wrap sm:items-baseline sm:gap-x-4">
@@ -41,7 +41,7 @@ export function SatIntensiveAnnouncementBar() {
             aria-hidden="true"
             className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 self-start rounded-lg bg-gold px-5 py-2.5 text-sm font-extrabold text-[#102F51] shadow-sm transition-colors group-hover:bg-[#F5CF62] lg:self-center"
           >
-            Join Remaining Classes <ArrowRight size={16} aria-hidden="true" />
+            Request to Join Now <ArrowRight size={16} aria-hidden="true" />
           </span>
         </TrackedLink>
       </div>
