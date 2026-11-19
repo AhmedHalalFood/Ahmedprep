@@ -52,9 +52,9 @@ export default async function Home() {
         </aside>
       )}
 
-      <WhyFamilies />
-
       <ToolsResources />
+
+      <WhyFamilies />
     </>
   )
 }

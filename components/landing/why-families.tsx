@@ -3,40 +3,34 @@ import { ArrowRight, ChartNoAxesColumn, ClipboardCheck, GraduationCap, Users } f
 import { MAX_CLASS_SIZE } from "@/lib/cohorts-2027"
 
 const REASONS = [
-  { icon: Users, number: "01", title: `Maximum ${MAX_CLASS_SIZE} students`, body: "Small classes and individual attention.", accent: "border-t-[#E7B83E] bg-[#FFFBF0]", iconBg: "bg-[#FCE9B7] text-[#785315]" },
-  { icon: GraduationCap, number: "02", title: "Founder-led teaching", body: "Learn directly from AhmedPrep's founder.", accent: "border-t-[#2778B4] bg-[#F1F8FE]", iconBg: "bg-[#DDEFFC] text-[#155B96]" },
-  { icon: ClipboardCheck, number: "03", title: "Diagnostic-based learning", body: "Instruction focused on each student's needs.", accent: "border-t-[#31856E] bg-[#F0F9F5]", iconBg: "bg-[#D6EEE5] text-[#176C55]" },
-  { icon: ChartNoAxesColumn, number: "04", title: "Progress you can follow", body: "Structured practice and parent updates.", accent: "border-t-[#5377A8] bg-[#F3F6FC]", iconBg: "bg-[#DFE9F6] text-[#2D598C]" },
+  { icon: Users, title: `Maximum ${MAX_CLASS_SIZE} students`, body: "Small classes and individual attention." },
+  { icon: GraduationCap, title: "Founder-led teaching", body: "Learn directly from our founder." },
+  { icon: ClipboardCheck, title: "Diagnostic-based learning", body: "Instruction focused on each student's needs." },
+  { icon: ChartNoAxesColumn, title: "Progress you can follow", body: "Structured practice and parent updates." },
 ] as const
 
 export function WhyFamilies() {
   return (
-    <section id="why-families" aria-labelledby="why-families-title" className="border-b border-line bg-site-canvas py-10 md:py-14">
+    <section id="why-families" aria-labelledby="why-families-title" className="bg-[#F2F4F7] py-2 md:py-3">
       <div className="container">
-        <div className="overflow-hidden rounded-2xl border border-[#D9E5EE] bg-white shadow-sm">
-          <div className="flex flex-col gap-4 border-b border-[#E3EAF0] bg-gradient-to-r from-[#F3F8FD] via-white to-[#FFFBF1] p-5 sm:flex-row sm:items-end sm:justify-between sm:p-7 md:p-8">
-            <div className="max-w-2xl space-y-2">
-              <p className="eyebrow blue">For parents</p>
-              <h2 id="why-families-title" className="text-balance text-2xl font-extrabold leading-tight text-navy md:text-3xl">
-                Why families choose AhmedPrep
-              </h2>
-              <p className="text-sm leading-relaxed text-subtle sm:text-base">Focused teaching, clear goals, and personal attention for every student.</p>
+        <div className="overflow-hidden rounded-xl border border-[#D8D5CC] bg-white shadow-sm">
+          <div className="flex flex-wrap items-center justify-between gap-3 bg-[#FFF4DA] px-4 py-3 md:px-5">
+            <div className="min-w-0 border-l-4 border-[#D5A329] pl-3">
+              <p className="text-[11px] font-extrabold uppercase tracking-[.12em] text-[#8B6412]">For parents</p>
+              <h2 id="why-families-title" className="text-lg font-extrabold leading-tight text-navy sm:text-xl">Why families choose our classes</h2>
             </div>
-            <Link href="/about" className="group inline-flex min-h-11 shrink-0 items-center gap-2 self-start rounded-lg border border-[#C5D8E8] bg-white px-4 py-2 text-sm font-extrabold text-navy transition-colors hover:border-brand hover:bg-[#EFF7FE] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy">
-              Meet AhmedPrep <ArrowRight size={17} aria-hidden="true" className="text-brand transition-transform group-hover:translate-x-1" />
+            <Link href="/about" className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-[#153E67] bg-white px-4 py-2 text-sm font-bold text-navy hover:bg-[#F2F7FD] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy">
+              Meet our founder <ArrowRight size={17} aria-hidden="true" />
             </Link>
           </div>
-          <ul className="grid gap-3 p-4 sm:grid-cols-2 sm:p-6 lg:grid-cols-4 lg:gap-4">
-            {REASONS.map(({ icon: Icon, number, title, body, accent, iconBg }) => (
-              <li key={title} className={`flex min-w-0 flex-col rounded-xl border border-[#DFE7EE] border-t-4 p-4 sm:p-5 ${accent}`}>
-                <div className="mb-5 flex items-start justify-between gap-3">
-                  <span className={`flex h-12 w-12 items-center justify-center rounded-xl ${iconBg}`}>
-                    <Icon size={26} strokeWidth={1.8} aria-hidden="true" />
-                  </span>
-                  <span aria-hidden="true" className="text-xs font-extrabold tracking-widest text-[#8396A9]">{number}</span>
+          <ul className="grid grid-cols-1 divide-y divide-[#E1E7ED] px-3 py-2 sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4">
+            {REASONS.map(({ icon: Icon, title, body }) => (
+              <li key={title} className="flex min-h-16 min-w-0 items-center gap-3 px-2 py-2 lg:border-r lg:border-[#E1E7ED] lg:last:border-r-0">
+                <Icon size={25} aria-hidden="true" className="shrink-0 text-[#1873B5]" strokeWidth={1.8} />
+                <div className="min-w-0">
+                  <h3 className="text-sm font-extrabold leading-snug text-navy">{title}</h3>
+                  <p className="text-xs leading-snug text-subtle">{body}</p>
                 </div>
-                <h3 className="text-base font-extrabold leading-snug text-navy sm:text-lg">{title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-subtle">{body}</p>
               </li>
             ))}
           </ul>
