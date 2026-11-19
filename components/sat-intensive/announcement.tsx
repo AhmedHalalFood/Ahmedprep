@@ -39,7 +39,7 @@ export function SatIntensiveAnnouncement() {
                   Digital SAT Final Intensive
                 </h2>
                 <p className="text-pretty text-sm font-semibold leading-relaxed text-ink md:text-base">
-                  Rolling enrollment is open for the remaining Mon–Thu sessions before the December 5 SAT.
+                  Rolling enrollment is open for the remaining Mon–Thu sessions for the December 5 SAT.
                 </p>
                 <p className="text-sm font-extrabold text-blue-800">Contact AhmedPrep to confirm the next available class days and request a seat.</p>
               </div>
