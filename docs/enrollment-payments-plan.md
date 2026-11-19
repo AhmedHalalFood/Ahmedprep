@@ -1,6 +1,6 @@
 # AhmedPrep Enrollment Payments: Future Stripe Integration Plan
 
-Status: **PROPOSAL ONLY.** Nothing in this document is implemented. No Stripe products, prices,
+Status: **SUPERSEDED FUTURE PROPOSAL ONLY.** The approved November 18, 2026 tuition policy requires full payment and prohibits installments. Current registration uses offline payment (Zelle, cash or check). Nothing in this Stripe proposal is implemented. No Stripe products, prices,
 payment links, checkout sessions, subscriptions, or webhooks exist. No database tables have been created.
 
 ## 1. Principles
@@ -19,7 +19,7 @@ payment links, checkout sessions, subscriptions, or webhooks exist. No database 
 | Table | Key columns |
 |---|---|
 | `cohorts` | `id`, `name`, `dates_status`, `enrollment_open` |
-| `classes` | `id`, `cohort_id`, `program_id`, `label`, `schedule`, `capacity` (10), `founding_seats` (5), `founding_deadline` |
+| `classes` | `id`, `cohort_id`, `program_id`, `label`, `schedule`, `capacity` (12), `founding_seats` (5), `founding_deadline` |
 | `enrollments` | `id`, `class_id`, `student_name`, `grade`, `parent_name`, `parent_email`, `phone`, `status`, `payment_option`, `amount_cents`, `founding_claim`, `stripe_checkout_session_id`, `stripe_customer_id`, `expires_at`, timestamps |
 | `stripe_events` | `event_id` (primary key), `type`, `received_at`, used to process each webhook event only once |
 
@@ -57,11 +57,9 @@ Card numbers, CVCs, and bank details are never stored. Only Stripe IDs are.
 - A hold counts toward the 5 seats only while it is unexpired. Abandoned checkouts free the seat when they expire.
 - An inquiry (`lead_submissions`) never creates a claim.
 
-## 6. Installments (regular tuition only, $480 × 3)
+## 6. Approved payment rule: full payment only
 
-Disabled until the payment terms are approved. Once they are, the likely approach is a Stripe Subscription Schedule
-with three phases, or three invoices with set due dates. The policy for failed installments (retries, notices, effect on
-class access) must be written and approved before this is turned on.
+Installment plans are not offered. No staged invoices, subscriptions, partial-payment checkout, or deposit-based seat reservations may be implemented under this proposal. Winter founding-family payment must be received in full by December 12, 2026 at 11:59 PM ET; Spring and Summer early-payment discounts require full payment at least 30 calendar days before the chosen cohort's first class. Do not enable any online payment integration without separate authorization.
 
 ## 7. Receipts and confirmations
 
@@ -71,7 +69,7 @@ class access) must be written and approved before this is turned on.
 
 ## 8. Rollout (each step needs explicit approval)
 
-1. Approve the payment terms, refund policy, and founding deadline policy.
+1. Preserve the approved full-payment-only tuition policy, and obtain separate approval for any future Stripe rollout and refund policy.
 2. Connect the Stripe integration in **test mode** and add the migration for section 2 on the Development branch only.
 3. Build the checkout server action and webhook, then test with Stripe test cards and the Stripe CLI, including
    simultaneous founding checkouts.

@@ -64,7 +64,7 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
               per cohort, paid in full by {formatDate(WINTER_FOUNDING_DEADLINE_ISO)} at {DEADLINE_TIME_LABEL}, subject to seat availability.
               Winter has no separate early-payment tier. Spring and Summer 2027: early-payment tuition (10% off) requires full payment at least{" "}
               {EARLY_DAYS_BEFORE_SPRING_SUMMER} calendar days before the selected cohort begins; there is no founding-family discount. Only one
-              discount applies.
+              discount applies. Full payment is required for all 2027 cohorts; no installment plans are offered.
             </p>
           </div>
 
