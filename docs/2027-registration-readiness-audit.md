@@ -26,7 +26,7 @@ Date: November 6, 2026. Scope: static GitHub code review. No live Neon queries, 
 - Approved class cap: **12 students per cohort**. A submitted inquiry does not reserve a seat. The existing form does not enforce capacity, which is acceptable for inquiries but must not be represented as a guaranteed seat.
 - The January inquiry form has only Winter program/schedule options. Do **not** present it as a Spring or Summer enrollment form until the server-side allowed values, persistence payload, and confirmation copy are updated together.
 - Existing January confirmation text is hardcoded to January 2027. A season-aware form must update both email subject and message.
-- Refunds, installment plans, payment capture, and final makeup assignments require separate policy approval before displaying firm promises.
+- **Payment policy supersession (owner approved November 18, 2026):** Installment plans are not offered for any 2027 cohort. All enrollment requires full payment after availability is confirmed. The Winter-only founding-family discount applies to the first five fully paid students per class, with full payment by December 12, 2026 at 11:59 PM ET. Spring and Summer early-payment discounts require full payment at least 30 calendar days before the respective cohort begins. No deposit or online payment collection is currently approved. Refunds, future payment-system changes, and final makeup assignments require separate policy approval before displaying firm promises.
 
 ## Prioritized next work
 1. Read-only verification of Neon migration state, production/preview DB separation, and Resend domain configuration.
