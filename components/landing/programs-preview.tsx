@@ -98,6 +98,43 @@ export function ProgramsPreview() {
             </TrackedLink>
           ))}
         </div>
+
+        <div className="mt-5 border-t border-line pt-5" aria-labelledby="winter-syllabus-heading">
+          <p className="text-xs font-extrabold uppercase tracking-widest text-brand">Explore our academic curriculum</p>
+          <h3 id="winter-syllabus-heading" className="mt-1 text-xl font-extrabold text-navy">
+            See what your child will learn
+          </h3>
+          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-subtle">
+            Learn how our Winter SHSAT Foundation and integrated Digital SAT Mastery programs develop skills,
+            use diagnostic assessments, and prepare students for increasingly challenging exam questions.
+          </p>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            <TrackedLink
+              href="/shsat-prep#shsat-pathway"
+              event={EVENTS.programCtaClick}
+              eventProps={{ location: "home_programs_preview", cta: "winter_shsat_curriculum" }}
+              className="flex min-h-20 items-center justify-between gap-3 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 transition-colors hover:bg-blue-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
+            >
+              <span className="flex flex-col gap-1">
+                <span className="text-sm font-extrabold text-navy">Winter SHSAT Foundation</span>
+                <span className="text-xs font-semibold text-[#375C79]">Explore curriculum &amp; learning goals</span>
+              </span>
+              <ArrowRight size={18} aria-hidden="true" className="shrink-0 text-navy" />
+            </TrackedLink>
+            <TrackedLink
+              href="/digital-sat-prep#sat-mastery"
+              event={EVENTS.programCtaClick}
+              eventProps={{ location: "home_programs_preview", cta: "winter_sat_curriculum" }}
+              className="flex min-h-20 items-center justify-between gap-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 transition-colors hover:bg-emerald-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
+            >
+              <span className="flex flex-col gap-1">
+                <span className="text-sm font-extrabold text-navy">Winter Digital SAT Mastery</span>
+                <span className="text-xs font-semibold text-[#275C4B]">Explore curriculum &amp; 1600 Challenge</span>
+              </span>
+              <ArrowRight size={18} aria-hidden="true" className="shrink-0 text-navy" />
+            </TrackedLink>
+          </div>
+        </div>
       </div>
     </section>
   )
