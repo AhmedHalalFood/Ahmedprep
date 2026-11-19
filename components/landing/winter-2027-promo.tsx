@@ -44,10 +44,16 @@ export function Winter2027Promo() {
           className="flex min-w-0 flex-col justify-between gap-5 rounded-lg py-1 transition-colors hover:bg-white/5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold lg:py-3"
         >
           <div className="flex flex-col gap-4">
-            <span className="inline-flex w-fit items-center gap-2 rounded-full bg-gold px-3 py-1 text-xs font-extrabold uppercase tracking-wider text-navy">
-            <Snowflake size={14} aria-hidden="true" />
-            Winter 2027 · Enrolling now
-          </span>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex w-fit items-center gap-2 rounded-full bg-gold px-3 py-1 text-xs font-extrabold uppercase tracking-wider text-navy">
+                <Snowflake size={14} aria-hidden="true" />
+                Winter 2027
+              </span>
+              <span className="inline-flex w-fit items-center gap-2 rounded-full border border-[#85D6AE] bg-[#DCFCE7] px-3 py-1 text-xs font-extrabold uppercase tracking-wider text-[#11603A]">
+                <span className="h-2 w-2 shrink-0 rounded-full bg-[#159957]" aria-hidden="true" />
+                Enrollment Open Now
+              </span>
+            </div>
           <div className="space-y-2">
             <h1 id="winter-2027-promo-title" className="text-balance text-3xl font-extrabold leading-tight tracking-tight text-cream sm:text-4xl lg:text-[2.7rem]">
               Winter SHSAT &amp; Digital SAT Prep
