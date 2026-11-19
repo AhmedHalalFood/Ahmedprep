@@ -1,6 +1,6 @@
 # AhmedPrep 2027 approved scheduling reference
 
-Status: scheduling framework approved November 6, 2026; enrollment-policy amendments approved November 8, 2026. Documentation only. Do not deploy without separate owner approval.
+Status: scheduling framework approved November 6, 2026; enrollment-policy amendments approved November 8 and reaffirmed November 18, 2026. This is the repository's approved 2027 scheduling and tuition-policy reference.
 
 ## Winter (72 hours per cohort, 24 × 3-hour sessions)
 - SHSAT weekday: Mon/Wed 5:30–8:30 PM, Jan 11–Mar 31.
@@ -43,15 +43,17 @@ Owner-approved: Sunday, August 29, 2027 is the required final instructional sess
 - Summer (July–August): both free Sunday classes suspended.
 - Fall: evaluate whether to resume; no restart date approved.
 
-## Tuition and enrollment policy (owner-approved November 8, 2026)
+## Tuition and enrollment policy (owner-approved November 18, 2026)
 - Winter 72h regular $1,440; Winter-only founding-family $1,080 (25% off regular). Winter has no early-payment tier.
 - Spring 72h regular $1,440; 10% early-payment $1,296.
 - Summer intensive 96h regular $1,920; 10% early-payment $1,728.
 - Summer weekend 48h regular $960; 10% early-payment $864.
 - **Founding-family offer applies to Winter 2027 only**, limited to the first five fully paid enrollments per Winter cohort and its published founding deadline. Do not advertise or apply a founding-family tier for Spring or Summer unless the owner separately approves a future promotion after Winter enrollment review.
 - **Winter 2027 founding-family deadline is December 12, 2026 at 11:59 PM ET for every Winter cohort** (weekend, weekday SHSAT, and weekday Digital SAT). Winter has no separate early-payment tier or early-payment deadline.
-- **Spring and Summer early-payment discount requires full payment 28 calendar days before cohort start** (replaces the prior 21-day gap after a hypothetical founding deadline): Spring weekend Mar 6, 2027; Spring weekday SHSAT Mar 8; Spring weekday Digital SAT Mar 9; Summer weekend Jun 5; Summer intensive Jun 8.
-- All listed payment deadlines end 11:59:59 PM America/New_York on the listed date. Discounts do not stack. The regular tuition is unchanged.
+- **Spring and Summer early-payment discount requires full payment at least 30 calendar days before each cohort's first class**: Spring weekend Mar 4, 2027; Spring weekday SHSAT Mar 6; Spring weekday Digital SAT Mar 7; Summer weekend Jun 3; Summer intensive Jun 6. No early-payment discount applies to Winter.
+- All listed discount deadlines end 11:59 PM America/New_York on the listed date. Discounts do not stack. The regular tuition is unchanged.
+- **Full payment only for all 2027 cohorts. No installment plans.** Regular tuition must be paid in full before a student's first scheduled class and before enrollment is confirmed. Discounted tuition requires full payment by its applicable deadline. An inquiry does not reserve a seat.
+- **Payment collection remains offline** (Zelle, cash or check after AhmedPrep confirms availability). Do not activate online tuition checkout without a new approval.
 - **Summer $250 seat deposit: concept approved, payment-policy approval pending.** Proposed credit against tuition, for Summer intensive and weekend cohorts; do not collect deposits, promise guaranteed seats, or change payment flows until owner approves refundability, cancellation/withdrawal terms, balance due date, deposit handling, and capacity verification. A deposit alone does not satisfy the existing full-payment requirement for the 10% early discount.
 
 ## Homepage and cohort discovery (approved for future implementation)
@@ -71,5 +73,5 @@ Owner-approved: Sunday, August 29, 2027 is the required final instructional sess
 - Each 3h class: 75m Math, 75m ELA/Reading-Writing, 30m cumulative practice/review.
 - Diagnostic, quizzes, mock tests, error log, parent progress reporting; separate teacher answer keys; Digital SAT students bring laptops.
 - Parent registration is an inquiry until seat availability and payment are verified.
-- Refund/withdrawal/installment terms, precise session-by-session syllabi, and production Neon/Resend checks must be confirmed before publication.
+- Refund/withdrawal terms, precise session-by-session syllabi, and production Neon/Resend checks remain subject to separate verification. Installments are not offered.
 - Do not merge, deploy, publish, or change live database/email settings without separate approval.
