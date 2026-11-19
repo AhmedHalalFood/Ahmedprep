@@ -50,6 +50,30 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
         </div>
       </section>
 
+      <section aria-labelledby="academic-pathways-title" className="px-5 py-6">
+        <div className="mx-auto max-w-5xl rounded-2xl border border-line bg-paper p-5 sm:p-6">
+          <h2 id="academic-pathways-title" className="text-xl font-extrabold text-navy">
+            How our SHSAT and Digital SAT programs are organized
+          </h2>
+          <div className="mt-4 grid gap-4 md:grid-cols-2">
+            <div className="rounded-xl border border-blue-200 bg-blue-50/60 p-4">
+              <h3 className="font-extrabold text-navy">SHSAT: Four-stage preparation</h3>
+              <p className="mt-2 text-sm leading-relaxed text-ink">Winter Foundation → Spring Advanced Mastery → Summer Intensive → Fall Final Intensive. Entry is guided by a diagnostic, and the fall program is announced separately.</p>
+              <Link href="/shsat-prep#shsat-pathway" className="mt-3 inline-flex items-center gap-1 text-sm font-extrabold text-navy underline underline-offset-4">
+                Explore the SHSAT pathway <ArrowUpRight size={15} aria-hidden="true" />
+              </Link>
+            </div>
+            <div className="rounded-xl border border-emerald-200 bg-emerald-50/60 p-4">
+              <h3 className="font-extrabold text-navy">Digital SAT: All mastery tiers in every cohort</h3>
+              <p className="mt-2 text-sm leading-relaxed text-ink">Each Winter, Spring, or Summer cohort covers Foundation, Advanced Mastery, Intensive Application, and the 1600 Challenge with diagnostic-based assignments. Final intensives are planned around SAT dates.</p>
+              <Link href="/digital-sat-prep#sat-mastery" className="mt-3 inline-flex items-center gap-1 text-sm font-extrabold text-navy underline underline-offset-4">
+                Explore the Digital SAT model <ArrowUpRight size={15} aria-hidden="true" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <FinderHashRestore season={state.season} program={state.program} />
       <ClassFinder state={state} full={(id) => isCohortFull(id, { previewFull })} />
 
