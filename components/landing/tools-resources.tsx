@@ -12,11 +12,11 @@ const ITEMS: { title: string; detail: string; href: string; event: EventName; Ic
 
 export function ToolsResources() {
   return (
-    <section id="resources" aria-labelledby="resources-heading" className="scroll-mt-4 bg-site-canvas pb-12 pt-10 md:pb-16 md:pt-14">
+    <section id="resources" aria-labelledby="resources-heading" className="scroll-mt-4 border-b border-[#C9DDEB] bg-[#EAF3FA] py-4 md:py-6">
       <div className="container">
-        <div className="overflow-hidden rounded-2xl border border-[#D9E5EE] bg-white shadow-sm">
-          <div className="flex flex-col gap-4 border-b border-[#E3EAF0] bg-gradient-to-r from-[#F3F8FD] via-white to-[#FFFBF1] p-5 sm:flex-row sm:items-end sm:justify-between sm:p-7 md:p-8">
-            <div className="max-w-2xl space-y-2">
+        <div className="overflow-hidden rounded-xl border border-[#B8D1E4] bg-white shadow-sm">
+          <div className="flex flex-col gap-2 border-b border-[#CADDEB] bg-[#DCEEF9] p-4 sm:flex-row sm:items-center sm:justify-between md:px-5 md:py-4">
+            <div className="max-w-3xl space-y-1">
               <p className="eyebrow blue">Free student resources</p>
               <h2 id="resources-heading" className="text-balance text-2xl font-extrabold leading-tight text-navy md:text-3xl">
                 Practice and prepare with confidence
@@ -28,23 +28,23 @@ export function ToolsResources() {
               Explore all free resources <ArrowRight size={17} aria-hidden="true" className="text-brand transition-transform group-hover:translate-x-1" />
             </TrackedLink>
           </div>
-          <ul className="grid gap-3 p-4 sm:grid-cols-2 sm:p-6 lg:grid-cols-4 lg:gap-4">
+          <ul className="grid gap-2 p-3 sm:grid-cols-2 lg:grid-cols-4">
             {ITEMS.map(({ title, detail, href, event, Icon, card, iconBg }) => (
               <li key={href} className="min-w-0">
                 <TrackedLink
                   href={href}
                   event={event}
                   eventProps={{ location: "home_resources_preview" }}
-                  className={`group flex h-full min-h-44 flex-col rounded-xl border border-[#DFE7EE] border-t-4 p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-brand hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy sm:p-5 ${card}`}
+                  className={`group flex h-full min-h-28 flex-col rounded-lg border border-[#D3E0EA] border-t-[3px] p-3 transition-all duration-200 hover:-translate-y-0.5 hover:border-brand hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy ${card}`}
                 >
-                  <div className="mb-5 flex items-start justify-between">
-                    <span className={`flex h-12 w-12 items-center justify-center rounded-xl ${iconBg}`}>
-                      <Icon size={26} strokeWidth={1.8} aria-hidden="true" />
+                  <div className="mb-2 flex items-center justify-between">
+                    <span className={`flex h-9 w-9 items-center justify-center rounded-lg ${iconBg}`}>
+                      <Icon size={20} strokeWidth={1.8} aria-hidden="true" />
                     </span>
                     <ArrowRight size={19} aria-hidden="true" className="text-brand transition-transform group-hover:translate-x-1" />
                   </div>
-                  <span className="text-base font-extrabold leading-snug text-navy sm:text-lg">{title}</span>
-                  <span className="mt-2 text-sm leading-relaxed text-subtle">{detail}</span>
+                  <span className="text-sm font-extrabold leading-snug text-navy sm:text-base">{title}</span>
+                  <span className="mt-1 text-sm leading-snug text-subtle">{detail}</span>
                 </TrackedLink>
               </li>
             ))}
