@@ -15,22 +15,22 @@ export const SHSAT_2026_GUIDES: Resource[] = [
     slug: "2026-shsat-dates-registration-deadline",
     category: "SHSAT",
     topic: "Dates & Registration",
-    featured: true,
+    featured: false,
     title: "2026 SHSAT Dates, Registration Deadline & What Parents Need to Know",
     cardTitle: "2026 SHSAT dates and registration deadline",
     metaTitle: "2026 SHSAT Dates & Registration Deadline for NYC Families",
     description:
-      "SHSAT registration closes October 30, 2026. See every fall 2026 test date, who tests when, and the steps NYC parents should take before the deadline.",
-    cardDescription: "Registration windows, every November test date, and a parent checklist for the weeks before the SHSAT.",
+      "Archived Fall 2026 SHSAT registration dates and test schedule. For current programs, visit AhmedPrep’s 2027 SHSAT preparation page.",
+    cardDescription: "Archived fall 2026 deadlines and test dates; check NYC Public Schools for current registration.",
     datePublished: PUBLISHED,
     intro: [
-      "The SHSAT is the only factor used for admission to the eight testing NYC Specialized High Schools, so missing a deadline is the one mistake a family cannot study its way out of. This guide collects the fall 2026 dates in one place and explains what each step means for your child.",
+      "ARCHIVED: This guide documents the Fall 2026 SHSAT cycle. Its October registration deadline and November testing dates have passed. For upcoming preparation, see [AhmedPrep’s 2027 SHSAT classes](/shsat-prep); confirm future official test dates with NYC Public Schools.",
       `Dates are set by NYC Public Schools and can change. Before you plan around any date below, confirm it on the [official NYC Public Schools Specialized High Schools page](${NYCPS_SHSAT_URL}).`,
     ],
     sections: [
       {
         heading: "Key 2026 SHSAT dates at a glance",
-        body: ["These are the current dates published by NYC Public Schools for the fall 2026 SHSAT administration:"],
+        body: ["These were the published dates for the fall 2026 SHSAT administration (historical reference):"],
         list: [
           "October 6, 2026: SHSAT registration opens in MySchools.",
           "October 30, 2026: SHSAT registration closes.",
@@ -95,10 +95,10 @@ export const SHSAT_2026_GUIDES: Resource[] = [
         ],
       },
       {
-        heading: "Making the most of the weeks before the test",
+        heading: "Preparing for the next SHSAT cycle",
         body: [
-          `With registration open, there are only a few weeks left before test day. That window is best used for targeted review, not for learning everything from scratch. A [free SHSAT diagnostic](/free-diagnostic) can show which Math and ELA areas will move the score most in the time remaining.`,
-          `For students who want structured, test-focused practice in the final stretch, AhmedPrep runs the [2026 SHSAT Final 5-Week Intensive](/shsat-prep) at our location in Astoria, Queens, and we serve students from across NYC.`,
+          `For the next SHSAT cycle, start with targeted review rather than waiting until test week. A [free SHSAT diagnostic](/free-diagnostic) can identify which Math and ELA skills need attention.`,
+          `AhmedPrep offers [2027 SHSAT preparation](/shsat-prep) in small groups at our Astoria, Queens classroom for students across NYC.`,
         ],
       },
     ],
