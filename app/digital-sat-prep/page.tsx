@@ -218,6 +218,36 @@ export default function DigitalSatPrepPage() {
         </div>
       </Section>
 
+      <Section
+        id="sat-mastery"
+        eyebrow="AhmedPrep Integrated Digital SAT Mastery"
+        title="Foundation through the 1600 Challenge, in every cohort"
+        intro="Winter, Spring, and Summer cohorts cover the full Digital SAT curriculum. Students enter based on a diagnostic and receive skill-level assignments within the same small group. No student must wait for a particular season to study advanced topics."
+      >
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            { name: "Foundation", detail: "Repair essential algebra, grammar, reading, and problem-solving gaps.", tone: "border-blue-200 bg-blue-50" },
+            { name: "Advanced Mastery", detail: "Build stronger reasoning across all Math and Reading & Writing domains.", tone: "border-emerald-200 bg-emerald-50" },
+            { name: "Intensive Application", detail: "Practice difficult, mixed-domain questions with timing and error analysis.", tone: "border-amber-200 bg-amber-50" },
+            { name: "1600 Challenge", detail: "Pursue near-perfect accuracy on the hardest exam-relevant questions and modules.", tone: "border-slate-200 bg-slate-50" },
+          ].map((tier) => (
+            <article key={tier.name} className={`rounded-xl border p-5 ${tier.tone}`}>
+              <h3 className="text-lg font-extrabold text-navy">{tier.name}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-ink">{tier.detail}</p>
+            </article>
+          ))}
+        </div>
+        <p className="mt-5 text-sm leading-relaxed text-subtle">
+          Every cohort includes 75 minutes of Math, 75 minutes of Reading &amp; Writing, and 30 minutes of guided practice per class. Official Bluebook testing and targeted performance reviews help students prepare for their selected SAT date. Our goal is each student’s highest attainable score, with 1600 as the top challenge, never a guaranteed result.
+        </p>
+        <p className="mt-2 text-sm leading-relaxed text-subtle">
+          Additional test-date-specific Final SAT Intensives are planned, with schedules and tuition announced separately.
+        </p>
+        <Link href="/programs-2027" className="text-link mt-4">
+          Compare Digital SAT classes and schedules <ArrowUpRight size={15} aria-hidden="true" />
+        </Link>
+      </Section>
+
       <Section id="curriculum" tone="warm" eyebrow="Digital SAT curriculum" title="What students learn in Math and Reading & Writing">
         <div className="grid gap-6 md:grid-cols-2">
           <article className="flex flex-col gap-4 border border-line bg-background p-6 md:p-8">
