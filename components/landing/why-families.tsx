@@ -11,11 +11,11 @@ const REASONS = [
 
 export function WhyFamilies() {
   return (
-    <section id="why-families" aria-labelledby="why-families-title" className="border-b border-line bg-site-canvas py-10 md:py-14">
+    <section id="why-families" aria-labelledby="why-families-title" className="border-b border-[#E8D8B6] bg-[#FFF8EA] py-4 md:py-6">
       <div className="container">
-        <div className="overflow-hidden rounded-2xl border border-[#D9E5EE] bg-white shadow-sm">
-          <div className="flex flex-col gap-4 border-b border-[#E3EAF0] bg-gradient-to-r from-[#F3F8FD] via-white to-[#FFFBF1] p-5 sm:flex-row sm:items-end sm:justify-between sm:p-7 md:p-8">
-            <div className="max-w-2xl space-y-2">
+        <div className="overflow-hidden rounded-xl border border-[#D2B777] bg-white shadow-sm">
+          <div className="flex flex-col gap-2 border-b border-[#E3EAF0] bg-[#FFF2D6] p-4 sm:flex-row sm:items-center sm:justify-between md:px-5 md:py-4">
+            <div className="max-w-3xl space-y-1">
               <p className="eyebrow blue">For parents</p>
               <h2 id="why-families-title" className="text-balance text-2xl font-extrabold leading-tight text-navy md:text-3xl">
                 Why families choose AhmedPrep
@@ -26,17 +26,17 @@ export function WhyFamilies() {
               Meet AhmedPrep <ArrowRight size={17} aria-hidden="true" className="text-brand transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
-          <ul className="grid gap-3 p-4 sm:grid-cols-2 sm:p-6 lg:grid-cols-4 lg:gap-4">
+          <ul className="grid gap-2 p-3 sm:grid-cols-2 lg:grid-cols-4">
             {REASONS.map(({ icon: Icon, number, title, body, accent, iconBg }) => (
-              <li key={title} className={`flex min-w-0 flex-col rounded-xl border border-[#DFE7EE] border-t-4 p-4 sm:p-5 ${accent}`}>
-                <div className="mb-5 flex items-start justify-between gap-3">
-                  <span className={`flex h-12 w-12 items-center justify-center rounded-xl ${iconBg}`}>
-                    <Icon size={26} strokeWidth={1.8} aria-hidden="true" />
+              <li key={title} className={`flex min-w-0 flex-col rounded-lg border border-[#DFE7EE] border-t-[3px] p-3 ${accent}`}>
+                <div className="mb-2 flex items-center justify-between gap-2">
+                  <span className={`flex h-9 w-9 items-center justify-center rounded-lg ${iconBg}`}>
+                    <Icon size={20} strokeWidth={1.8} aria-hidden="true" />
                   </span>
                   <span aria-hidden="true" className="text-xs font-extrabold tracking-widest text-[#8396A9]">{number}</span>
                 </div>
-                <h3 className="text-base font-extrabold leading-snug text-navy sm:text-lg">{title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-subtle">{body}</p>
+                <h3 className="text-sm font-extrabold leading-snug text-navy sm:text-base">{title}</h3>
+                <p className="mt-1 text-sm leading-snug text-subtle">{body}</p>
               </li>
             ))}
           </ul>
