@@ -134,6 +134,26 @@ export function ProgramsPreview() {
               <ArrowRight size={18} aria-hidden="true" className="shrink-0 text-navy" />
             </TrackedLink>
           </div>
+          <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-sm font-extrabold text-navy">
+            <a
+              href="/syllabi/2027/Winter%20SHSAT%20syllabus.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-10 items-center gap-2 underline underline-offset-4 hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
+              aria-label="Download Winter 2027 SHSAT syllabus PDF, opens in new tab"
+            >
+              Download Winter SHSAT syllabus (PDF) <ArrowRight size={15} aria-hidden="true" />
+            </a>
+            <a
+              href="/syllabi/2027/Winter%20Digital%20SAT%20syllabus.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-10 items-center gap-2 underline underline-offset-4 hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
+              aria-label="Download Winter 2027 Digital SAT syllabus PDF, opens in new tab"
+            >
+              Download Winter Digital SAT syllabus (PDF) <ArrowRight size={15} aria-hidden="true" />
+            </a>
+          </div>
         </div>
       </div>
     </section>
