@@ -186,13 +186,13 @@ export default function DigitalSatPrepPage() {
         intro="Students take the Digital SAT on a laptop or tablet in the College Board's Bluebook app. Both sections adapt by module: how a student performs on the first module determines the difficulty of the second."
       >
         <div className="grid items-stretch gap-6 lg:grid-cols-2">
-          <div className="rounded-2xl border border-[#D7E4EE] border-t-4 border-t-brand bg-[#F5FAFE] p-5 sm:p-6">
-            <h3 className="mb-4 text-lg font-extrabold text-navy">Digital SAT format at a glance</h3>
-            <dl className="grid gap-3 sm:grid-cols-2">
+          <div className="rounded-2xl border border-[#D7E4EE] border-t-4 border-t-brand bg-[#F5FAFE] p-4 sm:p-6">
+            <h3 className="mb-3 text-lg font-extrabold tracking-tight text-navy sm:mb-4">Digital SAT format at a glance</h3>
+            <dl className="grid gap-2.5 sm:grid-cols-2 sm:gap-3">
               {testFacts.map((f) => (
-                <div key={f.label} className="flex min-h-28 flex-col gap-2 rounded-xl border border-[#DCE8F1] bg-white p-4">
-                  <dt className="text-sm font-extrabold text-navy">{f.label}</dt>
-                  <dd className="text-pretty text-sm leading-relaxed text-ink">{f.value}</dd>
+                <div key={f.label} className="rounded-xl border border-[#DCE8F1] border-l-4 border-l-brand bg-white px-4 py-3 shadow-sm sm:px-4 sm:py-4">
+                  <dt className="text-sm font-extrabold leading-snug text-navy">{f.label}</dt>
+                  <dd className="mt-1 text-sm leading-relaxed text-ink">{f.value}</dd>
                 </div>
               ))}
             </dl>
