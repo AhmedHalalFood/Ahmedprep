@@ -61,7 +61,7 @@ export const RESOURCES: Resource[] = [
       {
         heading: "Who takes it",
         body: [
-          "NYC students take the SHSAT in 8th grade, and first-time 9th graders may also sit for it. Families register in MySchools; for the Fall 2026 test, registration closes October 30. Dates and registration windows change each year, so confirm them on the official NYC Public Schools Specialized High Schools page and with your child's school.",
+          "NYC students take the SHSAT in 8th grade, and first-time 9th graders may also sit for it. Families register through MySchools during the announced registration window. Dates and deadlines change each year, so confirm the current requirements on the official NYC Public Schools Specialized High Schools page and with your child's school.",
         ],
       },
       {

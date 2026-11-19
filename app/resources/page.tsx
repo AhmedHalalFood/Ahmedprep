@@ -50,7 +50,6 @@ const CATEGORIES: { id: string; title: string; links: CategoryLink[] }[] = [
     id: "test-dates-guides",
     title: "Test Dates & Guides",
     links: [
-      { label: "SHSAT dates & deadline", href: toolPath("shsat-dates"), note: "Fall 2026 test cycle" },
       { label: "SHSAT guide", href: "/resources/shsat-guide" },
       { label: "Digital SAT guide", href: "/resources/digital-sat-guide" },
       { label: "Digital SAT Reading & Writing", href: "/resources/digital-sat-reading-writing" },
@@ -67,7 +66,6 @@ const CATEGORIES: { id: string; title: string; links: CategoryLink[] }[] = [
 ]
 
 export default function ResourcesPage() {
-  const featured = RESOURCES.filter((r) => r.featured)
   const practiceGuides = PRACTICE_SLUGS.map((slug) => RESOURCES.find((r) => r.slug === slug)).filter(
     (r): r is Resource => Boolean(r),
   )
@@ -116,31 +114,6 @@ export default function ResourcesPage() {
           </ul>
         </div>
       </section>
-
-      <Section
-        id="shsat-2026"
-        tone="warm"
-        eyebrow="Fall 2026 SHSAT"
-        title="2026 SHSAT guides for NYC families"
-        intro="Dates, the digital test format, SHSAT Math review, practice test strategy, and planning advice for Queens families."
-      >
-        <ul className="grid gap-px border border-line bg-line md:grid-cols-2 lg:grid-cols-3">
-          {featured.map((resource) => (
-            <li key={resource.slug} className="bg-white">
-              <Link href={`/resources/${resource.slug}`} className="group flex h-full flex-col gap-3 p-6 transition-colors hover:bg-brand-soft md:p-8">
-                <p className="eyebrow blue">{resource.topic}</p>
-                <h3 className="text-balance text-xl font-extrabold leading-snug text-navy group-hover:text-brand">
-                  {resource.cardTitle ?? resource.title}
-                </h3>
-                <p className="text-pretty leading-relaxed text-subtle">{resource.cardDescription ?? resource.description}</p>
-                <span className="mt-auto inline-flex items-center gap-1 pt-2 text-xs font-extrabold uppercase tracking-wider text-brand">
-                  Read guide <ArrowRight size={14} aria-hidden="true" className="transition-transform group-hover:translate-x-0.5" />
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </Section>
 
       <Section
         id="shsat-practice"
