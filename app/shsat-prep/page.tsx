@@ -207,6 +207,34 @@ export default async function ShsatPrepPage() {
         </div>
       </Section>
 
+      <Section
+        id="shsat-pathway"
+        eyebrow="AhmedPrep SHSAT 2027 pathway"
+        title="Four connected stages, one clear goal"
+        intro="Our SHSAT curriculum builds toward the annual fall exam. Students can begin at the season that fits their readiness, following an initial diagnostic. Each stage combines Math, ELA, digital-format practice, and individualized feedback."
+      >
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            { season: "Winter", level: "1 · Foundation", focus: "Strengthen core Math and ELA, correct learning gaps, and establish accuracy.", tone: "border-blue-200 bg-blue-50" },
+            { season: "Spring", level: "2 · Advanced Mastery", focus: "Build challenging reasoning, complex reading comprehension, and multi-step problem solving.", tone: "border-emerald-200 bg-emerald-50" },
+            { season: "Summer", level: "3 · Intensive Preparation", focus: "Apply skills under time pressure through harder mixed sets and full-length practice.", tone: "border-amber-200 bg-amber-50" },
+            { season: "Fall", level: "4 · Final SHSAT Intensive", focus: "Refine exam strategy, correct recurring mistakes, and assess final readiness. Dates and tuition to be announced.", tone: "border-slate-200 bg-slate-50" },
+          ].map((stage) => (
+            <article key={stage.season} className={`rounded-xl border p-5 ${stage.tone}`}>
+              <p className="text-xs font-extrabold uppercase tracking-wider text-brand">{stage.season} 2027</p>
+              <h3 className="mt-2 text-lg font-extrabold text-navy">{stage.level}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-ink">{stage.focus}</p>
+            </article>
+          ))}
+        </div>
+        <p className="mt-5 text-sm leading-relaxed text-subtle">
+          Our instruction follows the current NYC Public Schools SHSAT framework, including computer-based questions and navigation. The official format and fall 2027 requirements will be reconfirmed when NYCPS publishes its updated guidance. Placement and practice level depend on student readiness; completion does not guarantee admission.
+        </p>
+        <Link href="/programs-2027" className="text-link mt-4">
+          View SHSAT class dates and tuition <ArrowUpRight size={15} aria-hidden="true" />
+        </Link>
+      </Section>
+
       <Section id="curriculum" tone="warm" eyebrow="SHSAT curriculum" title="What students learn in Math and ELA">
         <div className="grid gap-6 md:grid-cols-2">
           <article className="flex flex-col gap-4 border border-line bg-background p-6 md:p-8">
