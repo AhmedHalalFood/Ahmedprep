@@ -70,6 +70,12 @@ export function ProgramsPreview() {
                 <Icon size={20} strokeWidth={1.8} aria-hidden="true" className="shrink-0" />
                 <h3 className="text-base font-extrabold">{title}</h3>
               </div>
+              {id === "winter" && (
+                <span className="inline-flex w-fit items-center gap-2 rounded-full border border-[#85D6AE] bg-[#DCFCE7] px-3 py-1 text-xs font-extrabold uppercase tracking-wide text-[#11603A]">
+                  <span className="h-2 w-2 shrink-0 rounded-full bg-[#159957]" aria-hidden="true" />
+                  Enrollment Open Now
+                </span>
+              )}
               {id === "summer" ? (
                 <div className="self-start space-y-1.5 pt-3 text-xs leading-relaxed">
                   <p className="text-sm font-extrabold">{detail}</p>
