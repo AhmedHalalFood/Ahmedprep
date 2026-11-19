@@ -73,6 +73,7 @@ export function ProgramsPreview() {
               {id === "summer" ? (
                 <div className="self-start space-y-1.5 pt-3 text-xs leading-relaxed">
                   <p className="text-sm font-extrabold">{detail}</p>
+                  <p className="text-sm font-bold">SHSAT &amp; Digital SAT Prep</p>
                   <p>July 3 – August 29, 2027</p>
                   <p><strong>Weekend (Sat–Sun):</strong> 16 classes · 48 hours</p>
                   <p><strong>Weekday intensive (Mon–Thu):</strong> 32 classes · 96 hours</p>
@@ -80,6 +81,7 @@ export function ProgramsPreview() {
               ) : (
                 <div className="self-start space-y-1.5 pt-3">
                   <p className="text-sm font-extrabold">{detail}</p>
+                  <p className="text-sm font-bold">SHSAT &amp; Digital SAT Prep</p>
                   <p className="text-xs font-medium leading-relaxed">{formats}</p>
                   <p className="text-xs leading-relaxed opacity-85">{note}</p>
                 </div>
