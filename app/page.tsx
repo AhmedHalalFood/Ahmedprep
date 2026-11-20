@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     url: absoluteUrl("/"),
     title: "AhmedPrep | In-Person SHSAT & Digital SAT Prep in Astoria, Queens",
     description:
-      "In-person SHSAT and Digital SAT prep in Astoria, Queens for students from across NYC and Long Island. Small-group 2027 classes, max 12 students. Book a free diagnostic.",
+      "SHSAT and Digital SAT prep in Astoria, Queens, plus live online Winter weekday Digital SAT nationwide. Small-group 2027 classes, max 12 students. Book a free diagnostic.",
   },
 }
 
