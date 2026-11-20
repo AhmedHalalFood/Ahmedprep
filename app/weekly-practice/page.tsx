@@ -274,6 +274,15 @@ export default function WeeklyPracticePage() {
         </div>
       </section>
 
+      <section aria-labelledby="weekly-sat-challenge" className="border-b border-line bg-white py-6">
+        <div className="container max-w-3xl rounded-xl border border-line bg-warm p-5 sm:p-6">
+          <p className="text-xs font-extrabold uppercase tracking-wider text-brand">Free Digital SAT challenge</p>
+          <h2 id="weekly-sat-challenge" className="mt-1 text-xl font-extrabold text-navy">5 hard + 5 super-hard Digital SAT questions</h2>
+          <p className="mt-2 text-sm leading-relaxed text-ink">Complete all 10 Math and Reading &amp; Writing questions before unlocking your score, answer key, worked explanations and strategies.</p>
+          <Link href="/weekly-digital-sat-challenge" className="button button-gold mt-4">Take the Digital SAT challenge <ArrowUpRight size={16} aria-hidden="true" /></Link>
+        </div>
+      </section>
+
       {current && <CurrentPractice q={current} />}
 
       {previous.length > 0 && (
