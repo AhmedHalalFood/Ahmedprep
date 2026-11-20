@@ -4,7 +4,7 @@ Status: scheduling framework approved November 6, 2026; enrollment-policy amendm
 
 ## Winter (72 hours per cohort, 24 × 3-hour sessions)
 - SHSAT weekday: Mon/Wed 5:30–8:30 PM, Jan 11–Mar 31.
-- Digital SAT weekday: Tue/Thu 5:30–8:30 PM, Jan 12–Apr 1.
+- Digital SAT weekday: live online (Zoom), Tue/Thu 6:30–9:30 PM ET, Jan 12–Apr 1, open nationwide.
 - SHSAT weekend: Sat/Sun 10 AM–1 PM, Jan 9–Mar 28.
 - Digital SAT weekend: Sat/Sun 2–5 PM, Jan 9–Mar 28.
 
