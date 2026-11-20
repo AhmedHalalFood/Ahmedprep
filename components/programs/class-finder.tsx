@@ -5,6 +5,7 @@ import {
   PROGRAMS_2027,
   TERMS_2027,
   cohortSchedule,
+  isOnlineCohort,
   cohortSpan,
   dollars,
   formatLongDate,
@@ -238,7 +239,7 @@ function CohortDetail({ cohort, full }: { cohort: Cohort; full: boolean }) {
           ["Schedule", cohortSchedule(cohort)],
           ["Dates", `${formatLongDate(span.startIso)} – ${formatLongDate(span.endIso)}`],
           ["Program length", `${cohort.sessions} classes · ${cohort.hours} instructional hours`],
-          ["Availability", full ? "Full · waitlist open" : `Accepting enrollment requests · max ${MAX_CLASS_SIZE} students, in person in Astoria`],
+          ["Availability", full ? "Full · waitlist open" : `Accepting enrollment requests · max ${MAX_CLASS_SIZE} students, ${isOnlineCohort(cohort) ? "live online via Zoom" : "in person in Astoria"}`],
         ].map(([term, value]) => (
           <div key={term} className="flex flex-col gap-0.5 rounded-xl bg-paper px-4 py-3">
             <dt className="text-xs font-bold uppercase tracking-widest text-subtle">{term}</dt>
