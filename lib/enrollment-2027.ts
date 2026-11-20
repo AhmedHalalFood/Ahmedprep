@@ -72,7 +72,7 @@ export const ENROLLMENT_2027 = {
       body: "Reading & Writing and Math preparation for the adaptive Digital SAT, including Desmos and pacing strategy.",
       href: "/digital-sat-prep",
       schedules: [
-        { label: "Weekday group", days: "Tuesday & Thursday", time: "5:30–8:30 PM ET", start: "Tuesday, January 12, 2027" },
+        { label: "Weekday group (live online)", days: "Tuesday & Thursday", time: "6:30–9:30 PM ET", start: "Tuesday, January 12, 2027" },
         { label: "Weekend group", days: "Saturday & Sunday", time: "2–5 PM ET", start: "Saturday, January 9, 2027" },
       ],
     },
