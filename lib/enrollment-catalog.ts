@@ -74,9 +74,9 @@ export const CLASSES: ClassOffering[] = [
     id: "2027-01-dsat-weekday",
     cohortId: "2027-01",
     programId: "digital-sat",
-    label: "Digital SAT Weekdays",
+    label: "Digital SAT Weekdays (Live Online)",
     days: "Tuesday & Thursday",
-    time: "5:30–8:30 PM ET",
+    time: "6:30–9:30 PM ET",
     plannedStart: "Tuesday, January 12, 2027",
   },
   {
