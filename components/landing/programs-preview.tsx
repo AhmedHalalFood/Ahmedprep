@@ -45,7 +45,7 @@ export function ProgramsPreview() {
               Find the right class for your student
             </h2>
             <p className="max-w-2xl text-sm leading-relaxed text-subtle">
-              In-person preparation in Astoria, Queens. Maximum {MAX_CLASS_SIZE} students per class.
+              In-person preparation in Astoria, Queens, plus live online Winter weekday Digital SAT nationwide. Maximum {MAX_CLASS_SIZE} students per class.
             </p>
           </div>
           <TrackedLink
