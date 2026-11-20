@@ -25,7 +25,7 @@ export const revalidate = 3600
 
 const PATH = "/digital-sat-prep"
 const TITLE = "Digital SAT Prep & Tutoring in Astoria, Queens | AhmedPrep"
-const DESCRIPTION = `Digital SAT prep and tutoring in Astoria, Queens for NYC students. Winter 2027 classes, max ${MAX_CLASS_SIZE} students, Bluebook practice and free diagnostic.`
+const DESCRIPTION = `Live online Winter weekday Digital SAT prep nationwide and in-person SAT classes in Astoria, Queens. Small groups up to ${MAX_CLASS_SIZE}, Bluebook practice and free diagnostic.`
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
@@ -35,11 +35,11 @@ export const metadata: Metadata = {
   openGraph: { ...baseOpenGraph, title: TITLE, description: DESCRIPTION, url: absoluteUrl(PATH) },
 }
 
-const LAPTOP_NOTE = "Digital SAT students must bring their own laptop to every class."
+const LAPTOP_NOTE = "Digital SAT students need a compatible laptop for online classes and must bring a laptop to in-person classes."
 
 const benefits = [
   "A free Digital SAT diagnostic with score analysis",
-  `Small in-person classes, maximum ${MAX_CLASS_SIZE} students`,
+  `Live online or in-person small groups, maximum ${MAX_CLASS_SIZE} students`,
   "Math and Reading & Writing in every class",
   "Bluebook practice and Desmos strategies",
   "Regular progress updates for parents",
@@ -83,7 +83,7 @@ const faqs: FaqItem[] = [
   },
   {
     q: "Does my child need to bring a laptop?",
-    a: "Yes. Digital SAT students must bring their own laptop to every class so they can practice in Bluebook. AhmedPrep does not supply devices.",
+    a: "Yes. Online students need a compatible laptop and reliable internet for live Zoom instruction and independent Bluebook practice. In-person students must bring their own laptop. AhmedPrep does not supply devices.",
   },
   {
     q: "How is each three-hour Digital SAT class structured?",
@@ -103,7 +103,7 @@ const faqs: FaqItem[] = [
   },
   {
     q: "Where are Digital SAT classes and tutoring held?",
-    a: `All Digital SAT classes and private tutoring are held in person at ${BUSINESS.address.street}, ${BUSINESS.address.city}, ${BUSINESS.address.region} ${BUSINESS.address.postalCode}. AhmedPrep does not offer online Digital SAT classes or tutoring; only the free Sunday classes are held live online. The classroom is easy to reach from across Queens, including Long Island City, Sunnyside, Woodside, Jackson Heights, and Ditmars.`,
+    a: `Winter 2027 weekday Digital SAT classes are live online via Zoom on Tuesdays and Thursdays, 6:30–9:30 PM Eastern, and welcome students throughout the continental United States. Winter weekend SAT classes are in person at ${BUSINESS.address.street}, ${BUSINESS.address.city}, ${BUSINESS.address.region} ${BUSINESS.address.postalCode}. Spring and Summer follow their separately published schedules. Contact AhmedPrep for private tutoring arrangements.`,
   },
   {
     q: "Is AhmedPrep affiliated with the College Board?",
@@ -129,8 +129,8 @@ export default function DigitalSatPrepPage() {
         location="digital_sat"
         balancedActions
         eyebrow="SAT tutoring in NYC · Astoria, Queens"
-        title="Digital SAT Prep in Astoria, Queens"
-        serviceArea={`Small-group, in-person Digital SAT prep in Astoria for high school students across Queens and NYC. Maximum ${MAX_CLASS_SIZE} students per class.`}
+        title="Digital SAT Prep: Live Online or In Person"
+        serviceArea={`Winter weekday Digital SAT classes are live online nationwide; weekend classes meet in person in Astoria, Queens. Maximum ${MAX_CLASS_SIZE} students per class.`}
         intro="Math and Reading & Writing instruction built from a free diagnostic, with Bluebook practice, Desmos strategies, and timed adaptive-module drills."
         benefitsTitle="Every Digital SAT student receives"
         benefits={benefits}
@@ -146,17 +146,17 @@ export default function DigitalSatPrepPage() {
           <div className="rounded-2xl border border-[#D7E4EE] bg-white p-5 shadow-sm sm:p-7">
             <p className="text-xs font-extrabold uppercase tracking-widest text-brand">Winter 2027 · Now enrolling</p>
             <h2 id="dsat-winter-enrollment" className="mt-2 text-2xl font-extrabold text-navy md:text-3xl">
-              Winter Digital SAT classes in Astoria, Queens
+              Winter Digital SAT classes: online or in Astoria
             </h2>
             <p className="mt-2 text-ink">
-              In-person weekday or weekend classes. 12 weeks, 24 meetings, 72 instructional hours, maximum {MAX_CLASS_SIZE} students per class.
+              Weekday classes meet live online via Zoom (nationwide); weekend classes meet in person in Astoria. Both offer 12 weeks, 24 meetings, 72 instructional hours, maximum {MAX_CLASS_SIZE} students per class.
             </p>
             <div className="mt-5 grid gap-3 md:grid-cols-2">
               {cohortsFor("Digital SAT", "winter").map((cohort) => {
                 const tuition = priceFor(cohort)
                 return (
                   <article key={cohort.id} className="rounded-xl border border-[#D7E4EE] bg-[#F5FAFE] p-4">
-                    <h3 className="text-lg font-extrabold text-navy">Digital SAT {cohort.label}</h3>
+                    <h3 className="text-lg font-extrabold text-navy">Digital SAT {cohort.label} · {cohort.id === "winter-dsat-weekday" ? "Live online (Zoom)" : "In person (Astoria)"}</h3>
                     <p className="mt-1 font-semibold text-ink">{cohort.days}, {cohort.time} ET</p>
                     <p className="mt-1 text-sm text-subtle">Starts {cohort.firstIso === "2027-01-09" ? "January 9" : "January 12"}, 2027</p>
                     <p className="mt-3 text-sm text-ink">
@@ -308,7 +308,7 @@ export default function DigitalSatPrepPage() {
         program="Digital SAT"
         location="digital_sat"
         title="Book a free Digital SAT diagnostic"
-        intro="Complete the form and we'll contact you to confirm a diagnostic time at our Astoria location."
+        intro="Complete the form and we'll contact you to arrange a diagnostic. Winter weekday SAT classes are live online; weekend classes meet in Astoria."
       />
       <JsonLd data={courseSchema} />
     </>
