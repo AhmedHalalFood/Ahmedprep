@@ -25,7 +25,7 @@ Status: scheduling framework approved November 6, 2026; enrollment-policy amendm
 Winter/Spring: Saturdays 5:30–8:30 PM only.
 - Jan 16: Winter SHSAT weekday, replaces Jan 18.
 - Feb 13: Winter SHSAT weekday, replaces Feb 15.
-- Mar 6: Winter Digital SAT weekday, replaces Mar 9.
+- Mar 6: Winter Digital SAT weekday, replaces Mar 9; live online 6:30–9:30 PM ET (makeup date subject to calendar verification).
 - May 15: Spring SHSAT weekday, replaces May 17.
 - May 29: Spring SHSAT weekday, replaces May 31.
 Summer only: daytime weekend makeups after regular instruction.
