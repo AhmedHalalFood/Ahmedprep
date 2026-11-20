@@ -150,7 +150,7 @@ test("class hours are preserved", () => {
   assert.deepEqual(times, {
     "2027-01-shsat-weekday": "Monday & Wednesday 5:30–8:30 PM ET",
     "2027-01-shsat-weekend": "Saturday & Sunday 10 AM–1 PM ET",
-    "2027-01-dsat-weekday": "Tuesday & Thursday 5:30–8:30 PM ET",
+    "2027-01-dsat-weekday": "Tuesday & Thursday 6:30–9:30 PM ET",
     "2027-01-dsat-weekend": "Saturday & Sunday 2–5 PM ET",
   })
 })
