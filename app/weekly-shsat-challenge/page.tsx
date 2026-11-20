@@ -16,15 +16,17 @@ export const metadata: Metadata = {
 export const revalidate = 3600
 
 export default function WeeklySHSATChallengePage() {
-  const today = new Intl.DateTimeFormat("en-CA", {
+  const parts = new Intl.DateTimeFormat("en-US", {
     timeZone: "America/New_York", year: "numeric", month: "2-digit", day: "2-digit",
-  }).format(new Date())
+  }).formatToParts(new Date())
+  const part = (type: string) => parts.find((value) => value.type === type)?.value ?? ""
+  const today = `${part("year")}-${part("month")}-${part("day")}`
   const set = currentSHSATChallenge(today)
 
   return (
     <>
       <Breadcrumbs items={[{ label: "Weekly Practice", href: "/weekly-practice" }, { label: "Weekly SHSAT Challenge", href: "/weekly-shsat-challenge" }]} />
-      <main className="bg-site-canvas py-8 md:py-12">
+      <section className="bg-site-canvas py-8 md:py-12">
         <div className="container max-w-3xl space-y-6">
           <header className="space-y-3">
             <p className="eyebrow blue">AhmedPrep · Free weekly challenge</p>
@@ -48,7 +50,7 @@ export default function WeeklySHSATChallengePage() {
           </div>
           <p className="text-sm leading-relaxed text-subtle">This is independent AhmedPrep practice, not an official NYC Public Schools SHSAT or a computer-adaptive test. New weekly content must be reviewed and added before each scheduled release; the website never fabricates new questions automatically.</p>
         </div>
-      </main>
+      </section>
     </>
   )
 }
