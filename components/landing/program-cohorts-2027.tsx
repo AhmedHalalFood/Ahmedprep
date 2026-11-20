@@ -7,6 +7,7 @@ import {
   TERMS_2027,
   cohortInquiryHref,
   cohortSchedule,
+  isOnlineCohort,
   cohortSpan,
   deadlinesFor,
   dollars,
@@ -27,7 +28,7 @@ export function courseInstances2027(program: ProgramId) {
         return {
           "@type": "CourseInstance",
           name: `${term.name} ${c.program} ${c.label}`,
-          courseMode: "Onsite",
+          courseMode: isOnlineCohort(c) ? "Online" : "Onsite",
           startDate: span.startIso,
           endDate: span.endIso,
           courseSchedule: { "@type": "Schedule", description: cohortSchedule(c) },
@@ -63,7 +64,7 @@ export function ProgramCohorts2027({ program }: { program: ProgramId }) {
       title={`${program} classes in Winter, Spring, and Summer 2027`}
     >
       <p className="max-w-2xl text-pretty leading-relaxed text-subtle">
-        In person in Astoria, at most {MAX_CLASS_SIZE} students per class, {dollars(HOURLY_RATE)} per scheduled instructional hour.
+        In-person classes in Astoria, plus live online Winter weekday Digital SAT. At most {MAX_CLASS_SIZE} students per class, {dollars(HOURLY_RATE)} per scheduled instructional hour.
         Choose a cohort to request enrollment information with it already selected.
       </p>
       <div className="mt-8 grid gap-4 lg:grid-cols-3">
