@@ -113,6 +113,14 @@ export default async function ResourcePage({ params }: { params: Promise<{ slug:
               </section>
             )}
             {resource.slug === "shsat-math-practice" && (
+              <section aria-labelledby="weekly-shsat-challenge-promo" className="mt-6 rounded-xl border-2 border-gold bg-[#FFF9E9] p-5 sm:p-6">
+                <p className="text-xs font-extrabold uppercase tracking-wider text-brand">New · Free weekly quiz</p>
+                <h2 id="weekly-shsat-challenge-promo" className="mt-1 text-xl font-extrabold text-navy">10 advanced SHSAT questions, one complete quiz</h2>
+                <p className="mt-2 text-sm leading-relaxed text-ink">Five Math and five ELA questions. Answer all 10 first, then reveal your score, detailed worked solutions, and strategy tips.</p>
+                <Link href="/weekly-shsat-challenge" className="button button-gold mt-4">Start the weekly challenge <ArrowUpRight size={16} aria-hidden="true" /></Link>
+              </section>
+            )}
+            {resource.slug === "shsat-math-practice" && (
               <section aria-labelledby="math-winter-enrollment-title" className="mt-8 rounded-xl border border-gold/50 bg-warm p-5 sm:p-6">
                 <p className="text-xs font-extrabold uppercase tracking-wider text-brand">Winter 2027 · Enrollment open</p>
                 <h2 id="math-winter-enrollment-title" className="mt-1 text-xl font-extrabold text-navy">
