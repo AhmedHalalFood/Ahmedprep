@@ -16,7 +16,7 @@
   /* Slightly lifted gold so small text on the blue intensive band clears 4.5:1 contrast. */
   --gold-on-blue: #f0c656;
   --ink: #132d4b;
-  --muted: #556779;
+  --muted: #42566b; /* More legible supporting text on white and pale backgrounds. */
   --line: #d8e0e7;
   --paper: #fff;
   /* Page canvas sampled from the supplied MyERAS dashboard screenshot: RGB(242,242,242). */
@@ -2095,5 +2095,49 @@ img {
   #main ~ footer,
   [data-print-hide] {
     display: none !important;
+  }
+}
+
+
+/*
+ * AhmedPrep typography clarity preview
+ * Visual-only: preserves the existing brand, layouts, spacing, navigation and buttons.
+ * Inter / Playfair remain browser-rendered vector web fonts via next/font.
+ * These rules are deliberately scoped to content text, not badges or compact UI labels.
+ */
+@layer base {
+  body {
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3 {
+    letter-spacing: -0.012em;
+  }
+}
+
+@layer components {
+  /* Deepen informational copy without affecting white text on dark banners. */
+  main p.text-subtle,
+  main li.text-subtle,
+  main dd.text-subtle {
+    color: #41566b;
+  }
+
+  /* Comfortable paragraph text on program, pricing and enrollment pages. */
+  @media (min-width: 640px) {
+    main p.text-sm.text-subtle,
+    main p.text-sm.text-ink {
+      font-size: 0.9375rem;
+      line-height: 1.65;
+    }
+  }
+
+  /* Preserve the strong hierarchy without changing the existing heading sizes. */
+  main h2,
+  main h3 {
+    text-rendering: optimizeLegibility;
   }
 }
