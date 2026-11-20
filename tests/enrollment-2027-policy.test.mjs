@@ -139,7 +139,7 @@ test("planned start dates match the approved Winter 2027 schedule", () => {
   assert.deepEqual(landing, [
     "shsat Weekday group: Monday, January 11, 2027",
     "shsat Weekend group: Saturday, January 9, 2027",
-    "digital-sat Weekday group: Tuesday, January 12, 2027",
+    "digital-sat Weekday group · Live online (Zoom): Tuesday, January 12, 2027",
     "digital-sat Weekend group: Saturday, January 9, 2027",
   ])
   assert.equal(ENROLLMENT_2027.datesStatus, "confirmed")
