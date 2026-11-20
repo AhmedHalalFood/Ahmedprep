@@ -265,6 +265,15 @@ export default function WeeklyPracticePage() {
         </div>
       </section>
 
+      <section aria-labelledby="weekly-shsat-full-quiz" className="border-b border-line bg-warm py-6">
+        <div className="container max-w-3xl rounded-xl border border-gold bg-white p-5 sm:p-6">
+          <p className="text-xs font-extrabold uppercase tracking-wider text-brand">Free SHSAT challenge</p>
+          <h2 id="weekly-shsat-full-quiz" className="mt-1 text-xl font-extrabold text-navy">Ready for 10 challenging SHSAT questions?</h2>
+          <p className="mt-2 text-sm leading-relaxed text-ink">Complete all 10 Math and ELA questions before unlocking the score, answer key, worked explanations and tips.</p>
+          <Link href="/weekly-shsat-challenge" className="button button-gold mt-4">Take the full weekly SHSAT quiz <ArrowUpRight size={16} aria-hidden="true" /></Link>
+        </div>
+      </section>
+
       {current && <CurrentPractice q={current} />}
 
       {previous.length > 0 && (
