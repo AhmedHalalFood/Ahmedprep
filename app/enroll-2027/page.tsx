@@ -34,7 +34,7 @@ const ATTENDANCE_FAQS: FaqItem[] = [
   },
   {
     q: "What happens if classes are canceled due to severe weather?",
-    a: "If severe weather or an emergency prevents an in-person class from taking place, AhmedPrep will arrange a makeup session. Families will be notified of any schedule changes. All paid instruction remains in person.",
+    a: "If severe weather or an emergency prevents an in-person class from taking place, AhmedPrep will arrange a makeup session. Families will be notified of any schedule changes. Winter weekday Digital SAT instruction takes place live online; all other cohorts are in person.",
   },
   {
     q: "Will my child receive all 72 program hours?",
@@ -45,7 +45,7 @@ const ATTENDANCE_FAQS: FaqItem[] = [
 export const metadata: Metadata = {
   title: "2027 SHSAT & Digital SAT Enrollment: Winter, Spring, Summer",
   description:
-    "Request enrollment in AhmedPrep's Winter, Spring, or Summer 2027 SHSAT and Digital SAT cohorts in Astoria: small in-person classes of up to 12 students at $20 per instructional hour.",
+    "Request enrollment in AhmedPrep's Winter, Spring, or Summer 2027 SHSAT and Digital SAT cohorts in Astoria: small-group classes of up to 12 students, including live online Winter weekday Digital SAT, at $20 per instructional hour.",
   alternates: { canonical: absoluteUrl(PATH) },
   openGraph: { ...baseOpenGraph, url: absoluteUrl(PATH) },
 }
@@ -111,7 +111,7 @@ export default async function Enroll2027Page({ searchParams }: Props) {
               </h1>
               <p className="flex items-start gap-2 text-sm leading-relaxed text-ink">
                 <MapPin size={18} aria-hidden="true" className="mt-0.5 shrink-0 text-brand" />
-                <span>{`${E.location}: ${ADDRESS_LINE_1}, ${ADDRESS_LINE_2}`}</span>
+                <span>{selected.id === "winter-dsat-weekday" ? "Live online via Zoom · 6:30–9:30 PM Eastern · Nationwide" : `${E.location}: ${ADDRESS_LINE_1}, ${ADDRESS_LINE_2}`}</span>
               </p>
             </div>
 
@@ -157,7 +157,7 @@ export default async function Enroll2027Page({ searchParams }: Props) {
               Enroll in 2027 SHSAT &amp; Digital SAT Prep
             </h1>
             <p className="text-pretty text-lg leading-relaxed text-subtle">
-              Classes starting January, April and July 2027 in Astoria. Request enrollment and we&apos;ll confirm availability
+              Classes starting January, April and July 2027 in Astoria, plus live online Winter weekday Digital SAT. Request enrollment and we&apos;ll confirm availability
               and guide you through the rest.
             </p>
           </div>
