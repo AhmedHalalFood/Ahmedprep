@@ -66,6 +66,7 @@ export const FOUNDING_SEATS_PER_COHORT = 5
 export const MAX_CLASS_SIZE = 12
 export const SUMMER_BREAK_BEGINS_ISO = "2027-08-30"
 const EVENING_MAKEUP = "5:30–8:30 PM"
+const WINTER_ONLINE_SAT_MAKEUP = "6:30–9:30 PM"
 
 const WINTER_WEEKEND = { weekdays: [6, 0], firstIso: "2027-01-09", regularEndIso: "2027-03-28", closures: [], makeups: [] }
 const SPRING_WEEKEND = { weekdays: [6, 0], firstIso: "2027-04-03", regularEndIso: "2027-06-20", closures: [], makeups: [] }
@@ -98,10 +99,10 @@ const COHORTS: readonly Cohort[] = [
   },
   {
     id: "winter-dsat-weekday", term: "winter", program: "Digital SAT", label: "Weekday",
-    days: "Tuesday and Thursday", time: "5:30–8:30 PM", dates: "January 12 – April 1", sessions: 24, hours: 72,
+    days: "Tuesday and Thursday", time: "6:30–9:30 PM", dates: "January 12 – April 1", sessions: 24, hours: 72,
     weekdays: [2, 4], firstIso: "2027-01-12", regularEndIso: "2027-04-01",
     closures: [{ iso: "2027-03-09", reason: "Holiday closure (calendar verification pending)" }],
-    makeups: [{ iso: "2027-03-06", time: EVENING_MAKEUP, replaces: "2027-03-09", approved: false }],
+    makeups: [{ iso: "2027-03-06", time: WINTER_ONLINE_SAT_MAKEUP, replaces: "2027-03-09", approved: false }],
   },
   {
     id: "winter-shsat-weekend", term: "winter", program: "SHSAT", label: "Weekend",
@@ -308,7 +309,9 @@ export const cohortsFor = (program: string, term: string) => COHORTS.filter((c) 
 /** "Winter 2027 SHSAT Weekday" */
 export const cohortTitle = (c: Cohort) => `${TERM_NAMES[c.term]} ${c.program} ${c.label}`
 /** "Monday and Wednesday, 5:30–8:30 PM ET" */
-export const cohortSchedule = (c: Cohort) => `${c.days}, ${c.time} ET`
+export const isOnlineCohort = (c: Pick<Cohort, "id">) => c.id === "winter-dsat-weekday"
+export const cohortDelivery = (c: Pick<Cohort, "id">) => isOnlineCohort(c) ? "Live online (Zoom), nationwide" : "In person · Astoria, Queens"
+export const cohortSchedule = (c: Cohort) => `${c.days}, ${c.time} ET · ${cohortDelivery(c)}`
 
 /** Inquiry form link with this cohort already selected. */
 export const cohortInquiryHref = (c: Cohort) =>
