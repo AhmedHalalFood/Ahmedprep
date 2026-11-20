@@ -9,7 +9,6 @@ const LETTERS = ["A", "B", "C", "D"]
 export function SHSATWeeklyQuiz({ set }: Props) {
   const [answers, setAnswers] = useState<Record<string, number>>({})
   const [submitted, setSubmitted] = useState(false)
-  const [startedAt] = useState(() => Date.now())
   const total = set.questions.length
   const answered = set.questions.filter((q) => answers[q.id] !== undefined).length
   const score = useMemo(
