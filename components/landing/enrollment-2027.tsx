@@ -30,7 +30,7 @@ export function Enrollment2027({ showIntensive }: { showIntensive: boolean }) {
             Winter, Spring, and Summer 2027. <span className="text-brand">Small SHSAT and Digital SAT classes.</span>
           </h2>
           <p className="text-pretty leading-relaxed text-subtle">
-            Twelve in-person cohorts in Astoria across three terms. Every date below comes from the approved 2027 calendar, including
+            Twelve cohorts across three terms: eleven in person in Astoria and the Winter weekday Digital SAT class live online. Every date below comes from the approved 2027 calendar, including
             holiday closures. If AhmedPrep cancels a scheduled class, we provide a makeup class or equivalent live instruction at no
             additional cost.
           </p>
