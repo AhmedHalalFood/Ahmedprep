@@ -59,7 +59,7 @@ export function Winter2027Promo() {
               Winter SHSAT &amp; Digital SAT Prep
             </h1>
             <p className="text-pretty text-sm leading-relaxed text-cream/85 sm:text-base">
-              Personally taught by AhmedPrep’s founder. Focused SHSAT and Digital SAT preparation in small groups in Astoria, Queens.
+              Personally taught by AhmedPrep’s founder. SHSAT and Digital SAT preparation in small groups, in person in Astoria plus live online Winter weekday SAT.
             </p>
           </div>
           </div>
