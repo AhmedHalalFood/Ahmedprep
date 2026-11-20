@@ -144,15 +144,9 @@ export function ProgramsPreview() {
             >
               Download Winter SHSAT syllabus (PDF) <ArrowRight size={15} aria-hidden="true" />
             </a>
-            <a
-              href="/syllabi/2027/Winter%20Digital%20SAT%20syllabus.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex min-h-10 items-center gap-2 underline underline-offset-4 hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
-              aria-label="Download Winter 2027 Digital SAT syllabus PDF, opens in new tab"
-            >
-              Download Winter Digital SAT syllabus (PDF) <ArrowRight size={15} aria-hidden="true" />
-            </a>
+            <span className="inline-flex min-h-10 items-center text-sm font-semibold text-subtle">
+              Updated Winter Digital SAT syllabus (live online weekday) · PDF upload pending
+            </span>
           </div>
         </div>
       </div>
