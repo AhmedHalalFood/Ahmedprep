@@ -24,7 +24,7 @@ import { MAX_CLASS_SIZE, cohortsFor, cohortInquiryHref, priceFor, dollars } from
 export const revalidate = 3600
 
 const PATH = "/digital-sat-prep"
-const TITLE = "Digital SAT Prep & Tutoring in Astoria, Queens | AhmedPrep"
+const TITLE = "Digital SAT Prep Online Nationwide & In Person in NYC | AhmedPrep"
 const DESCRIPTION = `Live online Winter weekday Digital SAT prep nationwide and in-person SAT classes in Astoria, Queens. Small groups up to ${MAX_CLASS_SIZE}, Bluebook practice and free diagnostic.`
 
 export const metadata: Metadata = {
@@ -114,7 +114,7 @@ const faqs: FaqItem[] = [
 const courseSchema = {
   "@context": "https://schema.org",
   "@type": "Course",
-  name: "Digital SAT Prep in Astoria, Queens",
+  name: "Digital SAT Prep: Live Online and In Person",
   description: DESCRIPTION,
   url: `${SITE_URL}${PATH}`,
   provider: { "@id": `${SITE_URL}/#organization` },
