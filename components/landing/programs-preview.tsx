@@ -9,7 +9,7 @@ const SEASONS = [
     id: "winter" as const,
     title: "Winter 2027",
     detail: "12 weeks · 72 hours",
-    note: "Enrollment open · Founding-family offer",
+    note: "Enrollment open · Online weekday SAT + in-person options",
     formats: "Weekday and weekend classes",
     icon: Snowflake,
     tone: "border-[#B7D5E7] bg-[#E8F2FA] text-[#174D7C]",
