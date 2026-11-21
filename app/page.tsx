@@ -3,7 +3,6 @@ import { ArrowUpRight } from "lucide-react"
 import { ProgramsPreview } from "@/components/landing/programs-preview"
 import { Winter2027Promo } from "@/components/landing/winter-2027-promo"
 import { ToolsResources } from "@/components/landing/tools-resources"
-import { WhyFamilies } from "@/components/landing/why-families"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
 import { ENROLLMENT_2027 } from "@/lib/enrollment-2027"
@@ -54,7 +53,6 @@ export default async function Home() {
 
       <ToolsResources />
 
-      <WhyFamilies />
     </>
   )
 }
