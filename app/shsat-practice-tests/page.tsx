@@ -135,28 +135,32 @@ export default function ShsatPracticeTestsPage() {
       <Breadcrumbs items={[{ label: "SHSAT Practice Tests", href: PRACTICE_LIBRARY_PATH }]} />
       <PracticeLibraryViewTracker />
 
-      <section aria-labelledby="practice-library-title" className="border-b border-line bg-white py-14 md:py-20">
-        <div className="container max-w-3xl">
+      <section aria-labelledby="practice-library-title" className="border-b border-line bg-white py-7 md:py-9">
+        <div className="container max-w-4xl">
           <p className="eyebrow blue">Free SHSAT practice</p>
           <h1
             id="practice-library-title"
-            className="mt-3 text-balance text-4xl font-extrabold leading-tight tracking-tight text-navy md:text-5xl"
+            className="mt-2 text-balance text-3xl font-extrabold leading-tight tracking-tight text-navy md:text-4xl"
           >
-            Free SHSAT Practice Tests &amp; Practice Resources
+            Free SHSAT Practice Tests &amp; Resources
           </h1>
-          <p className="mt-5 text-pretty text-lg leading-relaxed text-subtle">
-            Prepare for the computer-adaptive SHSAT with official NYC Public Schools practice tests, AhmedPrep original
-            practice sets, Math and ELA practice, and detailed explanations.
+          <p className="mt-3 max-w-3xl text-pretty text-base leading-relaxed text-ink md:text-lg">
+            Prepare for the digital SHSAT with official NYC Public Schools sample tests and original AhmedPrep Math and ELA practice with detailed explanations.
           </p>
-          <p className="mt-5 border-l-4 border-line pl-4 text-sm leading-relaxed text-subtle">
+          <nav aria-label="Jump to SHSAT practice options" className="mt-4 flex flex-wrap gap-2 sm:gap-3">
+            <a href="#official-tests-title" className="button button-gold min-h-10 justify-center px-4 py-2 text-sm">Official Digital Tests <ArrowRight size={15} aria-hidden="true" /></a>
+            <a href="#ahmedprep-practice-title" className="button button-outline min-h-10 justify-center px-4 py-2 text-sm">AhmedPrep Practice <ArrowRight size={15} aria-hidden="true" /></a>
+            <Link href="/weekly-shsat-challenge" className="button button-outline min-h-10 justify-center px-4 py-2 text-sm">10-Question Weekly Challenge <ArrowRight size={15} aria-hidden="true" /></Link>
+          </nav>
+          <p className="mt-4 max-w-3xl border-l-4 border-line pl-3 text-xs leading-relaxed text-subtle sm:text-sm">
             Official SHSAT tests are provided by New York City Public Schools. AhmedPrep is an independent tutoring provider
             and is not affiliated with NYC Public Schools.
           </p>
         </div>
       </section>
 
-      <section aria-labelledby="winter-shsat-invitation-title" className="border-b border-line bg-cream py-6">
-        <div className="container flex flex-col gap-4 rounded-xl border border-gold/50 bg-white p-5 md:flex-row md:items-center md:justify-between md:p-6">
+      <section aria-labelledby="winter-shsat-invitation-title" className="border-b border-line bg-cream py-3">
+        <div className="container flex flex-col gap-3 rounded-xl border border-gold/50 bg-white p-4 md:flex-row md:items-center md:justify-between">
           <div className="max-w-2xl">
             <p className="text-xs font-extrabold uppercase tracking-wider text-brand">Winter 2027 · Enrollment open</p>
             <h2 id="winter-shsat-invitation-title" className="mt-1 text-xl font-extrabold text-navy">Ready for more structured SHSAT preparation?</h2>
@@ -185,7 +189,7 @@ export default function ShsatPracticeTestsPage() {
         </div>
       </section>
 
-      <section aria-labelledby="official-tests-title" className="bg-warm py-14">
+      <section aria-labelledby="official-tests-title" className="bg-warm py-9 md:py-11">
         <div className="container flex flex-col gap-8">
           <SectionHeading id="official-tests-title" eyebrow="From NYC Public Schools" title="Official Digital SHSAT Practice Tests">
             <p>
