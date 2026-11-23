@@ -20,9 +20,9 @@ import {
 } from "@/lib/shsat-practice-tests"
 import { WEEKLY_PRACTICE_PATH } from "@/lib/weekly-practice"
 
-const TITLE = "Free SHSAT Practice Tests 2026 | Digital Tests & Practice | AhmedPrep"
+const TITLE = "Free SHSAT Practice Tests 2027 | Math & ELA | AhmedPrep"
 const DESCRIPTION =
-  "Practice for the 2026 computer-adaptive SHSAT with official NYC Public Schools digital sample tests, AhmedPrep practice sets, Math and ELA practice, explanations and study guidance."
+  "Prepare for the 2027 SHSAT with free official NYC Public Schools digital sample tests, AhmedPrep Math and ELA practice questions, explanations, and study guidance."
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
