@@ -278,7 +278,7 @@ export function syllabusFor(cohort: Cohort): SyllabusSession[] {
   const n = calendar.length
   const program = cohort.program
   const verbalName = VERBAL_LABEL[program]
-  const mocks = new Set(mockSessionsFor(n))
+  const mocks = new Set(cohort.id === "fall-shsat-intensive" ? [5, 13, 21, 29] : mockSessionsFor(n))
   const cumulative = new Set(cumulativeSessionsFor(n))
   const instructionalCount = calendar.filter((s) => s.number !== 1 && !mocks.has(s.number)).length
   const mixed = MIXED_SESSIONS[n] ?? 0
@@ -374,7 +374,7 @@ export const ASSESSMENT_PLAN: readonly AssessmentPlanRow[] = [
   { assessment: "Initial diagnostic", frequency: "Session 1 of every cohort (full period)", purpose: "Baseline score and topic-level gaps that set each student's priorities.", scoring: "Original AhmedPrep full-length test on paper, scanned and scored with the manual GradeCam workflow. Raw scores." },
   { assessment: "Weekly quiz", frequency: "Every calendar week with a regular lesson, on the week's last lesson. Moved to an earlier lesson that week if a checkpoint falls on that session; replaced only when the week has no regular lesson, and labeled as such.", purpose: "Check retention of that week's Math and verbal topics.", scoring: "15-minute paper quiz in the review block, manual GradeCam workflow. Raw scores." },
   { assessment: "Cumulative review checkpoint", frequency: "2 per 16- and 24-session cohort; 3 per 32-session cohort", purpose: "Retrieval practice across every topic taught so far.", scoring: "Paper, manual GradeCam workflow; results logged by topic." },
-  { assessment: "Full-length mock exam", frequency: "2 per 16- and 24-session cohort; 3 per 32-session cohort (full period)", purpose: "Measure growth, pacing, and stamina under official timing.", scoring: "Original AhmedPrep test unless an official test is verified for use. Official Bluebook tests report College Board scaled scores; all other tests report raw scores." },
+  { assessment: "Full-length mock exam", frequency: "2 per 16- and 24-session cohort; 3 per 32-session cohort, except Fall SHSAT with 4", purpose: "Measure growth, pacing, and stamina under official timing.", scoring: "Original AhmedPrep test unless an official test is verified for use. Official Bluebook tests report College Board scaled scores; all other tests report raw scores." },
   { assessment: "Student error log", frequency: "Updated after every session, quiz, and exam; teacher-reviewed weekly", purpose: "Record why each item was missed (content gap, careless error, timing, guess) and drive targeted review.", scoring: "Not scored; reviewed for patterns." },
   { assessment: "Parent progress report", frequency: "After the diagnostic, after each mock exam, and at course end", purpose: "Scores, performance by area, attendance, homework, and next priorities.", scoring: "Prepared manually by the instructor on the AhmedPrep template." },
 ]
