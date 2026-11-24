@@ -30,7 +30,7 @@ import { NYCPS_SHSAT_URL } from "@/lib/resources-shsat-2026"
 const PATH = "/shsat-prep"
 const TITLE = "SHSAT Prep in Astoria, Queens | AhmedPrep"
 const DESCRIPTION =
-  "Small-group SHSAT prep in Astoria, Queens. Math and ELA instruction, diagnostic assessments, timed practice, and 2027 programs. Maximum 12 students per class."
+  "All paid 2027 SHSAT preparation classes are in person at AhmedPrep in Astoria, Queens. Winter, Spring, Summer and Fall. Max 12 students per class; free diagnostic."
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
@@ -138,7 +138,7 @@ export default async function ShsatPrepPage() {
         compact
         eyebrow="SHSAT tutoring in Astoria · Queens, NY"
         title="SHSAT Prep in Astoria, Queens"
-        serviceArea={`Small-group, in-person SHSAT prep in Astoria for families across Queens and NYC. Maximum ${MAX_CLASS_SIZE} students per class.`}
+        serviceArea={`All 2027 SHSAT prep cohorts are IN PERSON at our Astoria, Queens classroom, including Winter, Spring, Summer, and Fall. Maximum ${MAX_CLASS_SIZE} students per class. Separate free Sunday Zoom sessions remain online.`}
         intro="Math and ELA instruction built from a free diagnostic, with timed practice, mock exams, and regular progress updates for parents."
         benefitsTitle="Every SHSAT student receives"
         benefits={benefits}
