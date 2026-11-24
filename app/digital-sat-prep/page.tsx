@@ -278,7 +278,9 @@ export default function DigitalSatPrepPage() {
       </Section>
 
       <ClassStructure
-        title="How every Digital SAT class is structured"
+        eyebrow="Inside three-hour classes and extended weekend intensives"
+        extraNote="Summer and Fall Weekend Intensives meet 10 AM–3 PM. Each includes a 30-minute lunch break and 4.5 instructional hours; extended SAT practice, guided correction, and full-length Bluebook testing are scheduled within those sessions."
+        title="How Digital SAT classes are structured"
         intro="Our three-hour weekday and school-year weekend classes cover both sections and end with review. Summer and Fall weekend intensives extend to 4.5 instructional hours per meeting."
         blocks={[
           { minutes: 75, title: "Math", body: "Instruction and timed practice, including Desmos strategies where they help." },
