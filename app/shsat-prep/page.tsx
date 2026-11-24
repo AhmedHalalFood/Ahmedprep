@@ -105,7 +105,7 @@ const faqs: FaqItem[] = [
   },
   {
     q: "Is founding-family tuition available for every term?",
-    a: "No. Founding-family tuition applies to Winter 2027 cohorts only. Spring and Summer 2027 cohorts offer an early full-payment discount. Discounts do not combine.",
+    a: "No. Founding-family tuition applies to Winter 2027 cohorts only. Spring, Summer and Fall 2027 cohorts offer an early full-payment discount. Discounts do not combine.",
   },
   {
     q: "When should my child start SHSAT preparation?",
@@ -230,7 +230,7 @@ export default async function ShsatPrepPage() {
             { season: "Winter", level: "1 · Foundation", focus: "Strengthen core Math and ELA, correct learning gaps, and establish accuracy.", tone: "border-blue-200 bg-blue-50" },
             { season: "Spring", level: "2 · Advanced Mastery", focus: "Build challenging reasoning, complex reading comprehension, and multi-step problem solving.", tone: "border-emerald-200 bg-emerald-50" },
             { season: "Summer", level: "3 · Intensive Preparation", focus: "Apply skills under time pressure through harder mixed sets and full-length practice.", tone: "border-amber-200 bg-amber-50" },
-            { season: "Fall", level: "4 · Final SHSAT Intensive", focus: "Refine exam strategy, correct recurring mistakes, and assess final readiness. Dates and tuition to be announced.", tone: "border-slate-200 bg-slate-50" },
+            { season: "Fall", level: "4 · Final SHSAT Intensive", focus: "Refine exam strategy, correct recurring mistakes, and assess final readiness. September 13–November 4, Monday–Thursday, 5:30–8:30 PM ET, 96 instructional hours.", tone: "border-slate-200 bg-slate-50" },
           ].map((stage) => (
             <article key={stage.season} className={`rounded-xl border p-5 ${stage.tone}`}>
               <p className="text-xs font-extrabold uppercase tracking-wider text-brand">{stage.season} 2027</p>
