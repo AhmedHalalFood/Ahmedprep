@@ -18,9 +18,12 @@ import {
   termSummary,
 } from "@/lib/cohorts-2027"
 import { programsHref } from "@/lib/program-finder"
+import { activeTerms } from "@/lib/program-retirement"
 import { ENROLLMENT_2027 as E } from "@/lib/enrollment-2027"
 
 export function Enrollment2027({ showIntensive }: { showIntensive: boolean }) {
+  const terms = activeTerms(TERMS_2027)
+  if (!terms.length) return null
   return (
     <section id="programs" className="scroll-mt-4 bg-warm py-16 md:py-20" aria-labelledby="enrollment-title">
       <div className="container flex flex-col gap-10">
@@ -54,7 +57,7 @@ export function Enrollment2027({ showIntensive }: { showIntensive: boolean }) {
         </dl>
 
         <div className="grid gap-4 lg:grid-cols-4">
-          {TERMS_2027.map((term) => {
+          {terms.map((term) => {
             const s = termSummary(term)
             return (
               <article key={term.id} className="flex flex-col gap-5 border border-line bg-white p-6" aria-labelledby={`home-${term.id}-title`}>
