@@ -3,11 +3,12 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { STUDENT_PORTAL_URL } from "@/lib/student-portal"
+import { activeTermIds } from "@/lib/program-retirement"
 
 // The 2026 Intensive stays reachable through the time-gated announcement bar and its own page,
 // so it is no longer listed in the primary navigation.
 export function navLinks(_showIntensive?: boolean) {
-  return NAV_LINKS
+  return NAV_LINKS.filter((link) => link.href !== "/programs-2027" || activeTermIds().length > 0)
 }
 
 type NavLink = { label: string; href: string; prominent?: boolean }
