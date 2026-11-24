@@ -1,4 +1,6 @@
 import type { Metadata } from "next"
+import { connection } from "next/server"
+import { isTermActive } from "@/lib/program-retirement"
 import { ArrowUpRight } from "lucide-react"
 import { ProgramsPreview } from "@/components/landing/programs-preview"
 import { Winter2027Promo } from "@/components/landing/winter-2027-promo"
@@ -28,10 +30,11 @@ export const revalidate = 3600
 
 
 export default async function Home() {
+  await connection()
   const showIntensive = await intensiveSitewidePromoActive()
   return (
     <>
-      <Winter2027Promo />
+      {isTermActive("winter") && <Winter2027Promo />}
 
       <ProgramsPreview />
 
