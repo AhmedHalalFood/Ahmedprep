@@ -17,10 +17,11 @@ import {
 } from "@/lib/cohorts-2027"
 import { programsHref } from "@/lib/program-finder"
 import { BUSINESS, SITE_URL } from "@/lib/business"
+import { activeTerms } from "@/lib/program-retirement"
 
 /** Schema.org CourseInstance entries for every 2027 cohort of one program. */
 export function courseInstances2027(program: ProgramId) {
-  return TERMS_2027.flatMap((term) =>
+  return activeTerms(TERMS_2027).flatMap((term) =>
     term.cohorts
       .filter((c) => c.program === program)
       .map((c) => {
@@ -56,6 +57,8 @@ export function courseInstances2027(program: ProgramId) {
 }
 
 export function ProgramCohorts2027({ program }: { program: ProgramId }) {
+  const terms = activeTerms(TERMS_2027).filter((term) => term.cohorts.some((c) => c.program === program))
+  if (!terms.length) return null
   return (
     <Section
       id="classes-2027"
@@ -68,7 +71,7 @@ export function ProgramCohorts2027({ program }: { program: ProgramId }) {
         Choose a cohort to request enrollment information with it already selected.
       </p>
       <div className="mt-8 grid gap-4 lg:grid-cols-4">
-        {TERMS_2027.map((term) => (
+        {terms.map((term) => (
           <div key={term.id} className="flex flex-col gap-3 border border-line bg-white p-6">
             <h3 className="text-xl font-extrabold text-navy">{term.name}</h3>
             <ul className="flex flex-col border-t border-line">
