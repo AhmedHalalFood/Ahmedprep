@@ -3,6 +3,7 @@ import { MapPin } from "lucide-react"
 import Link from "next/link"
 import { ClassCards } from "@/components/enroll-2027/class-cards"
 import { EnrollmentSteps } from "@/components/enroll-2027/enrollment-steps"
+import { AnnualShsatPackage } from "@/components/program-page/annual-shsat-package"
 import { EnrollmentHelp } from "@/components/enroll-2027/enrollment-help"
 import { PayNowSlot } from "@/components/enroll-2027/pay-now-slot"
 import { SelectedClassSummary } from "@/components/enroll-2027/selected-class-summary"
@@ -185,6 +186,8 @@ export default async function Enroll2027Page({ searchParams }: Props) {
           </div>
         </div>
       </section>
+
+      <AnnualShsatPackage compact />
 
       <div className="bg-warm px-5 py-10 sm:py-14">
         <div className="mx-auto flex max-w-5xl flex-col gap-12">
