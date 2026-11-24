@@ -25,7 +25,7 @@ import { absoluteUrl } from "@/lib/seo"
 export const metadata: Metadata = {
   title: "2027 Programs & Pricing: SHSAT and Digital SAT Classes",
   description:
-    "AhmedPrep's Winter, Spring, and Summer 2027 SHSAT and Digital SAT cohorts in Astoria: class schedules, dates, hours, tuition, discount deadlines, and enrollment.",
+    "AhmedPrep's Winter, Spring, Summer, and Fall 2027 SHSAT and Digital SAT cohorts in Astoria: class schedules, dates, hours, tuition, discount deadlines, and enrollment.",
   alternates: { canonical: absoluteUrl("/programs-2027") },
 }
 
@@ -58,14 +58,14 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
           <div className="mt-4 grid gap-4 md:grid-cols-2">
             <div className="rounded-xl border border-blue-200 bg-blue-50/60 p-4">
               <h3 className="font-extrabold text-navy">SHSAT: Four-stage preparation</h3>
-              <p className="mt-2 text-sm leading-relaxed text-ink">Winter Foundation → Spring Advanced Mastery → Summer Intensive → Fall Final Intensive. Entry is guided by a diagnostic, and the fall program is announced separately.</p>
+              <p className="mt-2 text-sm leading-relaxed text-ink">Winter Foundation → Spring Advanced Mastery → Summer Intensive → Fall Final Intensive. Entry is guided by a diagnostic, and the Fall Final Intensive.</p>
               <Link href="/shsat-prep#shsat-pathway" className="mt-3 inline-flex items-center gap-1 text-sm font-extrabold text-navy underline underline-offset-4">
                 Explore the SHSAT pathway <ArrowUpRight size={15} aria-hidden="true" />
               </Link>
             </div>
             <div className="rounded-xl border border-emerald-200 bg-emerald-50/60 p-4">
               <h3 className="font-extrabold text-navy">Digital SAT: All mastery tiers in every cohort</h3>
-              <p className="mt-2 text-sm leading-relaxed text-ink">Each Winter, Spring, or Summer cohort covers Foundation, Advanced Mastery, Intensive Application, and the 1600 Challenge with diagnostic-based assignments. Final intensives are planned around SAT dates.</p>
+              <p className="mt-2 text-sm leading-relaxed text-ink">Each seasonal Digital SAT cohort covers Foundation, Advanced Mastery, Intensive Application, and the 1600 Challenge with diagnostic-based assignments. Summer and Fall meet on weekends, 10 AM–3 PM, with a 30-minute lunch break.</p>
               <Link href="/digital-sat-prep#sat-mastery" className="mt-3 inline-flex items-center gap-1 text-sm font-extrabold text-navy underline underline-offset-4">
                 Explore the Digital SAT model <ArrowUpRight size={15} aria-hidden="true" />
               </Link>
@@ -86,7 +86,7 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
             <p className="text-pretty text-sm leading-relaxed text-ink">
               Winter 2027: founding-family tuition (25% off) is available only to the first {FOUNDING_SEATS_PER_COHORT} fully paid enrollments
               per cohort, paid in full by {formatDate(WINTER_FOUNDING_DEADLINE_ISO)} at {DEADLINE_TIME_LABEL}, subject to seat availability.
-              Winter has no separate early-payment tier. Spring and Summer 2027: early-payment tuition (10% off) requires full payment at least{" "}
+              Winter has no separate early-payment tier. Spring, Summer and Fall 2027: early-payment tuition (10% off) requires full payment at least{" "}
               {EARLY_DAYS_BEFORE_SPRING_SUMMER} calendar days before the selected cohort begins; there is no founding-family discount. Only one
               discount applies.
             </p>
@@ -239,8 +239,8 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
               </div>
               <div className="space-y-3 text-sm leading-relaxed text-ink">
                 <p><strong className="text-navy">Winter and Spring:</strong> Makeup instruction is scheduled on select Saturdays from 5:30–8:30 PM.</p>
-                <p><strong className="text-navy">Summer weekend makeup:</strong> A daytime session on August 28.</p>
-                <p><strong className="text-navy">Sunday, August 29:</strong> Required final instructional session for both summer intensive cohorts (SHSAT 10 AM–1 PM ET; Digital SAT 2–5 PM ET).</p>
+                <p><strong className="text-navy">Summer Digital SAT:</strong> July 4 closed; August 28 is the final Saturday class.</p>
+                <p><strong className="text-navy">Summer SHSAT:</strong> First class July 1, July 5 closed; weekday classes continue July 6–August 26.</p>
                 <p className="text-subtle">Exact makeup assignments remain subject to final curriculum sequencing and calendar verification before publication.</p>
               </div>
             </article>
