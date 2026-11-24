@@ -1,4 +1,6 @@
 import type { Metadata } from "next"
+import { connection } from "next/server"
+import { activeCohorts, isAnnualShsatOfferActive } from "@/lib/program-retirement"
 import "./refinement.css"
 import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 import Link from "next/link"
@@ -129,6 +131,7 @@ const courseSchema = {
 }
 
 export default async function ShsatPrepPage() {
+  await connection()
   const showIntensive = await intensiveSitewidePromoActive()
   return (
     <>
@@ -328,7 +331,7 @@ export default async function ShsatPrepPage() {
         intro="Complete the form and we'll contact you to confirm a diagnostic time at our Astoria location."
       />
       </div>
-      <JsonLd data={courseSchema} />
+      <JsonLd data={{ ...courseSchema, hasCourseInstance: courseInstances2027("SHSAT") }} />
     </>
   )
 }
