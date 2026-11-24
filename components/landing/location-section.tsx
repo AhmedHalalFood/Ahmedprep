@@ -17,8 +17,7 @@ export function LocationSection({ location, compact = false }: { location: strin
             </p>
           </address>
           <p className="leading-relaxed text-subtle">
-            Our Astoria classroom welcomes SHSAT families from across NYC and Long Island. All SHSAT group classes meet in person here.
-            {location !== "shsat" ? " Digital SAT classes may be live online or in person, depending on the selected cohort." : ""}
+            {location === "shsat" ? "Our Astoria classroom welcomes SHSAT families from across NYC and Long Island. All SHSAT group classes meet in person here." : "Our Astoria classroom welcomes families from across NYC and Long Island. Digital SAT weekday Winter 2027 classes meet live online, while the weekend cohort meets here in person."}
           </p>
           <div className="flex flex-wrap items-center gap-4">
             <a
