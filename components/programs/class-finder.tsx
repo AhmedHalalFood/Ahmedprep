@@ -22,6 +22,7 @@ import { ENROLLMENT_ACTIONS, REQUEST_NOT_GUARANTEE } from "@/lib/enrollment-2027
 import { FINDER_ID, FORMAT_LABEL, programsHref, type FinderState } from "@/lib/program-finder"
 import { PROGRAM_TONE } from "@/components/programs/program-tone"
 import { EnrollmentHelp } from "@/components/enroll-2027/enrollment-help"
+import { activeTerms } from "@/lib/program-retirement"
 import { PayNowSlot } from "@/components/enroll-2027/pay-now-slot"
 
 const START_ICON: Record<TermId, LucideIcon> = { winter: Snowflake, spring: Leaf, summer: Sun, fall: Sunset }
@@ -135,7 +136,7 @@ export function ClassFinder({ state, full }: { state: FinderState; full: (cohort
               </p>
             )}
             <ul className="grid gap-3 sm:grid-cols-4">
-              {TERMS_2027.map((term) => {
+              {activeTerms(TERMS_2027).map((term) => {
                 const s = termSummary(term)
                 const Icon = START_ICON[term.id]
                 return (
