@@ -314,7 +314,7 @@ export const cohortsFor = (program: string, term: string) => COHORTS.filter((c) 
 export const cohortTitle = (c: Cohort) => `${TERM_NAMES[c.term]} ${c.program} ${c.label}`
 /** "Monday and Wednesday, 5:30–8:30 PM ET" */
 export const isOnlineCohort = (c: Pick<Cohort, "id">) => ["winter-dsat-weekday", "spring-dsat-weekday"].includes(c.id)
-export const cohortDelivery = (c: Pick<Cohort, "id">) => isOnlineCohort(c) ? "Live online (Zoom), nationwide" : "In person · Astoria, Queens"
+export const cohortDelivery = (c: Pick<Cohort, "id">) => isOnlineCohort(c) ? "Live online (Zoom)" : "In person · Astoria, Queens"
 export const cohortSchedule = (c: Cohort) => `${c.days}, ${c.time} ET · ${cohortDelivery(c)}${c.breakMinutes ? ` · ${c.breakMinutes}-minute break included` : ""}`
 
 /** Inquiry form link with this cohort already selected. */
