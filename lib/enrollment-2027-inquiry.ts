@@ -170,7 +170,7 @@ export function buildInquiryEmails(d: InquiryFields, s: Selection, intent: Inqui
       `Thank you for your interest in AhmedPrep's ${termName(s.term)} ${s.program} program for ${d.studentName}. This email confirms that we received your inquiry. It is not a confirmed enrollment.`,
       ENROLLMENT_DISCLAIMER,
       facts
-        ? `Your selected cohort: ${cohortTitle(s.cohort!)}\nSchedule: ${facts.schedule}\nDates: ${facts.dates}\nInstruction: ${facts.instruction}\nClass size: no more than ${MAX_CLASS_SIZE} students\nLocation: ${isOnlineCohort(s.cohort!) ? "Live online (Zoom), nationwide" : "Astoria, Queens (in person)"}`
+        ? `Your selected cohort: ${cohortTitle(s.cohort!)}\nSchedule: ${facts.schedule}\nDates: ${facts.dates}\nInstruction: ${facts.instruction}\nClass size: no more than ${MAX_CLASS_SIZE} students\nLocation: ${isOnlineCohort(s.cohort!) ? "Live online (Zoom)" : "Astoria, Queens (in person)"}`
         : `Your selection: ${label}. We will help you choose a schedule.`,
       ...(facts ? [`Tuition for this cohort:\n${facts.tuition}\nSubmitting this inquiry does not reserve a seat or lock in a discounted price.`] : []),
       ...(showFounding ? [`Founding-family tuition interest: ${d.foundingInterest}`] : []),
