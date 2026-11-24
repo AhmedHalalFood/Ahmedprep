@@ -103,7 +103,7 @@ const faqs: FaqItem[] = [
   },
   {
     q: "Where are Digital SAT classes and tutoring held?",
-    a: `Winter 2027 weekday Digital SAT classes are live online via Zoom on Tuesdays and Thursdays, 6:30–9:30 PM Eastern, and welcome students throughout the continental United States. Winter weekend SAT classes are in person at ${BUSINESS.address.street}, ${BUSINESS.address.city}, ${BUSINESS.address.region} ${BUSINESS.address.postalCode}. Spring and Summer follow their separately published schedules. Contact AhmedPrep for private tutoring arrangements.`,
+    a: `Winter 2027 weekday Digital SAT classes are live online via Zoom on Tuesdays and Thursdays, 6:30–9:30 PM Eastern, and welcome students throughout the continental United States. Winter weekend SAT classes are in person at ${BUSINESS.address.street}, ${BUSINESS.address.city}, ${BUSINESS.address.region} ${BUSINESS.address.postalCode}. Spring weekday classes also meet live online, and Summer and Fall Weekend Intensives meet in person. Contact AhmedPrep for private tutoring arrangements.`,
   },
   {
     q: "Is AhmedPrep affiliated with the College Board?",
@@ -222,7 +222,7 @@ export default function DigitalSatPrepPage() {
         id="sat-mastery"
         eyebrow="AhmedPrep Integrated Digital SAT Mastery"
         title="Foundation through the 1600 Challenge, in every cohort"
-        intro="Winter, Spring, and Summer cohorts cover the full Digital SAT curriculum. Students enter based on a diagnostic and receive skill-level assignments within the same small group. No student must wait for a particular season to study advanced topics."
+        intro="Winter, Spring, Summer, and Fall cohorts cover the full Digital SAT curriculum. Students enter based on a diagnostic and receive skill-level assignments within the same small group. No student must wait for a particular season to study advanced topics."
       >
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {[
@@ -241,7 +241,7 @@ export default function DigitalSatPrepPage() {
           Every cohort includes 75 minutes of Math, 75 minutes of Reading &amp; Writing, and 30 minutes of guided practice per class. Official Bluebook testing and targeted performance reviews help students prepare for their selected SAT date. Our goal is each student’s highest attainable score, with 1600 as the top challenge, never a guaranteed result.
         </p>
         <p className="mt-2 text-sm leading-relaxed text-subtle">
-          Additional test-date-specific Final SAT Intensives are planned, with schedules and tuition announced separately.
+          Summer and Fall Weekend Intensives meet Saturday and Sunday, 10 AM–3 PM, including a 30-minute break.
         </p>
         <Link href="/programs-2027" className="text-link mt-4">
           Compare Digital SAT classes and schedules <ArrowUpRight size={15} aria-hidden="true" />
