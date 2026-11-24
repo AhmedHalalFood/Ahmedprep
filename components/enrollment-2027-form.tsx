@@ -22,6 +22,7 @@ import {
   tuitionOptionsFor,
 } from "@/lib/cohorts-2027"
 import { WAITLIST_DISCLAIMER } from "@/lib/cohort-capacity"
+import { activeCohorts, activeTerms, isCohortActive } from "@/lib/program-retirement"
 import { ENROLLMENT_ACTIONS, ENROLLMENT_DISCLAIMER, FOUNDING_INTEREST_OPTIONS, GRADES_2027, inquiryReceivedMessage } from "@/lib/enrollment-2027"
 import { foundingQuestionApplies, inquiryName, resolveSelection, selectionLabel } from "@/lib/enrollment-2027-inquiry"
 
@@ -53,7 +54,7 @@ export type Enrollment2027Preset = { program?: string; term?: string; cohortId?:
 /** Turns ?program=&term=&cohort= into a consistent preset; anything that doesn't match the catalog is dropped. */
 export function presetFrom(input: Enrollment2027Preset): Pick<InquiryData, "program" | "term" | "cohortId"> {
   const cohort = input.cohortId ? findCohort(input.cohortId) : undefined
-  if (cohort) return { program: cohort.program, term: cohort.term, cohortId: cohort.id }
+  if (cohort && isCohortActive(cohort)) return { program: cohort.program, term: cohort.term, cohortId: cohort.id }
   const program = input.program && isProgramId(input.program) ? input.program : ""
   const term = input.term && isTermId(input.term) ? input.term : ""
   return { program, term, cohortId: "" }
@@ -198,8 +199,9 @@ export function Enrollment2027Form({ preset = {}, selectionShownAbove = false }:
     onChange: (v: string) => update(key, v),
   })
 
-  const cohorts = data.program && data.term ? cohortsFor(data.program, data.term) : []
-  const chosen = findCohort(data.cohortId)
+  const cohorts = data.program && data.term ? activeCohorts().filter((c) => c.program === data.program && c.term === data.term) : []
+  const selectedCohort = findCohort(data.cohortId)
+  const chosen = selectedCohort && isCohortActive(selectedCohort) ? selectedCohort : undefined
 
   if (status === "success" && submitted) {
     const selection = resolveSelection(submitted)
@@ -313,7 +315,7 @@ export function Enrollment2027Form({ preset = {}, selectionShownAbove = false }:
           update("cohortId", "")
           if (!(isTermId(v) && foundingQuestionApplies(v))) update("foundingInterest", "")
         }}
-        options={TERMS_2027.map((t) => {
+        options={activeTerms(TERMS_2027).map((t) => {
           const starts = (data.program ? cohortsFor(data.program, t.id) : t.cohorts).map((c) => c.firstIso).sort()
           return { value: t.id, title: termStartLabel(t.id), detail: t.id === "winter" ? "Classes begin Jan 9–12, depending on schedule." : starts[0] ? `First class ${formatShortDate(starts[0])}` : undefined }
         })}
