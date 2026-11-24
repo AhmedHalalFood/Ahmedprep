@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { connection } from "next/server"
-import { isTermActive } from "@/lib/program-retirement"
+import { activeCohorts, isTermActive } from "@/lib/program-retirement"
 import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 import Link from "next/link"
 import { ArrowUpRight, Laptop } from "lucide-react"
@@ -298,7 +298,7 @@ export default async function DigitalSatPrepPage() {
 
       <ProgramTuition program="Digital SAT" note={LAPTOP_NOTE} />
 
-      <EnrollmentSteps program="Digital SAT" location="digital_sat_enrollment" diagnosticEvent={EVENTS.digitalSatCtaClick} />
+      {activeCohorts().some((c) => c.program === "Digital SAT") && <EnrollmentSteps program="Digital SAT" location="digital_sat_enrollment" diagnosticEvent={EVENTS.digitalSatCtaClick} />}
 
       <Section id="free-resources" eyebrow="Free Digital SAT resources" title="Free practice and planning tools">
         <ResourceLinks items={resources} />
