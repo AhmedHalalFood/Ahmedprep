@@ -32,7 +32,7 @@ export function courseInstances2027(program: ProgramId) {
           startDate: span.startIso,
           endDate: span.endIso,
           courseSchedule: { "@type": "Schedule", description: cohortSchedule(c) },
-          location: {
+          ...(!isOnlineCohort(c) ? { location: {
             "@type": "Place",
             name: "AhmedPrep, Astoria, Queens",
             address: {
@@ -43,7 +43,7 @@ export function courseInstances2027(program: ProgramId) {
               postalCode: BUSINESS.address.postalCode,
               addressCountry: BUSINESS.address.country,
             },
-          },
+          } } : {}),
           offers: {
             "@type": "Offer",
             price: priceFor(c).regular,
@@ -61,13 +61,13 @@ export function ProgramCohorts2027({ program }: { program: ProgramId }) {
       id="classes-2027"
       tone="warm"
       eyebrow="2027 small-group classes"
-      title={`${program} classes in Winter, Spring, and Summer 2027`}
+      title={`${program} classes in Winter, Spring, Summer, and Fall 2027`}
     >
       <p className="max-w-2xl text-pretty leading-relaxed text-subtle">
-        In-person classes in Astoria, plus live online Winter weekday Digital SAT. At most {MAX_CLASS_SIZE} students per class, {dollars(HOURLY_RATE)} per scheduled instructional hour.
+        In-person classes in Astoria, plus live online Winter and Spring weekday Digital SAT. At most {MAX_CLASS_SIZE} students per class, {dollars(HOURLY_RATE)} per scheduled instructional hour.
         Choose a cohort to request enrollment information with it already selected.
       </p>
-      <div className="mt-8 grid gap-4 lg:grid-cols-3">
+      <div className="mt-8 grid gap-4 lg:grid-cols-4">
         {TERMS_2027.map((term) => (
           <div key={term.id} className="flex flex-col gap-3 border border-line bg-white p-6">
             <h3 className="text-xl font-extrabold text-navy">{term.name}</h3>
