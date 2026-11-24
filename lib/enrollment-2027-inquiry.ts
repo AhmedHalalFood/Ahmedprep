@@ -29,6 +29,7 @@ import {
 } from "@/lib/enrollment-2027"
 import type { Confirmation } from "@/lib/lead-delivery"
 import { WAITLIST_DISCLAIMER } from "@/lib/cohort-capacity"
+import { isCohortActive } from "@/lib/program-retirement"
 
 /**
  * Shared by the form, the API route, and the admin confirmation resend, so all three agree on what a valid
@@ -53,7 +54,7 @@ export function resolveSelection(input: { program?: string; term?: string; cohor
   const program = input.program ?? ""
   if (input.cohortId) {
     const cohort = findCohort(input.cohortId)
-    if (!cohort || !isProgramId(program) || !isTermId(input.term ?? "")) return null
+    if (!cohort || !isCohortActive(cohort) || !isProgramId(program) || !isTermId(input.term ?? "")) return null
     if (cohort.program !== program || cohort.term !== input.term) return null
     return { kind: "cohort", cohort, program, term: cohort.term }
   }
@@ -61,6 +62,8 @@ export function resolveSelection(input: { program?: string; term?: string; cohor
   const schedule = input.schedule ?? ""
   if (!legacy || !programByName(program) || !scheduleOptionsFor(program).includes(schedule)) return null
   const cohort = schedule === SCHEDULE_UNSURE ? null : findCohort(`winter-${legacy.slug}-${schedule.startsWith("Weekday") ? "weekday" : "weekend"}`) ?? null
+  if (cohort && !isCohortActive(cohort)) return null
+  if (!cohort && !["2027-01-09", "2027-01-11"].some((date) => date >= new Date().toISOString().slice(0, 10))) return null
   return { kind: "legacy", cohort, program: legacy.program, term: "winter", schedule }
 }
 
