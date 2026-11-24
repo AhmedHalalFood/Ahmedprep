@@ -1,4 +1,4 @@
-import { ArrowRight, Leaf, Snowflake, Sun } from "lucide-react"
+import { ArrowRight, Leaf, Snowflake, Sun, Sunset } from "lucide-react"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
 import { MAX_CLASS_SIZE } from "@/lib/cohorts-2027"
@@ -18,8 +18,8 @@ const SEASONS = [
     id: "spring" as const,
     title: "Spring 2027",
     detail: "12 weeks · 72 hours",
-    note: "Early-payment discount available",
-    formats: "Weekday and weekend classes",
+    note: "Weekday Digital SAT live online; weekend SHSAT & SAT in person",
+    formats: "Digital SAT online Tue/Thu, 6:30–9:30 PM ET"
     icon: Leaf,
     tone: "border-[#A9D5C5] bg-[#E6F4ED] text-[#086347]",
   },
@@ -27,10 +27,19 @@ const SEASONS = [
     id: "summer" as const,
     title: "Summer 2027",
     detail: "8-week program",
-    note: "Weekend and weekday intensive options",
-    formats: "Weekend and weekday intensive",
+    note: "SHSAT weekdays; Digital SAT weekends only",
+    formats: "SHSAT 96 hours · Digital SAT 72 hours"
     icon: Sun,
     tone: "border-[#F0D991] bg-[#FFF4D6] text-[#865500]",
+  },
+  {
+    id: "fall" as const,
+    title: "Fall 2027",
+    detail: "8-week intensives",
+    note: "SHSAT final exam preparation; Digital SAT weekend intensive",
+    formats: "SHSAT 96 hours · Digital SAT 72 hours",
+    icon: Sunset,
+    tone: "border-[#D3C6E6] bg-[#F4F0FA] text-[#593E83]",
   },
 ] as const
 
@@ -45,7 +54,7 @@ export function ProgramsPreview() {
               Find the right class for your student
             </h2>
             <p className="max-w-2xl text-sm leading-relaxed text-subtle">
-              In-person preparation in Astoria, Queens, plus live online Winter weekday Digital SAT nationwide. Maximum {MAX_CLASS_SIZE} students per class.
+              In-person preparation in Astoria, Queens, plus live online Winter and Spring weekday Digital SAT nationwide. Maximum {MAX_CLASS_SIZE} students per class.
             </p>
           </div>
           <TrackedLink
@@ -57,7 +66,7 @@ export function ProgramsPreview() {
             <span style={{ color: "#102F51" }}>Compare programs & pricing</span> <ArrowRight size={17} aria-hidden="true" style={{ color: "#102F51" }} />
           </TrackedLink>
         </div>
-        <div className="grid gap-3 md:grid-cols-3">
+        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
           {SEASONS.map(({ id, title, detail, note, formats, icon: Icon, tone }) => (
             <TrackedLink
               key={id}
@@ -80,9 +89,14 @@ export function ProgramsPreview() {
                 <div className="self-start space-y-1.5 pt-3 text-xs leading-relaxed">
                   <p className="text-sm font-extrabold">{detail}</p>
                   <p className="text-sm font-bold">SHSAT &amp; Digital SAT Prep</p>
-                  <p>July 3 – August 29, 2027</p>
-                  <p><strong>Weekend (Sat–Sun):</strong> 16 classes · 48 hours</p>
-                  <p><strong>Weekday intensive (Mon–Thu):</strong> 32 classes · 96 hours</p>
+                  <p><strong>SHSAT weekdays:</strong> July 1–Aug 26 · Mon–Thu, 10 AM–1 PM · 96 hours</p>
+                  <p><strong>Digital SAT weekends:</strong> July 3–Aug 28 · Sat/Sun, 10 AM–3 PM · 72 instructional hours (30-minute break)</p>
+                </div>
+              ) : id === "fall" ? (
+                <div className="self-start space-y-1.5 pt-3 text-xs leading-relaxed">
+                  <p className="text-sm font-extrabold">{detail}</p>
+                  <p><strong>SHSAT Final Intensive:</strong> Sep 13–Nov 4 · Mon–Thu, 5:30–8:30 PM · 96 hours</p>
+                  <p><strong>Digital SAT Weekend:</strong> Sep 11–Oct 31 · Sat/Sun, 10 AM–3 PM · 72 instructional hours (30-minute break)</p>
                 </div>
               ) : (
                 <div className="self-start space-y-1.5 pt-3">
@@ -97,6 +111,11 @@ export function ProgramsPreview() {
               </span>
             </TrackedLink>
           ))}
+        </div>
+
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-gold/50 bg-cream px-4 py-3 text-sm text-navy">
+          <span><strong>Complete SHSAT 2027:</strong> 336 instructional hours across four stages · $6,720 regular · annual packages from $5,040 for qualifying founding families</span>
+          <a href="/shsat-prep#annual-shsat-package" className="font-bold underline underline-offset-4 hover:text-brand">Explore annual SHSAT package</a>
         </div>
 
         <div className="mt-5 border-t border-line pt-5" aria-labelledby="winter-syllabus-heading">
