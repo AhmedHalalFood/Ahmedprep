@@ -46,7 +46,7 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
           </h1>
           <p className="max-w-3xl text-pretty text-lg leading-relaxed text-subtle">
             Choose when to start, SHSAT or Digital SAT, and a schedule to see one class&apos;s dates and tuition. Small groups in Astoria, maximum {MAX_CLASS_SIZE}{" "}
-            students. Winter and Spring weekday Digital SAT classes are live online; other listed cohorts meet in person in Astoria. All times are Eastern Time.
+            students. All SHSAT preparation cohorts are in person at our Astoria classroom. Winter and Spring weekday Digital SAT classes are live online, while its weekend and intensive cohorts meet in person in Astoria. All times are Eastern Time.
           </p>
         </div>
       </section>
@@ -58,7 +58,7 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
           </h2>
           <div className="mt-4 grid gap-4 md:grid-cols-2">
             <div className="rounded-xl border border-blue-200 bg-blue-50/60 p-4">
-              <h3 className="font-extrabold text-navy">SHSAT: Four-stage preparation</h3>
+              <h3 className="font-extrabold text-navy">SHSAT: Four-stage preparation · All in person in Astoria</h3>
               <p className="mt-2 text-sm leading-relaxed text-ink">Winter Foundation → Spring Advanced Mastery → Summer Intensive → Fall Final Intensive. Entry is guided by a diagnostic, and the Fall Final Intensive.</p>
               <Link href="/shsat-prep#shsat-pathway" className="mt-3 inline-flex items-center gap-1 text-sm font-extrabold text-navy underline underline-offset-4">
                 Explore the SHSAT pathway <ArrowUpRight size={15} aria-hidden="true" />
