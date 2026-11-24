@@ -112,7 +112,7 @@ export default async function Enroll2027Page({ searchParams }: Props) {
               </h1>
               <p className="flex items-start gap-2 text-sm leading-relaxed text-ink">
                 <MapPin size={18} aria-hidden="true" className="mt-0.5 shrink-0 text-brand" />
-                <span>{isOnlineCohort(selected) ? "Live online via Zoom · 6:30–9:30 PM Eastern · Nationwide" : `${E.location}: ${ADDRESS_LINE_1}, ${ADDRESS_LINE_2}`}</span>
+                <span>{isOnlineCohort(selected) ? "Live online via Zoom · 6:30–9:30 PM Eastern" : `${E.location}: ${ADDRESS_LINE_1}, ${ADDRESS_LINE_2}`}</span>
               </p>
             </div>
 
