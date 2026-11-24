@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { connection } from "next/server"
-import { activeCohorts, isAnnualShsatOfferActive } from "@/lib/program-retirement"
+import { activeCohorts, activeTermIds } from "@/lib/program-retirement"
 import "./refinement.css"
 import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 import Link from "next/link"
@@ -223,7 +223,7 @@ export default async function ShsatPrepPage() {
         </div>
       </Section>
 
-      <Section
+      {activeCohorts().some((c) => c.program === "SHSAT") && <Section
         id="shsat-pathway"
         eyebrow="AhmedPrep SHSAT 2027 pathway"
         title="Four connected stages, one clear goal"
@@ -235,7 +235,7 @@ export default async function ShsatPrepPage() {
             { season: "Spring", level: "2 · Advanced Mastery", focus: "Build challenging reasoning, complex reading comprehension, and multi-step problem solving.", tone: "border-emerald-200 bg-emerald-50" },
             { season: "Summer", level: "3 · Intensive Preparation", focus: "Apply skills under time pressure through harder mixed sets and full-length practice.", tone: "border-amber-200 bg-amber-50" },
             { season: "Fall", level: "4 · Final SHSAT Intensive", focus: "Refine exam strategy, correct recurring mistakes, and assess final readiness. September 13–November 4, Monday–Thursday, 5:30–8:30 PM ET, 96 instructional hours.", tone: "border-slate-200 bg-slate-50" },
-          ].map((stage) => (
+          ].filter((stage) => activeTermIds().includes(stage.season.toLowerCase() as "winter" | "spring" | "summer" | "fall")).map((stage) => (
             <article key={stage.season} className={`rounded-xl border p-5 ${stage.tone}`}>
               <p className="text-xs font-extrabold uppercase tracking-wider text-brand">{stage.season} 2027</p>
               <h3 className="mt-2 text-lg font-extrabold text-navy">{stage.level}</h3>
@@ -249,7 +249,7 @@ export default async function ShsatPrepPage() {
         <Link href="/programs-2027" className="text-link mt-4">
           View SHSAT class dates and tuition <ArrowUpRight size={15} aria-hidden="true" />
         </Link>
-      </Section>
+      </Section>}
 
       <Section id="curriculum" tone="warm" eyebrow="SHSAT curriculum" title="What students learn in Math and ELA">
         <div className="grid gap-6 md:grid-cols-2">
@@ -313,7 +313,7 @@ export default async function ShsatPrepPage() {
 
       <ProgramTuition program="SHSAT" />
 
-      <EnrollmentSteps program="SHSAT" location="shsat_enrollment" diagnosticEvent={EVENTS.shsatCtaClick} />
+      {activeCohorts().some((c) => c.program === "SHSAT") && <EnrollmentSteps program="SHSAT" location="shsat_enrollment" diagnosticEvent={EVENTS.shsatCtaClick} />}
 
       <Section id="free-resources" eyebrow="Free SHSAT resources" title="Practice tests and free SHSAT help">
         <ResourceLinks items={resources} />
