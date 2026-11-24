@@ -1,4 +1,5 @@
-import { ALL_COHORTS, TERM_IDS, type Cohort, type ProgramId, type TermId } from "@/lib/cohorts-2027"
+import { TERM_IDS, type Cohort, type ProgramId, type TermId } from "@/lib/cohorts-2027"
+import { activeCohorts, activeTermIds } from "@/lib/program-retirement"
 
 /**
  * URL state for the /programs-2027 class finder: season → program → format → one exact cohort.
@@ -46,11 +47,11 @@ export function parseFinder(params: Record<string, string | string[] | undefined
   const seasonRaw = one(params.season)
   const programRaw = one(params.program)
   const formatRaw = one(params.format)
-  const season = seasonRaw && (TERM_IDS as readonly string[]).includes(seasonRaw) ? (seasonRaw as TermId) : undefined
+  const season = seasonRaw && activeTermIds().includes(seasonRaw as TermId) ? (seasonRaw as TermId) : undefined
   const program = programRaw && programRaw in SLUG_PROGRAM ? SLUG_PROGRAM[programRaw as ProgramSlug] : undefined
   const formats =
     season && program
-      ? ALL_COHORTS.filter((c) => c.term === season && c.program === program).map((cohort) => ({ slug: formatOf(cohort), cohort }))
+      ? activeCohorts().filter((c) => c.term === season && c.program === program).map((cohort) => ({ slug: formatOf(cohort), cohort }))
       : []
   const match = formats.find((f) => f.slug === formatRaw)
   return { season, program, format: match?.slug, formats, cohort: match?.cohort }
