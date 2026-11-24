@@ -54,7 +54,7 @@ export function ProgramsPreview() {
               Find the right class for your student
             </h2>
             <p className="max-w-2xl text-sm leading-relaxed text-subtle">
-              In-person preparation in Astoria, Queens, plus live online Winter and Spring weekday Digital SAT nationwide. Maximum {MAX_CLASS_SIZE} students per class.
+              All SHSAT preparation cohorts meet in person at our Astoria, Queens classroom. Digital SAT weekday classes are live online in Winter and Spring; Digital SAT weekend and intensive classes meet in person. Maximum {MAX_CLASS_SIZE} students per class.
             </p>
           </div>
           <TrackedLink
@@ -114,7 +114,7 @@ export function ProgramsPreview() {
         </div>
 
         <div className="mt-4 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-gold/50 bg-cream px-4 py-3 text-sm text-navy">
-          <span><strong>Complete SHSAT 2027:</strong> 336 instructional hours across four stages · $6,720 regular · annual packages from $5,040 for qualifying founding families</span>
+          <span><strong>Complete SHSAT 2027 · All in person in Astoria:</strong> 336 instructional hours across four stages · $6,720 regular · annual packages from $5,040 for qualifying founding families</span>
           <a href="/shsat-prep#annual-shsat-package" className="font-bold underline underline-offset-4 hover:text-brand">Explore annual SHSAT package</a>
         </div>
 
