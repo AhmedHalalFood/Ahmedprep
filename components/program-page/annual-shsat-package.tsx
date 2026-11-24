@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { ArrowRight, Check } from "lucide-react"
 import { ANNUAL_SHSAT_2027, dollars } from "@/lib/cohorts-2027"
+import { isAnnualShsatOfferActive } from "@/lib/program-retirement"
 
 const annualInquiry = "mailto:Tariq@ahmedprep.com?subject=" +
   encodeURIComponent("Complete SHSAT 2027 Annual Package Inquiry") +
@@ -8,6 +9,7 @@ const annualInquiry = "mailto:Tariq@ahmedprep.com?subject=" +
 
 export function AnnualShsatPackage({ compact = false }: { compact?: boolean }) {
   const plan = ANNUAL_SHSAT_2027
+  if (!isAnnualShsatOfferActive()) return null
   return (
     <section id="annual-shsat-package" aria-labelledby="annual-shsat-title" className="scroll-mt-28 border-y border-line bg-white py-7 md:py-9">
       <div className="container">
