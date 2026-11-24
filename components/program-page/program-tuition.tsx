@@ -13,6 +13,7 @@ import {
   type ProgramId,
 } from "@/lib/cohorts-2027"
 import { programsHref } from "@/lib/program-finder"
+import { activeTerms } from "@/lib/program-retirement"
 
 // Seasonal accents are intentionally subtle so program schedules and tuition remain readable.
 const SEASON_CARD_TONE = {
@@ -35,6 +36,8 @@ const SEASON_CARD_TONE = {
 } as const
 
 export function ProgramTuition({ program, note }: { program: ProgramId; note?: string }) {
+  const terms = activeTerms(TERMS_2027).filter((term) => term.cohorts.some((cohort) => cohort.program === program))
+  if (terms.length === 0) return null
   return (
     <Section
       id="schedules-tuition"
@@ -44,7 +47,7 @@ export function ProgramTuition({ program, note }: { program: ProgramId; note?: s
     >
       {note ? <p className="-mt-4 mb-8 max-w-2xl font-bold text-navy">{note}</p> : null}
       <div className="flex flex-col gap-10">
-        {TERMS_2027.map((term) => {
+        {terms.map((term) => {
           const cohorts = term.cohorts.filter((c) => c.program === program)
           const tone = SEASON_CARD_TONE[term.id]
           return (
