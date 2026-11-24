@@ -130,7 +130,7 @@ export default function DigitalSatPrepPage() {
         balancedActions
         eyebrow="SAT tutoring in NYC · Astoria, Queens"
         title="Digital SAT Prep: Live Online or In Person"
-        serviceArea={`Winter weekday Digital SAT classes are live online nationwide; weekend classes meet in person in Astoria, Queens. Maximum ${MAX_CLASS_SIZE} students per class.`}
+        serviceArea={`Winter and Spring weekday Digital SAT classes are live online nationwide; weekend and intensive classes meet in person in Astoria, Queens. Maximum ${MAX_CLASS_SIZE} students per class.`}
         intro="Math and Reading & Writing instruction built from a free diagnostic, with Bluebook practice, Desmos strategies, and timed adaptive-module drills."
         benefitsTitle="Every Digital SAT student receives"
         benefits={benefits}
@@ -238,7 +238,7 @@ export default function DigitalSatPrepPage() {
           ))}
         </div>
         <p className="mt-5 text-sm leading-relaxed text-subtle">
-          Every cohort includes 75 minutes of Math, 75 minutes of Reading &amp; Writing, and 30 minutes of guided practice per class. Official Bluebook testing and targeted performance reviews help students prepare for their selected SAT date. Our goal is each student’s highest attainable score, with 1600 as the top challenge, never a guaranteed result.
+          Three-hour sessions include 75 minutes of Math, 75 minutes of Reading &amp; Writing, and 30 minutes of guided practice. Summer and Fall weekend intensive sessions provide 4.5 instructional hours with a 30-minute lunch break. Official Bluebook testing and targeted performance reviews help students prepare for their selected SAT date. Our goal is each student’s highest attainable score, with 1600 as the top challenge, never a guaranteed result.
         </p>
         <p className="mt-2 text-sm leading-relaxed text-subtle">
           Summer and Fall Weekend Intensives meet Saturday and Sunday, 10 AM–3 PM, including a 30-minute break.
@@ -279,7 +279,7 @@ export default function DigitalSatPrepPage() {
 
       <ClassStructure
         title="How every Digital SAT class is structured"
-        intro="Each three-hour class covers both sections of the test and ends with cumulative review."
+        intro="Our three-hour weekday and school-year weekend classes cover both sections and end with review. Summer and Fall weekend intensives extend to 4.5 instructional hours per meeting."
         blocks={[
           { minutes: 75, title: "Math", body: "Instruction and timed practice, including Desmos strategies where they help." },
           { minutes: 75, title: "Reading and Writing", body: "Skill-by-skill instruction across all four Reading and Writing domains." },
