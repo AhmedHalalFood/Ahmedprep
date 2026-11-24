@@ -158,7 +158,7 @@ export default async function Enroll2027Page({ searchParams }: Props) {
               Enroll in 2027 SHSAT &amp; Digital SAT Prep
             </h1>
             <p className="text-pretty text-lg leading-relaxed text-subtle">
-              Classes starting January, April, July and September 2027 in Astoria, plus live online Winter and Spring weekday Digital SAT. Request enrollment and we&apos;ll confirm availability
+              All SHSAT preparation cohorts meet in person in Astoria. Digital SAT weekday cohorts are live online in Winter and Spring; all Digital SAT weekend and intensive cohorts are in person. Request enrollment and we&apos;ll confirm availability
               and guide you through the rest.
             </p>
           </div>
@@ -176,7 +176,7 @@ export default async function Enroll2027Page({ searchParams }: Props) {
             <p className="flex items-start gap-2 text-sm leading-relaxed text-ink">
               <MapPin size={18} aria-hidden="true" className="mt-0.5 shrink-0 text-brand" />
               <span>
-                <span className="font-bold">{`${E.location} location: `}</span>
+                <span className="font-bold">{`${E.location} classroom (all SHSAT cohorts): `}</span>
                 {`${ADDRESS_LINE_1}, ${ADDRESS_LINE_2}`}
               </span>
             </p>
