@@ -19,7 +19,7 @@ const SEASONS = [
     title: "Spring 2027",
     detail: "12 weeks · 72 hours",
     note: "Weekday Digital SAT live online; weekend SHSAT & SAT in person",
-    formats: "Digital SAT online Tue/Thu, 6:30–9:30 PM ET"
+    formats: "Digital SAT online Tue/Thu, 6:30–9:30 PM ET",
     icon: Leaf,
     tone: "border-[#A9D5C5] bg-[#E6F4ED] text-[#086347]",
   },
@@ -28,7 +28,7 @@ const SEASONS = [
     title: "Summer 2027",
     detail: "8-week program",
     note: "SHSAT weekdays; Digital SAT weekends only",
-    formats: "SHSAT 96 hours · Digital SAT 72 hours"
+    formats: "SHSAT 96 hours · Digital SAT 72 hours",
     icon: Sun,
     tone: "border-[#F0D991] bg-[#FFF4D6] text-[#865500]",
   },
