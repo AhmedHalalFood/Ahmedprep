@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { connection } from "next/server"
+import { redirect } from "next/navigation"
 import { activeTerms } from "@/lib/program-retirement"
 import Link from "next/link"
 import { ArrowUpRight, CalendarDays, ClipboardCheck, Info, Laptop, UserRound, Video } from "lucide-react"
@@ -38,6 +39,7 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
   await connection()
   const params = await searchParams
   const currentTerms = activeTerms(TERMS_2027)
+  if (!currentTerms.length) redirect("/free-diagnostic")
   const previewFull = params.previewFull === "1"
   const state = parseFinder(params)
   return (
