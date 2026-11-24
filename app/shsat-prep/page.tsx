@@ -21,6 +21,7 @@ import { EnrollmentSteps } from "@/components/program-page/enrollment-steps"
 import { FeatureGrid, ResourceLinks } from "@/components/program-page/feature-grid"
 import { ProgramCtas } from "@/components/program-page/program-ctas"
 import { ProgramTuition } from "@/components/program-page/program-tuition"
+import { OfficialExamSources } from "@/components/program-page/official-exam-sources"
 import { AnnualShsatPackage } from "@/components/program-page/annual-shsat-package"
 import { EVENTS } from "@/lib/analytics"
 import { SITE_URL } from "@/lib/business"
@@ -312,6 +313,8 @@ export default async function ShsatPrepPage() {
       <AnnualShsatPackage compact />
 
       <ProgramTuition program="SHSAT" />
+
+      <OfficialExamSources exam="SHSAT" />
 
       {activeCohorts().some((c) => c.program === "SHSAT") && <EnrollmentSteps program="SHSAT" location="shsat_enrollment" diagnosticEvent={EVENTS.shsatCtaClick} />}
 
