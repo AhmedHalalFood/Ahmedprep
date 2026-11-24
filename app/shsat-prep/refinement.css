@@ -15,9 +15,6 @@
 .shsat-page-refined #shsat-pathway .mt-5 {
   margin-top: 0.75rem;
 }
-.shsat-page-refined #location .md\\:min-h-80 {
-  min-height: 15rem;
-}
 @media (min-width: 768px) {
   .shsat-page-refined > section:not(#diagnostic) {
     padding-top: 3.25rem;
