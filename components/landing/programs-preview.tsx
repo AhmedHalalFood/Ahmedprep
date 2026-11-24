@@ -2,6 +2,7 @@ import { ArrowRight, Leaf, Snowflake, Sun, Sunset } from "lucide-react"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
 import { MAX_CLASS_SIZE } from "@/lib/cohorts-2027"
+import { activeTermIds, isAnnualShsatOfferActive, isTermActive } from "@/lib/program-retirement"
 import { programsHref } from "@/lib/program-finder"
 
 const SEASONS = [
@@ -44,6 +45,8 @@ const SEASONS = [
 ] as const
 
 export function ProgramsPreview() {
+  const active = activeTermIds()
+  if (!active.length) return null
   return (
     <section id="programs-pricing" aria-labelledby="programs-pricing-title" className="scroll-mt-4 border-b border-line bg-site-canvas py-5 md:py-6">
       <div className="container rounded-2xl border border-line border-t-4 border-t-gold bg-white p-5 shadow-sm sm:p-6 md:p-7">
@@ -67,7 +70,7 @@ export function ProgramsPreview() {
           </TrackedLink>
         </div>
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-          {SEASONS.map(({ id, title, detail, note, formats, icon: Icon, tone }) => (
+          {SEASONS.filter((season) => active.includes(season.id)).map(({ id, title, detail, note, formats, icon: Icon, tone }) => (
             <TrackedLink
               key={id}
               href={programsHref({ season: id })}
@@ -113,12 +116,12 @@ export function ProgramsPreview() {
           ))}
         </div>
 
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-gold/50 bg-cream px-4 py-3 text-sm text-navy">
+        {isAnnualShsatOfferActive() && <div className="mt-4 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-gold/50 bg-cream px-4 py-3 text-sm text-navy">
           <span><strong>Complete SHSAT 2027 · All in person in Astoria:</strong> 336 instructional hours across four stages · $6,720 regular · annual packages from $5,040 for qualifying founding families</span>
           <a href="/shsat-prep#annual-shsat-package" className="font-bold underline underline-offset-4 hover:text-brand">Explore annual SHSAT package</a>
-        </div>
+        </div>}
 
-        <div className="mt-5 border-t border-line pt-5" aria-labelledby="winter-syllabus-heading">
+        {isTermActive("winter") && <div className="mt-5 border-t border-line pt-5" aria-labelledby="winter-syllabus-heading">
           <p className="text-xs font-extrabold uppercase tracking-widest text-brand">Explore our academic curriculum</p>
           <h3 id="winter-syllabus-heading" className="mt-1 text-xl font-extrabold text-navy">
             See what your child will learn
@@ -167,7 +170,7 @@ export function ProgramsPreview() {
               Updated Winter Digital SAT syllabus (live online weekday) · PDF upload pending
             </span>
           </div>
-        </div>
+        </div>}
       </div>
     </section>
   )
