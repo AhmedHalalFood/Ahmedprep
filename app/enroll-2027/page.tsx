@@ -6,7 +6,7 @@ import { EnrollmentSteps } from "@/components/enroll-2027/enrollment-steps"
 import { EnrollmentHelp } from "@/components/enroll-2027/enrollment-help"
 import { PayNowSlot } from "@/components/enroll-2027/pay-now-slot"
 import { SelectedClassSummary } from "@/components/enroll-2027/selected-class-summary"
-import { TERM_IDS, cohortTitle, findCohort, termStartLabel } from "@/lib/cohorts-2027"
+import { TERM_IDS, isOnlineCohort, cohortTitle, findCohort, termStartLabel } from "@/lib/cohorts-2027"
 import { TuitionOptions } from "@/components/enroll-2027/tuition-options"
 import { Enrollment2027Form } from "@/components/enrollment-2027-form"
 import { Faq, type FaqItem } from "@/components/landing/faq"
@@ -26,7 +26,7 @@ const ATTENDANCE_FAQS: FaqItem[] = [
   },
   {
     q: "What happens if AhmedPrep cancels a class?",
-    a: "We will provide the published makeup session or equivalent live instruction at no additional cost, preserving the promised 72 hours.",
+    a: "We will provide the published makeup session or equivalent live instruction at no additional cost, preserving the published cohort instructional hours.",
   },
   {
     q: "What if my child misses a class?",
@@ -34,18 +34,18 @@ const ATTENDANCE_FAQS: FaqItem[] = [
   },
   {
     q: "What happens if classes are canceled due to severe weather?",
-    a: "If severe weather or an emergency prevents an in-person class from taking place, AhmedPrep will arrange a makeup session. Families will be notified of any schedule changes. Winter weekday Digital SAT instruction takes place live online; all other cohorts are in person.",
+    a: "If severe weather or an emergency prevents an in-person class from taking place, AhmedPrep will arrange a makeup session. Families will be notified of any schedule changes. Winter and Spring weekday Digital SAT instruction takes place live online; all other cohorts are in person.",
   },
   {
-    q: "Will my child receive all 72 program hours?",
-    a: "Yes. Each program includes 72 hours of scheduled live instruction. Holiday closures and any AhmedPrep cancellations are covered by makeup instruction.",
+    q: "Will my child receive all published instructional hours?",
+    a: "Yes. Each program includes its published 72 or 96 hours of live instruction. Holiday closures and any AhmedPrep cancellations are covered by makeup instruction.",
   },
 ]
 
 export const metadata: Metadata = {
-  title: "2027 SHSAT & Digital SAT Enrollment: Winter, Spring, Summer",
+  title: "2027 SHSAT & Digital SAT Enrollment: Winter through Fall",
   description:
-    "Request enrollment in AhmedPrep's Winter, Spring, or Summer 2027 SHSAT and Digital SAT cohorts in Astoria: small-group classes of up to 12 students, including live online Winter weekday Digital SAT, at $20 per instructional hour.",
+    "Request enrollment in AhmedPrep's Winter, Spring, Summer, or Fall 2027 SHSAT and Digital SAT cohorts in Astoria: small-group classes of up to 12 students, including live online Winter and Spring weekday Digital SAT, at $20 per instructional hour.",
   alternates: { canonical: absoluteUrl(PATH) },
   openGraph: { ...baseOpenGraph, url: absoluteUrl(PATH) },
 }
@@ -70,7 +70,7 @@ export default async function Enroll2027Page({ searchParams }: Props) {
   const unknownCohort = Boolean(cohortParam) && !selected
   const facts = [
     { term: "Programs", value: "SHSAT & Digital SAT" },
-    { term: "Classes start", value: "January · April · July 2027" },
+    { term: "Classes start", value: "January · April · July · September 2027" },
     { term: "Class size", value: `Max ${E.maxClassSize} students` },
   ]
 
@@ -111,7 +111,7 @@ export default async function Enroll2027Page({ searchParams }: Props) {
               </h1>
               <p className="flex items-start gap-2 text-sm leading-relaxed text-ink">
                 <MapPin size={18} aria-hidden="true" className="mt-0.5 shrink-0 text-brand" />
-                <span>{selected.id === "winter-dsat-weekday" ? "Live online via Zoom · 6:30–9:30 PM Eastern · Nationwide" : `${E.location}: ${ADDRESS_LINE_1}, ${ADDRESS_LINE_2}`}</span>
+                <span>{isOnlineCohort(selected) ? "Live online via Zoom · 6:30–9:30 PM Eastern · Nationwide" : `${E.location}: ${ADDRESS_LINE_1}, ${ADDRESS_LINE_2}`}</span>
               </p>
             </div>
 
@@ -157,7 +157,7 @@ export default async function Enroll2027Page({ searchParams }: Props) {
               Enroll in 2027 SHSAT &amp; Digital SAT Prep
             </h1>
             <p className="text-pretty text-lg leading-relaxed text-subtle">
-              Classes starting January, April and July 2027 in Astoria, plus live online Winter weekday Digital SAT. Request enrollment and we&apos;ll confirm availability
+              Classes starting January, April, July and September 2027 in Astoria, plus live online Winter and Spring weekday Digital SAT. Request enrollment and we&apos;ll confirm availability
               and guide you through the rest.
             </p>
           </div>
@@ -190,7 +190,7 @@ export default async function Enroll2027Page({ searchParams }: Props) {
         <div className="mx-auto flex max-w-5xl flex-col gap-12">
           <div className="flex flex-col gap-2 border-l-4 border-brand bg-white p-5 text-sm leading-relaxed text-ink">
             <p className="font-extrabold text-navy">Choose when to start</p>
-            <p>The classes and tuition below are for January 2027 classes, the only start date with founding-family pricing (25% off, paid in full by December 12, 2026, at 11:59 PM ET). Spring and Summer offer early-payment pricing instead.</p>
+            <p>The classes and tuition below are for January 2027 classes, the only start date with founding-family pricing (25% off, paid in full by December 12, 2026, at 11:59 PM ET). Spring, Summer and Fall offer early-payment pricing instead.</p>
             <ul className="flex flex-col">
               {TERM_IDS.map((id) => (
                 <li key={id}>
