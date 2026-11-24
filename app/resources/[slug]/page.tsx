@@ -124,7 +124,7 @@ export default async function ResourcePage({ params }: { params: Promise<{ slug:
                 <Link href="/weekly-shsat-challenge" className="button button-gold mt-4">Start the weekly challenge <ArrowUpRight size={16} aria-hidden="true" /></Link>
               </section>
             )}
-            {resource.slug === "shsat-math-practice" && (
+            {resource.slug === "shsat-math-practice" && isTermActive("winter") && (
               <section aria-labelledby="math-winter-enrollment-title" className="mt-8 rounded-xl border border-gold/50 bg-warm p-5 sm:p-6">
                 <p className="text-xs font-extrabold uppercase tracking-wider text-brand">Winter 2027 · Enrollment open</p>
                 <h2 id="math-winter-enrollment-title" className="mt-1 text-xl font-extrabold text-navy">
