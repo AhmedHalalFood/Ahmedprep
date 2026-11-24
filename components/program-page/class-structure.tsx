@@ -2,10 +2,10 @@ import { Section } from "@/components/landing/primitives"
 
 type Block = { minutes: number; title: string; body: string }
 
-export function ClassStructure({ title, intro, blocks }: { title: string; intro: string; blocks: [Block, Block, Block] }) {
+export function ClassStructure({ title, intro, blocks, eyebrow = "Inside every three-hour class", extraNote }: { title: string; intro: string; blocks: [Block, Block, Block]; eyebrow?: string; extraNote?: string }) {
   const tones = ["bg-navy text-primary-foreground", "bg-brand text-primary-foreground", "bg-gold text-navy"]
   return (
-    <Section id="class-structure" eyebrow="Inside every three-hour class" title={title} intro={intro}>
+    <Section id="class-structure" eyebrow={eyebrow} title={title} intro={intro}>
       <div aria-hidden="true" className="flex h-12 w-full overflow-hidden border border-line">
         {blocks.map((b, i) => (
           <div
@@ -26,6 +26,7 @@ export function ClassStructure({ title, intro, blocks }: { title: string; intro:
           </li>
         ))}
       </ol>
+      {extraNote && <p className="mt-3 max-w-3xl text-sm leading-relaxed text-subtle">{extraNote}</p>}
     </Section>
   )
 }
