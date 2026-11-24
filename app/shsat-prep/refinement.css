@@ -1,0 +1,32 @@
+/* SHSAT program-page refinement only. Does not affect other pages. */
+.shsat-page-refined > section:not(#diagnostic) {
+  padding-top: 2.75rem;
+  padding-bottom: 2.75rem;
+}
+.shsat-page-refined > section > .container > .mb-10 {
+  margin-bottom: 1.5rem;
+}
+.shsat-page-refined #class-structure .mt-6 {
+  margin-top: 1rem;
+}
+.shsat-page-refined #enrollment .mt-6 {
+  margin-top: 1rem;
+}
+.shsat-page-refined #shsat-pathway .mt-5 {
+  margin-top: 0.75rem;
+}
+.shsat-page-refined #location .md\\:min-h-80 {
+  min-height: 15rem;
+}
+@media (min-width: 768px) {
+  .shsat-page-refined > section:not(#diagnostic) {
+    padding-top: 3.25rem;
+    padding-bottom: 3.25rem;
+  }
+}
+@media (max-width: 639px) {
+  .shsat-page-refined > section:not(#diagnostic) {
+    padding-top: 2.25rem;
+    padding-bottom: 2.25rem;
+  }
+}
