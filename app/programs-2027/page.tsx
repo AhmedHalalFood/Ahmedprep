@@ -1,4 +1,6 @@
 import type { Metadata } from "next"
+import { connection } from "next/server"
+import { activeTerms } from "@/lib/program-retirement"
 import Link from "next/link"
 import { ArrowUpRight, CalendarDays, ClipboardCheck, Info, Laptop, UserRound, Video } from "lucide-react"
 import { ClassFinder } from "@/components/programs/class-finder"
@@ -33,7 +35,9 @@ export const metadata: Metadata = {
 const SECONDARY_OPTIONS = (["free_diagnostic", "free_sunday", "private_tutoring"] as const).map((id) => getProgram(id)!)
 
 export default async function Programs2027Page({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+  await connection()
   const params = await searchParams
+  const currentTerms = activeTerms(TERMS_2027)
   const previewFull = params.previewFull === "1"
   const state = parseFinder(params)
   return (
@@ -59,7 +63,7 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
           <div className="mt-4 grid gap-4 md:grid-cols-2">
             <div className="rounded-xl border border-blue-200 bg-blue-50/60 p-4">
               <h3 className="font-extrabold text-navy">SHSAT: Four-stage preparation · All in person in Astoria</h3>
-              <p className="mt-2 text-sm leading-relaxed text-ink">Winter Foundation → Spring Advanced Mastery → Summer Intensive → Fall Final Intensive. Entry is guided by a diagnostic, and the Fall Final Intensive.</p>
+              <p className="mt-2 text-sm leading-relaxed text-ink">Winter Foundation, Spring Advanced Mastery, Summer Intensive, and Fall Final Intensive build toward the SHSAT, with diagnostic-guided placement.</p>
               <Link href="/shsat-prep#shsat-pathway" className="mt-3 inline-flex items-center gap-1 text-sm font-extrabold text-navy underline underline-offset-4">
                 Explore the SHSAT pathway <ArrowUpRight size={15} aria-hidden="true" />
               </Link>
@@ -98,7 +102,7 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
           <div className="rounded-2xl border border-line bg-paper">
             <h2 className="flex min-h-14 items-center px-5 text-lg font-extrabold text-navy">Compare all 2027 classes</h2>
             <div className="flex flex-col gap-6 border-t border-line px-5 pb-5 pt-4">
-              {TERMS_2027.map((term) => (
+              {currentTerms.map((term) => (
                 <div
                   key={term.id}
                   className={`overflow-x-auto rounded-xl border ${
