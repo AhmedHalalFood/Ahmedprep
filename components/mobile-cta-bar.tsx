@@ -6,6 +6,7 @@ import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
 import { BUSINESS } from "@/lib/business"
 import { ENROLLMENT_2027 } from "@/lib/enrollment-2027"
+import { activeTermIds } from "@/lib/program-retirement"
 
 export function MobileCtaBar({ showIntensive }: { showIntensive: boolean }) {
   return (
@@ -29,12 +30,12 @@ export function MobileCtaBar({ showIntensive }: { showIntensive: boolean }) {
         />
       ) : (
         <TrackedLink
-          href={ENROLLMENT_2027.requestHref}
+          href={activeTermIds().length ? ENROLLMENT_2027.requestHref : "/free-diagnostic"}
           event={EVENTS.programCtaClick}
           eventProps={{ location: "mobile_bar", cta: "request_enrollment_info" }}
           className="mobile-cta-primary"
         >
-          Request Enrollment <ArrowRight size={15} aria-hidden="true" />
+          {activeTermIds().length ? "Request Enrollment" : "Free Diagnostic"} <ArrowRight size={15} aria-hidden="true" />
         </TrackedLink>
       )}
     </nav>
