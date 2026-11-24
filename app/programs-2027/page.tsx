@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowUpRight, CalendarDays, ClipboardCheck, Info, Laptop, UserRound, Video } from "lucide-react"
 import { ClassFinder } from "@/components/programs/class-finder"
+import { AnnualShsatPackage } from "@/components/program-page/annual-shsat-package"
 import { FinderHashRestore } from "@/components/programs/finder-hash-restore"
 import {
   DEADLINE_TIME_LABEL,
@@ -40,12 +41,12 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
       <section aria-labelledby="programs-2027-title" className="border-b border-line px-5 pb-8 pt-10 sm:pt-14">
         <div className="mx-auto flex max-w-5xl flex-col gap-3">
           <p className="eyebrow blue">Programs &amp; Pricing</p>
-          <h1 id="programs-2027-title" className="text-balance font-serif text-3xl font-bold leading-tight text-navy sm:text-5xl">
+          <h1 id="programs-2027-title" className="text-balance text-3xl font-extrabold leading-tight tracking-tight text-navy sm:text-4xl">
             2027 SHSAT and Digital SAT classes
           </h1>
           <p className="max-w-3xl text-pretty text-lg leading-relaxed text-subtle">
             Choose when to start, SHSAT or Digital SAT, and a schedule to see one class&apos;s dates and tuition. Small groups in Astoria, maximum {MAX_CLASS_SIZE}{" "}
-            students. All times are Eastern Time.
+            students. Winter and Spring weekday Digital SAT classes are live online; other listed cohorts meet in person in Astoria. All times are Eastern Time.
           </p>
         </div>
       </section>
@@ -74,6 +75,8 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
         </div>
       </section>
 
+      <AnnualShsatPackage compact />
+
       <FinderHashRestore season={state.season} program={state.program} />
       <ClassFinder state={state} full={(id) => isCohortFull(id, { previewFull })} />
 
@@ -88,7 +91,7 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
               per cohort, paid in full by {formatDate(WINTER_FOUNDING_DEADLINE_ISO)} at {DEADLINE_TIME_LABEL}, subject to seat availability.
               Winter has no separate early-payment tier. Spring, Summer and Fall 2027: early-payment tuition (10% off) requires full payment at least{" "}
               {EARLY_DAYS_BEFORE_SPRING_SUMMER} calendar days before the selected cohort begins; there is no founding-family discount. Only one
-              discount applies.
+              discount applies. Full payment is required; installment plans are not offered.
             </p>
           </div>
 
