@@ -17,7 +17,7 @@ export function LocationSection({ location, compact = false }: { location: strin
             </p>
           </address>
           <p className="leading-relaxed text-subtle">
-            {location === "shsat" ? "Our Astoria classroom welcomes SHSAT families from across NYC and Long Island. All SHSAT group classes meet in person here." : "Our Astoria classroom welcomes families from across NYC and Long Island. Digital SAT weekday Winter 2027 classes meet live online, while the weekend cohort meets here in person."}
+            {location === "shsat" ? "Our Astoria classroom welcomes SHSAT families from across NYC and Long Island. All SHSAT group classes meet in person here." : "Our Astoria classroom welcomes families from across NYC and Long Island. Digital SAT weekday Winter and Spring 2027 classes meet live online, while the weekend cohort meets here in person."}
           </p>
           <div className="flex flex-wrap items-center gap-4">
             <a
