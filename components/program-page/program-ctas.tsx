@@ -24,16 +24,16 @@ export function ProgramCtas({
         href="#diagnostic"
         event={diagnosticEvent}
         eventProps={{ location }}
-        className={compact ? "button button-gold min-h-13 min-w-0 px-2 py-3 text-center text-[11px] leading-tight sm:text-xs" : "button button-gold button-lg justify-center"}
+        className={compact ? "button button-gold min-h-12 min-w-0 justify-center px-2.5 py-2.5 text-center text-[13px] font-bold leading-snug sm:text-sm" : "button button-gold button-lg justify-center"}
       >
         <CalendarCheck size={16} className="shrink-0" aria-hidden="true" />
         {compact ? "Free Diagnostic" : "Book Free Diagnostic"}
       </TrackedLink>
-      <Link href="/programs-2027" className={compact ? "button button-outline min-h-13 min-w-0 px-2 py-3 text-center text-[11px] leading-tight sm:text-xs" : "button button-outline button-lg justify-center"}>
+      <Link href="/programs-2027" className={compact ? "button button-outline min-h-12 min-w-0 justify-center px-2.5 py-2.5 text-center text-[13px] font-bold leading-snug sm:text-sm" : "button button-outline button-lg justify-center"}>
         <ListChecks size={16} className="shrink-0" aria-hidden="true" />
         {compact ? "Programs & Pricing" : "View Programs & Pricing"}
       </Link>
-      <Link href={enrollHref} className={compact ? "button button-outline min-h-13 min-w-0 px-2 py-3 text-center text-[11px] leading-tight sm:text-xs" : "button button-outline button-lg justify-center"}>
+      <Link href={enrollHref} className={compact ? "button button-outline min-h-12 min-w-0 justify-center px-2.5 py-2.5 text-center text-[13px] font-bold leading-snug sm:text-sm" : "button button-outline button-lg justify-center"}>
         Enroll for 2027 <ArrowRight size={16} className="shrink-0" aria-hidden="true" />
       </Link>
     </div>

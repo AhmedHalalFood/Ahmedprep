@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import "./refinement.css"
 import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
@@ -133,6 +134,7 @@ export default async function ShsatPrepPage() {
       <Breadcrumbs items={[{ label: "SHSAT Prep", href: PATH }]} />
       <ProgramHero
         location="shsat"
+        compact
         eyebrow="SHSAT tutoring in Astoria · Queens, NY"
         title="SHSAT Prep in Astoria, Queens"
         serviceArea={`Small-group, in-person SHSAT prep in Astoria for families across Queens and NYC. Maximum ${MAX_CLASS_SIZE} students per class.`}
@@ -141,7 +143,7 @@ export default async function ShsatPrepPage() {
         benefits={benefits}
         ctaLabel="Book Free Diagnostic"
         ctaEvent={EVENTS.shsatCtaClick}
-        actions={<ProgramCtas program="SHSAT" location="shsat_hero" diagnosticEvent={EVENTS.shsatCtaClick} />}
+        actions={<ProgramCtas program="SHSAT" location="shsat_hero" diagnosticEvent={EVENTS.shsatCtaClick} compact />}
       />
 
       {showIntensive && (
@@ -168,6 +170,16 @@ export default async function ShsatPrepPage() {
         </aside>
       )}
 
+      <nav aria-label="Jump to SHSAT program information" className="border-b border-line bg-white py-3">
+        <div className="container flex flex-wrap gap-x-5 gap-y-2 text-sm font-bold text-navy">
+          <a href="#schedules-tuition" className="min-h-9 py-2 underline underline-offset-4 hover:text-brand">2027 Classes &amp; Tuition</a>
+          <a href="#curriculum" className="min-h-9 py-2 underline underline-offset-4 hover:text-brand">Math &amp; ELA Curriculum</a>
+          <a href="#free-resources" className="min-h-9 py-2 underline underline-offset-4 hover:text-brand">Free Practice</a>
+          <a href="#diagnostic" className="min-h-9 py-2 underline underline-offset-4 hover:text-brand">Free Diagnostic</a>
+        </div>
+      </nav>
+
+      <div className="shsat-page-refined">
       <Section
         id="overview"
         eyebrow="SHSAT program overview"
@@ -305,13 +317,14 @@ export default async function ShsatPrepPage() {
       <TeachingVideos page="shsat" title="Short SHSAT lessons from AhmedPrep" />
       <SuccessStories program="SHSAT" title="SHSAT student results" />
       <Faq title="SHSAT prep FAQ" items={faqs} />
-      <LocationSection location="shsat" />
+      <LocationSection location="shsat" compact />
       <DiagnosticSection
         program="SHSAT"
         location="shsat"
         title="Book a free SHSAT diagnostic"
         intro="Complete the form and we'll contact you to confirm a diagnostic time at our Astoria location."
       />
+      </div>
       <JsonLd data={courseSchema} />
     </>
   )
