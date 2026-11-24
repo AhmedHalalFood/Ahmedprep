@@ -10,9 +10,9 @@ type ProgramSlug = "shsat" | "digital-sat"
 
 const PROGRAM_SLUG: Record<ProgramId, ProgramSlug> = { SHSAT: "shsat", "Digital SAT": "digital-sat" }
 const SLUG_PROGRAM: Record<ProgramSlug, ProgramId> = { shsat: "SHSAT", "digital-sat": "Digital SAT" }
-const FORMAT_OF: Record<Cohort["label"], FormatSlug> = { Weekday: "weekday", Weekend: "weekend", "Weekday Intensive": "intensive" }
+const FORMAT_OF: Record<Cohort["label"], FormatSlug> = { Weekday: "weekday", Weekend: "weekend", "Weekday Intensive": "intensive", "Weekend Intensive": "intensive", "Final Intensive": "intensive" }
 
-export const FORMAT_LABEL: Record<FormatSlug, string> = { weekday: "Weekday", weekend: "Weekend", intensive: "Summer Intensive" }
+export const FORMAT_LABEL: Record<FormatSlug, string> = { weekday: "Weekday", weekend: "Weekend", intensive: "Intensive" }
 
 export const formatOf = (cohort: Cohort) => FORMAT_OF[cohort.label]
 
