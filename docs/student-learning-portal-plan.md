@@ -64,6 +64,49 @@ Parent/guardian (optional Phase 2): view only linked minor's progress, homework 
 
 **Quality gates and staged output.** Begin with a 10–20-question technical grading smoke test, then an instructional **~200-question validated pilot** with a small student group, then 500–800, 2,000, and finally 4,000 approved questions. These are rollout targets, not counts already written or imported. For each batch: subject-matter review, solve-and-key check, independent distractor review, duplicate search, math rendering review, device accessibility, and teacher signoff before publishing.
 
+## Self-paced learning and subscriptions (new requested product, pricing proposals only)
+
+Offer AhmedPrep Self-Paced Learning as a third product line beside instructor-led SHSAT and Digital SAT courses. It uses the same central original question registry and grading engine, with its own content entitlements and protected mock exam pool.
+
+### Proposed commercial model (owner approval required)
+
+| Access | Proposed cost | Included | Boundaries |
+| --- | --- | --- | --- |
+| Free Practice | $0 | Weekly practice teaser, selected sample quizzes, sample explanations | No protected mocks; optional free account |
+| Self-Paced Plus SHSAT | $29/month/student | Approved SHSAT topic practice, timed quizzes, original assessments when ready, solutions, progress tracking | SHSAT only; no live teaching |
+| Self-Paced Plus Digital SAT | $29/month/student | Approved Digital SAT topic practice, timed quizzes, original assessments when ready, solutions, progress tracking | SAT only; no official College Board scaled score |
+| Enrolled instructor-led students | Included with existing course tuition for authorized class duration | Teacher-assigned homework, quizzes, tests, saved grades and teacher feedback | Existing full-upfront tuition policy preserved |
+
+Prices are **proposals only**. Do not advertise $29, promise the entire 4,000-question bank, or collect recurring payments before explicit approval of pricing, content readiness and subscription terms. Class tuition remains fully paid upfront; this subscription is a separate product, not installments.
+
+### Student experience
+
+- Choose SHSAT or Digital SAT and take an optional readiness diagnostic.
+- Study short original lessons and worked examples, using AhmedPrep math typography.
+- Practice by topic, weak skill, timed quiz or mixed set, progressing to original full-length assessments when bank coverage is sufficient.
+- Receive auto-graded raw results and full explanations, with an error notebook, performance history and next-study suggestions.
+- Permit retakes as configured, accommodations, and secure server-side timer management.
+- Reserve unseen mock/diagnostic items; do not expose secure classroom test forms in subscription topic sets. Track which IDs each student has seen and prevent unintended duplication.
+- Students enrolled in classes use the portal without an extra subscription charge for their assigned course materials. Optional subscription add-ons must never auto-enroll or double-charge them.
+- After subscription expires, preserve historical grades and permitted exports according to a written retention policy; stop access to new premium practice items.
+
+### Billing, privacy and access requirements
+
+1. Add a separate entitlement and billing model (products, plans, entitlements, subscriptions, billing customer references, idempotent billing events) apart from live cohort enrollment.
+2. Choose a reputable managed hosted checkout/billing system only after owner approval; disclose recurrence, renewal, cancellation and refund terms before checkout; verify signed billing events server-side. Do not store card details.
+3. Support online cancellation, refunds where required, failed payments and reasonable grace periods, with applicable legal compliance reviewed before launch.
+4. Use parental purchase and consent appropriate for minors; keep personal and academic data restricted to the student, authorized guardian and assigned instructors.
+5. Check access on the server on every question, solution, assessment, grade and file endpoint; hidden UI is insufficient.
+6. Keep the instructor-led course offline/full-payment policy unchanged. The free pilot may operate without activating any payment service.
+7. No automatic production deployments, billing, student invitations or production database changes without owner approval.
+
+### Staged release
+
+A. Validate secure login, question rendering and grading with 10-20 original items and test accounts.
+B. Pilot free self-paced study with about 200 reviewed unique items and a small group.
+C. Expand to 500-800 reviewed items plus sufficient test coverage, review pricing and legal terms, then build subscription checkout in preview.
+D. Activate paid subscriptions only after teacher content review, security tests, parent/guardian flow checks and explicit approval. Scale toward the 4,000-question target based on measured use.
+
 ## Phase 1: minimum viable portal
 
 1. Choose and integrate managed authentication with email verification, secure sessions, password reset, rate limiting, and a safe account invitation flow. Do not build custom password cryptography. Avoid creating real minor accounts with shared passwords.
