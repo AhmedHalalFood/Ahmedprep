@@ -1,4 +1,6 @@
 import type { Metadata } from "next"
+import { connection } from "next/server"
+import { activeTermIds, isCohortActive, isTermActive } from "@/lib/program-retirement"
 import { MapPin } from "lucide-react"
 import Link from "next/link"
 import { ClassCards } from "@/components/enroll-2027/class-cards"
@@ -55,6 +57,7 @@ type Props = { searchParams: Promise<Record<string, string | string[] | undefine
 const first = (value: string | string[] | undefined) => (Array.isArray(value) ? value[0] : value)
 
 export default async function Enroll2027Page({ searchParams }: Props) {
+  await connection()
   const params = await searchParams
   const cohortParam = first(params.cohort)
   const previewFull = first(params.previewFull) === "1"
@@ -67,7 +70,8 @@ export default async function Enroll2027Page({ searchParams }: Props) {
     previewFull,
   }
   const E = ENROLLMENT_2027
-  const selected = cohortParam ? findCohort(cohortParam) : undefined
+  const requested = cohortParam ? findCohort(cohortParam) : undefined
+  const selected = requested && isCohortActive(requested) ? requested : undefined
   const unknownCohort = Boolean(cohortParam) && !selected
   const facts = [
     { term: "Programs", value: "SHSAT & Digital SAT" },
@@ -195,7 +199,7 @@ export default async function Enroll2027Page({ searchParams }: Props) {
             <p className="font-extrabold text-navy">Choose when to start</p>
             <p>The classes and tuition below are for January 2027 classes, the only start date with founding-family pricing (25% off, paid in full by December 12, 2026, at 11:59 PM ET). Spring, Summer and Fall offer early-payment pricing instead.</p>
             <ul className="flex flex-col">
-              {TERM_IDS.map((id) => (
+              {activeTermIds().map((id) => (
                 <li key={id}>
                   <Link href={programsHref({ season: id })} className="inline-flex min-h-11 items-center font-bold text-brand underline">
                     {`${termStartLabel(id)}: schedules and tuition`}
@@ -204,11 +208,11 @@ export default async function Enroll2027Page({ searchParams }: Props) {
               ))}
             </ul>
           </div>
-          <div className="flex flex-col gap-12">
+          {isTermActive("winter") && <div className="flex flex-col gap-12">
             <p className="eyebrow blue">Classes starting January 2027</p>
             <ClassCards />
             <TuitionOptions />
-          </div>
+          </div>}
           <EnrollmentSteps />
         </div>
       </div>
