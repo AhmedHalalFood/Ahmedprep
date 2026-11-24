@@ -74,9 +74,9 @@ const WINTER_WEEKEND = { weekdays: [6, 0], firstIso: "2027-01-09", regularEndIso
 const SPRING_WEEKEND = { weekdays: [6, 0], firstIso: "2027-04-03", regularEndIso: "2027-06-20", closures: [], makeups: [] }
 const SUMMER_INTENSIVE = {
   weekdays: [1, 2, 3, 4],
-  firstIso: "2027-07-06",
+  firstIso: "2027-07-01",
   regularEndIso: "2027-08-26",
-  closures: [],
+  closures: [{ iso: "2027-07-05", reason: "Independence Day observed" }],
 }
 const SUMMER_WEEKEND = {
   weekdays: [6, 0],
@@ -149,7 +149,7 @@ const COHORTS: readonly Cohort[] = [
     id: "summer-shsat-intensive", term: "summer", program: "SHSAT", label: "Weekday Intensive",
     days: "Monday–Thursday", time: "10 AM–1 PM", dates: "July 1 kickoff; July 6 – August 26", sessions: 32, hours: 96,
     ...SUMMER_INTENSIVE,
-    makeups: [{ iso: "2027-07-01", time: "10 AM–1 PM", replaces: "2027-07-05", approved: true, additional: true }],
+    makeups: [],
   },
   {
     id: "summer-dsat-weekend", term: "summer", program: "Digital SAT", label: "Weekend Intensive",
