@@ -4,6 +4,7 @@ import { saveAndDeliverLead } from "@/lib/lead-storage"
 import { buildInquiryEmails, inquiryFieldsValid, resolveSelection, waitlistIdentity } from "@/lib/enrollment-2027-inquiry"
 import { termName } from "@/lib/cohorts-2027"
 import { isCohortFull } from "@/lib/cohort-capacity"
+import { isCohortActive } from "@/lib/program-retirement"
 
 export async function POST(request: Request) {
   const body = await readBody(request)
@@ -30,7 +31,8 @@ export async function POST(request: Request) {
     schedule: clean(body.schedule, 120),
   })
 
-  if (!selection || !inquiryFieldsValid(fields, selection.term)) return fail(400, "Please complete all required fields.")
+  if (!selection || !inquiryFieldsValid(fields, selection.term)) return fail(400, "Please complete all required fields or choose an active class.")
+  if (selection.cohort && !isCohortActive(selection.cohort)) return fail(410, "This program has ended. Please choose a current class.")
 
   // Waitlist requests are accepted only for an exact cohort that the server itself considers full.
   const intent = clean(body.intent, 20) === "waitlist" ? "waitlist" : "inquiry"
