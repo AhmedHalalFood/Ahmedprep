@@ -11,7 +11,6 @@ import {
   TERMS_2027,
   cohortSchedule,
   cohortSpan,
-  cohortsFor,
   dollars,
   findCohort,
   formatShortDate,
