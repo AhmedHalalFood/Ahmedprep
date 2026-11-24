@@ -86,7 +86,7 @@ const faqs: FaqItem[] = [
     a: "Yes. Online students need a compatible laptop and reliable internet for live Zoom instruction and independent Bluebook practice. In-person students must bring their own laptop. AhmedPrep does not supply devices.",
   },
   {
-    q: "How is each three-hour Digital SAT class structured?",
+    q: "How is each Digital SAT class structured?",
     a: "Every class includes 75 minutes of Math, 75 minutes of Reading and Writing, and 30 minutes of cumulative review.",
   },
   {
