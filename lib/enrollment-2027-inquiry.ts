@@ -1,5 +1,6 @@
 import {
   type Cohort,
+  isOnlineCohort,
   type ProgramId,
   type TermId,
   MAX_CLASS_SIZE,
@@ -81,7 +82,7 @@ export const foundingQuestionApplies = (term: TermId) => term === "winter"
 export type InquiryIntent = "inquiry" | "waitlist"
 
 /**
- * Winter requires a founding-interest answer. Spring and Summer must not carry one: the field is not shown there,
+ * Winter requires a founding-interest answer. Spring, Summer and Fall must not carry one: the field is not shown there,
  * so any value sent would be stale or forged, and is rejected rather than stored.
  */
 export function inquiryFieldsValid(d: InquiryFields, term: TermId = "winter") {
@@ -119,7 +120,7 @@ export function cohortFacts(cohort: Cohort) {
   return {
     schedule: cohortSchedule(cohort),
     dates: `${formatLongDate(startIso)} to ${formatLongDate(endIso)}`,
-    instruction: `${cohort.sessions} three-hour sessions, ${cohort.hours} hours of scheduled live instruction`,
+    instruction: `${cohort.sessions} live sessions, ${cohort.hours} instructional hours${cohort.breakMinutes ? ` (${cohort.breakMinutes}-minute break per meeting excluded)` : ""}`,
     tuition: [
       `Regular tuition: ${dollars(price.regular)}, paid in full before the first class.`,
       ...(price.founding !== null && foundingIso
@@ -169,7 +170,7 @@ export function buildInquiryEmails(d: InquiryFields, s: Selection, intent: Inqui
       `Thank you for your interest in AhmedPrep's ${termName(s.term)} ${s.program} program for ${d.studentName}. This email confirms that we received your inquiry. It is not a confirmed enrollment.`,
       ENROLLMENT_DISCLAIMER,
       facts
-        ? `Your selected cohort: ${cohortTitle(s.cohort!)}\nSchedule: ${facts.schedule}\nDates: ${facts.dates}\nInstruction: ${facts.instruction}\nClass size: no more than ${MAX_CLASS_SIZE} students\nLocation: Astoria, Queens (in person)`
+        ? `Your selected cohort: ${cohortTitle(s.cohort!)}\nSchedule: ${facts.schedule}\nDates: ${facts.dates}\nInstruction: ${facts.instruction}\nClass size: no more than ${MAX_CLASS_SIZE} students\nLocation: ${isOnlineCohort(s.cohort!) ? "Live online (Zoom), nationwide" : "Astoria, Queens (in person)"}`
         : `Your selection: ${label}. We will help you choose a schedule.`,
       ...(facts ? [`Tuition for this cohort:\n${facts.tuition}\nSubmitting this inquiry does not reserve a seat or lock in a discounted price.`] : []),
       ...(showFounding ? [`Founding-family tuition interest: ${d.foundingInterest}`] : []),
