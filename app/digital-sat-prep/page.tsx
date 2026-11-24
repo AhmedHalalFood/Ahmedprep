@@ -19,6 +19,7 @@ import { EnrollmentSteps } from "@/components/program-page/enrollment-steps"
 import { FeatureGrid, ResourceLinks } from "@/components/program-page/feature-grid"
 import { ProgramCtas } from "@/components/program-page/program-ctas"
 import { ProgramTuition } from "@/components/program-page/program-tuition"
+import { OfficialExamSources } from "@/components/program-page/official-exam-sources"
 import { EVENTS } from "@/lib/analytics"
 import { BUSINESS, SITE_URL } from "@/lib/business"
 import { MAX_CLASS_SIZE, cohortsFor, cohortInquiryHref, priceFor, dollars } from "@/lib/cohorts-2027"
@@ -297,6 +298,8 @@ export default async function DigitalSatPrepPage() {
       </Section>
 
       <ProgramTuition program="Digital SAT" note={LAPTOP_NOTE} />
+
+      <OfficialExamSources exam="Digital SAT" />
 
       {activeCohorts().some((c) => c.program === "Digital SAT") && <EnrollmentSteps program="Digital SAT" location="digital_sat_enrollment" diagnosticEvent={EVENTS.digitalSatCtaClick} />}
 
