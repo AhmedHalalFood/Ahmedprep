@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { connection } from "next/server"
+import { redirect } from "next/navigation"
 import { activeTermIds, isCohortActive, isTermActive } from "@/lib/program-retirement"
 import { MapPin } from "lucide-react"
 import Link from "next/link"
@@ -9,7 +10,7 @@ import { AnnualShsatPackage } from "@/components/program-page/annual-shsat-packa
 import { EnrollmentHelp } from "@/components/enroll-2027/enrollment-help"
 import { PayNowSlot } from "@/components/enroll-2027/pay-now-slot"
 import { SelectedClassSummary } from "@/components/enroll-2027/selected-class-summary"
-import { TERM_IDS, isOnlineCohort, cohortTitle, findCohort, termStartLabel } from "@/lib/cohorts-2027"
+import { isOnlineCohort, cohortTitle, findCohort, termStartLabel } from "@/lib/cohorts-2027"
 import { TuitionOptions } from "@/components/enroll-2027/tuition-options"
 import { Enrollment2027Form } from "@/components/enrollment-2027-form"
 import { Faq, type FaqItem } from "@/components/landing/faq"
@@ -58,6 +59,7 @@ const first = (value: string | string[] | undefined) => (Array.isArray(value) ? 
 
 export default async function Enroll2027Page({ searchParams }: Props) {
   await connection()
+  if (!activeTermIds().length) redirect("/free-diagnostic")
   const params = await searchParams
   const cohortParam = first(params.cohort)
   const previewFull = first(params.previewFull) === "1"
@@ -91,7 +93,7 @@ export default async function Enroll2027Page({ searchParams }: Props) {
         </div>
         {unknownCohort && (
           <p role="alert" className="border-l-4 border-gold bg-cream p-4 text-sm font-semibold leading-relaxed text-navy">
-            We couldn&apos;t find that class. Please choose when to start, the program, and a schedule below.
+            This class may have ended or is no longer offered. Please choose from the available classes below.
           </p>
         )}
         <div className="border border-line bg-white p-5 sm:p-8">
