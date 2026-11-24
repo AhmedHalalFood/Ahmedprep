@@ -315,7 +315,7 @@ export function Enrollment2027Form({ preset = {}, selectionShownAbove = false }:
           if (!(isTermId(v) && foundingQuestionApplies(v))) update("foundingInterest", "")
         }}
         options={activeTerms(TERMS_2027).map((t) => {
-          const starts = (data.program ? cohortsFor(data.program, t.id) : t.cohorts).map((c) => c.firstIso).sort()
+          const starts = t.cohorts.filter((cohort) => !data.program || cohort.program === data.program).map((cohort) => cohort.firstIso).sort()
           return { value: t.id, title: termStartLabel(t.id), detail: t.id === "winter" ? "Classes begin Jan 9–12, depending on schedule." : starts[0] ? `First class ${formatShortDate(starts[0])}` : undefined }
         })}
       />
