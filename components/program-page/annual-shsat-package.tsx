@@ -17,7 +17,7 @@ export function AnnualShsatPackage({ compact = false }: { compact?: boolean }) {
             One four-stage pathway from Winter Foundation to Fall Final Intensive
           </h2>
           <p className="mt-2 max-w-3xl text-sm leading-relaxed text-ink md:text-base">
-            336 instructional hours across Winter (72), Spring (72), Summer Intensive (96), and Fall Final Intensive (96).
+            All four SHSAT stages meet in person at AhmedPrep’s Astoria, Queens classroom: 336 instructional hours across Winter (72), Spring (72), Summer Intensive (96), and Fall Final Intensive (96).
             Seasonal enrollment remains available separately.
           </p>
           <div className="mt-4 grid gap-3 sm:grid-cols-3">
