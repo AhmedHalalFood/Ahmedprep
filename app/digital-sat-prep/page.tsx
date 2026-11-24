@@ -1,4 +1,6 @@
 import type { Metadata } from "next"
+import { connection } from "next/server"
+import { isTermActive } from "@/lib/program-retirement"
 import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 import Link from "next/link"
 import { ArrowUpRight, Laptop } from "lucide-react"
@@ -121,7 +123,8 @@ const courseSchema = {
   hasCourseInstance: courseInstances2027("Digital SAT"),
 }
 
-export default function DigitalSatPrepPage() {
+export default async function DigitalSatPrepPage() {
+  await connection()
   return (
     <>
       <Breadcrumbs items={[{ label: "Digital SAT Prep", href: PATH }]} />
@@ -141,7 +144,7 @@ export default function DigitalSatPrepPage() {
 
       <SatIntensiveAnnouncement />
 
-      <section aria-labelledby="dsat-winter-enrollment" className="bg-site-canvas py-6 md:py-8">
+      {isTermActive("winter") && <section aria-labelledby="dsat-winter-enrollment" className="bg-site-canvas py-6 md:py-8">
         <div className="container">
           <div className="rounded-2xl border border-[#D7E4EE] bg-white p-5 shadow-sm sm:p-7">
             <p className="text-xs font-extrabold uppercase tracking-widest text-brand">Winter 2027 · Now enrolling</p>
@@ -177,7 +180,7 @@ export default function DigitalSatPrepPage() {
             </Link>
           </div>
         </div>
-      </section>
+      </section>}
 
       <Section
         id="overview"
@@ -312,7 +315,7 @@ export default function DigitalSatPrepPage() {
         title="Book a free Digital SAT diagnostic"
         intro="Complete the form and we'll contact you to arrange a diagnostic. Winter weekday SAT classes are live online; weekend classes meet in Astoria."
       />
-      <JsonLd data={courseSchema} />
+      <JsonLd data={{ ...courseSchema, hasCourseInstance: courseInstances2027("Digital SAT") }} />
     </>
   )
 }
