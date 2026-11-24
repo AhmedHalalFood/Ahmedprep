@@ -113,8 +113,7 @@ export function Enrollment2027({ showIntensive }: { showIntensive: boolean }) {
                 {dollars(HOURLY_RATE)} per scheduled instructional hour
               </h3>
               <p className="text-pretty leading-relaxed text-white/75">
-                The same rate applies to SHSAT and Digital SAT. Winter and Spring cohorts are 72 hours; Summer cohorts are 96 hours
-                (weekday intensive) or 48 hours (weekend).
+                The same rate applies to SHSAT and Digital SAT. Winter and Spring cohorts are 72 hours; Summer and Fall SHSAT intensives are 96 hours, while Summer and Fall Digital SAT weekend intensives are 72 hours.
               </p>
             </div>
             <ul className="flex flex-col border-t border-white/20">
