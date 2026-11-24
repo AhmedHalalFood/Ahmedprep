@@ -50,11 +50,11 @@ const LEGACY_PROGRAM: Record<string, { program: ProgramId; slug: "shsat" | "dsat
  * Returns the validated selection, or null. New submissions send program + term + cohortId, and all three must
  * agree with the catalog. Older January payloads (cached pages, stored records) still resolve to their Winter cohort.
  */
-export function resolveSelection(input: { program?: string; term?: string; cohortId?: string; schedule?: string }): Selection | null {
+export function resolveSelection(input: { program?: string; term?: string; cohortId?: string; schedule?: string }, { includeCompleted = false }: { includeCompleted?: boolean } = {}): Selection | null {
   const program = input.program ?? ""
   if (input.cohortId) {
     const cohort = findCohort(input.cohortId)
-    if (!cohort || !isCohortActive(cohort) || !isProgramId(program) || !isTermId(input.term ?? "")) return null
+    if (!cohort || (!includeCompleted && !isCohortActive(cohort)) || !isProgramId(program) || !isTermId(input.term ?? "")) return null
     if (cohort.program !== program || cohort.term !== input.term) return null
     return { kind: "cohort", cohort, program, term: cohort.term }
   }
@@ -62,8 +62,8 @@ export function resolveSelection(input: { program?: string; term?: string; cohor
   const schedule = input.schedule ?? ""
   if (!legacy || !programByName(program) || !scheduleOptionsFor(program).includes(schedule)) return null
   const cohort = schedule === SCHEDULE_UNSURE ? null : findCohort(`winter-${legacy.slug}-${schedule.startsWith("Weekday") ? "weekday" : "weekend"}`) ?? null
-  if (cohort && !isCohortActive(cohort)) return null
-  if (!cohort && !isTermActive("winter")) return null
+  if (cohort && !includeCompleted && !isCohortActive(cohort)) return null
+  if (!cohort && !includeCompleted && !isTermActive("winter")) return null
   return { kind: "legacy", cohort, program: legacy.program, term: "winter", schedule }
 }
 
