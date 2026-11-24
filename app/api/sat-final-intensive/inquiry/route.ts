@@ -13,6 +13,7 @@ import {
   formatUsd,
   quoteFor,
   validateInquiry,
+  newYorkWallClock,
   type ClassDate,
   type InquiryInput,
   type PaymentMethod,
@@ -26,6 +27,7 @@ export const dynamic = "force-dynamic"
  * No seat is reserved and no payment is taken or confirmed.
  */
 export async function POST(request: Request) {
+  if (newYorkWallClock(new Date()) >= "2026-12-03 21:00") return NextResponse.json({ success: false, error: "This intensive has ended. See current Digital SAT programs." }, { status: 410 })
   const body = await readBody(request)
   if (!body) return NextResponse.json({ success: false, error: "Invalid request." }, { status: 400 })
 
