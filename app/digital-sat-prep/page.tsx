@@ -25,7 +25,7 @@ export const revalidate = 3600
 
 const PATH = "/digital-sat-prep"
 const TITLE = "Digital SAT Prep in Queens & Online | AhmedPrep"
-const DESCRIPTION = `Prepare for the Digital SAT with AhmedPrep. Live online classes nationwide and in-person tutoring in Astoria, Queens. Small groups, max ${MAX_CLASS_SIZE}. Free diagnostic.`
+const DESCRIPTION = `Prepare for the Digital SAT with AhmedPrep. Live online classes and in-person tutoring in Astoria, Queens. Small groups, max ${MAX_CLASS_SIZE}. Free diagnostic.`
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
@@ -130,7 +130,7 @@ export default function DigitalSatPrepPage() {
         balancedActions
         eyebrow="SAT tutoring in NYC · Astoria, Queens"
         title="Digital SAT Prep: Live Online or In Person"
-        serviceArea={`Winter and Spring weekday Digital SAT classes are live online nationwide; weekend and intensive classes meet in person in Astoria, Queens. Maximum ${MAX_CLASS_SIZE} students per class.`}
+        serviceArea={`Winter and Spring weekday Digital SAT classes are live online; weekend and intensive classes meet in person in Astoria, Queens. Maximum ${MAX_CLASS_SIZE} students per class.`}
         intro="Math and Reading & Writing instruction built from a free diagnostic, with Bluebook practice, Desmos strategies, and timed adaptive-module drills."
         benefitsTitle="Every Digital SAT student receives"
         benefits={benefits}
@@ -149,7 +149,7 @@ export default function DigitalSatPrepPage() {
               Winter Digital SAT classes: online or in Astoria
             </h2>
             <p className="mt-2 text-ink">
-              Weekday classes meet live online via Zoom (nationwide); weekend classes meet in person in Astoria. Both offer 12 weeks, 24 meetings, 72 instructional hours, maximum {MAX_CLASS_SIZE} students per class.
+              Weekday classes meet live online via Zoom; weekend classes meet in person in Astoria. Both offer 12 weeks, 24 meetings, 72 instructional hours, maximum {MAX_CLASS_SIZE} students per class.
             </p>
             <div className="mt-5 grid gap-3 md:grid-cols-2">
               {cohortsFor("Digital SAT", "winter").map((cohort) => {
