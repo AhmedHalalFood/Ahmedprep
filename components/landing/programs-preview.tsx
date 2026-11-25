@@ -55,9 +55,9 @@ export function ProgramsPreview() {
       <div className="container rounded-2xl border border-line border-t-4 border-t-gold bg-white p-5 shadow-sm sm:p-6 md:p-7">
         <div className="mb-5 flex flex-col justify-between gap-4 md:flex-row md:items-center">
           <div className="space-y-2">
-            <p className="eyebrow blue">Explore the 2027 class calendar</p>
+            <p className="eyebrow blue">Winter enrollment first · 2027 calendar below</p>
             <h2 id="programs-pricing-title" className="text-balance text-2xl font-extrabold leading-tight text-navy md:text-3xl">
-              Find the right class for your student
+              Choose your Winter class, then explore the year
             </h2>
             <p className="max-w-2xl text-sm leading-relaxed text-subtle">
               All SHSAT preparation cohorts meet in person at our Astoria, Queens classroom. Digital SAT weekday classes are live online in Winter and Spring; Digital SAT weekend and intensive classes meet in person. Maximum {MAX_CLASS_SIZE} students per class.
@@ -72,6 +72,37 @@ export function ProgramsPreview() {
             <span style={{ color: "#102F51" }}>Compare programs & pricing</span> <ArrowRight size={17} aria-hidden="true" style={{ color: "#102F51" }} />
           </TrackedLink>
         </div>
+        {winterClasses.length > 0 && (
+          <div className="mt-5 border-t border-line pt-5">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <p className="text-xs font-extrabold uppercase tracking-widest text-brand">Winter 2027 · Four separate classes</p>
+                <h3 className="mt-1 text-lg font-extrabold text-navy">Choose from all four Winter class options</h3>
+              </div>
+              <p className="text-xs font-semibold text-subtle">12 weeks · 24 meetings · 72 hours · Maximum 12 students each</p>
+            </div>
+            <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+              {winterClasses.map((c) => (
+                <li key={c.id}>
+                  <TrackedLink
+                    href={cohortInquiryHref(c)}
+                    event={EVENTS.programCtaClick}
+                    eventProps={{ location: "home_winter_four_classes", cta: c.id }}
+                    className={`flex h-full flex-col gap-2 rounded-xl border px-4 py-4 transition-colors hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy ${c.program === "SHSAT" ? "border-blue-200 bg-blue-50/60" : "border-emerald-200 bg-emerald-50/60"}`}
+                  >
+                    <span className="text-sm font-extrabold text-navy">{c.program} · {c.label}</span>
+                    <span className="text-xs leading-relaxed text-ink">{cohortSchedule(c)}</span>
+                    <span className="mt-auto text-xs font-bold text-navy">{dollars(priceFor(c).regular)} regular · Founding-family {dollars(priceFor(c).founding ?? priceFor(c).regular)} if eligible</span>
+                    <span className="inline-flex items-center gap-1 pt-1 text-xs font-extrabold text-brand">View this class <ArrowRight size={14} aria-hidden="true" /></span>
+                  </TrackedLink>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <div className="mt-6 border-t border-line pt-5">
+          <p className="mb-3 text-xs font-extrabold uppercase tracking-widest text-brand">Explore Spring, Summer and Fall as well</p>
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
           {SEASONS.filter((season) => active.includes(season.id)).map(({ id, title, detail, note, formats, icon: Icon, tone }) => (
             <TrackedLink
@@ -120,34 +151,7 @@ export function ProgramsPreview() {
           ))}
         </div>
 
-        {winterClasses.length > 0 && (
-          <div className="mt-5 border-t border-line pt-5">
-            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-              <div>
-                <p className="text-xs font-extrabold uppercase tracking-widest text-brand">Winter 2027 · Four separate classes</p>
-                <h3 className="mt-1 text-lg font-extrabold text-navy">Choose from all four Winter class options</h3>
-              </div>
-              <p className="text-xs font-semibold text-subtle">12 weeks · 24 meetings · 72 hours · Maximum 12 students each</p>
-            </div>
-            <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-              {winterClasses.map((c) => (
-                <li key={c.id}>
-                  <TrackedLink
-                    href={cohortInquiryHref(c)}
-                    event={EVENTS.programCtaClick}
-                    eventProps={{ location: "home_winter_four_classes", cta: c.id }}
-                    className={`flex h-full flex-col gap-2 rounded-xl border px-4 py-4 transition-colors hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy ${c.program === "SHSAT" ? "border-blue-200 bg-blue-50/60" : "border-emerald-200 bg-emerald-50/60"}`}
-                  >
-                    <span className="text-sm font-extrabold text-navy">{c.program} · {c.label}</span>
-                    <span className="text-xs leading-relaxed text-ink">{cohortSchedule(c)}</span>
-                    <span className="mt-auto text-xs font-bold text-navy">{dollars(priceFor(c).regular)} regular · Founding-family {dollars(priceFor(c).founding ?? priceFor(c).regular)} if eligible</span>
-                    <span className="inline-flex items-center gap-1 pt-1 text-xs font-extrabold text-brand">View this class <ArrowRight size={14} aria-hidden="true" /></span>
-                  </TrackedLink>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        </div>
 
         {isAnnualShsatOfferActive() && <div className="mt-4 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-gold/50 bg-cream px-4 py-3 text-sm text-navy">
           <span><strong>Complete SHSAT 2027 · All in person in Astoria:</strong> 336 instructional hours across four stages · $6,720 regular · annual packages from $5,040 for qualifying founding families</span>
@@ -199,9 +203,7 @@ export function ProgramsPreview() {
             >
               Download Winter SHSAT syllabus (PDF) <ArrowRight size={15} aria-hidden="true" />
             </a>
-            <span className="inline-flex min-h-10 items-center text-sm font-semibold text-subtle">
-              Updated Winter Digital SAT syllabus (live online weekday) · PDF upload pending
-            </span>
+            <a href="/digital-sat-prep#sat-mastery" className="inline-flex min-h-10 items-center text-sm font-extrabold text-navy underline underline-offset-4 hover:text-brand">View the Winter Digital SAT curriculum <ArrowRight size={15} aria-hidden="true" /></a>
           </div>
         </div>}
       </div>
