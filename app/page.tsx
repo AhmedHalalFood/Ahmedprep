@@ -34,6 +34,7 @@ export default async function Home() {
     <>
       <Winter2027Promo />
 
+      <ProgramsPreview />
 
       {showIntensive && (
         <aside aria-label="2026 SHSAT Final Intensive" className="border-b border-gold/40 bg-cream">
@@ -52,8 +53,6 @@ export default async function Home() {
       )}
 
       <WhyFamilies />
-
-      <ProgramsPreview />
 
       <ToolsResources />
     </>

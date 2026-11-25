@@ -123,7 +123,7 @@ test("regular tuition is due before the first scheduled class, with no installme
   assert.match(TUITION_TIERS.find((t) => t.id === "regular").condition, /before the student’s first scheduled class/)
   assert.equal(
     ENROLLMENT_2027.tuition.rules,
-    "Only one discount applies. Payment and installment terms will be confirmed before payment is requested.",
+    "Only one discount applies. Full tuition payment is required before enrollment is confirmed. AhmedPrep will provide payment instructions after confirming availability.",
   )
 })
 
