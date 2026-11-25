@@ -41,7 +41,7 @@ export const metadata: Metadata = {
 const benefits = [
   "A free, timed SHSAT-style diagnostic",
   `Small in-person classes, maximum ${MAX_CLASS_SIZE} students`,
-  "Instruction led by founder Tariq Ahmed",
+  "Every SHSAT class personally taught by founder Tariq Ahmed",
   "Math and ELA in every three-hour class",
   "Timed quizzes, mock exams, and progress updates",
 ]
@@ -56,8 +56,8 @@ const approach = [
     body: `Every SHSAT cohort is capped at ${MAX_CLASS_SIZE} students. That keeps classes focused and lets every student get direct feedback on their work.`,
   },
   {
-    title: "Founder-led instruction",
-    body: "Classes are led by founder Tariq Ahmed, who has 12+ years of teaching and test-prep experience.",
+    title: "Personally taught by the founder",
+    body: "Tariq Ahmed personally teaches SHSAT classes, with 12+ years of teaching and test-prep experience.",
   },
 ]
 
