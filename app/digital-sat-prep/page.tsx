@@ -295,6 +295,17 @@ export default function DigitalSatPrepPage() {
 
       <EnrollmentSteps program="Digital SAT" location="digital_sat_enrollment" diagnosticEvent={EVENTS.digitalSatCtaClick} />
 
+      <section className="bg-warm py-6" aria-labelledby="digital-sat-weekly-challenge-title">
+        <div className="container rounded-xl border border-gold/50 bg-white p-5 sm:p-6">
+          <p className="text-xs font-extrabold uppercase tracking-wider text-brand">Free Digital SAT weekly challenge</p>
+          <h2 id="digital-sat-weekly-challenge-title" className="mt-1 text-xl font-extrabold text-navy">10 questions: 5 hard and 5 super hard</h2>
+          <p className="mt-2 text-sm leading-relaxed text-ink">Test your Math and Reading &amp; Writing skills. Submit all answers before seeing your score and detailed solutions.</p>
+          <Link href="/weekly-digital-sat-challenge" className="mt-4 inline-flex items-center gap-2 font-bold text-brand underline underline-offset-4">
+            Take the weekly Digital SAT challenge <ArrowUpRight size={16} aria-hidden="true" />
+          </Link>
+        </div>
+      </section>
+
       <Section id="free-resources" eyebrow="Free Digital SAT resources" title="Free practice and planning tools">
         <ResourceLinks items={resources} />
       </Section>
