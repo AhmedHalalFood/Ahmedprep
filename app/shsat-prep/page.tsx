@@ -133,6 +133,7 @@ export default async function ShsatPrepPage() {
       <Breadcrumbs items={[{ label: "SHSAT Prep", href: PATH }]} />
       <ProgramHero
         location="shsat"
+        compact
         eyebrow="SHSAT tutoring in Astoria · Queens, NY"
         title="SHSAT Prep in Astoria, Queens"
         serviceArea={`Small-group, in-person SHSAT prep in Astoria for families across Queens and NYC. Maximum ${MAX_CLASS_SIZE} students per class.`}
@@ -141,7 +142,7 @@ export default async function ShsatPrepPage() {
         benefits={benefits}
         ctaLabel="Book Free Diagnostic"
         ctaEvent={EVENTS.shsatCtaClick}
-        actions={<ProgramCtas program="SHSAT" location="shsat_hero" diagnosticEvent={EVENTS.shsatCtaClick} />}
+        actions={<ProgramCtas program="SHSAT" location="shsat_hero" diagnosticEvent={EVENTS.shsatCtaClick} compact />}
       />
 
       {showIntensive && (
