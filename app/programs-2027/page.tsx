@@ -45,7 +45,7 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
           </h1>
           <p className="max-w-3xl text-pretty text-lg leading-relaxed text-subtle">
             Choose when to start, SHSAT or Digital SAT, and a schedule to see one class&apos;s dates and tuition. Small groups in Astoria, maximum {MAX_CLASS_SIZE}{" "}
-            students. All times are Eastern Time.
+            students. All classes are personally taught by founder Tariq Ahmed. All times are Eastern Time.
           </p>
         </div>
       </section>
