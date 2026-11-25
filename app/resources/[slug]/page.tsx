@@ -48,8 +48,9 @@ export default async function ResourcePage({ params }: { params: Promise<{ slug:
   if (!resource) notFound()
 
   const isShsat = resource.category === "SHSAT"
+  const isPastRegistrationGuide = resource.slug === "2026-shsat-dates-registration-deadline"
   const programHref = isShsat ? "/shsat-prep" : "/digital-sat-prep"
-  const related = RESOURCES.filter((r) => r.category === resource.category && r.slug !== resource.slug).slice(0, 6)
+  const related = RESOURCES.filter((r) => r.category === resource.category && r.slug !== resource.slug && r.slug !== "2026-shsat-dates-registration-deadline").slice(0, 6)
   const updated = resource.dateModified ?? resource.datePublished
   const url = `${SITE_URL}/resources/${resource.slug}`
 
@@ -70,6 +71,11 @@ export default async function ResourcePage({ params }: { params: Promise<{ slug:
             {updated && (
               <p className="text-xs font-bold uppercase tracking-wider text-subtle">
                 Updated <time dateTime={updated}>{formatDate(updated)}</time>
+              </p>
+            )}
+            {isPastRegistrationGuide && (
+              <p className="rounded-md border border-amber-200 bg-amber-50 p-3 text-sm font-semibold text-navy">
+                Archived information: This article covers the completed Fall 2026 SHSAT registration period. Check NYC Public Schools for current registration dates and AhmedPrep&apos;s 2027 programs for current classes.
               </p>
             )}
             {resource.intro ? (

@@ -91,7 +91,7 @@ export default async function UpdatesPage({ searchParams }: { searchParams: Prom
             <nav aria-label="In-depth guides" className="border border-line p-6">
               <h2 className="text-xs font-extrabold uppercase tracking-wider text-subtle">In-depth guides</h2>
               <ul className="mt-4 flex flex-col gap-3 font-bold leading-snug text-navy">
-                <li><Link href="/resources/2026-shsat-dates-registration-deadline" className="hover:text-brand">2026 SHSAT dates and registration</Link></li>
+                <li><Link href="/resources/shsat-guide" className="hover:text-brand">SHSAT guide for NYC families</Link></li>
                 <li><Link href="/resources/digital-shsat-2026" className="hover:text-brand">How the digital SHSAT works</Link></li>
                 <li><Link href="/resources/digital-sat-guide" className="hover:text-brand">Digital SAT guide for families</Link></li>
                 <li><Link href="/resources" className="hover:text-brand">All resources</Link></li>
