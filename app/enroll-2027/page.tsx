@@ -11,7 +11,7 @@ import { Faq, type FaqItem } from "@/components/landing/faq"
 import { Breadcrumbs } from "@/components/landing/primitives"
 import { ADDRESS_LINE_1, ADDRESS_LINE_2 } from "@/lib/business"
 import { isCohortFull } from "@/lib/cohort-capacity"
-import { ENROLLMENT_2027, ENROLLMENT_ACTIONS, REQUEST_NOT_GUARANTEE } from "@/lib/enrollment-2027"
+import { ENROLLMENT_2027, ENROLLMENT_ACTIONS } from "@/lib/enrollment-2027"
 import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 import { programsHref } from "@/lib/program-finder"
 
