@@ -158,7 +158,7 @@ export default async function Enroll2027Page({ searchParams }: Props) {
               Winter 2027 SHSAT &amp; Digital SAT Enrollment
             </h1>
             <p className="text-pretty text-lg leading-relaxed text-subtle">
-              January classes are enrolling now. In-person SHSAT and weekend Digital SAT classes meet in Astoria; Winter weekday Digital SAT meets live online. Spring and Summer 2027 inquiries are also welcome.
+              January classes are enrolling now. In-person SHSAT and weekend Digital SAT classes meet in Astoria; Winter weekday Digital SAT meets live online. Every class is personally taught by founder Tariq Ahmed. Spring and Summer 2027 inquiries are also welcome.
             </p>
             <div id="winter-tuition" className="scroll-mt-6 rounded-xl border border-[#E8D5A2] bg-[#FFF8E7] p-4 text-navy sm:p-5">
               <p className="text-xs font-extrabold uppercase tracking-wider text-[#79570A]">
