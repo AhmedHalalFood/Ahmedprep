@@ -157,7 +157,7 @@ export default async function Enroll2027Page({ searchParams }: Props) {
               Enroll in 2027 SHSAT &amp; Digital SAT Prep
             </h1>
             <p className="text-pretty text-lg leading-relaxed text-subtle">
-              Classes starting January, April and July 2027 in Astoria, plus live online Winter weekday Digital SAT. Request enrollment and we&apos;ll confirm availability
+              Classes starting January, April and July 2027 in Astoria, plus live online Winter weekday Digital SAT. Every class is personally taught by founder Tariq Ahmed. Request enrollment and we&apos;ll confirm availability
               and guide you through the rest.
             </p>
           </div>

@@ -40,6 +40,7 @@ const LAPTOP_NOTE = "Digital SAT students need a compatible laptop for online cl
 const benefits = [
   "A free Digital SAT diagnostic with score analysis",
   `Live online or in-person small groups, maximum ${MAX_CLASS_SIZE} students`,
+  "Every class personally taught by founder Tariq Ahmed",
   "Math and Reading & Writing in every class",
   "Bluebook practice and Desmos strategies",
   "Regular progress updates for parents",
@@ -205,7 +206,7 @@ export default function DigitalSatPrepPage() {
               changes most likely to raise it.
             </p>
             <p className="leading-relaxed text-subtle">
-              Classes are led by founder Tariq Ahmed, who has 12+ years of teaching and test-prep
+              Classes are personally taught by founder Tariq Ahmed, who has 12+ years of teaching and test-prep
               experience, in groups of {MAX_CLASS_SIZE} or fewer.
             </p>
             <div className="mt-auto flex items-start gap-3 rounded-xl border border-[#D7E4EE] bg-white p-4">

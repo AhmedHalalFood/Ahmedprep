@@ -59,7 +59,7 @@ export function Winter2027Promo() {
               Winter SHSAT &amp; Digital SAT Prep
             </h1>
             <p className="text-pretty text-sm leading-relaxed text-cream/85 sm:text-base">
-              Personally taught by AhmedPrep’s founder. SHSAT and Digital SAT preparation in small groups, in person in Astoria plus live online Winter weekday SAT.
+              Every Winter SHSAT and Digital SAT class is personally taught by AhmedPrep founder Tariq Ahmed. Small groups meet in Astoria, with live online Winter weekday Digital SAT.
             </p>
           </div>
           </div>
