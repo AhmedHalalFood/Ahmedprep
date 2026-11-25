@@ -386,7 +386,7 @@ export function Enrollment2027Form({ preset = {}, selectionShownAbove = false }:
           required
           placeholder="Select an option"
           options={[...FOUNDING_INTEREST_OPTIONS]}
-          hint="Winter 2027 only: 25% off for the first 5 fully paid enrollments in each cohort, while seats remain."
+          hint="AhmedPrep will confirm whether the discount is available before payment."
           {...field("foundingInterest")}
         />
       )}
