@@ -6,7 +6,7 @@ import { EnrollmentSteps } from "@/components/enroll-2027/enrollment-steps"
 import { EnrollmentHelp } from "@/components/enroll-2027/enrollment-help"
 import { PayNowSlot } from "@/components/enroll-2027/pay-now-slot"
 import { SelectedClassSummary } from "@/components/enroll-2027/selected-class-summary"
-import { TERM_IDS, cohortTitle, findCohort, termStartLabel } from "@/lib/cohorts-2027"
+import { DEADLINE_TIME_LABEL, FOUNDING_SEATS_PER_COHORT, TERM_IDS, WINTER_FOUNDING_DEADLINE_ISO, cohortTitle, cohortsFor, dollars, findCohort, formatDate, priceFor, termStartLabel } from "@/lib/cohorts-2027"
 import { TuitionOptions } from "@/components/enroll-2027/tuition-options"
 import { Enrollment2027Form } from "@/components/enrollment-2027-form"
 import { Faq, type FaqItem } from "@/components/landing/faq"
@@ -18,6 +18,8 @@ import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 import { programsHref } from "@/lib/program-finder"
 
 const PATH = "/enroll-2027"
+const WINTER_TUITION = priceFor(cohortsFor("SHSAT", "winter")[0])
+const WINTER_SAVINGS = WINTER_TUITION.regular - WINTER_TUITION.founding!
 
 const ATTENDANCE_FAQS: FaqItem[] = [
   {
@@ -154,12 +156,24 @@ export default async function Enroll2027Page({ searchParams }: Props) {
           <div className="flex max-w-2xl flex-col gap-3">
             <p className="eyebrow blue">2027 Enrollment</p>
             <h1 id="enroll-heading" className="text-balance text-3xl font-extrabold leading-tight tracking-tight text-navy sm:text-5xl">
-              Enroll in 2027 SHSAT &amp; Digital SAT Prep
+              Winter 2027 SHSAT &amp; Digital SAT Enrollment
             </h1>
             <p className="text-pretty text-lg leading-relaxed text-subtle">
-              Classes starting January, April and July 2027 in Astoria, plus live online Winter weekday Digital SAT. Request enrollment and we&apos;ll confirm availability
-              and guide you through the rest.
+              January classes are enrolling now. In-person SHSAT and weekend Digital SAT classes meet in Astoria; Winter weekday Digital SAT meets live online. Spring and Summer 2027 inquiries are also welcome.
             </p>
+            <div className="flex flex-col gap-2 rounded-xl border border-[#E8D5A2] bg-[#FFF8E7] px-4 py-3 text-navy sm:flex-row sm:items-center sm:justify-between sm:gap-5">
+              <div>
+                <p className="text-xs font-extrabold uppercase tracking-wider text-[#79570A]">Winter 2027 · Founding-family offer</p>
+                <p className="mt-1 text-2xl font-black leading-tight">
+                  {dollars(WINTER_TUITION.founding!)}
+                  <span className="ml-2 text-sm font-semibold text-navy/70">Regular {dollars(WINTER_TUITION.regular)}</span>
+                </p>
+                <p className="mt-1 text-sm font-semibold">Save {dollars(WINTER_SAVINGS)} (25%) on 72 instructional hours</p>
+              </div>
+              <p className="max-w-sm text-xs leading-relaxed text-navy/85 sm:text-right">
+                First {FOUNDING_SEATS_PER_COHORT} fully paid students per class. Pay in full by {formatDate(WINTER_FOUNDING_DEADLINE_ISO)} at {DEADLINE_TIME_LABEL}. Subject to seat availability; inquiries do not reserve the offer.
+              </p>
+            </div>
           </div>
 
           <dl className="grid grid-cols-1 border-y border-line sm:grid-cols-3">
