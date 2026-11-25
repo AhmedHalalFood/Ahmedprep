@@ -4,7 +4,7 @@ import { MAX_CLASS_SIZE } from "@/lib/cohorts-2027"
 
 const REASONS = [
   { icon: Users, title: `Maximum ${MAX_CLASS_SIZE} students`, body: "Small classes and individual attention." },
-  { icon: GraduationCap, title: "Founder-led teaching", body: "Learn directly from our founder." },
+  { icon: GraduationCap, title: "Personally founder-taught", body: "SHSAT and Digital SAT classes taught by Tariq Ahmed." },
   { icon: ClipboardCheck, title: "Diagnostic-based learning", body: "Instruction focused on each student's needs." },
   { icon: ChartNoAxesColumn, title: "Progress you can follow", body: "Structured practice and parent updates." },
 ] as const

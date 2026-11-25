@@ -9,6 +9,7 @@ const SEASONS = [
     id: "winter" as const,
     title: "Winter 2027",
     detail: "12 weeks · 72 hours",
+    dateRange: "January 9 – April 1, 2027",
     note: "Digital SAT weekend: IN PERSON · Sat & Sun, 2–5 PM ET. SHSAT classes remain in person.",
     formats: "Digital SAT weekday: LIVE ONLINE · Tue & Thu, 6:30–9:30 PM ET",
     icon: Snowflake,
@@ -18,6 +19,7 @@ const SEASONS = [
     id: "spring" as const,
     title: "Spring 2027",
     detail: "12 weeks · 72 hours",
+    dateRange: "April 3 – June 24, 2027",
     note: "Early-payment discount available",
     formats: "Weekday and weekend classes",
     icon: Leaf,
@@ -27,6 +29,7 @@ const SEASONS = [
     id: "summer" as const,
     title: "Summer 2027",
     detail: "8-week program",
+    dateRange: "July 3 – August 29, 2027",
     note: "Weekend and weekday intensive options",
     formats: "Weekend and weekday intensive",
     icon: Sun,
@@ -58,7 +61,7 @@ export function ProgramsPreview() {
           </TrackedLink>
         </div>
         <div className="grid gap-3 md:grid-cols-3">
-          {SEASONS.map(({ id, title, detail, note, formats, icon: Icon, tone }) => (
+          {SEASONS.map(({ id, title, detail, dateRange, note, formats, icon: Icon, tone }) => (
             <TrackedLink
               key={id}
               href={programsHref({ season: id })}
@@ -80,7 +83,7 @@ export function ProgramsPreview() {
                 <div className="self-start space-y-1.5 pt-3 text-xs leading-relaxed">
                   <p className="text-sm font-extrabold">{detail}</p>
                   <p className="text-sm font-bold">SHSAT &amp; Digital SAT Prep</p>
-                  <p>July 3 – August 29, 2027</p>
+                  <p>{dateRange}</p>
                   <p><strong>Weekend (Sat–Sun):</strong> 16 classes · 48 hours</p>
                   <p><strong>Weekday intensive (Mon–Thu):</strong> 32 classes · 96 hours</p>
                 </div>
@@ -88,6 +91,7 @@ export function ProgramsPreview() {
                 <div className="self-start space-y-1.5 pt-3">
                   <p className="text-sm font-extrabold">{detail}</p>
                   <p className="text-sm font-bold">SHSAT &amp; Digital SAT Prep</p>
+                  <p className="text-xs leading-relaxed">{dateRange}</p>
                   <p className="text-xs font-medium leading-relaxed">{formats}</p>
                   <p className="text-xs leading-relaxed opacity-85">{note}</p>
                 </div>

@@ -60,6 +60,11 @@ export function SelectedClassSummary({ cohort, full }: { cohort: Cohort; full: b
           ))}
         </ul>
         <p className="text-xs text-subtle">Only one discount applies.</p>
+        {cohort.makeups.some((makeup) => !makeup.approved) && (
+          <p className="mt-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-navy">
+            Some holiday makeup dates are proposed and will be confirmed with families before enrollment is finalized.
+          </p>
+        )}
       </div>
     </section>
   )

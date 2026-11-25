@@ -366,7 +366,7 @@ export function Enrollment2027Form({ preset = {}, selectionShownAbove = false }:
       </>
       )}
 
-      {chosen && !(selectionShownAbove && !changingSelection) && (
+      {chosen && chosen.term !== "winter" && !(selectionShownAbove && !changingSelection) && (
         <div aria-live="polite" className="border border-line bg-cream px-4 py-3 text-sm leading-relaxed text-navy">
           <p className="font-bold">Tuition for this cohort ({chosen.hours} hours at $20 per hour)</p>
           <ul className="mt-1 flex flex-col gap-1">
@@ -386,7 +386,7 @@ export function Enrollment2027Form({ preset = {}, selectionShownAbove = false }:
           required
           placeholder="Select an option"
           options={[...FOUNDING_INTEREST_OPTIONS]}
-          hint="Winter 2027 only: 25% off for the first 5 fully paid enrollments in each cohort, while seats remain."
+          hint="AhmedPrep will confirm whether the discount is available before payment."
           {...field("foundingInterest")}
         />
       )}
