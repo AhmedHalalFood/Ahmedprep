@@ -161,18 +161,20 @@ export default async function Enroll2027Page({ searchParams }: Props) {
             <p className="text-pretty text-lg leading-relaxed text-subtle">
               January classes are enrolling now. In-person SHSAT and weekend Digital SAT classes meet in Astoria; Winter weekday Digital SAT meets live online. Spring and Summer 2027 inquiries are also welcome.
             </p>
-            <div className="flex flex-col gap-2 rounded-xl border border-[#E8D5A2] bg-[#FFF8E7] px-4 py-3 text-navy sm:flex-row sm:items-center sm:justify-between sm:gap-5">
-              <div>
-                <p className="text-xs font-extrabold uppercase tracking-wider text-[#79570A]">Winter 2027 · Founding-family offer</p>
-                <p className="mt-1 text-2xl font-black leading-tight">
-                  {dollars(WINTER_TUITION.founding!)}
-                  <span className="ml-2 text-sm font-semibold text-navy/70">Regular {dollars(WINTER_TUITION.regular)}</span>
-                </p>
-                <p className="mt-1 text-sm font-semibold">Save {dollars(WINTER_SAVINGS)} (25%) on 72 instructional hours</p>
-              </div>
-              <p className="max-w-sm text-xs leading-relaxed text-navy/85 sm:text-right">
-                First {FOUNDING_SEATS_PER_COHORT} fully paid students per class. Pay in full by {formatDate(WINTER_FOUNDING_DEADLINE_ISO)} at {DEADLINE_TIME_LABEL}. Subject to seat availability; inquiries do not reserve the offer.
+            <div className="rounded-xl border border-[#E8D5A2] bg-[#FFF8E7] p-4 text-navy sm:p-5">
+              <p className="text-xs font-extrabold uppercase tracking-wider text-[#79570A]">
+                Winter 2027 · Founding-family offer
               </p>
+              <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                <strong className="text-3xl font-black leading-tight">{dollars(WINTER_TUITION.founding!)}</strong>
+                <span className="text-sm font-medium text-navy/75">Regular {dollars(WINTER_TUITION.regular)}</span>
+              </div>
+              <p className="mt-1 text-sm font-bold">Save {dollars(WINTER_SAVINGS)} (25%) · 72 instructional hours</p>
+              <div className="mt-3 space-y-1.5 border-t border-[#E8D5A2] pt-3 text-sm leading-relaxed">
+                <p>Limited to the first {FOUNDING_SEATS_PER_COHORT} fully paid students per class.</p>
+                <p className="font-bold">Pay in full by {formatDate(WINTER_FOUNDING_DEADLINE_ISO)} at {DEADLINE_TIME_LABEL}.</p>
+                <p className="text-xs text-navy/80">Subject to seat availability. Sending an inquiry does not reserve a seat or the discount.</p>
+              </div>
             </div>
           </div>
 
