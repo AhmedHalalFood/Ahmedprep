@@ -1,7 +1,8 @@
 import { ArrowRight, Leaf, Snowflake, Sun, Sunset } from "lucide-react"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
-import { MAX_CLASS_SIZE } from "@/lib/cohorts-2027"
+import { MAX_CLASS_SIZE, TERMS_2027, cohortInquiryHref, cohortSchedule, priceFor, dollars } from "@/lib/cohorts-2027"
+import { activeTerms } from "@/lib/program-retirement"
 import { activeTermIds, isAnnualShsatOfferActive, isTermActive } from "@/lib/program-retirement"
 import { programsHref } from "@/lib/program-finder"
 
@@ -46,6 +47,8 @@ const SEASONS = [
 
 export function ProgramsPreview() {
   const active = activeTermIds()
+  const currentTerms = activeTerms(TERMS_2027)
+  const winterClasses = currentTerms.find((term) => term.id === "winter")?.cohorts ?? []
   if (!active.length) return null
   return (
     <section id="programs-pricing" aria-labelledby="programs-pricing-title" className="scroll-mt-4 border-b border-line bg-site-canvas py-5 md:py-6">
@@ -82,6 +85,7 @@ export function ProgramsPreview() {
                 <Icon size={20} strokeWidth={1.8} aria-hidden="true" className="shrink-0" />
                 <h3 className="text-base font-extrabold">{title}</h3>
               </div>
+              <p className="text-xs font-bold opacity-90">{currentTerms.find((term) => term.id === id)?.cohorts.length ?? 0} approved class options</p>
               {id === "winter" && (
                 <span className="inline-flex w-fit items-center gap-2 rounded-full border border-[#85D6AE] bg-[#DCFCE7] px-3 py-1 text-xs font-extrabold uppercase tracking-wide text-[#11603A]">
                   <span className="h-2 w-2 shrink-0 rounded-full bg-[#159957]" aria-hidden="true" />
@@ -115,6 +119,35 @@ export function ProgramsPreview() {
             </TrackedLink>
           ))}
         </div>
+
+        {winterClasses.length > 0 && (
+          <div className="mt-5 border-t border-line pt-5">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <p className="text-xs font-extrabold uppercase tracking-widest text-brand">Winter 2027 · Four separate classes</p>
+                <h3 className="mt-1 text-lg font-extrabold text-navy">Choose from all four Winter class options</h3>
+              </div>
+              <p className="text-xs font-semibold text-subtle">12 weeks · 24 meetings · 72 hours · Maximum 12 students each</p>
+            </div>
+            <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+              {winterClasses.map((c) => (
+                <li key={c.id}>
+                  <TrackedLink
+                    href={cohortInquiryHref(c)}
+                    event={EVENTS.programCtaClick}
+                    eventProps={{ location: "home_winter_four_classes", cta: c.id }}
+                    className={`flex h-full flex-col gap-2 rounded-xl border px-4 py-4 transition-colors hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy ${c.program === "SHSAT" ? "border-blue-200 bg-blue-50/60" : "border-emerald-200 bg-emerald-50/60"}`}
+                  >
+                    <span className="text-sm font-extrabold text-navy">{c.program} · {c.label}</span>
+                    <span className="text-xs leading-relaxed text-ink">{cohortSchedule(c)}</span>
+                    <span className="mt-auto text-xs font-bold text-navy">{dollars(priceFor(c).regular)} regular · Founding-family {dollars(priceFor(c).founding ?? priceFor(c).regular)} if eligible</span>
+                    <span className="inline-flex items-center gap-1 pt-1 text-xs font-extrabold text-brand">View this class <ArrowRight size={14} aria-hidden="true" /></span>
+                  </TrackedLink>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         {isAnnualShsatOfferActive() && <div className="mt-4 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-gold/50 bg-cream px-4 py-3 text-sm text-navy">
           <span><strong>Complete SHSAT 2027 · All in person in Astoria:</strong> 336 instructional hours across four stages · $6,720 regular · annual packages from $5,040 for qualifying founding families</span>
