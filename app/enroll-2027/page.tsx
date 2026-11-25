@@ -21,24 +21,20 @@ const WINTER_SAVINGS = WINTER_TUITION.regular - WINTER_TUITION.founding!
 
 const ATTENDANCE_FAQS: FaqItem[] = [
   {
-    q: "Do classes continue during school holidays?",
-    a: "Yes. AhmedPrep follows its published cohort calendar. Approved holiday closures are covered by scheduled makeup sessions; other school breaks do not automatically cancel classes.",
+    q: "Are classes held during school holidays?",
+    a: "AhmedPrep follows the calendar for each cohort. A published closure may require a makeup session to preserve the promised instructional hours. Proposed makeup dates are confirmed with families before they are treated as final.",
   },
   {
     q: "What happens if AhmedPrep cancels a class?",
-    a: "We will provide the published makeup session or equivalent live instruction at no additional cost, preserving the promised 72 hours.",
+    a: "If AhmedPrep cancels a class because of weather, an emergency, or another reason, families will be notified and replacement live instruction will be arranged at no additional cost to preserve the chosen cohort's published hours.",
   },
   {
     q: "What if my child misses a class?",
-    a: "Parents may request missed assignments and available class materials. Individual makeup sessions are not guaranteed when a student misses a regularly scheduled class. If AhmedPrep cancels a class because of severe weather or an emergency, a replacement session will be arranged.",
+    a: "Parents may request missed assignments and available class materials. Individual makeup sessions are not guaranteed for student absences.",
   },
   {
-    q: "What happens if classes are canceled due to severe weather?",
-    a: "If severe weather or an emergency prevents an in-person class from taking place, AhmedPrep will arrange a makeup session. Families will be notified of any schedule changes. Winter weekday Digital SAT instruction takes place live online; all other cohorts are in person.",
-  },
-  {
-    q: "Will my child receive all 72 program hours?",
-    a: "Yes. Each program includes 72 hours of scheduled live instruction. Holiday closures and any AhmedPrep cancellations are covered by makeup instruction.",
+    q: "How many instructional hours will my child receive?",
+    a: "Winter and Spring cohorts include 72 hours each. Summer weekend cohorts include 48 hours, and Summer weekday intensive cohorts include 96 hours. The selected class schedule shows its specific total.",
   },
 ]
 
