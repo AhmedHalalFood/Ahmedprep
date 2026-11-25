@@ -44,8 +44,8 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
             2027 SHSAT and Digital SAT classes
           </h1>
           <p className="max-w-3xl text-pretty text-lg leading-relaxed text-subtle">
-            Choose when to start, SHSAT or Digital SAT, and a schedule to see one class&apos;s dates and tuition. Small groups in Astoria, maximum {MAX_CLASS_SIZE}{" "}
-            students. All classes are personally taught by founder Tariq Ahmed. All times are Eastern Time.
+            Choose January, April, or July, then SHSAT or Digital SAT to see the matching dates and tuition. In-person small groups meet in Astoria; Winter weekday Digital SAT meets live online nationwide. Maximum {MAX_CLASS_SIZE}{" "}
+            students per class, personally taught by founder Tariq Ahmed. All times are Eastern Time.
           </p>
         </div>
       </section>
@@ -88,7 +88,7 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
               per cohort, paid in full by {formatDate(WINTER_FOUNDING_DEADLINE_ISO)} at {DEADLINE_TIME_LABEL}, subject to seat availability.
               Winter has no separate early-payment tier. Spring and Summer 2027: early-payment tuition (10% off) requires full payment at least{" "}
               {EARLY_DAYS_BEFORE_SPRING_SUMMER} calendar days before the selected cohort begins; there is no founding-family discount. Only one
-              discount applies.
+              discount applies. Full payment is required to confirm enrollment; there are no installments or online payments at this time.
             </p>
           </div>
 
@@ -238,10 +238,10 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
                 <h3 className="text-lg font-extrabold text-navy">Holiday makeups and summer dates</h3>
               </div>
               <div className="space-y-3 text-sm leading-relaxed text-ink">
-                <p><strong className="text-navy">Winter and Spring:</strong> Makeup instruction is scheduled on select Saturdays from 5:30–8:30 PM.</p>
-                <p><strong className="text-navy">Summer weekend makeup:</strong> A daytime session on August 28.</p>
+                <p><strong className="text-navy">Winter and Spring:</strong> Proposed makeups are on select Saturdays from 5:30–8:30 PM ET. The live online Winter weekday Digital SAT makeup, if confirmed, would run 6:30–9:30 PM ET.</p>
+                <p><strong className="text-navy">Summer weekend:</strong> A daytime August 28 replacement class for the July 4 closure is proposed; its date has not been finalized.</p>
                 <p><strong className="text-navy">Sunday, August 29:</strong> Required final instructional session for both summer intensive cohorts (SHSAT 10 AM–1 PM ET; Digital SAT 2–5 PM ET).</p>
-                <p className="text-subtle">Exact makeup assignments remain subject to final curriculum sequencing and calendar verification before publication.</p>
+                <p className="text-subtle">Makeup dates other than the approved August 29 final intensive sessions remain subject to calendar verification and confirmation with families.</p>
               </div>
             </article>
             <article className="rounded-2xl border border-amber-200 bg-[#FFFAED] p-5 shadow-sm sm:p-6">
