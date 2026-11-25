@@ -1,4 +1,6 @@
 import type { Metadata } from "next"
+import { connection } from "next/server"
+import { activeCohorts, isTermActive } from "@/lib/program-retirement"
 import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 import Link from "next/link"
 import { ArrowUpRight, Laptop } from "lucide-react"
@@ -17,6 +19,7 @@ import { EnrollmentSteps } from "@/components/program-page/enrollment-steps"
 import { FeatureGrid, ResourceLinks } from "@/components/program-page/feature-grid"
 import { ProgramCtas } from "@/components/program-page/program-ctas"
 import { ProgramTuition } from "@/components/program-page/program-tuition"
+import { OfficialExamSources } from "@/components/program-page/official-exam-sources"
 import { EVENTS } from "@/lib/analytics"
 import { BUSINESS, SITE_URL } from "@/lib/business"
 import { MAX_CLASS_SIZE, cohortsFor, cohortInquiryHref, priceFor, dollars } from "@/lib/cohorts-2027"
@@ -25,7 +28,7 @@ export const revalidate = 3600
 
 const PATH = "/digital-sat-prep"
 const TITLE = "Digital SAT Prep in Queens & Online | AhmedPrep"
-const DESCRIPTION = `Prepare for the Digital SAT with AhmedPrep. Live online classes nationwide and in-person tutoring in Astoria, Queens. Small groups, max ${MAX_CLASS_SIZE}. Free diagnostic.`
+const DESCRIPTION = `Prepare for the Digital SAT with AhmedPrep. Live online classes and in-person tutoring in Astoria, Queens. Small groups, max ${MAX_CLASS_SIZE}. Free diagnostic.`
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
@@ -86,7 +89,7 @@ const faqs: FaqItem[] = [
     a: "Yes. Online students need a compatible laptop and reliable internet for live Zoom instruction and independent Bluebook practice. In-person students must bring their own laptop. AhmedPrep does not supply devices.",
   },
   {
-    q: "How is each three-hour Digital SAT class structured?",
+    q: "How is each Digital SAT class structured?",
     a: "Every class includes 75 minutes of Math, 75 minutes of Reading and Writing, and 30 minutes of cumulative review.",
   },
   {
@@ -103,7 +106,7 @@ const faqs: FaqItem[] = [
   },
   {
     q: "Where are Digital SAT classes and tutoring held?",
-    a: `Winter 2027 weekday Digital SAT classes are live online via Zoom on Tuesdays and Thursdays, 6:30–9:30 PM Eastern, and welcome students throughout the continental United States. Winter weekend SAT classes are in person at ${BUSINESS.address.street}, ${BUSINESS.address.city}, ${BUSINESS.address.region} ${BUSINESS.address.postalCode}. Spring and Summer follow their separately published schedules. Contact AhmedPrep for private tutoring arrangements.`,
+    a: `Winter 2027 weekday Digital SAT classes are live online via Zoom on Tuesdays and Thursdays, 6:30–9:30 PM Eastern, and welcome students throughout the continental United States. Winter weekend SAT classes are in person at ${BUSINESS.address.street}, ${BUSINESS.address.city}, ${BUSINESS.address.region} ${BUSINESS.address.postalCode}. Spring weekday classes also meet live online, and Summer and Fall Weekend Intensives meet in person. Contact AhmedPrep for private tutoring arrangements.`,
   },
   {
     q: "Is AhmedPrep affiliated with the College Board?",
@@ -121,7 +124,8 @@ const courseSchema = {
   hasCourseInstance: courseInstances2027("Digital SAT"),
 }
 
-export default function DigitalSatPrepPage() {
+export default async function DigitalSatPrepPage() {
+  await connection()
   return (
     <>
       <Breadcrumbs items={[{ label: "Digital SAT Prep", href: PATH }]} />
@@ -130,7 +134,7 @@ export default function DigitalSatPrepPage() {
         balancedActions
         eyebrow="SAT tutoring in NYC · Astoria, Queens"
         title="Digital SAT Prep: Live Online or In Person"
-        serviceArea={`Winter weekday Digital SAT classes are live online nationwide; weekend classes meet in person in Astoria, Queens. Maximum ${MAX_CLASS_SIZE} students per class.`}
+        serviceArea={`Winter and Spring weekday Digital SAT classes are live online; weekend and intensive classes meet in person in Astoria, Queens. Maximum ${MAX_CLASS_SIZE} students per class.`}
         intro="Math and Reading & Writing instruction built from a free diagnostic, with Bluebook practice, Desmos strategies, and timed adaptive-module drills."
         benefitsTitle="Every Digital SAT student receives"
         benefits={benefits}
@@ -141,7 +145,7 @@ export default function DigitalSatPrepPage() {
 
       <SatIntensiveAnnouncement />
 
-      <section aria-labelledby="dsat-winter-enrollment" className="bg-site-canvas py-6 md:py-8">
+      {isTermActive("winter") && <section aria-labelledby="dsat-winter-enrollment" className="bg-site-canvas py-6 md:py-8">
         <div className="container">
           <div className="rounded-2xl border border-[#D7E4EE] bg-white p-5 shadow-sm sm:p-7">
             <p className="text-xs font-extrabold uppercase tracking-widest text-brand">Winter 2027 · Now enrolling</p>
@@ -149,7 +153,7 @@ export default function DigitalSatPrepPage() {
               Winter Digital SAT classes: online or in Astoria
             </h2>
             <p className="mt-2 text-ink">
-              Weekday classes meet live online via Zoom (nationwide); weekend classes meet in person in Astoria. Both offer 12 weeks, 24 meetings, 72 instructional hours, maximum {MAX_CLASS_SIZE} students per class.
+              Weekday classes meet live online via Zoom; weekend classes meet in person in Astoria. Both offer 12 weeks, 24 meetings, 72 instructional hours, maximum {MAX_CLASS_SIZE} students per class.
             </p>
             <div className="mt-5 grid gap-3 md:grid-cols-2">
               {cohortsFor("Digital SAT", "winter").map((cohort) => {
@@ -177,7 +181,7 @@ export default function DigitalSatPrepPage() {
             </Link>
           </div>
         </div>
-      </section>
+      </section>}
 
       <Section
         id="overview"
@@ -222,7 +226,7 @@ export default function DigitalSatPrepPage() {
         id="sat-mastery"
         eyebrow="AhmedPrep Integrated Digital SAT Mastery"
         title="Foundation through the 1600 Challenge, in every cohort"
-        intro="Winter, Spring, and Summer cohorts cover the full Digital SAT curriculum. Students enter based on a diagnostic and receive skill-level assignments within the same small group. No student must wait for a particular season to study advanced topics."
+        intro="Winter, Spring, Summer, and Fall cohorts cover the full Digital SAT curriculum. Students enter based on a diagnostic and receive skill-level assignments within the same small group. No student must wait for a particular season to study advanced topics."
       >
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {[
@@ -238,10 +242,10 @@ export default function DigitalSatPrepPage() {
           ))}
         </div>
         <p className="mt-5 text-sm leading-relaxed text-subtle">
-          Every cohort includes 75 minutes of Math, 75 minutes of Reading &amp; Writing, and 30 minutes of guided practice per class. Official Bluebook testing and targeted performance reviews help students prepare for their selected SAT date. Our goal is each student’s highest attainable score, with 1600 as the top challenge, never a guaranteed result.
+          Three-hour sessions include 75 minutes of Math, 75 minutes of Reading &amp; Writing, and 30 minutes of guided practice. Summer and Fall weekend intensive sessions provide 4.5 instructional hours with a 30-minute lunch break. Official Bluebook testing and targeted performance reviews help students prepare for their selected SAT date. Our goal is each student’s highest attainable score, with 1600 as the top challenge, never a guaranteed result.
         </p>
         <p className="mt-2 text-sm leading-relaxed text-subtle">
-          Additional test-date-specific Final SAT Intensives are planned, with schedules and tuition announced separately.
+          Summer and Fall Weekend Intensives meet Saturday and Sunday, 10 AM–3 PM, including a 30-minute break.
         </p>
         <Link href="/programs-2027" className="text-link mt-4">
           Compare Digital SAT classes and schedules <ArrowUpRight size={15} aria-hidden="true" />
@@ -278,8 +282,10 @@ export default function DigitalSatPrepPage() {
       </Section>
 
       <ClassStructure
-        title="How every Digital SAT class is structured"
-        intro="Each three-hour class covers both sections of the test and ends with cumulative review."
+        eyebrow="Inside three-hour classes and extended weekend intensives"
+        extraNote="Summer and Fall Weekend Intensives meet 10 AM–3 PM. Each includes a 30-minute lunch break and 4.5 instructional hours; extended SAT practice, guided correction, and full-length Bluebook testing are scheduled within those sessions."
+        title="How Digital SAT classes are structured"
+        intro="Our three-hour weekday and school-year weekend classes cover both sections and end with review. Summer and Fall weekend intensives extend to 4.5 instructional hours per meeting."
         blocks={[
           { minutes: 75, title: "Math", body: "Instruction and timed practice, including Desmos strategies where they help." },
           { minutes: 75, title: "Reading and Writing", body: "Skill-by-skill instruction across all four Reading and Writing domains." },
@@ -293,7 +299,9 @@ export default function DigitalSatPrepPage() {
 
       <ProgramTuition program="Digital SAT" note={LAPTOP_NOTE} />
 
-      <EnrollmentSteps program="Digital SAT" location="digital_sat_enrollment" diagnosticEvent={EVENTS.digitalSatCtaClick} />
+      <OfficialExamSources exam="Digital SAT" />
+
+      {activeCohorts().some((c) => c.program === "Digital SAT") && <EnrollmentSteps program="Digital SAT" location="digital_sat_enrollment" diagnosticEvent={EVENTS.digitalSatCtaClick} />}
 
       <Section id="free-resources" eyebrow="Free Digital SAT resources" title="Free practice and planning tools">
         <ResourceLinks items={resources} />
@@ -310,7 +318,7 @@ export default function DigitalSatPrepPage() {
         title="Book a free Digital SAT diagnostic"
         intro="Complete the form and we'll contact you to arrange a diagnostic. Winter weekday SAT classes are live online; weekend classes meet in Astoria."
       />
-      <JsonLd data={courseSchema} />
+      <JsonLd data={{ ...courseSchema, hasCourseInstance: courseInstances2027("Digital SAT") }} />
     </>
   )
 }

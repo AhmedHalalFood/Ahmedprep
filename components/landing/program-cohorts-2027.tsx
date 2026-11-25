@@ -17,10 +17,11 @@ import {
 } from "@/lib/cohorts-2027"
 import { programsHref } from "@/lib/program-finder"
 import { BUSINESS, SITE_URL } from "@/lib/business"
+import { activeTerms } from "@/lib/program-retirement"
 
 /** Schema.org CourseInstance entries for every 2027 cohort of one program. */
 export function courseInstances2027(program: ProgramId) {
-  return TERMS_2027.flatMap((term) =>
+  return activeTerms(TERMS_2027).flatMap((term) =>
     term.cohorts
       .filter((c) => c.program === program)
       .map((c) => {
@@ -32,7 +33,7 @@ export function courseInstances2027(program: ProgramId) {
           startDate: span.startIso,
           endDate: span.endIso,
           courseSchedule: { "@type": "Schedule", description: cohortSchedule(c) },
-          location: {
+          ...(!isOnlineCohort(c) ? { location: {
             "@type": "Place",
             name: "AhmedPrep, Astoria, Queens",
             address: {
@@ -43,7 +44,7 @@ export function courseInstances2027(program: ProgramId) {
               postalCode: BUSINESS.address.postalCode,
               addressCountry: BUSINESS.address.country,
             },
-          },
+          } } : {}),
           offers: {
             "@type": "Offer",
             price: priceFor(c).regular,
@@ -56,19 +57,21 @@ export function courseInstances2027(program: ProgramId) {
 }
 
 export function ProgramCohorts2027({ program }: { program: ProgramId }) {
+  const terms = activeTerms(TERMS_2027).filter((term) => term.cohorts.some((c) => c.program === program))
+  if (!terms.length) return null
   return (
     <Section
       id="classes-2027"
       tone="warm"
       eyebrow="2027 small-group classes"
-      title={`${program} classes in Winter, Spring, and Summer 2027`}
+      title={`${program} classes in Winter, Spring, Summer, and Fall 2027`}
     >
       <p className="max-w-2xl text-pretty leading-relaxed text-subtle">
-        In-person classes in Astoria, plus live online Winter weekday Digital SAT. At most {MAX_CLASS_SIZE} students per class, {dollars(HOURLY_RATE)} per scheduled instructional hour.
+        In-person classes in Astoria, plus live online Winter and Spring weekday Digital SAT. At most {MAX_CLASS_SIZE} students per class, {dollars(HOURLY_RATE)} per scheduled instructional hour.
         Choose a cohort to request enrollment information with it already selected.
       </p>
-      <div className="mt-8 grid gap-4 lg:grid-cols-3">
-        {TERMS_2027.map((term) => (
+      <div className="mt-8 grid gap-4 lg:grid-cols-4">
+        {terms.map((term) => (
           <div key={term.id} className="flex flex-col gap-3 border border-line bg-white p-6">
             <h3 className="text-xl font-extrabold text-navy">{term.name}</h3>
             <ul className="flex flex-col border-t border-line">

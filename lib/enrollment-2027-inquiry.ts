@@ -1,5 +1,6 @@
 import {
   type Cohort,
+  isOnlineCohort,
   type ProgramId,
   type TermId,
   MAX_CLASS_SIZE,
@@ -28,6 +29,7 @@ import {
 } from "@/lib/enrollment-2027"
 import type { Confirmation } from "@/lib/lead-delivery"
 import { WAITLIST_DISCLAIMER } from "@/lib/cohort-capacity"
+import { isCohortActive, isTermActive } from "@/lib/program-retirement"
 
 /**
  * Shared by the form, the API route, and the admin confirmation resend, so all three agree on what a valid
@@ -48,11 +50,11 @@ const LEGACY_PROGRAM: Record<string, { program: ProgramId; slug: "shsat" | "dsat
  * Returns the validated selection, or null. New submissions send program + term + cohortId, and all three must
  * agree with the catalog. Older January payloads (cached pages, stored records) still resolve to their Winter cohort.
  */
-export function resolveSelection(input: { program?: string; term?: string; cohortId?: string; schedule?: string }): Selection | null {
+export function resolveSelection(input: { program?: string; term?: string; cohortId?: string; schedule?: string }, { includeCompleted = false }: { includeCompleted?: boolean } = {}): Selection | null {
   const program = input.program ?? ""
   if (input.cohortId) {
     const cohort = findCohort(input.cohortId)
-    if (!cohort || !isProgramId(program) || !isTermId(input.term ?? "")) return null
+    if (!cohort || (!includeCompleted && !isCohortActive(cohort)) || !isProgramId(program) || !isTermId(input.term ?? "")) return null
     if (cohort.program !== program || cohort.term !== input.term) return null
     return { kind: "cohort", cohort, program, term: cohort.term }
   }
@@ -60,6 +62,8 @@ export function resolveSelection(input: { program?: string; term?: string; cohor
   const schedule = input.schedule ?? ""
   if (!legacy || !programByName(program) || !scheduleOptionsFor(program).includes(schedule)) return null
   const cohort = schedule === SCHEDULE_UNSURE ? null : findCohort(`winter-${legacy.slug}-${schedule.startsWith("Weekday") ? "weekday" : "weekend"}`) ?? null
+  if (cohort && !includeCompleted && !isCohortActive(cohort)) return null
+  if (!cohort && !includeCompleted && !isTermActive("winter")) return null
   return { kind: "legacy", cohort, program: legacy.program, term: "winter", schedule }
 }
 
@@ -81,7 +85,7 @@ export const foundingQuestionApplies = (term: TermId) => term === "winter"
 export type InquiryIntent = "inquiry" | "waitlist"
 
 /**
- * Winter requires a founding-interest answer. Spring and Summer must not carry one: the field is not shown there,
+ * Winter requires a founding-interest answer. Spring, Summer and Fall must not carry one: the field is not shown there,
  * so any value sent would be stale or forged, and is rejected rather than stored.
  */
 export function inquiryFieldsValid(d: InquiryFields, term: TermId = "winter") {
@@ -119,7 +123,7 @@ export function cohortFacts(cohort: Cohort) {
   return {
     schedule: cohortSchedule(cohort),
     dates: `${formatLongDate(startIso)} to ${formatLongDate(endIso)}`,
-    instruction: `${cohort.sessions} three-hour sessions, ${cohort.hours} hours of scheduled live instruction`,
+    instruction: `${cohort.sessions} live sessions, ${cohort.hours} instructional hours${cohort.breakMinutes ? ` (${cohort.breakMinutes}-minute break per meeting excluded)` : ""}`,
     tuition: [
       `Regular tuition: ${dollars(price.regular)}, paid in full before the first class.`,
       ...(price.founding !== null && foundingIso
@@ -169,7 +173,7 @@ export function buildInquiryEmails(d: InquiryFields, s: Selection, intent: Inqui
       `Thank you for your interest in AhmedPrep's ${termName(s.term)} ${s.program} program for ${d.studentName}. This email confirms that we received your inquiry. It is not a confirmed enrollment.`,
       ENROLLMENT_DISCLAIMER,
       facts
-        ? `Your selected cohort: ${cohortTitle(s.cohort!)}\nSchedule: ${facts.schedule}\nDates: ${facts.dates}\nInstruction: ${facts.instruction}\nClass size: no more than ${MAX_CLASS_SIZE} students\nLocation: Astoria, Queens (in person)`
+        ? `Your selected cohort: ${cohortTitle(s.cohort!)}\nSchedule: ${facts.schedule}\nDates: ${facts.dates}\nInstruction: ${facts.instruction}\nClass size: no more than ${MAX_CLASS_SIZE} students\nLocation: ${isOnlineCohort(s.cohort!) ? "Live online (Zoom)" : "Astoria, Queens (in person)"}`
         : `Your selection: ${label}. We will help you choose a schedule.`,
       ...(facts ? [`Tuition for this cohort:\n${facts.tuition}\nSubmitting this inquiry does not reserve a seat or lock in a discounted price.`] : []),
       ...(showFounding ? [`Founding-family tuition interest: ${d.foundingInterest}`] : []),

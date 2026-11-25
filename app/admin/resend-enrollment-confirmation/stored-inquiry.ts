@@ -5,7 +5,7 @@ import { CONFIRMATION_KEYS, type StoredLead } from "@/lib/lead-storage"
 export function storedInquiry(lead: StoredLead | null) {
   if (!lead || lead.formType !== "enrollment_2027") return null
   const p = lead.payload ?? {}
-  const selection = resolveSelection({ program: p.program, term: p.term, cohortId: p.cohortId, schedule: p.schedule })
+  const selection = resolveSelection({ program: p.program, term: p.term, cohortId: p.cohortId, schedule: p.schedule }, { includeCompleted: true })
   if (!selection) return null
   const fields: InquiryFields = {
     parentName: p.parentName ?? "",

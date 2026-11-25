@@ -25,17 +25,17 @@ export const ENROLLMENT_2027 = {
         "Winter 2027 only. Save $360 (25% off). Available only to the first 5 fully paid enrollments per cohort, paid in full by December 12, 2026 at 11:59 PM ET, subject to seat availability.",
       points: [
         "Save $360 (25% off regular tuition)",
-        "Winter 2027 cohorts only; Spring and Summer 2027 offer early-payment tuition instead",
+        "Winter 2027 cohorts only; Spring, Summer and Fall 2027 offer early-payment tuition instead",
         "Limited to the first 5 fully paid enrollments per cohort",
         "Full payment by December 12, 2026 at 11:59 PM ET, subject to seat availability",
       ],
       note: "Winter 2027 only. Limited to the first 5 fully paid enrollments in each class.",
     },
     early: {
-      label: "Early Payment (Spring and Summer 2027)",
+      label: "Early Payment (Spring, Summer and Fall 2027)",
       total: "$1,296",
       savingsLabel: "10% off",
-      summary: "Spring and Summer 2027 only. 10% discount when full payment is received at least 30 calendar days before the selected cohort begins. Not offered for Winter 2027.",
+      summary: "Spring, Summer and Fall 2027 only. 10% discount when full payment is received at least 30 calendar days before the selected cohort begins. Not offered for Winter 2027.",
       points: ["10% discount", "Full payment at least 30 calendar days before the cohort begins", "Spring and Summer 2027 only"],
     },
     regular: {

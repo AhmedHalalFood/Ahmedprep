@@ -5,6 +5,7 @@ import { ReviewLink } from "@/components/review-link"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
 import { ADDRESS_LINE_1, ADDRESS_LINE_2, BUSINESS, MAPS_URL, NOT_AFFILIATED_NOTE } from "@/lib/business"
+import { activeTermIds } from "@/lib/program-retirement"
 
 const PROGRAM_LINKS = [
   { href: "/programs-2027", label: "Programs & Pricing" },
@@ -42,6 +43,8 @@ function ColumnHeading({ id, children }: { id: string; children: string }) {
 }
 
 export function Footer() {
+  const has2027 = activeTermIds().length > 0
+  const visibleLinks = PROGRAM_LINKS.filter((link) => has2027 || !["/programs-2027", "/programs-2027#more-options", "/enroll-2027"].includes(link.href))
   return (
     <>
       <footer className="site-footer bg-footer text-sm">
@@ -93,7 +96,7 @@ export function Footer() {
           <nav aria-labelledby="footer-programs" className="flex flex-col gap-3 lg:border-l lg:border-footer-divider lg:px-10">
             <ColumnHeading id="footer-programs">Programs</ColumnHeading>
             <ul className="grid gap-x-8 sm:grid-cols-2">
-              {PROGRAM_LINKS.map((link) => (
+              {visibleLinks.map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className={linkClass}>
                     {arrow}

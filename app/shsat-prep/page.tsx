@@ -1,4 +1,7 @@
 import type { Metadata } from "next"
+import { connection } from "next/server"
+import { activeCohorts, activeTermIds } from "@/lib/program-retirement"
+import "./refinement.css"
 import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
@@ -18,6 +21,8 @@ import { EnrollmentSteps } from "@/components/program-page/enrollment-steps"
 import { FeatureGrid, ResourceLinks } from "@/components/program-page/feature-grid"
 import { ProgramCtas } from "@/components/program-page/program-ctas"
 import { ProgramTuition } from "@/components/program-page/program-tuition"
+import { OfficialExamSources } from "@/components/program-page/official-exam-sources"
+import { AnnualShsatPackage } from "@/components/program-page/annual-shsat-package"
 import { EVENTS } from "@/lib/analytics"
 import { SITE_URL } from "@/lib/business"
 import { MAX_CLASS_SIZE } from "@/lib/cohorts-2027"
@@ -28,7 +33,7 @@ import { NYCPS_SHSAT_URL } from "@/lib/resources-shsat-2026"
 const PATH = "/shsat-prep"
 const TITLE = "SHSAT Prep in Astoria, Queens | AhmedPrep"
 const DESCRIPTION =
-  "Small-group SHSAT prep in Astoria, Queens. Math and ELA instruction, diagnostic assessments, timed practice, and 2027 programs. Maximum 12 students per class."
+  "All paid 2027 SHSAT preparation classes are in person at AhmedPrep in Astoria, Queens. Winter, Spring, Summer and Fall. Max 12 students per class; free diagnostic."
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
@@ -104,7 +109,7 @@ const faqs: FaqItem[] = [
   },
   {
     q: "Is founding-family tuition available for every term?",
-    a: "No. Founding-family tuition applies to Winter 2027 cohorts only. Spring and Summer 2027 cohorts offer an early full-payment discount. Discounts do not combine.",
+    a: "No. Founding-family tuition applies to Winter 2027 cohorts only. Spring, Summer and Fall 2027 cohorts offer an early full-payment discount. Discounts do not combine.",
   },
   {
     q: "When should my child start SHSAT preparation?",
@@ -127,21 +132,23 @@ const courseSchema = {
 }
 
 export default async function ShsatPrepPage() {
+  await connection()
   const showIntensive = await intensiveSitewidePromoActive()
   return (
     <>
       <Breadcrumbs items={[{ label: "SHSAT Prep", href: PATH }]} />
       <ProgramHero
         location="shsat"
+        compact
         eyebrow="SHSAT tutoring in Astoria · Queens, NY"
         title="SHSAT Prep in Astoria, Queens"
-        serviceArea={`Small-group, in-person SHSAT prep in Astoria for families across Queens and NYC. Maximum ${MAX_CLASS_SIZE} students per class.`}
+        serviceArea={`All 2027 SHSAT prep cohorts are IN PERSON at our Astoria, Queens classroom, including Winter, Spring, Summer, and Fall. Maximum ${MAX_CLASS_SIZE} students per class. Separate free Sunday Zoom sessions remain online.`}
         intro="Math and ELA instruction built from a free diagnostic, with timed practice, mock exams, and regular progress updates for parents."
         benefitsTitle="Every SHSAT student receives"
         benefits={benefits}
         ctaLabel="Book Free Diagnostic"
         ctaEvent={EVENTS.shsatCtaClick}
-        actions={<ProgramCtas program="SHSAT" location="shsat_hero" diagnosticEvent={EVENTS.shsatCtaClick} />}
+        actions={<ProgramCtas program="SHSAT" location="shsat_hero" diagnosticEvent={EVENTS.shsatCtaClick} compact />}
       />
 
       {showIntensive && (
@@ -168,6 +175,16 @@ export default async function ShsatPrepPage() {
         </aside>
       )}
 
+      <nav aria-label="Jump to SHSAT program information" className="border-b border-line bg-white py-3">
+        <div className="container flex flex-wrap gap-x-5 gap-y-2 text-sm font-bold text-navy">
+          <a href="#schedules-tuition" className="min-h-9 py-2 underline underline-offset-4 hover:text-brand">2027 Classes &amp; Tuition</a>
+          <a href="#curriculum" className="min-h-9 py-2 underline underline-offset-4 hover:text-brand">Math &amp; ELA Curriculum</a>
+          <a href="#free-resources" className="min-h-9 py-2 underline underline-offset-4 hover:text-brand">Free Practice</a>
+          <a href="#diagnostic" className="min-h-9 py-2 underline underline-offset-4 hover:text-brand">Free Diagnostic</a>
+        </div>
+      </nav>
+
+      <div className="shsat-page-refined">
       <Section
         id="overview"
         eyebrow="SHSAT program overview"
@@ -207,7 +224,7 @@ export default async function ShsatPrepPage() {
         </div>
       </Section>
 
-      <Section
+      {activeCohorts().some((c) => c.program === "SHSAT") && <Section
         id="shsat-pathway"
         eyebrow="AhmedPrep SHSAT 2027 pathway"
         title="Four connected stages, one clear goal"
@@ -218,8 +235,8 @@ export default async function ShsatPrepPage() {
             { season: "Winter", level: "1 · Foundation", focus: "Strengthen core Math and ELA, correct learning gaps, and establish accuracy.", tone: "border-blue-200 bg-blue-50" },
             { season: "Spring", level: "2 · Advanced Mastery", focus: "Build challenging reasoning, complex reading comprehension, and multi-step problem solving.", tone: "border-emerald-200 bg-emerald-50" },
             { season: "Summer", level: "3 · Intensive Preparation", focus: "Apply skills under time pressure through harder mixed sets and full-length practice.", tone: "border-amber-200 bg-amber-50" },
-            { season: "Fall", level: "4 · Final SHSAT Intensive", focus: "Refine exam strategy, correct recurring mistakes, and assess final readiness. Dates and tuition to be announced.", tone: "border-slate-200 bg-slate-50" },
-          ].map((stage) => (
+            { season: "Fall", level: "4 · Final SHSAT Intensive", focus: "Refine exam strategy, correct recurring mistakes, and assess final readiness. September 13–November 4, Monday–Thursday, 5:30–8:30 PM ET, 96 instructional hours.", tone: "border-slate-200 bg-slate-50" },
+          ].filter((stage) => activeTermIds().includes(stage.season.toLowerCase() as "winter" | "spring" | "summer" | "fall")).map((stage) => (
             <article key={stage.season} className={`rounded-xl border p-5 ${stage.tone}`}>
               <p className="text-xs font-extrabold uppercase tracking-wider text-brand">{stage.season} 2027</p>
               <h3 className="mt-2 text-lg font-extrabold text-navy">{stage.level}</h3>
@@ -233,7 +250,7 @@ export default async function ShsatPrepPage() {
         <Link href="/programs-2027" className="text-link mt-4">
           View SHSAT class dates and tuition <ArrowUpRight size={15} aria-hidden="true" />
         </Link>
-      </Section>
+      </Section>}
 
       <Section id="curriculum" tone="warm" eyebrow="SHSAT curriculum" title="What students learn in Math and ELA">
         <div className="grid gap-6 md:grid-cols-2">
@@ -293,9 +310,13 @@ export default async function ShsatPrepPage() {
         <FeatureGrid items={method} />
       </Section>
 
+      <AnnualShsatPackage compact />
+
       <ProgramTuition program="SHSAT" />
 
-      <EnrollmentSteps program="SHSAT" location="shsat_enrollment" diagnosticEvent={EVENTS.shsatCtaClick} />
+      <OfficialExamSources exam="SHSAT" />
+
+      {activeCohorts().some((c) => c.program === "SHSAT") && <EnrollmentSteps program="SHSAT" location="shsat_enrollment" diagnosticEvent={EVENTS.shsatCtaClick} />}
 
       <Section id="free-resources" eyebrow="Free SHSAT resources" title="Practice tests and free SHSAT help">
         <ResourceLinks items={resources} />
@@ -305,14 +326,15 @@ export default async function ShsatPrepPage() {
       <TeachingVideos page="shsat" title="Short SHSAT lessons from AhmedPrep" />
       <SuccessStories program="SHSAT" title="SHSAT student results" />
       <Faq title="SHSAT prep FAQ" items={faqs} />
-      <LocationSection location="shsat" />
+      <LocationSection location="shsat" compact />
       <DiagnosticSection
         program="SHSAT"
         location="shsat"
         title="Book a free SHSAT diagnostic"
         intro="Complete the form and we'll contact you to confirm a diagnostic time at our Astoria location."
       />
-      <JsonLd data={courseSchema} />
+      </div>
+      <JsonLd data={{ ...courseSchema, hasCourseInstance: courseInstances2027("SHSAT") }} />
     </>
   )
 }

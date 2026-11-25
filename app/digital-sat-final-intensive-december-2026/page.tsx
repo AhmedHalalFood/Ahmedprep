@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { redirect } from "next/navigation"
 import { Faq, type FaqItem } from "@/components/landing/faq"
 import { LocationSection } from "@/components/landing/location-section"
 import { Breadcrumbs, JsonLd } from "@/components/landing/primitives"
@@ -18,6 +19,7 @@ import {
   WHAT_TO_BRING,
   formatUsd,
   quoteFor,
+  newYorkWallClock,
 } from "@/lib/sat-final-intensive"
 import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 
@@ -94,6 +96,8 @@ const courseSchema = {
 }
 
 export default function DigitalSatFinalIntensivePage() {
+  // Retire the finished course immediately after its final class on Dec 3 at 9 PM New York time.
+  if (newYorkWallClock(new Date()) >= "2026-12-03 21:00") redirect("/digital-sat-prep")
   return (
     <>
       <Breadcrumbs items={[{ label: "Digital SAT Final Intensive", href: SAT_INTENSIVE_PATH }]} />
