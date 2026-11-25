@@ -102,8 +102,8 @@ export function ProgramsPreview() {
         )}
 
         <div className="mt-6 border-t border-line pt-5">
-          <p className="mb-3 text-xs font-extrabold uppercase tracking-widest text-brand">Explore Spring, Summer and Fall as well</p>
-        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+          <p className="mb-3 text-xs font-extrabold uppercase tracking-widest text-brand">Explore all 2027 seasons and their schedules</p>
+          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
           {SEASONS.filter((season) => active.includes(season.id)).map(({ id, title, detail, note, formats, icon: Icon, tone }) => (
             <TrackedLink
               key={id}
@@ -149,8 +149,7 @@ export function ProgramsPreview() {
               </span>
             </TrackedLink>
           ))}
-        </div>
-
+          </div>
         </div>
 
         {isAnnualShsatOfferActive() && <div className="mt-4 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-gold/50 bg-cream px-4 py-3 text-sm text-navy">
