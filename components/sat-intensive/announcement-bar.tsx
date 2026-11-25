@@ -15,7 +15,7 @@ export function SatIntensiveAnnouncementBar() {
           href={`${SAT_INTENSIVE_PATH}#register`}
           event={EVENTS.programCtaClick}
           eventProps={{ location: "home_dec_sat_announcement", cta: "join_remaining_classes" }}
-          className="group flex min-w-0 flex-col gap-3 rounded-xl border border-[#DFC99E] bg-[#FFFCF5] px-4 py-3 shadow-sm transition-all hover:border-[#C9A968] hover:bg-white hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#16476A] lg:flex-row lg:items-center lg:justify-between lg:gap-6"
+          className="group flex min-w-0 flex-col gap-3 rounded-xl border border-[#C9DCE9] border-l-[5px] border-l-[#DAA928] bg-[#EDF6FC] px-4 py-3 shadow-[0_4px_14px_rgba(16,47,81,0.14)] transition-all hover:border-[#83B0CC] hover:border-l-[#DAA928] hover:bg-[#F6FBFE] hover:shadow-[0_6px_18px_rgba(16,47,81,0.18)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#16476A] lg:flex-row lg:items-center lg:justify-between lg:gap-6"
         >
           <div className="flex min-w-0 flex-col gap-1.5">
             <div className="flex flex-wrap items-center gap-2">
