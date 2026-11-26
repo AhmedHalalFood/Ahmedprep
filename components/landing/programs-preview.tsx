@@ -1,7 +1,7 @@
 import { ArrowRight, Leaf, Snowflake, Sun, Sunset } from "lucide-react"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
-import { MAX_CLASS_SIZE, TERMS_2027, cohortInquiryHref, cohortSchedule, priceFor, dollars } from "@/lib/cohorts-2027"
+import { MAX_CLASS_SIZE, TERMS_2027, cohortInquiryHref, cohortSchedule, priceFor, dollars, winterFoundingOfferActive } from "@/lib/cohorts-2027"
 import { activeTerms } from "@/lib/program-retirement"
 import { activeTermIds, isAnnualShsatOfferActive, isTermActive } from "@/lib/program-retirement"
 import { programsHref } from "@/lib/program-finder"
@@ -49,6 +49,7 @@ export function ProgramsPreview() {
   const active = activeTermIds()
   const currentTerms = activeTerms(TERMS_2027)
   const winterClasses = currentTerms.find((term) => term.id === "winter")?.cohorts ?? []
+  const foundingOfferOpen = winterFoundingOfferActive()
   if (!active.length) return null
   return (
     <section id="programs-pricing" aria-labelledby="programs-pricing-title" className="scroll-mt-4 border-b border-line bg-site-canvas py-5 md:py-6">
@@ -60,7 +61,7 @@ export function ProgramsPreview() {
               Choose your Winter class, then explore the year
             </h2>
             <p className="max-w-2xl text-sm leading-relaxed text-subtle">
-              All SHSAT preparation cohorts meet in person at our Astoria, Queens classroom. Digital SAT weekday classes are live online in Winter and Spring; Digital SAT weekend and intensive classes meet in person. Maximum {MAX_CLASS_SIZE} students per class.
+              All SHSAT preparation cohorts meet in person at our Astoria, Queens classroom. Winter and Spring weekday Digital SAT classes are live online via Zoom; all other Digital SAT classes meet in person in Astoria. Maximum {MAX_CLASS_SIZE} students per class, personally taught by founder Tariq Ahmed.
             </p>
           </div>
           <TrackedLink
@@ -92,7 +93,7 @@ export function ProgramsPreview() {
                   >
                     <span className="text-sm font-extrabold text-navy">{c.program} · {c.label}</span>
                     <span className="text-xs leading-relaxed text-ink">{cohortSchedule(c)}</span>
-                    <span className="mt-auto text-xs font-bold text-navy">{dollars(priceFor(c).regular)} regular · Founding-family {dollars(priceFor(c).founding ?? priceFor(c).regular)} if eligible</span>
+                    <span className="mt-auto text-xs font-bold text-navy">{dollars(priceFor(c).regular)} regular{foundingOfferOpen ? ` · Founding-family ${dollars(priceFor(c).founding!)} if eligible` : ""}</span>
                     <span className="inline-flex items-center gap-1 pt-1 text-xs font-extrabold text-brand">View this class <ArrowRight size={14} aria-hidden="true" /></span>
                   </TrackedLink>
                 </li>
@@ -153,7 +154,7 @@ export function ProgramsPreview() {
         </div>
 
         {isAnnualShsatOfferActive() && <div className="mt-4 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-gold/50 bg-cream px-4 py-3 text-sm text-navy">
-          <span><strong>Complete SHSAT 2027 · All in person in Astoria:</strong> 336 instructional hours across four stages · $6,720 regular · annual packages from $5,040 for qualifying founding families</span>
+          <span><strong>Complete SHSAT 2027 · All in person in Astoria:</strong> 336 instructional hours across four stages · $6,720 regular · planned annual packages from $5,040, subject to a signed agreement</span>
           <a href="/shsat-prep#annual-shsat-package" className="font-bold underline underline-offset-4 hover:text-brand">Explore annual SHSAT package</a>
         </div>}
 
