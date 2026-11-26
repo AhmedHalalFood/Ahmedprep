@@ -10,6 +10,7 @@ import { FinderHashRestore } from "@/components/programs/finder-hash-restore"
 import {
   DEADLINE_TIME_LABEL,
   EARLY_DAYS_BEFORE_SPRING_SUMMER,
+  winterFoundingOfferActive,
   FOUNDING_SEATS_PER_COHORT,
   MAX_CLASS_SIZE,
   TERMS_2027,
@@ -39,6 +40,7 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
   await connection()
   const params = await searchParams
   const currentTerms = activeTerms(TERMS_2027)
+  const foundingOpen = winterFoundingOfferActive()
   if (!currentTerms.length) redirect("/free-diagnostic")
   const previewFull = params.previewFull === "1"
   const state = parseFinder(params)
@@ -52,7 +54,7 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
           </h1>
           <p className="max-w-3xl text-pretty text-lg leading-relaxed text-subtle">
             Choose when to start, SHSAT or Digital SAT, and a schedule to see one class&apos;s dates and tuition. Small groups in Astoria, maximum {MAX_CLASS_SIZE}{" "}
-            students. All SHSAT preparation cohorts are in person at our Astoria classroom. Winter and Spring weekday Digital SAT classes are live online, while its weekend and intensive cohorts meet in person in Astoria. All times are Eastern Time.
+            students. All SHSAT preparation cohorts are in person at our Astoria classroom. Winter and Spring weekday Digital SAT classes are live online via Zoom; weekend and intensive cohorts meet in person in Astoria. Classes are personally taught by founder Tariq Ahmed. All times are Eastern Time.
           </p>
         </div>
       </section>
@@ -93,11 +95,9 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
               How tuition discounts work
             </h2>
             <p className="text-pretty text-sm leading-relaxed text-ink">
-              Winter 2027: founding-family tuition (25% off) is available only to the first {FOUNDING_SEATS_PER_COHORT} fully paid enrollments
-              per cohort, paid in full by {formatDate(WINTER_FOUNDING_DEADLINE_ISO)} at {DEADLINE_TIME_LABEL}, subject to seat availability.
-              Winter has no separate early-payment tier. Spring, Summer and Fall 2027: early-payment tuition (10% off) requires full payment at least{" "}
-              {EARLY_DAYS_BEFORE_SPRING_SUMMER} calendar days before the selected cohort begins; there is no founding-family discount. Only one
-              discount applies. Full payment is required; installment plans are not offered.
+              {foundingOpen ? <>Winter 2027: founding-family tuition (25% off) is limited to the first {FOUNDING_SEATS_PER_COHORT} fully paid students per cohort by {formatDate(WINTER_FOUNDING_DEADLINE_ISO)} at {DEADLINE_TIME_LABEL}, while seats remain. </> : <>Winter 2027: regular tuition applies. </>}
+              Winter has no separate early-payment tier. Spring, Summer, and Fall offer 10% early-payment tuition if the full payment is received at least{" "}
+              {EARLY_DAYS_BEFORE_SPRING_SUMMER} calendar days before the selected cohort starts. Discounts cannot be combined. Full payment is required; no installments or online checkout.
             </p>
           </div>
 
@@ -247,10 +247,10 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
                 <h3 className="text-lg font-extrabold text-navy">Holiday makeups and summer dates</h3>
               </div>
               <div className="space-y-3 text-sm leading-relaxed text-ink">
-                <p><strong className="text-navy">Winter and Spring:</strong> Makeup instruction is scheduled on select Saturdays from 5:30–8:30 PM.</p>
+                <p><strong className="text-navy">Winter and Spring:</strong> Proposed holiday replacement sessions are on select Saturdays; exact assignments require confirmation, including the live online Digital SAT makeup.</p>
                 <p><strong className="text-navy">Summer Digital SAT:</strong> July 4 closed; August 28 is the final Saturday class.</p>
                 <p><strong className="text-navy">Summer SHSAT:</strong> First class July 1, July 5 closed; weekday classes continue July 6–August 26.</p>
-                <p className="text-subtle">Exact makeup assignments remain subject to final curriculum sequencing and calendar verification before publication.</p>
+                <p className="text-subtle">The July 1 Summer SHSAT kickoff is part of the approved 32-class calendar. Other proposed makeup dates are confirmed with families after calendar verification.</p>
               </div>
             </article>
             <article className="rounded-2xl border border-amber-200 bg-[#FFFAED] p-5 shadow-sm sm:p-6">
