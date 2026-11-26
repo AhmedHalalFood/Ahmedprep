@@ -262,22 +262,10 @@ export function Enrollment2027Form({ preset = {}, selectionShownAbove = false }:
       <Honeypot id={`${LOCATION}-website`} inputRef={honeypotRef} />
       <RequiredNote id={`${LOCATION}-required-note`} />
 
-      <fieldset className="flex flex-col gap-4">
-        <legend className="mb-3 text-base font-extrabold text-navy">Parent or guardian</legend>
-        <TextField label="Parent/Guardian Name" autoComplete="name" required {...field("parentName")} />
-        <div className="grid gap-5 sm:grid-cols-2">
-          <TextField label="Email Address" type="email" inputMode="email" autoComplete="email" required {...field("email")} />
-          <TextField label="Phone Number" type="tel" inputMode="tel" autoComplete="tel" required {...field("phone")} />
-        </div>
-      </fieldset>
+      {!selectionShownAbove && (
+        <p className="text-sm font-bold uppercase tracking-wider text-brand">1. Choose your class</p>
+      )}
 
-      <fieldset className="flex flex-col gap-4 border-t border-line pt-6">
-        <legend className="mb-3 float-left w-full text-base font-extrabold text-navy">Student</legend>
-        <div className="grid gap-5 sm:grid-cols-2">
-          <TextField label="Student Name" autoComplete="off" required {...field("studentName")} />
-          <SelectField label="Current Grade" required placeholder="Select grade" options={GRADES_2027} {...field("studentGrade")} />
-        </div>
-      </fieldset>
 
       {chosen && !changingSelection && selectionShownAbove ? null : chosen && !changingSelection ? (
         <section aria-labelledby={`${LOCATION}-selected-title`} className="flex flex-col gap-3 rounded-2xl border-2 border-brand bg-brand-soft p-4 sm:flex-row sm:items-center sm:justify-between">
@@ -366,6 +354,30 @@ export function Enrollment2027Form({ preset = {}, selectionShownAbove = false }:
       )}
       </>
       )}
+
+      <div className="border-t border-line pt-5">
+        <p className="text-sm font-bold uppercase tracking-wider text-brand">
+          {selectionShownAbove ? "Your contact details" : "2. Tell us about your student"}
+        </p>
+      </div>
+
+      <fieldset className="flex flex-col gap-4">
+        <legend className="mb-3 text-base font-extrabold text-navy">Parent or guardian</legend>
+        <TextField label="Parent/Guardian Name" autoComplete="name" required {...field("parentName")} />
+        <div className="grid gap-5 sm:grid-cols-2">
+          <TextField label="Email Address" type="email" inputMode="email" autoComplete="email" required {...field("email")} />
+          <TextField label="Phone Number" type="tel" inputMode="tel" autoComplete="tel" required {...field("phone")} />
+        </div>
+      </fieldset>
+
+      <fieldset className="flex flex-col gap-4 border-t border-line pt-6">
+        <legend className="mb-3 float-left w-full text-base font-extrabold text-navy">Student</legend>
+        <div className="grid gap-5 sm:grid-cols-2">
+          <TextField label="Student Name" autoComplete="off" required {...field("studentName")} />
+          <SelectField label="Current Grade" required placeholder="Select grade" options={GRADES_2027} {...field("studentGrade")} />
+        </div>
+      </fieldset>
+
 
       {chosen && chosen.term !== "winter" && !(selectionShownAbove && !changingSelection) && (
         <div aria-live="polite" className="border border-line bg-cream px-4 py-3 text-sm leading-relaxed text-navy">
