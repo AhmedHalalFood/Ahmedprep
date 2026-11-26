@@ -29,7 +29,8 @@ export default function AboutPage() {
             <h1 id="about-title" className="mt-3 text-balance text-4xl font-extrabold leading-tight tracking-tight text-navy md:text-5xl">
               Tariq Ahmed
             </h1>
-            <p className="founder-role">Founder & Lead Instructor</p>
+            <p className="founder-role">Founder &amp; Lead Instructor</p>
+            <p className="mt-3 max-w-xl rounded-lg border border-[#D8E4EF] bg-[#F5F9FC] px-4 py-3 text-sm font-bold leading-relaxed text-navy">I personally teach AhmedPrep’s SHSAT and Digital SAT classes, so families work directly with the person who founded the program.</p>
             <p className="founder-text">
               AhmedPrep provides New York students with focused, individualized instruction built around their starting point, goals, and
               progress. From our classroom in Astoria, Queens, we prepare students for the SHSAT and the Digital SAT with a simple approach:
