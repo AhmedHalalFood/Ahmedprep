@@ -56,9 +56,9 @@ export function ProgramsPreview() {
       <div className="container rounded-2xl border border-line border-t-4 border-t-gold bg-white p-5 shadow-sm sm:p-6 md:p-7">
         <div className="mb-5 flex flex-col justify-between gap-4 md:flex-row md:items-center">
           <div className="space-y-2">
-            <p className="eyebrow blue">Winter enrollment first · 2027 calendar below</p>
+            <p className="eyebrow blue">{winterClasses.length ? "Winter enrollment first · 2027 calendar below" : "Explore available 2027 classes"}</p>
             <h2 id="programs-pricing-title" className="text-balance text-2xl font-extrabold leading-tight text-navy md:text-3xl">
-              Choose your Winter class, then explore the year
+              {winterClasses.length ? "Choose your Winter class, then explore the year" : "Find a current SHSAT or Digital SAT class"}
             </h2>
             <p className="max-w-2xl text-sm leading-relaxed text-subtle">
               All SHSAT preparation cohorts meet in person at our Astoria, Queens classroom. Winter and Spring weekday Digital SAT classes are live online via Zoom; all other Digital SAT classes meet in person in Astoria. Maximum {MAX_CLASS_SIZE} students per class, personally taught by founder Tariq Ahmed.
