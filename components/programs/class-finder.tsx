@@ -270,6 +270,11 @@ function CohortDetail({ cohort, full }: { cohort: Cohort; full: boolean }) {
           ))}
         </ul>
         <p className="text-sm text-subtle">Discounts do not combine. Requesting enrollment does not reserve a seat or a discounted rate.</p>
+        {cohort.makeups.some((makeup) => !makeup.approved) && (
+          <p className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm leading-relaxed text-navy">
+            This class includes proposed holiday makeup dates. Final dates will be confirmed with families before enrollment is finalized.
+          </p>
+        )}
       </div>
     </article>
   )
