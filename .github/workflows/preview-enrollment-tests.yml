@@ -1,0 +1,42 @@
+name: Preview enrollment policy and email safety tests
+
+on:
+  pull_request:
+    paths:
+      - "app/enroll-2027/**"
+      - "app/api/enrollment-2027/**"
+      - "lib/cohorts-2027.ts"
+      - "lib/enrollment-2027-inquiry.ts"
+      - "lib/email-sender.ts"
+      - "lib/lead-*.ts"
+      - "lib/program-retirement.ts"
+      - "tests/**"
+      - ".github/workflows/preview-enrollment-tests.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  policies-and-email-safety:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      VERCEL_ENV: preview
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Run master-plan, pricing, historic cohort and preview email unit tests
+        run: >-
+          node --experimental-strip-types --import ./tests/alias-loader.mjs --test
+          tests/approved-2027-master-plan.test.mjs
+          tests/early-deadline-21-day.test.mjs
+          tests/enrollment-2027-historical-email-safety.test.mjs
+          tests/program-retirement.test.mjs
