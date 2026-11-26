@@ -1,5 +1,7 @@
 "use client"
 
+import { useEffect, useState } from "react"
+import { usePathname } from "next/navigation"
 import { ArrowRight, MessageSquare, Phone } from "lucide-react"
 import { ReserveSeatDialog } from "@/components/landing/reserve-seat-dialog"
 import { TrackedLink } from "@/components/tracked-link"
@@ -9,8 +11,33 @@ import { ENROLLMENT_2027 } from "@/lib/enrollment-2027"
 import { activeTermIds } from "@/lib/program-retirement"
 
 export function MobileCtaBar({ showIntensive }: { showIntensive: boolean }) {
+  const pathname = usePathname()
+  const [formVisible, setFormVisible] = useState(false)
+
+  // The inquiry form has its own real submit button. Hide the competing sticky
+  // enrollment shortcut while that section is on screen, but keep Call / Text.
+  useEffect(() => {
+    setFormVisible(false)
+    if (pathname !== "/enroll-2027") return
+    const section = document.getElementById("inquiry-form")
+    if (!section) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setFormVisible(entry.isIntersecting),
+      { rootMargin: "0px 0px -64px 0px", threshold: 0 },
+    )
+    observer.observe(section)
+    return () => observer.disconnect()
+  }, [pathname])
+
+  const showEnrollmentShortcut = !(pathname === "/enroll-2027" && formVisible)
+
   return (
-    <nav className="mobile-cta-bar" aria-label="Quick contact">
+    <nav
+      className="mobile-cta-bar"
+      aria-label="Quick contact"
+      style={showEnrollmentShortcut ? undefined : { gridTemplateColumns: "1fr 1fr" }}
+    >
       <TrackedLink href={BUSINESS.phoneHref} event={EVENTS.phoneClick} eventProps={{ location: "mobile_bar" }} aria-label={`Call AhmedPrep at ${BUSINESS.phoneDisplay}`}>
         <Phone size={15} aria-hidden="true" />
         Call
@@ -19,7 +46,7 @@ export function MobileCtaBar({ showIntensive }: { showIntensive: boolean }) {
         <MessageSquare size={15} aria-hidden="true" />
         Text
       </TrackedLink>
-      {showIntensive ? (
+      {showEnrollmentShortcut && (showIntensive ? (
         <ReserveSeatDialog
           location="mobile_bar"
           trigger={
@@ -37,7 +64,7 @@ export function MobileCtaBar({ showIntensive }: { showIntensive: boolean }) {
         >
           {activeTermIds().length ? "Request Enrollment" : "Free Diagnostic"} <ArrowRight size={15} aria-hidden="true" />
         </TrackedLink>
-      )}
+      ))}
     </nav>
   )
 }
