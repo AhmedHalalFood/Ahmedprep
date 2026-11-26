@@ -1,6 +1,6 @@
 /**
- * January 2027 enrollment details approved by AhmedPrep.
- * Start dates and cohort schedules approved in AhmedPrep 2027 Master Plan v3.0.
+ * Winter 2027 enrollment details, with all-season schedules and tuition held in lib/cohorts-2027.ts.
+ * Source: owner-approved November 23, 2026 Complete Readiness Master Plan.
  */
 export const ENROLLMENT_2027 = {
   eyebrow: "January 2027 Enrollment",
@@ -36,7 +36,7 @@ export const ENROLLMENT_2027 = {
       total: "$1,296",
       savingsLabel: "10% off",
       summary: "Spring, Summer and Fall 2027 only. 10% discount when full payment is received at least 30 calendar days before the selected cohort begins. Not offered for Winter 2027.",
-      points: ["10% discount", "Full payment at least 30 calendar days before the cohort begins", "Spring and Summer 2027 only"],
+      points: ["10% discount", "Full payment at least 30 calendar days before the cohort begins", "Spring, Summer and Fall 2027 only"],
     },
     regular: {
       label: "Regular Tuition",
