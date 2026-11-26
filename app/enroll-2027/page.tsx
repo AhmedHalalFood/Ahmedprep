@@ -70,7 +70,8 @@ export default async function Enroll2027Page({ searchParams }: Props) {
     previewFull,
   }
   const E = ENROLLMENT_2027
-  const foundingOfferOpen = isTermActive("winter") && nyCalendarDate() <= WINTER_FOUNDING_DEADLINE_ISO
+  const winterActive = isTermActive("winter")
+  const foundingOfferOpen = winterActive && nyCalendarDate() <= WINTER_FOUNDING_DEADLINE_ISO
   const winterTuition = priceFor({term:"winter", hours:72})
   const requested = cohortParam ? findCohort(cohortParam) : undefined
   const selected = requested && isCohortActive(requested) ? requested : undefined
@@ -160,16 +161,17 @@ export default async function Enroll2027Page({ searchParams }: Props) {
       <section aria-labelledby="enroll-heading" className="border-b-4 border-gold bg-white px-5 pb-7 pt-7 sm:pb-9 sm:pt-9">
         <div className="mx-auto flex max-w-5xl flex-col gap-4">
           <div className="flex max-w-3xl flex-col gap-3">
-            <p className="eyebrow blue">2027 Enrollment · Winter classes open</p>
+            <p className="eyebrow blue">{winterActive ? "2027 Enrollment · Winter classes open" : "2027 Enrollment"}</p>
             <h1 id="enroll-heading" className="text-balance text-3xl font-extrabold leading-tight tracking-tight text-navy sm:text-5xl">
               SHSAT &amp; Digital SAT Enrollment 2027
             </h1>
             <p className="text-pretty text-base leading-relaxed text-subtle sm:text-lg">
-              Winter classes are enrolling now. All paid SHSAT classes meet in person in Astoria, Queens.
+              {winterActive ? "Winter classes are enrolling now. " : "Explore currently available 2027 classes. "}
+              All paid SHSAT classes meet in person in Astoria, Queens.
               Winter and Spring weekday Digital SAT classes meet live online via Zoom. Founder Tariq Ahmed personally teaches each class.
-              Spring, Summer, and Fall class choices are available below.
+              Select your preferred exam and class schedule below.
             </p>
-            {isTermActive("winter") && (
+            {winterActive && (
               <div id="winter-tuition" className="scroll-mt-6 rounded-xl border border-[#E8D5A2] bg-[#FFF8E7] p-4 text-navy sm:p-5">
                 <p className="text-xs font-extrabold uppercase tracking-wider text-[#79570A]">
                   {foundingOfferOpen ? "Winter 2027 · Founding-family tuition" : "Winter 2027 · Regular tuition"}
