@@ -10,8 +10,8 @@ const annualInquiry = "mailto:Tariq@ahmedprep.com?subject=" +
 export function AnnualShsatPackage({ compact = false }: { compact?: boolean }) {
   const plan = ANNUAL_SHSAT_2027
   if (!isAnnualShsatOfferActive()) return null
-  return (
-    <section id="annual-shsat-package" aria-labelledby="annual-shsat-title" className="scroll-mt-28 border-y border-line bg-white py-7 md:py-9">
+  const packageContent = (
+    <section id="annual-shsat-package" aria-labelledby="annual-shsat-title" className={compact ? "pt-3" : "scroll-mt-28 border-y border-line bg-white py-7 md:py-9"}>
       <div className="container">
         <div className={`rounded-xl border border-gold/50 bg-cream p-5 md:p-7 ${compact ? "" : "shadow-sm"}`}>
           <p className="text-xs font-extrabold uppercase tracking-wider text-brand">Complete SHSAT 2027 · Annual package inquiry</p>
@@ -54,5 +54,15 @@ export function AnnualShsatPackage({ compact = false }: { compact?: boolean }) {
         </div>
       </div>
     </section>
+  )
+  if (!compact) return packageContent
+  return (
+    <details className="group rounded-xl border border-line bg-[#FBF8F0] px-4 py-3 sm:px-5">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-sm font-bold text-navy marker:hidden">
+        <span>Interested in the complete SHSAT 2027 annual package? <span className="font-normal text-subtle">336 hours · from $5,040</span></span>
+        <span aria-hidden="true" className="shrink-0 text-xl text-brand group-open:rotate-45">+</span>
+      </summary>
+      {packageContent}
+    </details>
   )
 }
