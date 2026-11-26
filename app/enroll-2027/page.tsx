@@ -23,24 +23,16 @@ const PATH = "/enroll-2027"
 
 const ATTENDANCE_FAQS: FaqItem[] = [
   {
-    q: "Do classes continue during school holidays?",
-    a: "Yes. AhmedPrep follows its published cohort calendar. Approved holiday closures are covered by scheduled makeup sessions; other school breaks do not automatically cancel classes.",
-  },
-  {
-    q: "What happens if AhmedPrep cancels a class?",
-    a: "We will provide the published makeup session or equivalent live instruction at no additional cost, preserving the published cohort instructional hours.",
+    q: "Are classes held during school holidays or severe weather?",
+    a: "AhmedPrep follows each cohort's published calendar. If an AhmedPrep class is canceled for a holiday, severe weather, or another reason, families will be notified and live makeup instruction arranged to preserve the scheduled hours. Proposed makeup dates are confirmed before enrollment is finalized.",
   },
   {
     q: "What if my child misses a class?",
-    a: "Parents may request missed assignments and available class materials. Individual makeup sessions are not guaranteed when a student misses a regularly scheduled class. If AhmedPrep cancels a class because of severe weather or an emergency, a replacement session will be arranged.",
+    a: "Parents may request missed assignments and available class materials. Individual makeup instruction for student absences is not guaranteed.",
   },
   {
-    q: "What happens if classes are canceled due to severe weather?",
-    a: "If severe weather or an emergency prevents an in-person class from taking place, AhmedPrep will arrange a makeup session. Families will be notified of any schedule changes. Winter and Spring weekday Digital SAT instruction takes place live online; all other cohorts are in person.",
-  },
-  {
-    q: "Will my child receive all published instructional hours?",
-    a: "Yes. Each program includes its published 72 or 96 hours of live instruction. Holiday closures and any AhmedPrep cancellations are covered by makeup instruction.",
+    q: "How many instructional hours are included?",
+    a: "Winter and Spring classes include 72 instructional hours; the Summer and Fall SHSAT intensives include 96. Summer and Fall Digital SAT weekend intensives include 72 instructional hours, excluding a 30-minute break from each five-hour session.",
   },
 ]
 
@@ -76,11 +68,7 @@ export default async function Enroll2027Page({ searchParams }: Props) {
   const requested = cohortParam ? findCohort(cohortParam) : undefined
   const selected = requested && isCohortActive(requested) ? requested : undefined
   const unknownCohort = Boolean(cohortParam) && !selected
-  const facts = [
-    { term: "Programs", value: "SHSAT & Digital SAT" },
-    { term: "Classes start", value: activeTermIds().map(termStartLabel).map(s => s.replace(" Classes", "")).join(" · ") },
-    { term: "Class size", value: `Max ${E.maxClassSize} students` },
-  ]
+
 
   const inquirySection = (
     <section aria-labelledby="inquiry-heading" className="scroll-mt-4 bg-white px-5 py-8 sm:py-10" id="inquiry-form">
@@ -90,7 +78,7 @@ export default async function Enroll2027Page({ searchParams }: Props) {
           <h2 id="inquiry-heading" className="text-balance text-2xl font-extrabold tracking-tight text-navy sm:text-3xl">
             {preset.waitlist ? "Join this class's waitlist" : ENROLLMENT_ACTIONS.request}
           </h2>
-          <p className="text-pretty leading-relaxed text-subtle">Choose your start month, exam, and class schedule. AhmedPrep will confirm seat availability and payment instructions after your inquiry.</p>
+          <p className="text-pretty text-sm leading-relaxed text-subtle">Start by choosing a class. Add your contact details next, and AhmedPrep will follow up about availability and payment.</p>
         </div>
         {unknownCohort && (
           <p role="alert" className="border-l-4 border-gold bg-cream p-4 text-sm font-semibold leading-relaxed text-navy">
@@ -162,15 +150,16 @@ export default async function Enroll2027Page({ searchParams }: Props) {
         <div className="mx-auto flex max-w-5xl flex-col gap-4">
           <div className="flex max-w-3xl flex-col gap-3">
             <p className="eyebrow blue">{winterActive ? "2027 Enrollment · Winter classes open" : "2027 Enrollment"}</p>
-            <h1 id="enroll-heading" className="text-balance text-3xl font-extrabold leading-tight tracking-tight text-navy sm:text-5xl">
-              SHSAT &amp; Digital SAT Enrollment 2027
+            <h1 id="enroll-heading" className="text-balance text-3xl font-extrabold leading-tight tracking-tight text-navy sm:text-4xl">
+              Enroll in SHSAT or Digital SAT Prep
             </h1>
-            <p className="text-pretty text-base leading-relaxed text-subtle sm:text-lg">
-              {winterActive ? "Winter classes are enrolling now. " : "Explore currently available 2027 classes. "}
-              All paid SHSAT classes meet in person in Astoria, Queens.
-              Winter and Spring weekday Digital SAT classes meet live online via Zoom. Founder Tariq Ahmed personally teaches each class.
-              Select your preferred exam and class schedule below.
+            <p className="text-pretty text-sm leading-relaxed text-subtle sm:text-base">
+              Choose a 2027 class personally taught by founder Tariq Ahmed. Small groups in Astoria; Winter and Spring weekday Digital SAT classes meet live on Zoom.
             </p>
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm font-semibold text-navy">
+              <span>Winter · Spring · Summer · Fall</span>
+              <span>Maximum {E.maxClassSize} students per class</span>
+            </div>
             {winterActive && (
               <div id="winter-tuition" className="scroll-mt-6 rounded-xl border border-[#E8D5A2] bg-[#FFF8E7] p-4 text-navy sm:p-5">
                 <p className="text-xs font-extrabold uppercase tracking-wider text-[#79570A]">
@@ -196,21 +185,13 @@ export default async function Enroll2027Page({ searchParams }: Props) {
               Compare all 2027 programs and tuition
             </Link>
           </div>
-          <dl className="grid grid-cols-1 border-y border-line sm:grid-cols-3">
-            {facts.map((fact, i) => (
-              <div key={fact.term} className={`flex flex-col gap-0.5 py-3 ${i > 0 ? "border-t border-line sm:border-l sm:border-t-0 sm:pl-4" : ""}`}>
-                <dt className="text-xs font-bold uppercase tracking-widest text-subtle">{fact.term}</dt>
-                <dd className="text-base font-extrabold text-navy">{fact.value}</dd>
-              </div>
-            ))}
-          </dl>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <p className="flex items-start gap-2 text-sm leading-relaxed text-ink">
               <MapPin size={18} aria-hidden="true" className="mt-0.5 shrink-0 text-brand" />
               <span>In-person classes: <strong>{ADDRESS_LINE_1}, {ADDRESS_LINE_2}</strong></span>
             </p>
             <a href="#inquiry-form" className="button button-gold button-lg self-start sm:self-auto">
-              {ENROLLMENT_ACTIONS.request}
+              Choose a class &amp; request enrollment
             </a>
           </div>
         </div>
@@ -218,7 +199,11 @@ export default async function Enroll2027Page({ searchParams }: Props) {
 
       {inquirySection}
 
-      <AnnualShsatPackage compact />
+      <div className="bg-white px-5 pb-8 pt-2">
+        <div className="mx-auto max-w-5xl">
+          <AnnualShsatPackage compact />
+        </div>
+      </div>
 
       <div className="bg-warm px-5 py-8 sm:py-10">
         <div className="mx-auto max-w-5xl">
