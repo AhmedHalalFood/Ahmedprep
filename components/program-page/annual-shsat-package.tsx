@@ -59,7 +59,7 @@ export function AnnualShsatPackage({ compact = false }: { compact?: boolean }) {
   return (
     <details className="group rounded-xl border border-line bg-[#FBF8F0] px-4 py-3 sm:px-5">
       <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-sm font-bold text-navy marker:hidden">
-        <span>Interested in the complete SHSAT 2027 annual package? <span className="font-normal text-subtle">336 hours · from $5,040</span></span>
+        <span>Optional: Complete SHSAT annual package <span className="font-normal text-subtle">· 336 hours · View pricing and conditions</span></span>
         <span aria-hidden="true" className="shrink-0 text-xl text-brand group-open:rotate-45">+</span>
       </summary>
       {packageContent}
