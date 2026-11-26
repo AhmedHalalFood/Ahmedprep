@@ -1,6 +1,7 @@
 import {
   type Cohort,
   isOnlineCohort,
+  winterFoundingOfferActive,
   type ProgramId,
   type TermId,
   MAX_CLASS_SIZE,
@@ -79,8 +80,8 @@ export type InquiryFields = {
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-/** Founding-family tuition, and so the interest question, exists for Winter 2027 only. */
-export const foundingQuestionApplies = (term: TermId) => term === "winter"
+/** The Winter founding-family interest question ends when the December 12 offer expires. */
+export const foundingQuestionApplies = (term: TermId) => term === "winter" && winterFoundingOfferActive()
 
 export type InquiryIntent = "inquiry" | "waitlist"
 
