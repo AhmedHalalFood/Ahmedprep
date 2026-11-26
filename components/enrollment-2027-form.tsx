@@ -136,19 +136,6 @@ function ChoiceCards({
   )
 }
 
-function Placeholder({ label, text, error }: { label: string; text: string; error?: string }) {
-  return (
-    <div>
-      <p className="text-sm font-semibold text-ink">
-        {label} <span aria-hidden="true" className="text-error">*</span>
-        <span className="sr-only">(required)</span>
-      </p>
-      <p className="mt-2 border border-dashed border-line px-4 py-3 text-sm text-subtle">{text}</p>
-      {error && <p className="mt-1.5 text-xs font-medium text-error">{error}</p>}
-    </div>
-  )
-}
-
 /**
  * `selectionShownAbove`: the page already shows the selected class (with a "Change class" link) right above the form,
  * so the form skips its own selected-class and tuition boxes instead of repeating them.
@@ -266,7 +253,6 @@ export function Enrollment2027Form({ preset = {}, selectionShownAbove = false }:
         <p className="text-sm font-bold uppercase tracking-wider text-brand">1. Choose your class</p>
       )}
 
-
       {chosen && !changingSelection && selectionShownAbove ? null : chosen && !changingSelection ? (
         <section aria-labelledby={`${LOCATION}-selected-title`} className="flex flex-col gap-3 rounded-2xl border-2 border-brand bg-brand-soft p-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-col gap-0.5">
@@ -296,7 +282,7 @@ export function Enrollment2027Form({ preset = {}, selectionShownAbove = false }:
         legend="When would you like to start?"
         value={data.term}
         error={errors.term}
-        columns="sm:grid-cols-3"
+        columns="sm:grid-cols-2 lg:grid-cols-4"
         onChange={(v) => {
           update("term", v)
           update("cohortId", "")
@@ -321,7 +307,7 @@ export function Enrollment2027Form({ preset = {}, selectionShownAbove = false }:
           options={PROGRAMS_2027.map((p) => ({ value: p, title: p, detail: PROGRAM_DETAIL[p], tone: p === "SHSAT" ? "shsat" : "dsat" }))}
         />
       ) : (
-        <Placeholder label="Program" text="Choose when to start above, then SHSAT or Digital SAT." error={errors.program} />
+        errors.program ? <p role="alert" className="text-sm font-medium text-error">{errors.program}</p> : null
       )}
 
       {cohorts.length > 0 ? (
@@ -346,11 +332,7 @@ export function Enrollment2027Form({ preset = {}, selectionShownAbove = false }:
           })}
         />
       ) : (
-        <Placeholder
-          label="Schedule"
-          text="Choose a start date and program above to see the weekday and weekend schedules."
-          error={errors.cohortId}
-        />
+        errors.cohortId ? <p role="alert" className="text-sm font-medium text-error">{errors.cohortId}</p> : null
       )}
       </>
       )}
