@@ -14,7 +14,7 @@ export function AnnualShsatPackage({ compact = false }: { compact?: boolean }) {
     <section id="annual-shsat-package" aria-labelledby="annual-shsat-title" className="scroll-mt-28 border-y border-line bg-white py-7 md:py-9">
       <div className="container">
         <div className={`rounded-xl border border-gold/50 bg-cream p-5 md:p-7 ${compact ? "" : "shadow-sm"}`}>
-          <p className="text-xs font-extrabold uppercase tracking-wider text-brand">Complete SHSAT 2027 · Annual enrollment option</p>
+          <p className="text-xs font-extrabold uppercase tracking-wider text-brand">Complete SHSAT 2027 · Annual package inquiry</p>
           <h2 id="annual-shsat-title" className="mt-2 text-balance text-2xl font-extrabold tracking-tight text-navy md:text-3xl">
             One four-stage pathway from Winter Foundation to Fall Final Intensive
           </h2>
@@ -34,13 +34,13 @@ export function AnnualShsatPackage({ compact = false }: { compact?: boolean }) {
             <div className="rounded-lg border-2 border-navy bg-white p-3">
               <p className="text-xs font-semibold text-subtle">Founding-family annual · 25% off</p>
               <p className="mt-1 text-xl font-extrabold text-navy">{dollars(plan.founding)}</p>
-              <p className="text-xs text-subtle">First {plan.foundingSeats} fully paid annual enrollments</p>
+              <p className="text-xs text-subtle">Proposed for the first {plan.foundingSeats} qualifying annual enrollments</p>
             </div>
           </div>
           <p className="mt-3 text-sm leading-relaxed text-ink">
             <Check size={16} className="mr-1 inline text-brand" aria-hidden="true" />
-            Annual full-payment deadline: January 8, 2027, at 11:59 PM ET. No installment plans or stacked discounts.
-            Annual placement, withdrawal, refund, and exam-date-adjustment terms must be reviewed before payment.
+            Proposed annual full-payment deadline: January 8, 2027, at 11:59 PM ET, subject to a completed written enrollment agreement. No installment plans or stacked discounts.
+            Annual placement, withdrawal, refund, instructor coverage, and exam-date-adjustment terms must be finalized in writing before any payment is requested.
           </p>
           <div className="mt-4 flex flex-wrap gap-3">
             <a href={annualInquiry} className="button button-gold justify-center">
@@ -50,7 +50,7 @@ export function AnnualShsatPackage({ compact = false }: { compact?: boolean }) {
               Compare individual cohorts
             </Link>
           </div>
-          <p className="mt-2 text-xs text-subtle">This is an inquiry only. No payment is collected online, and submitting an inquiry does not reserve an annual-package place.</p>
+          <p className="mt-2 text-xs text-subtle">Annual pricing is approved for planning; the written contract and enrollment terms are pending. This is an inquiry only. No payment is collected online or requested before the agreement is finalized.</p>
         </div>
       </div>
     </section>
