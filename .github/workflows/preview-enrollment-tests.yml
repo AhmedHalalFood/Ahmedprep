@@ -11,6 +11,7 @@ on:
       - "lib/lead-*.ts"
       - "lib/program-retirement.ts"
       - "tests/**"
+      - "scripts/verify-preview-db.mjs"
       - ".github/workflows/preview-enrollment-tests.yml"
   workflow_dispatch:
 
@@ -40,3 +41,7 @@ jobs:
           tests/early-deadline-21-day.test.mjs
           tests/enrollment-2027-historical-email-safety.test.mjs
           tests/program-retirement.test.mjs
+      - name: Safe Preview page and API smoke tests (no customer submission)
+        env:
+          PREVIEW_BASE_URL: https://v0-ahmedprep-website-git-preview-approved-mast-6fc606-ahmedprep.vercel.app
+        run: node tests/preview-http-smoke.mjs
