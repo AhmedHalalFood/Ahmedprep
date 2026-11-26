@@ -172,6 +172,31 @@ const COHORTS: readonly Cohort[] = [
   },
 ]
 
+/**
+ * Legacy 2027 Summer offerings retained strictly for historical inquiry and confirmation-resend records.
+ * These were replaced in the November 23 approved master plan. Do not include in COHORTS, TERMS_2027,
+ * ALL_COHORTS, public class listings, or new enrollment/API selection.
+ */
+const HISTORICAL_SUPERSEDED_COHORTS: readonly Cohort[] = [
+  {
+    id: "summer-dsat-intensive", term: "summer", program: "Digital SAT", label: "Weekday Intensive",
+    days: "Monday–Thursday", time: "2–5 PM", dates: "July 6 – August 26; final session August 29",
+    sessions: 32, hours: 96, weekdays: [1, 2, 3, 4],
+    firstIso: "2027-07-06", regularEndIso: "2027-08-26", closures: [],
+    makeups: [{ iso: "2027-08-29", time: "2–5 PM", replaces: "2027-07-05", approved: true, additional: true }],
+  },
+  {
+    id: "summer-shsat-weekend", term: "summer", program: "SHSAT", label: "Weekend",
+    days: "Saturday and Sunday", time: "10 AM–1 PM",
+    dates: "July 3 – August 22; July 4 closure made up August 28",
+    sessions: 16, hours: 48, weekdays: [6, 0],
+    firstIso: "2027-07-03", regularEndIso: "2027-08-22",
+    closures: [{ iso: "2027-07-04", reason: "Independence Day closure" }],
+    makeups: [{ iso: "2027-08-28", time: "10 AM–1 PM", replaces: "2027-07-04", approved: false }],
+  },
+]
+export const findHistoricalCohort = (id: string) => HISTORICAL_SUPERSEDED_COHORTS.find((c) => c.id === id)
+
 const TERM_NAMES: Record<TermId, string> = { winter: "Winter 2027", spring: "Spring 2027", summer: "Summer 2027", fall: "Fall 2027" }
 
 /**
