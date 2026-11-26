@@ -242,6 +242,14 @@ export function cohortSpan(cohort: Cohort) {
 export const EARLY_DAYS_BEFORE_SPRING_SUMMER = 30
 /** Phase 1 correction: one founding-family deadline for every Winter 2027 cohort. */
 export const WINTER_FOUNDING_DEADLINE_ISO = "2026-12-12"
+
+/** Current New York calendar date, independent of Vercel server region. */
+export function newYorkDateToday(now: Date = new Date()): string {
+  const parts = new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(now)
+  const byType = (key: string) => parts.find((part) => part.type === key)?.value ?? ""
+  return `${byType("year")}-${byType("month")}-${byType("day")}`
+}
+export const winterFoundingOfferActive = (now: Date = new Date()) => newYorkDateToday(now) <= WINTER_FOUNDING_DEADLINE_ISO
 export const DEADLINE_TIME_LABEL = "11:59 PM ET"
 
 /** Founding-family tuition is offered for Winter 2027 cohorts only. */
@@ -356,7 +364,7 @@ export function tuitionOptionsFor(cohort: Cohort) {
   const price = priceFor(cohort)
   const d = deadlinesFor(cohort)
   const options: { id: "founding" | "early" | "regular"; label: string; amount: number; condition: string }[] = []
-  if (price.founding !== null && d.foundingIso) {
+  if (price.founding !== null && d.foundingIso && winterFoundingOfferActive()) {
     options.push({
       id: "founding",
       label: "Founding-family tuition (25% off)",
@@ -364,7 +372,7 @@ export function tuitionOptionsFor(cohort: Cohort) {
       condition: `First ${FOUNDING_SEATS_PER_COHORT} fully paid enrollments in this cohort, paid in full by ${formatDate(d.foundingIso)} at ${DEADLINE_TIME_LABEL}, subject to seat availability.`,
     })
   }
-  if (price.early !== null && d.earlyIso) {
+  if (price.early !== null && d.earlyIso && newYorkDateToday() <= d.earlyIso) {
     options.push({
       id: "early",
       label: "Early-payment tuition (10% off)",
