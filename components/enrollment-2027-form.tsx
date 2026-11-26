@@ -367,7 +367,7 @@ export function Enrollment2027Form({ preset = {}, selectionShownAbove = false }:
       </>
       )}
 
-      {chosen && !(selectionShownAbove && !changingSelection) && (
+      {chosen && chosen.term !== "winter" && !(selectionShownAbove && !changingSelection) && (
         <div aria-live="polite" className="border border-line bg-cream px-4 py-3 text-sm leading-relaxed text-navy">
           <p className="font-bold">Tuition for this cohort ({chosen.hours} hours at $20 per hour)</p>
           <ul className="mt-1 flex flex-col gap-1">
