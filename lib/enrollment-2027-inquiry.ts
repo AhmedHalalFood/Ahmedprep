@@ -13,6 +13,7 @@ import {
   deadlinesFor,
   dollars,
   findCohort,
+  findHistoricalCohort,
   formatDate,
   formatLongDate,
   isProgramId,
@@ -54,7 +55,7 @@ const LEGACY_PROGRAM: Record<string, { program: ProgramId; slug: "shsat" | "dsat
 export function resolveSelection(input: { program?: string; term?: string; cohortId?: string; schedule?: string }, { includeCompleted = false }: { includeCompleted?: boolean } = {}): Selection | null {
   const program = input.program ?? ""
   if (input.cohortId) {
-    const cohort = findCohort(input.cohortId)
+    const cohort = findCohort(input.cohortId) ?? (includeCompleted ? findHistoricalCohort(input.cohortId) : undefined)
     if (!cohort || (!includeCompleted && !isCohortActive(cohort)) || !isProgramId(program) || !isTermId(input.term ?? "")) return null
     if (cohort.program !== program || cohort.term !== input.term) return null
     return { kind: "cohort", cohort, program, term: cohort.term }
