@@ -41,7 +41,29 @@ jobs:
           tests/early-deadline-21-day.test.mjs
           tests/enrollment-2027-historical-email-safety.test.mjs
           tests/program-retirement.test.mjs
+      - name: Build the application for smoke tests
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
+        run: pnpm build
       - name: Safe Preview page and API smoke tests (no customer submission)
         env:
-          PREVIEW_BASE_URL: https://v0-ahmedprep-website-git-preview-approved-mast-6fc606-ahmedprep.vercel.app
-        run: node tests/preview-http-smoke.mjs
+          NEXT_TELEMETRY_DISABLED: "1"
+        run: |
+          # Hosted Previews require Vercel authentication. Serve this checkout on loopback.
+          node node_modules/next/dist/bin/next start --hostname 127.0.0.1 --port 3217 > preview-server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent --max-time 2 http://127.0.0.1:3217/ > /dev/null; then
+              if node tests/preview-http-smoke.mjs --local; then
+                exit 0
+              fi
+              break
+            fi
+            if ! kill -0 "$server_pid" 2>/dev/null; then
+              break
+            fi
+            sleep 1
+          done
+          cat preview-server.log
+          exit 1

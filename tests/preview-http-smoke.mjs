@@ -2,12 +2,18 @@
 // NEVER send a valid enrollment payload: Preview database isolation is not yet confirmed.
 import assert from "node:assert/strict"
 
-const base = process.env.PREVIEW_BASE_URL
+const args = process.argv.slice(2)
+const local = args.length === 1 && args[0] === "--local"
+assert.ok(local || args.length === 0, "Usage: node tests/preview-http-smoke.mjs [--local]")
+
+const base = local ? "http://127.0.0.1:3217" : process.env.PREVIEW_BASE_URL
 assert.ok(base, "Set PREVIEW_BASE_URL")
 const root = new URL(base)
-assert.equal(root.protocol, "https:", "Preview must use HTTPS")
-assert.ok(root.hostname.endsWith(".vercel.app"), "Only a vercel.app Preview may be tested")
-assert.ok(/preview/i.test(root.hostname), "Never test production aliases")
+if (!local) {
+  assert.equal(root.protocol, "https:", "Preview must use HTTPS")
+  assert.ok(root.hostname.endsWith(".vercel.app"), "Only a vercel.app Preview may be tested")
+  assert.ok(/preview/i.test(root.hostname), "Never test production aliases")
+}
 
 async function request(path, init = {}) {
   const url = new URL(path, root)
@@ -40,6 +46,7 @@ const badJson = await request("/api/enrollment-2027", {
   body: "{invalid",
 })
 assert.equal(badJson.status, 400, "Malformed request should be rejected")
+assert.deepEqual(await badJson.json(), { success: false, error: "Invalid request." })
 
 const invalidSelection = await request("/api/enrollment-2027", {
   method: "POST",
@@ -47,7 +54,9 @@ const invalidSelection = await request("/api/enrollment-2027", {
   body: JSON.stringify({ elapsedMs: 3000, website: "", program: "FAKE-PROGRAM", term: "winter", cohortId: "invalid" }),
 })
 assert.equal(invalidSelection.status, 400, "Incomplete/inconsistent enrollment should be rejected")
-const result = await invalidSelection.json()
-assert.equal(result.success, false)
+assert.deepEqual(await invalidSelection.json(), {
+  success: false,
+  error: "Please complete all required fields or choose an active class.",
+})
 
 console.log("PASS: Preview pages and non-mutating enrollment API checks")
