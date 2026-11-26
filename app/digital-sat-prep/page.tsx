@@ -17,6 +17,7 @@ import { EnrollmentSteps } from "@/components/program-page/enrollment-steps"
 import { FeatureGrid, ResourceLinks } from "@/components/program-page/feature-grid"
 import { ProgramCtas } from "@/components/program-page/program-ctas"
 import { ProgramTuition } from "@/components/program-page/program-tuition"
+import { OfficialExamSources } from "@/components/program-page/official-exam-sources"
 import { EVENTS } from "@/lib/analytics"
 import { BUSINESS, SITE_URL } from "@/lib/business"
 import { MAX_CLASS_SIZE, cohortsFor, cohortInquiryHref, priceFor, dollars } from "@/lib/cohorts-2027"
@@ -40,6 +41,7 @@ const LAPTOP_NOTE = "Digital SAT students need a compatible laptop for online cl
 const benefits = [
   "A free Digital SAT diagnostic with score analysis",
   `Live online or in-person small groups, maximum ${MAX_CLASS_SIZE} students`,
+  "Every class personally taught by founder Tariq Ahmed",
   "Math and Reading & Writing in every class",
   "Bluebook practice and Desmos strategies",
   "Regular progress updates for parents",
@@ -205,7 +207,7 @@ export default function DigitalSatPrepPage() {
               changes most likely to raise it.
             </p>
             <p className="leading-relaxed text-subtle">
-              Classes are led by founder Tariq Ahmed, who has 12+ years of teaching and test-prep
+              Classes are personally taught by founder Tariq Ahmed, who has 12+ years of teaching and test-prep
               experience, in groups of {MAX_CLASS_SIZE} or fewer.
             </p>
             <div className="mt-auto flex items-start gap-3 rounded-xl border border-[#D7E4EE] bg-white p-4">
@@ -290,6 +292,8 @@ export default function DigitalSatPrepPage() {
       <Section id="method" tone="warm" eyebrow="Our teaching approach" title="Practice that mirrors the real test">
         <FeatureGrid items={method} />
       </Section>
+
+      <OfficialExamSources exam="Digital SAT" />
 
       <ProgramTuition program="Digital SAT" note={LAPTOP_NOTE} />
 
