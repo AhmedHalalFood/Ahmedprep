@@ -1,17 +1,15 @@
 import type { Metadata } from "next"
 import { connection } from "next/server"
 import { redirect } from "next/navigation"
-import { activeTermIds, isCohortActive, isTermActive } from "@/lib/program-retirement"
+import { activeTermIds, isCohortActive, isTermActive, nyCalendarDate } from "@/lib/program-retirement"
 import { MapPin } from "lucide-react"
 import Link from "next/link"
-import { ClassCards } from "@/components/enroll-2027/class-cards"
 import { EnrollmentSteps } from "@/components/enroll-2027/enrollment-steps"
 import { AnnualShsatPackage } from "@/components/program-page/annual-shsat-package"
 import { EnrollmentHelp } from "@/components/enroll-2027/enrollment-help"
 import { PayNowSlot } from "@/components/enroll-2027/pay-now-slot"
 import { SelectedClassSummary } from "@/components/enroll-2027/selected-class-summary"
-import { isOnlineCohort, cohortTitle, findCohort, termStartLabel } from "@/lib/cohorts-2027"
-import { TuitionOptions } from "@/components/enroll-2027/tuition-options"
+import { isOnlineCohort, cohortTitle, findCohort, termStartLabel, WINTER_FOUNDING_DEADLINE_ISO, FOUNDING_SEATS_PER_COHORT, DEADLINE_TIME_LABEL, dollars, priceFor } from "@/lib/cohorts-2027"
 import { Enrollment2027Form } from "@/components/enrollment-2027-form"
 import { Faq, type FaqItem } from "@/components/landing/faq"
 import { Breadcrumbs } from "@/components/landing/primitives"
@@ -72,28 +70,30 @@ export default async function Enroll2027Page({ searchParams }: Props) {
     previewFull,
   }
   const E = ENROLLMENT_2027
+  const foundingOfferOpen = isTermActive("winter") && nyCalendarDate() <= WINTER_FOUNDING_DEADLINE_ISO
+  const winterTuition = priceFor({term:"winter", hours:72})
   const requested = cohortParam ? findCohort(cohortParam) : undefined
   const selected = requested && isCohortActive(requested) ? requested : undefined
   const unknownCohort = Boolean(cohortParam) && !selected
   const facts = [
     { term: "Programs", value: "SHSAT & Digital SAT" },
-    { term: "Classes start", value: "January · April · July · September 2027" },
+    { term: "Classes start", value: activeTermIds().map(termStartLabel).map(s => s.replace(" Classes", "")).join(" · ") },
     { term: "Class size", value: `Max ${E.maxClassSize} students` },
   ]
 
   const inquirySection = (
-    <section aria-labelledby="inquiry-heading" className="scroll-mt-4 bg-white px-5 py-10 sm:py-14" id="inquiry-form">
+    <section aria-labelledby="inquiry-heading" className="scroll-mt-4 bg-white px-5 py-8 sm:py-10" id="inquiry-form">
       <div className="mx-auto flex max-w-3xl flex-col gap-6">
         <div className="flex flex-col gap-2">
           <p className="eyebrow blue">{preset.waitlist ? "Waitlist" : "Enrollment request"}</p>
           <h2 id="inquiry-heading" className="text-balance text-2xl font-extrabold tracking-tight text-navy sm:text-3xl">
             {preset.waitlist ? "Join this class's waitlist" : ENROLLMENT_ACTIONS.request}
           </h2>
-          <p className="text-pretty leading-relaxed text-subtle">No payment is taken here. {REQUEST_NOT_GUARANTEE}</p>
+          <p className="text-pretty leading-relaxed text-subtle">Choose your start month, exam, and class schedule. AhmedPrep will confirm seat availability and payment instructions after your inquiry.</p>
         </div>
         {unknownCohort && (
           <p role="alert" className="border-l-4 border-gold bg-cream p-4 text-sm font-semibold leading-relaxed text-navy">
-            This class may have ended or is no longer offered. Please choose from the available classes below.
+            This class may have ended or is no longer offered. Please choose from the available programs in the form.
           </p>
         )}
         <div className="border border-line bg-white p-5 sm:p-8">
@@ -156,35 +156,56 @@ export default async function Enroll2027Page({ searchParams }: Props) {
     <>
       <Breadcrumbs items={[{ label: "2027 Enrollment", href: PATH }]} />
 
-      <section aria-labelledby="enroll-heading" className="border-b-4 border-gold bg-white px-5 pb-10 pt-10 sm:pt-14">
-        <div className="mx-auto flex max-w-5xl flex-col gap-6">
-          <div className="flex max-w-2xl flex-col gap-3">
-            <p className="eyebrow blue">2027 Enrollment</p>
-            <h1 id="enroll-heading" className="text-balance text-3xl font-extrabold leading-tight tracking-tight text-navy sm:text-5xl">
-              Enroll in 2027 SHSAT &amp; Digital SAT Prep
-            </h1>
-            <p className="text-pretty text-lg leading-relaxed text-subtle">
-              All SHSAT preparation cohorts meet in person in Astoria. Digital SAT weekday cohorts are live online in Winter and Spring; all Digital SAT weekend and intensive cohorts are in person. Request enrollment and we&apos;ll confirm availability
-              and guide you through the rest.
-            </p>
-          </div>
 
+      <section aria-labelledby="enroll-heading" className="border-b-4 border-gold bg-white px-5 pb-7 pt-7 sm:pb-9 sm:pt-9">
+        <div className="mx-auto flex max-w-5xl flex-col gap-4">
+          <div className="flex max-w-3xl flex-col gap-3">
+            <p className="eyebrow blue">2027 Enrollment · Winter classes open</p>
+            <h1 id="enroll-heading" className="text-balance text-3xl font-extrabold leading-tight tracking-tight text-navy sm:text-5xl">
+              SHSAT &amp; Digital SAT Enrollment 2027
+            </h1>
+            <p className="text-pretty text-base leading-relaxed text-subtle sm:text-lg">
+              Winter classes are enrolling now. All paid SHSAT classes meet in person in Astoria, Queens.
+              Winter and Spring weekday Digital SAT classes meet live online via Zoom. Founder Tariq Ahmed personally teaches each class.
+              Spring, Summer, and Fall class choices are available below.
+            </p>
+            {isTermActive("winter") && (
+              <div id="winter-tuition" className="scroll-mt-6 rounded-xl border border-[#E8D5A2] bg-[#FFF8E7] p-4 text-navy sm:p-5">
+                <p className="text-xs font-extrabold uppercase tracking-wider text-[#79570A]">
+                  {foundingOfferOpen ? "Winter 2027 · Founding-family tuition" : "Winter 2027 · Regular tuition"}
+                </p>
+                <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                  <strong className="text-3xl font-black leading-tight">{dollars(foundingOfferOpen ? winterTuition.founding! : winterTuition.regular)}</strong>
+                  {foundingOfferOpen && <span className="text-sm font-medium text-navy/75">Regular {dollars(winterTuition.regular)}</span>}
+                </div>
+                <p className="mt-1 text-sm font-bold">{foundingOfferOpen ? "Save $360 (25%)" : "24 classes"} · 72 instructional hours · Max 12 students per class</p>
+                <div className="mt-3 space-y-1.5 border-t border-[#E8D5A2] pt-3 text-sm leading-relaxed">
+                  {foundingOfferOpen ? (
+                    <>
+                      <p>Limited to the first {FOUNDING_SEATS_PER_COHORT} fully paid students per class, subject to seat availability.</p>
+                      <p className="font-bold">Full payment due by December 12, 2026 at {DEADLINE_TIME_LABEL}.</p>
+                    </>
+                  ) : <p>Full payment is required to confirm enrollment.</p>}
+                  <p className="text-xs text-navy/80">Submitting an inquiry does not reserve a seat or tuition rate. No online payment is collected on this page.</p>
+                </div>
+              </div>
+            )}
+            <Link href="/programs-2027" className="inline-flex min-h-10 items-center self-start text-sm font-bold text-brand underline underline-offset-4">
+              Compare all 2027 programs and tuition
+            </Link>
+          </div>
           <dl className="grid grid-cols-1 border-y border-line sm:grid-cols-3">
             {facts.map((fact, i) => (
               <div key={fact.term} className={`flex flex-col gap-0.5 py-3 ${i > 0 ? "border-t border-line sm:border-l sm:border-t-0 sm:pl-4" : ""}`}>
                 <dt className="text-xs font-bold uppercase tracking-widest text-subtle">{fact.term}</dt>
-                <dd className="text-lg font-extrabold text-navy">{fact.value}</dd>
+                <dd className="text-base font-extrabold text-navy">{fact.value}</dd>
               </div>
             ))}
           </dl>
-
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <p className="flex items-start gap-2 text-sm leading-relaxed text-ink">
               <MapPin size={18} aria-hidden="true" className="mt-0.5 shrink-0 text-brand" />
-              <span>
-                <span className="font-bold">{`${E.location} classroom (all SHSAT cohorts): `}</span>
-                {`${ADDRESS_LINE_1}, ${ADDRESS_LINE_2}`}
-              </span>
+              <span>In-person classes: <strong>{ADDRESS_LINE_1}, {ADDRESS_LINE_2}</strong></span>
             </p>
             <a href="#inquiry-form" className="button button-gold button-lg self-start sm:self-auto">
               {ENROLLMENT_ACTIONS.request}
@@ -193,33 +214,15 @@ export default async function Enroll2027Page({ searchParams }: Props) {
         </div>
       </section>
 
+      {inquirySection}
+
       <AnnualShsatPackage compact />
 
-      <div className="bg-warm px-5 py-10 sm:py-14">
-        <div className="mx-auto flex max-w-5xl flex-col gap-12">
-          <div className="flex flex-col gap-2 border-l-4 border-brand bg-white p-5 text-sm leading-relaxed text-ink">
-            <p className="font-extrabold text-navy">Choose when to start</p>
-            <p>The classes and tuition below are for January 2027 classes, the only start date with founding-family pricing (25% off, paid in full by December 12, 2026, at 11:59 PM ET). Spring, Summer and Fall offer early-payment pricing instead.</p>
-            <ul className="flex flex-col">
-              {activeTermIds().map((id) => (
-                <li key={id}>
-                  <Link href={programsHref({ season: id })} className="inline-flex min-h-11 items-center font-bold text-brand underline">
-                    {`${termStartLabel(id)}: schedules and tuition`}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          {isTermActive("winter") && <div className="flex flex-col gap-12">
-            <p className="eyebrow blue">Classes starting January 2027</p>
-            <ClassCards />
-            <TuitionOptions />
-          </div>}
+      <div className="bg-warm px-5 py-8 sm:py-10">
+        <div className="mx-auto max-w-5xl">
           <EnrollmentSteps />
         </div>
       </div>
-
-      {inquirySection}
 
       <Faq id="attendance-faq" title="Class attendance and holidays" items={ATTENDANCE_FAQS} />
     </>
