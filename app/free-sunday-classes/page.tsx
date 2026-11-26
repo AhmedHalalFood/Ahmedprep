@@ -33,7 +33,7 @@ export function generateMetadata(): Metadata {
   const description = summary.paused
     ? "AhmedPrep's free Sunday Zoom classes resume Sunday, January 10, 2027: SHSAT (Math and ELA) 6:00–6:45 PM ET and Digital SAT (Math and Reading/Writing) 7:00–7:45 PM ET, every other Sunday. RSVPs open December 13."
     : summary.schedule === "weekly_2026"
-      ? "Free live online Sunday SHSAT and Digital SAT classes from AhmedPrep, Sundays 4–5 PM ET. Beginning in January 2027: free classes every other Sunday, SHSAT (Math and ELA) 6:00–6:45 PM ET and Digital SAT (Math and Reading/Writing) 7:00–7:45 PM ET. RSVP required."
+      ? "AhmedPrep's 2026 free Sunday sessions are paused. Starting January 10, 2027: every other Sunday, SHSAT (Math and ELA) 6:00–6:45 PM ET and Digital SAT (Math and Reading/Writing) 7:00–7:45 PM ET; separate RSVPs open December 13."
       : "Free live online SHSAT and Digital SAT classes from AhmedPrep, every other Sunday: SHSAT (Math and ELA) 6:00–6:45 PM ET, Digital SAT (Math and Reading/Writing) 7:00–7:45 PM ET. RSVP required."
   return {
     title: { absolute: title },
@@ -58,7 +58,7 @@ const expectationsFor = (mathOnly: boolean) => [
 
 const SCHEDULE_FAQ_2026: FaqItem = {
   q: "How does the schedule work?",
-  a: "Through December 27, 2026, one class meets every Sunday from 4:00–5:00 PM ET. The 1st and 3rd Sundays are SHSAT, the 2nd and 4th are Digital SAT, and a 5th Sunday is a special workshop. Beginning in January 2027, free classes meet every other Sunday: Free SHSAT Class 6:00–6:45 PM ET, then Free Digital SAT Class 7:00–7:45 PM ET, starting January 10, 2027.",
+  a: "The 2026 free Sunday classes are paused. From January 10, 2027, free classes meet every other Sunday: SHSAT 6:00–6:45 PM ET and Digital SAT 7:00–7:45 PM ET. Each session requires a separate RSVP; signups open December 13, 2026.",
 }
 const SCHEDULE_FAQ_2027: FaqItem = {
   q: "How does the schedule work?",
@@ -90,7 +90,7 @@ const faqs = (scheduleFaq: FaqItem): FaqItem[] => [
   },
   {
     q: "Is this a sales presentation?",
-    a: "No. The hour is genuine instruction: a focused lesson, guided practice, timed questions, and time for students to ask questions.",
+    a: "No. Each 45-minute class includes live instruction, guided practice, and opportunities to ask questions.",
   },
   {
     q: "What does my student need?",
