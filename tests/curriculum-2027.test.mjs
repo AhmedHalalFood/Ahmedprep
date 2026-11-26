@@ -20,12 +20,9 @@ test("SMART uses the owner's definition", () => {
 })
 
 test("every cohort syllabus covers its approved sessions and hours", () => {
-  const expected = { winter: 24, spring: 24 }
   for (const c of ALL_COHORTS) {
     const s = syllabusFor(c)
-    const sessions = expected[c.term] ?? (c.label === "Weekday Intensive" ? 32 : 16)
-    assert.equal(s.length, sessions, c.id)
-    assert.equal(s.length * 3, c.hours, c.id)
+    assert.equal(s.length, c.sessions, c.id)
     assert.deepEqual(s.map((x) => x.number), s.map((_, i) => i + 1), c.id)
   }
 })
@@ -34,7 +31,7 @@ test("diagnostic first, mock exams by course length, reports after each, final r
   for (const c of ALL_COHORTS) {
     const s = syllabusFor(c)
     assert.equal(s[0].format, "diagnostic", c.id)
-    assert.deepEqual(s.filter((x) => x.format === "mock").map((x) => x.number), [...mockSessionsFor(s.length)], c.id)
+    assert.deepEqual(s.filter((x) => x.format === "mock").map((x) => x.number), c.id === "fall-shsat-intensive" ? [5, 13, 21, 29] : [...mockSessionsFor(s.length)], c.id)
     for (const x of s.filter((x) => x.format !== "instruction")) assert.ok(x.assessments.some((a) => a.kind === "report"), `${c.id} ${x.number}`)
     assert.ok(s.at(-1).assessments.some((a) => a.kind === "final"), c.id)
     assert.ok(s.some((x) => x.assessments.some((a) => a.kind === "cumulative")), c.id)
@@ -90,7 +87,7 @@ test("unverified official tests are not claimed; exams are labeled original Ahme
   }
 })
 
-test("proposed makeups stay unapproved; August 29 is the approved final intensive session; no same-day overlaps", () => {
+test("proposed makeups stay unapproved and cohort meetings do not overlap", () => {
   const toMin = (t) => {
     const [, h, m = "0", ap] = t.match(/^(\d+)(?::(\d+))?\s*(AM|PM)?/)
     return ((+h % 12) + (ap === "PM" || (!ap && /PM/.test(t)) ? 12 : 0)) * 60 + +m
@@ -110,17 +107,17 @@ test("proposed makeups stay unapproved; August 29 is the approved final intensiv
       assert.equal(m.approved, c.makeups.find((x) => x.iso === m.iso).approved, c.id)
       assert.ok(!c.closures.some((x) => x.iso === m.iso), `${c.id} makeup on a closure`)
     }
-    if (c.label === "Weekday Intensive") {
-      const aug29 = makeups.find((m) => m.iso === "2027-08-29")
-      assert.ok(aug29?.additional, c.id)
-      assert.equal(aug29.approved, true, c.id)
-      assert.equal(aug29.number, 32, c.id)
-      assert.equal(aug29.time, c.program === "SHSAT" ? "10 AM–1 PM" : "2–5 PM", c.id)
-      assert.equal(s.at(-1).iso, "2027-08-29", c.id)
+    for (const m of makeups) assert.equal(m.approved, false, `${c.id} ${m.iso} must stay proposed`)
+    if (c.id === "summer-shsat-intensive") {
+      assert.equal(s[0].iso, "2027-07-01", c.id)
+      assert.equal(s.at(-1).iso, "2027-08-26", c.id)
       assert.ok(!sessionCalendar(c).some((x) => x.iso === "2027-07-05"), c.id)
-    } else {
-      for (const m of makeups) assert.equal(m.approved, false, `${c.id} ${m.iso} must stay proposed`)
     }
+    const minutes = s.reduce((sum, x) => {
+      const [start, end] = range(x.time)
+      return sum + end - start - (c.breakMinutes ?? 0)
+    }, 0)
+    assert.equal(minutes, c.hours * 60, c.id)
     for (const x of s) all.push({ id: c.id, iso: x.iso, r: range(x.time) })
   }
   for (const a of all) for (const b of all) {

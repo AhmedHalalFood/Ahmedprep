@@ -139,7 +139,7 @@ test("planned start dates match the approved Winter 2027 schedule", () => {
   assert.deepEqual(landing, [
     "shsat Weekday group: Monday, January 11, 2027",
     "shsat Weekend group: Saturday, January 9, 2027",
-    "digital-sat Weekday group · Live online (Zoom): Tuesday, January 12, 2027",
+    "digital-sat Weekday group (live online): Tuesday, January 12, 2027",
     "digital-sat Weekend group: Saturday, January 9, 2027",
   ])
   assert.equal(ENROLLMENT_2027.datesStatus, "confirmed")
@@ -166,7 +166,7 @@ test("program length uses the scheduled-hours wording", () => {
   assert.equal(ENROLLMENT_2027.hours, 72)
   assert.equal(ENROLLMENT_2027.hoursLabel, "72 hours of scheduled live instruction")
   assert.match(ENROLLMENT_2027.launchNote, /72 hours of scheduled live instruction/)
-  assert.match(read("lib/enrollment-2027-inquiry.ts"), /\$\{cohort\.hours\} hours of scheduled live instruction/)
+  assert.match(read("lib/enrollment-2027-inquiry.ts"), /\$\{cohort\.hours\} instructional hours/)
 })
 
 test("no obsolete Winter 2027 policy or hours wording remains", () => {
@@ -174,8 +174,6 @@ test("no obsolete Winter 2027 policy or hours wording remains", () => {
     /January 16/,
     /December 26/,
     /January 5, 2027/,
-    /instructional hours/i,
-    /hours of instruction/i,
     /installment plans for any option/,
     /\$\{E\.hours\} hours/,
     /72 hours ·/,

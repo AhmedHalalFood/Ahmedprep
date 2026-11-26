@@ -5,7 +5,7 @@ import { Breadcrumbs, JsonLd } from "@/components/landing/primitives"
 import { PracticeLibraryViewTracker } from "@/components/practice-tests/practice-library-view-tracker"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
-import { CLASS_TYPES, FREE_CLASS, PAUSE_ANNOUNCEMENT, getNextClass, getUpcomingClasses, rsvpHref, scheduleSummary } from "@/lib/free-class"
+import { CLASS_TYPES, FREE_CLASS, getNextClass, getUpcomingClasses, rsvpHref, scheduleSummary } from "@/lib/free-class"
 import { absoluteUrl, baseOpenGraph, webPageSchema } from "@/lib/seo"
 import {
   AHMEDPREP_PRACTICE_TESTS,
@@ -126,6 +126,7 @@ function AhmedPrepTestCard({ test }: { test: AhmedPrepPracticeTest }) {
 }
 
 export default function ShsatPracticeTestsPage() {
+  const summary = scheduleSummary()
   const session = getUpcomingClasses(6).find((c) => c.type === "shsat") ?? getNextClass()
   const anyPublished = AHMEDPREP_PRACTICE_TESTS.some(isPublished)
 
@@ -398,7 +399,7 @@ export default function ShsatPracticeTestsPage() {
         </div>
       </section>
 
-      {!session && scheduleSummary().paused && (
+      {!session && summary.paused && (
       <section aria-labelledby="sunday-title" className="bg-warm py-14">
         <div className="container">
           <div className="flex flex-col gap-4 border border-line bg-white p-6 md:flex-row md:items-center md:justify-between md:p-8">
@@ -406,7 +407,7 @@ export default function ShsatPracticeTestsPage() {
               <h2 id="sunday-title" className="text-pretty text-xl font-extrabold leading-snug text-navy">
                 Want to Review SHSAT Questions Live?
               </h2>
-              <p className="leading-relaxed text-ink">{PAUSE_ANNOUNCEMENT}</p>
+              <p className="leading-relaxed text-ink">{summary.upcomingChange}</p>
             </div>
             <TrackedLink
               href={FREE_CLASS.path}
@@ -414,7 +415,7 @@ export default function ShsatPracticeTestsPage() {
               eventProps={{ location: "practice_library", class_date: "paused" }}
               className="button button-outline shrink-0 justify-center"
             >
-              See the January Schedule <ArrowUpRight size={17} aria-hidden="true" />
+              See Free Sunday Class Updates <ArrowUpRight size={17} aria-hidden="true" />
             </TrackedLink>
           </div>
         </div>

@@ -2,7 +2,7 @@ import { ArrowUpRight, CalendarDays, Clock, Video } from "lucide-react"
 import { ClassTypeBadge } from "@/components/sunday-classes/class-type-badge"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
-import { FREE_CLASS, PAUSE_ANNOUNCEMENT, getNextClassDay, isTodayInNewYork, rsvpDayHref, scheduleSummary } from "@/lib/free-class"
+import { FREE_CLASS, getNextClassDay, isTodayInNewYork, rsvpDayHref, scheduleSummary } from "@/lib/free-class"
 
 /** Compact "next free class" banner. Pages using it should revalidate hourly so it rolls over after each class. */
 export function ThisSundayStrip({ location }: { location: string }) {
@@ -58,6 +58,7 @@ export function ThisSundayStrip({ location }: { location: string }) {
 
 function PausedStrip({ location }: { location: string }) {
   const headingId = `this-sunday-${location}`
+  const summary = scheduleSummary()
   return (
     <section aria-labelledby={headingId} className="border-y border-line bg-site-canvas py-8 md:py-10">
       <div className="container relative flex flex-col gap-5 overflow-hidden rounded-2xl border border-[#E8D8AA] bg-[#FFF9EB] px-5 py-6 shadow-sm md:px-8 lg:flex-row lg:items-center lg:justify-between">
@@ -65,7 +66,7 @@ function PausedStrip({ location }: { location: string }) {
           <p id={headingId} className="text-xs font-extrabold uppercase tracking-[0.16em] text-[#8A5C08]">
             Free Sunday classes at AhmedPrep
           </p>
-          <p className="text-pretty text-xl font-extrabold leading-snug text-navy">{PAUSE_ANNOUNCEMENT}</p>
+          <p className="text-pretty text-xl font-extrabold leading-snug text-navy">{summary.upcomingChange}</p>
           <p className="text-sm font-semibold text-ink">SHSAT (Math and ELA) 6:00–6:45 PM ET · Digital SAT (Math and Reading/Writing) 7:00–7:45 PM ET · Every other Sunday</p>
         </div>
         <TrackedLink
@@ -74,7 +75,7 @@ function PausedStrip({ location }: { location: string }) {
           eventProps={{ location: `this_sunday_strip_${location}`, class_date: "paused" }}
           className="button button-gold min-h-12 shrink-0 justify-center rounded-lg px-6 font-extrabold shadow-sm"
         >
-          See the January Schedule <ArrowUpRight size={17} aria-hidden="true" />
+          See Free Sunday Class Updates <ArrowUpRight size={17} aria-hidden="true" />
         </TrackedLink>
       </div>
     </section>

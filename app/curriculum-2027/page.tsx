@@ -99,7 +99,7 @@ export default function Curriculum2027Page() {
                     <td className="p-3">{s.sessions}</td>
                     <td className="p-3">{"hours" in s ? s.hours : s.sessions * 3}</td>
                     <td className="p-3">Session 1</td>
-                    <td className="p-3">Sessions {mockSessionsFor(s.sessions).join(", ")}</td>
+                    <td className="p-3">Sessions {mockSessionsFor(s.sessions).join(", ")}{s.sessions === 32 ? `. Fall SHSAT proposed sessions: ${mockSessionsFor(s.sessions, "fall-shsat-intensive").join(", ")}` : ""}</td>
                   </tr>
                 ))}
               </tbody>

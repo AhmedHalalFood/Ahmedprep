@@ -14,13 +14,14 @@ Every lesson session in the dated syllabi lists one activity per SMART step.
 
 ## Session structure
 
-Lesson sessions: **75 min Math, 75 min ELA / Reading and Writing, 30 min cumulative practice and review.** Session 1 (diagnostic) and mock-exam sessions use the full period.
+Lesson sessions use **75 min Math, 75 min ELA or Reading and Writing, and 30 min cumulative practice and review.** Summer and Fall Digital SAT weekend intensives add 90 minutes of guided practice and a separate 30-minute break. The SHSAT diagnostic and mocks use all 180 minutes for testing, with directions before the session and debrief at the next lesson. The Digital SAT diagnostic and mocks use 134 minutes of testing and a 10-minute break. That leaves 36 minutes for directions and guided practice or review in three-hour meetings and 136 minutes in five-hour meetings, where the 10-minute exam break counts toward the 30-minute scheduled break.
 
 | Course | Cohorts | Sessions | Diagnostic | Mock exams | Cumulative checkpoints | Mixed timed sessions |
 | --- | --- | --- | --- | --- | --- | --- |
 | Winter / Spring | 8 | 24 | 1 | 12, 22 | 7, 17 | last 3 lessons |
-| Summer weekday intensive | 2 | 32 | 1 | 11, 21, 30 | 8, 18, 27 | last 4 lessons |
-| Summer weekend | 2 | 16 | 1 | 8, 15 | 6, 13 | last 2 lessons |
+| Summer SHSAT weekday intensive | 1 | 32 | 1 | 11, 21, 30 | 8, 18, 27 | last 4 lessons |
+| Fall SHSAT intensive | 1 | 32 | 1 | 5, 13, 21, 29 (proposed) | 8, 18, 27 | last 4 lessons |
+| Summer and Fall Digital SAT weekends | 2 | 16 | 1 | 8, 15 | 6, 13 | last 2 lessons |
 
 ### Three phases
 
@@ -45,21 +46,21 @@ Targeted review: each review block opens with retrieval on topics from two lesso
 | Initial diagnostic | Session 1 | Original AhmedPrep full-length test, paper, manual GradeCam workflow; raw scores |
 | Weekly quiz (15 min) | One per calendar week (Mon–Sun), on the week's last lesson; moved earlier in the week if that lesson holds a checkpoint; weeks with no lesson are labeled "No separate weekly quiz this week" | Paper, manual GradeCam workflow; raw scores |
 | Cumulative checkpoint | 2 per 16/24-session course, 3 per 32-session course | Paper, manual GradeCam workflow |
-| Full-length mock exam | 2 per 16/24-session course, 3 per 32-session course | Original test unless an official test is verified; scaled scores only from official Bluebook reports |
+| Full-length mock exam | 2 per 16/24-session course, 3 for Summer SHSAT, 4 proposed for Fall SHSAT | Original test unless an official test is verified; scaled scores only from official Bluebook reports |
 | Student error log | Every session; teacher review weekly | Not scored |
-| Parent progress report | After diagnostic, after each mock, at course end | Template at `/curriculum-2027/progress-report` |
+| Parent progress report | After scoring the diagnostic and each mock, with a final summary at course end | Template at `/curriculum-2027/progress-report` |
 
 The website has **no** GradeCam integration and none is claimed. AhmedPrep does not convert raw scores to scaled scores.
 
 ## Makeup and calendar review
 
-No time overlaps were found between cohorts on any date. Saturday-evening makeups (5:30–8:30 PM) start 30 minutes after the same-day weekend cohorts end. **Sunday, August 29, 2027** is the owner-approved required final instructional session for both summer intensive cohorts (SHSAT 10 AM–1 PM ET; Digital SAT 2–5 PM ET). It completes 32 sessions / 96 hours and is not a makeup; July 5 (the observed Independence Day holiday) falls before the July 6 start, so it was never a class.
+The draft calendars have no same-day overlaps. Summer SHSAT schedules 32 sessions and 96 hours, starting with the July 1 kickoff pending facility and instructor availability. July 5 is closed and the course ends August 26. Summer Digital SAT schedules 16 weekend sessions and 72 hours, ending August 28. Winter and Spring replacement dates marked proposed require confirmation.
 
 ## Needs owner decision
 
 1. Approve the topic sequence, priority topics, and mock-exam placement.
 2. Verify official SHSAT and Bluebook practice tests (availability, current format, permitted classroom use) before any are scheduled.
-3. Approve every makeup date still marked proposed. (The August 29 summer intensive final session is approved.)
-4. SHSAT full-length simulations fill the whole 180-minute period, which leaves no time for check-in and directions. Decide on early arrival or an extended session.
+3. Approve every makeup date still marked proposed.
+4. SHSAT full-length simulations fill the whole 180-minute period, which leaves no time for check-in and directions. Confirm the plan for pre-session directions and check-in.
 5. Holiday conflicts: Easter Sunday (Mar 28), Lunar New Year (Feb 6), Juneteenth (Jun 19), and estimated Eid dates near the pending Mar 9 and May 17 closures.
-6. Confirm the diagnostic and mock sessions may depart from the 75/75/30 structure.
+6. Confirm the diagnostic and mock schedule against the Fall exam calendar.

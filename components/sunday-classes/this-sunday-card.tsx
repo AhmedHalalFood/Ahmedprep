@@ -4,22 +4,16 @@ import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
 import { isTodayInNewYork, rsvpHref, type ClassDay } from "@/lib/free-class"
 
-/** Shown when no class Sunday is bookable yet, e.g. after Dec 27, 2026 until the first 2027 date is confirmed. */
-export function NextDatePendingCard() {
+export function NextDatePendingCard({ announcement }: { announcement: string }) {
   return (
     <article
       aria-labelledby="this-sunday-title"
       className="flex flex-col gap-4 border border-line border-t-4 border-t-gold bg-white p-6 text-ink shadow-xl shadow-navy/20 sm:p-8"
     >
-      <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-gold-deep">Classes paused until January</p>
       <h2 id="this-sunday-title" className="text-balance text-2xl font-extrabold leading-tight text-navy">
-        Free Sunday Zoom Classes Resume January 10, 2027
+        Free Sunday Zoom classes
       </h2>
-      <p className="text-pretty font-semibold leading-relaxed text-navy">RSVPs open December 13.</p>
-      <p className="text-pretty leading-relaxed text-subtle">
-        Every other Sunday: Free SHSAT Class 6:00–6:45 PM ET, then Free Digital SAT Class 7:00–7:45 PM ET. Each class
-        needs its own RSVP.
-      </p>
+      <p className="text-pretty font-semibold leading-relaxed text-navy">{announcement}</p>
     </article>
   )
 }

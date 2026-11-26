@@ -18,10 +18,7 @@ export function TopContactBar() {
         >
           <span className={styles.tag}>Free</span>
           {summary.paused ? (
-            <span>
-              Free Sunday Zoom Classes Resume January 10, 2027{" "}
-              <span className={styles.sep} aria-hidden="true">•</span> RSVPs open December 13
-            </span>
+            <span>{summary.upcomingChange}</span>
           ) : summary.schedule === "weekly_2026" ? (
             <span>
               Live SHSAT & Digital SAT Zoom Classes — Sundays 4:00–5:00 PM ET{" "}
