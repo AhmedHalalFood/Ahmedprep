@@ -22,7 +22,7 @@ import { ProgramTuition } from "@/components/program-page/program-tuition"
 import { OfficialExamSources } from "@/components/program-page/official-exam-sources"
 import { EVENTS } from "@/lib/analytics"
 import { BUSINESS, SITE_URL } from "@/lib/business"
-import { MAX_CLASS_SIZE, cohortsFor, cohortInquiryHref, priceFor, dollars } from "@/lib/cohorts-2027"
+import { MAX_CLASS_SIZE, cohortsFor, cohortInquiryHref, priceFor, dollars, winterFoundingOfferActive } from "@/lib/cohorts-2027"
 
 export const revalidate = 3600
 
@@ -107,7 +107,7 @@ const faqs: FaqItem[] = [
   },
   {
     q: "Where are Digital SAT classes and tutoring held?",
-    a: `Winter 2027 weekday Digital SAT classes are live online via Zoom on Tuesdays and Thursdays, 6:30–9:30 PM Eastern, and welcome students throughout the continental United States. Winter weekend SAT classes are in person at ${BUSINESS.address.street}, ${BUSINESS.address.city}, ${BUSINESS.address.region} ${BUSINESS.address.postalCode}. Spring weekday classes also meet live online, and Summer and Fall Weekend Intensives meet in person. Contact AhmedPrep for private tutoring arrangements.`,
+    a: `Winter 2027 weekday Digital SAT classes are live online via Zoom on Tuesdays and Thursdays, 6:30–9:30 PM Eastern, for students who can attend remotely. Winter weekend SAT classes are in person at ${BUSINESS.address.street}, ${BUSINESS.address.city}, ${BUSINESS.address.region} ${BUSINESS.address.postalCode}. Spring weekday classes also meet live online, and Summer and Fall Weekend Intensives meet in person. Contact AhmedPrep for private tutoring arrangements.`,
   },
   {
     q: "Is AhmedPrep affiliated with the College Board?",
@@ -127,6 +127,7 @@ const courseSchema = {
 
 export default async function DigitalSatPrepPage() {
   await connection()
+  const winterFoundingOpen = winterFoundingOfferActive()
   return (
     <>
       <Breadcrumbs items={[{ label: "Digital SAT Prep", href: PATH }]} />
@@ -165,7 +166,7 @@ export default async function DigitalSatPrepPage() {
                     <p className="mt-1 font-semibold text-ink">{cohort.days}, {cohort.time} ET</p>
                     <p className="mt-1 text-sm text-subtle">Starts {cohort.firstIso === "2027-01-09" ? "January 9" : "January 12"}, 2027</p>
                     <p className="mt-3 text-sm text-ink">
-                      Regular tuition: {dollars(tuition.regular)} · Founding-family: {dollars(tuition.founding!)}
+                      Regular tuition: {dollars(tuition.regular)}{winterFoundingOpen ? ` · Founding-family: ${dollars(tuition.founding!)}` : ""}
                     </p>
                     <Link href={cohortInquiryHref(cohort)} className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-lg bg-gold px-5 py-2 font-extrabold text-navy hover:bg-gold/90">
                       Request {cohort.label.toLowerCase()} enrollment <ArrowUpRight size={17} aria-hidden="true" />
@@ -175,7 +176,7 @@ export default async function DigitalSatPrepPage() {
               })}
             </div>
             <p className="mt-4 text-sm leading-relaxed text-subtle">
-              Founding-family tuition is limited to the first five fully paid students per class, with full payment by December 12, 2026 at 11:59 PM ET, subject to seat availability. Regular tuition is paid in full before enrollment is confirmed. An inquiry does not reserve a seat.
+              {winterFoundingOpen ? "Founding-family tuition is limited to the first five fully paid students per class, with full payment by December 12, 2026 at 11:59 PM ET, subject to seat availability. " : ""}Regular tuition is paid in full before enrollment is confirmed. An inquiry does not reserve a seat.
             </p>
             <Link href="/enroll-2027" className="mt-3 inline-flex items-center gap-2 font-bold text-brand underline underline-offset-4">
               Compare all 2027 class schedules and tuition <ArrowUpRight size={16} aria-hidden="true" />
