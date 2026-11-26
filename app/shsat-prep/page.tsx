@@ -18,6 +18,7 @@ import { EnrollmentSteps } from "@/components/program-page/enrollment-steps"
 import { FeatureGrid, ResourceLinks } from "@/components/program-page/feature-grid"
 import { ProgramCtas } from "@/components/program-page/program-ctas"
 import { ProgramTuition } from "@/components/program-page/program-tuition"
+import { OfficialExamSources } from "@/components/program-page/official-exam-sources"
 import { EVENTS } from "@/lib/analytics"
 import { SITE_URL } from "@/lib/business"
 import { MAX_CLASS_SIZE } from "@/lib/cohorts-2027"
@@ -292,6 +293,8 @@ export default async function ShsatPrepPage() {
       <Section id="method" tone="warm" eyebrow="Our teaching approach" title="Diagnostic-based teaching with structured practice">
         <FeatureGrid items={method} />
       </Section>
+
+      <OfficialExamSources exam="SHSAT" />
 
       <ProgramTuition program="SHSAT" />
 
