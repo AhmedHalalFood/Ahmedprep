@@ -16,8 +16,8 @@ export const metadata: Metadata = {
 
 const COURSE_SHAPES = [
   { name: "Winter and Spring (all 8 cohorts)", sessions: 24 },
-  { name: "Summer weekday intensive (2 cohorts)", sessions: 32 },
-  { name: "Summer weekend (2 cohorts)", sessions: 16 },
+  { name: "Summer SHSAT and Fall SHSAT intensives", sessions: 32 },
+  { name: "Summer and Fall Digital SAT weekend intensives", sessions: 16, hours: 72 },
 ]
 
 export default function Curriculum2027Page() {
@@ -36,8 +36,7 @@ export default function Curriculum2027Page() {
         <section aria-labelledby="structure" className="flex flex-col gap-4">
           <h2 id="structure" className="text-2xl font-extrabold text-navy">Session structure</h2>
           <p className="leading-relaxed text-ink">
-            Every session is three hours. Session 1 is the full-length diagnostic, and mock-exam sessions use the full three
-            hours for testing. All other sessions follow the approved structure:
+            Most sessions are three hours. Summer and Fall Digital SAT weekend intensives are five hours on-site, including a 30-minute break, with 4.5 instructional hours. Session 1 is the diagnostic; mock sessions use the relevant official exam timing. All other sessions follow the approved structure:
           </p>
           <ul className="grid gap-3 sm:grid-cols-3">
             {SESSION_BLOCKS.map((b) => (
@@ -98,9 +97,9 @@ export default function Curriculum2027Page() {
                   <tr key={s.name} className="border-b border-line">
                     <td className="p-3 font-semibold text-ink">{s.name}</td>
                     <td className="p-3">{s.sessions}</td>
-                    <td className="p-3">{s.sessions * 3}</td>
+                    <td className="p-3">{"hours" in s ? s.hours : s.sessions * 3}</td>
                     <td className="p-3">Session 1</td>
-                    <td className="p-3">Sessions {mockSessionsFor(s.sessions).join(", ")}</td>
+                    <td className="p-3">Sessions {mockSessionsFor(s.sessions).join(", ")}{s.sessions === 32 ? `. Fall SHSAT proposed sessions: ${mockSessionsFor(s.sessions, "fall-shsat-intensive").join(", ")}` : ""}</td>
                   </tr>
                 ))}
               </tbody>
@@ -171,8 +170,7 @@ export default function Curriculum2027Page() {
         <section aria-labelledby="calendar" className="flex flex-col gap-4 print:break-before-page">
           <h2 id="calendar" className="text-2xl font-extrabold text-navy">Makeup and calendar review</h2>
           <p className="text-sm leading-relaxed text-subtle">
-            No dates, times, or hours were changed. Sunday, August 29 is the approved required final instructional session for
-            both summer intensive cohorts. Every other unapproved makeup stays labeled &ldquo;Proposed makeup — not yet approved.&rdquo;
+            The updated summer includes a July 1 SHSAT kickoff, July 5 closure, and weekday SHSAT classes through August 26. Digital SAT runs weekends through August 28. Fall SHSAT and Digital SAT schedules have been added.
           </p>
           <div className="overflow-x-auto">
             <table className="w-full border-collapse bg-background text-left text-sm">

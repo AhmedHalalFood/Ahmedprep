@@ -18,19 +18,22 @@ import {
   termSummary,
 } from "@/lib/cohorts-2027"
 import { programsHref } from "@/lib/program-finder"
+import { activeTerms } from "@/lib/program-retirement"
 import { ENROLLMENT_2027 as E } from "@/lib/enrollment-2027"
 
 export function Enrollment2027({ showIntensive }: { showIntensive: boolean }) {
+  const terms = activeTerms(TERMS_2027)
+  if (!terms.length) return null
   return (
     <section id="programs" className="scroll-mt-4 bg-warm py-16 md:py-20" aria-labelledby="enrollment-title">
       <div className="container flex flex-col gap-10">
         <div className="flex max-w-2xl flex-col gap-3">
           <p className="eyebrow">2027 Enrollment</p>
           <h2 id="enrollment-title" className="text-balance text-3xl font-extrabold leading-tight tracking-tight text-navy md:text-4xl">
-            Winter, Spring, and Summer 2027. <span className="text-brand">Small SHSAT and Digital SAT classes.</span>
+            Winter through Fall 2027. <span className="text-brand">Small SHSAT and Digital SAT classes.</span>
           </h2>
           <p className="text-pretty leading-relaxed text-subtle">
-            Twelve cohorts across three terms: eleven in person in Astoria and the Winter weekday Digital SAT class live online. Every date below comes from the approved 2027 calendar, including
+            Twelve cohorts across four terms: ten in-person Astoria classes and two live-online weekday Digital SAT cohorts. Every date below comes from the approved 2027 calendar, including
             holiday closures. If AhmedPrep cancels a scheduled class, we provide a makeup class or equivalent live instruction at no
             additional cost.
           </p>
@@ -38,7 +41,7 @@ export function Enrollment2027({ showIntensive }: { showIntensive: boolean }) {
 
         <dl className="grid grid-cols-2 border-y border-line md:grid-cols-4">
           {[
-            { term: "Terms", value: "Winter · Spring · Summer" },
+            { term: "Terms", value: "Winter · Spring · Summer · Fall" },
             { term: "Tuition", value: `${dollars(HOURLY_RATE)} per class hour` },
             { term: "Class size", value: `Max ${MAX_CLASS_SIZE} students` },
             { term: "Diagnostic", value: "Free" },
@@ -53,8 +56,8 @@ export function Enrollment2027({ showIntensive }: { showIntensive: boolean }) {
           ))}
         </dl>
 
-        <div className="grid gap-4 lg:grid-cols-3">
-          {TERMS_2027.map((term) => {
+        <div className="grid gap-4 lg:grid-cols-4">
+          {terms.map((term) => {
             const s = termSummary(term)
             return (
               <article key={term.id} className="flex flex-col gap-5 border border-line bg-white p-6" aria-labelledby={`home-${term.id}-title`}>
@@ -113,14 +116,13 @@ export function Enrollment2027({ showIntensive }: { showIntensive: boolean }) {
                 {dollars(HOURLY_RATE)} per scheduled instructional hour
               </h3>
               <p className="text-pretty leading-relaxed text-white/75">
-                The same rate applies to SHSAT and Digital SAT. Winter and Spring cohorts are 72 hours; Summer cohorts are 96 hours
-                (weekday intensive) or 48 hours (weekend).
+                The same rate applies to SHSAT and Digital SAT. Winter and Spring cohorts are 72 hours; Summer and Fall SHSAT intensives are 96 hours, while Summer and Fall Digital SAT weekend intensives are 72 hours.
               </p>
             </div>
             <ul className="flex flex-col border-t border-white/20">
               {[
                 { label: "Founding-Family (Winter 2027 only)", value: "25% off", note: `First ${FOUNDING_SEATS_PER_COHORT} fully paid seats per Winter cohort, paid in full by ${formatDate(WINTER_FOUNDING_DEADLINE_ISO)}, subject to seat availability` },
-                { label: "Early Payment (Spring and Summer 2027)", value: "10% off", note: `Paid in full at least ${EARLY_DAYS_BEFORE_SPRING_SUMMER} calendar days before the cohort begins` },
+                { label: "Early Payment (Spring, Summer and Fall 2027)", value: "10% off", note: `Paid in full at least ${EARLY_DAYS_BEFORE_SPRING_SUMMER} calendar days before the cohort begins` },
                 { label: "Regular Tuition", value: "Full rate", note: "Paid in full before the student’s first scheduled class" },
               ].map((t) => (
                 <li key={t.label} className="flex flex-col gap-1 border-b border-white/20 py-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">

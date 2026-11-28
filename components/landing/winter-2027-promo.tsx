@@ -1,6 +1,7 @@
 import { ArrowRight, CalendarDays, Check, Clock, Snowflake, Users } from "lucide-react"
 import { TrackedLink } from "@/components/tracked-link"
 import { EVENTS } from "@/lib/analytics"
+import { activeCohorts, nyCalendarDate } from "@/lib/program-retirement"
 import {
   DEADLINE_TIME_LABEL,
   FOUNDING_SEATS_PER_COHORT,
@@ -33,6 +34,11 @@ const STATS = [
 ]
 
 export function Winter2027Promo() {
+  const foundingOfferOpen = nyCalendarDate() <= WINTER_FOUNDING_DEADLINE_ISO
+  const winterCohorts = activeCohorts().filter((c) => c.term === "winter")
+  const shsatOpen = winterCohorts.some((c) => c.program === "SHSAT")
+  const satOpen = winterCohorts.some((c) => c.program === "Digital SAT")
+  if (!winterCohorts.length) return null
   return (
     <section id="top" aria-labelledby="winter-2027-promo-title" className="overflow-hidden bg-navy text-cream">
       <div className="mx-auto grid w-full max-w-[1200px] items-stretch gap-6 px-4 py-6 sm:px-6 md:py-8 lg:grid-cols-[minmax(0,1.06fr)_minmax(0,0.94fr)] lg:gap-7">
@@ -56,10 +62,10 @@ export function Winter2027Promo() {
             </div>
           <div className="space-y-2">
             <h1 id="winter-2027-promo-title" className="text-balance text-3xl font-extrabold leading-tight tracking-tight text-cream sm:text-4xl lg:text-[2.7rem]">
-              Winter SHSAT &amp; Digital SAT Prep
+              {shsatOpen && satOpen ? "Winter SHSAT & Digital SAT Prep" : shsatOpen ? "Winter SHSAT Prep" : "Winter Digital SAT Prep"}
             </h1>
             <p className="text-pretty text-sm leading-relaxed text-cream/85 sm:text-base">
-              Personally taught by AhmedPrep’s founder. SHSAT and Digital SAT preparation in small groups, in person in Astoria plus live online Winter weekday SAT.
+              Every Winter SHSAT and Digital SAT class is personally taught by AhmedPrep founder Tariq Ahmed. Small groups meet in Astoria, with live online Winter weekday Digital SAT.
             </p>
           </div>
           </div>
@@ -90,33 +96,33 @@ export function Winter2027Promo() {
             <span className="sr-only">Review the Winter 2027 founding-family offer and enrollment</span>
           </TrackedLink>
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <p className="text-base font-extrabold text-navy">Founding-family tuition</p>
-            <span className="rounded-full border border-[#D9A42B] bg-[#F5CC59] px-3 py-1.5 text-xs font-black text-[#102F51] shadow-sm">
+            <p className="text-base font-extrabold text-navy">{foundingOfferOpen ? "Founding-family tuition" : "Winter tuition"}</p>
+            {foundingOfferOpen && <span className="rounded-full border border-[#D9A42B] bg-[#F5CC59] px-3 py-1.5 text-xs font-black text-[#102F51] shadow-sm">
               Save {dollars(savings)} ({savingsPercent}%)
-            </span>
+            </span>}
           </div>
           <div className="mt-2 flex flex-wrap items-end gap-x-4 gap-y-1">
-            <span className="text-4xl font-black leading-none tracking-tight sm:text-5xl">{dollars(founding)}</span>
-            <span className="pb-1 text-sm text-navy/75">Regular <span className="line-through">{dollars(price.regular)}</span></span>
+            <span className="text-4xl font-black leading-none tracking-tight sm:text-5xl">{dollars(foundingOfferOpen ? founding : price.regular)}</span>
+            {foundingOfferOpen && <span className="pb-1 text-sm text-navy/75">Regular <span className="line-through">{dollars(price.regular)}</span></span>}
           </div>
-          <p className="mt-2 text-sm font-semibold text-navy">For SHSAT or Digital SAT · 72 hours of instruction</p>
-          <div className="mt-3 grid grid-cols-2 gap-2 border-y border-navy/15 py-2 text-sm">
-            <div className="rounded-lg border border-[#B7D5E7] bg-[#E8F2FA] px-3 py-2">
+          <p className="mt-2 text-sm font-semibold text-navy">For {shsatOpen && satOpen ? "SHSAT or Digital SAT" : shsatOpen ? "SHSAT" : "Digital SAT"} · 72 hours of instruction</p>
+          <div className={`mt-3 grid gap-2 border-y border-navy/15 py-2 text-sm ${shsatOpen && satOpen ? "grid-cols-2" : "grid-cols-1"}`}>
+            {shsatOpen && <div className="rounded-lg border border-[#B7D5E7] bg-[#E8F2FA] px-3 py-2">
               <p className="font-extrabold text-[#174D7C]">SHSAT Prep</p>
               <p className="text-xs font-medium text-[#375C79]">Math + ELA</p>
-            </div>
-            <div className="rounded-lg border border-[#A9D5C5] bg-[#E6F4ED] px-3 py-2">
+            </div>}
+            {satOpen && <div className="rounded-lg border border-[#A9D5C5] bg-[#E6F4ED] px-3 py-2">
               <p className="font-extrabold text-[#086347]">Digital SAT Prep</p>
               <p className="text-xs font-medium text-[#275C4B]">Math + Reading/Writing</p>
-            </div>
+            </div>}
           </div>
-          <p className="mt-3 flex items-start gap-2 text-xs font-medium leading-snug text-navy sm:text-sm">
+          {foundingOfferOpen ? <p className="mt-3 flex items-start gap-2 text-xs font-medium leading-snug text-navy sm:text-sm">
             <Check size={16} className="mt-0.5 shrink-0 text-[#087850]" aria-hidden="true" />
             <span>
               For the first {FOUNDING_SEATS_PER_COHORT} fully paid students per class.
               <strong className="block font-extrabold"> Pay in full by {deadline}, {DEADLINE_TIME_LABEL}.</strong>
             </span>
-          </p>
+          </p> : <p className="mt-3 text-sm font-semibold text-navy">Founding-family discount period has ended. Regular tuition applies; full payment is required before enrollment is confirmed.</p>}
           <div className="relative z-10 mt-auto flex flex-col gap-2 border-t border-navy/15 pt-4 sm:flex-row">
             <TrackedLink
               href="/enroll-2027"

@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowRight, BookOpen, CalendarDays, Check, Laptop, Leaf, Snowflake, Sun, type LucideIcon } from "lucide-react"
+import { ArrowRight, BookOpen, CalendarDays, Check, Laptop, Leaf, Snowflake, Sun, Sunset, type LucideIcon } from "lucide-react"
 import {
   MAX_CLASS_SIZE,
   PROGRAMS_2027,
@@ -22,9 +22,10 @@ import { ENROLLMENT_ACTIONS, REQUEST_NOT_GUARANTEE } from "@/lib/enrollment-2027
 import { FINDER_ID, FORMAT_LABEL, programsHref, type FinderState } from "@/lib/program-finder"
 import { PROGRAM_TONE } from "@/components/programs/program-tone"
 import { EnrollmentHelp } from "@/components/enroll-2027/enrollment-help"
+import { activeTerms } from "@/lib/program-retirement"
 import { PayNowSlot } from "@/components/enroll-2027/pay-now-slot"
 
-const START_ICON: Record<TermId, LucideIcon> = { winter: Snowflake, spring: Leaf, summer: Sun }
+const START_ICON: Record<TermId, LucideIcon> = { winter: Snowflake, spring: Leaf, summer: Sun, fall: Sunset }
 const PROGRAM_ICON: Record<ProgramId, LucideIcon> = { SHSAT: BookOpen, "Digital SAT": Laptop }
 
 // Each season has its own subtle tint; program colors remain blue for SHSAT and sage for Digital SAT.
@@ -49,6 +50,10 @@ const SEASON_TONE: Record<TermId, Tone & { idle: string; icon: string }> = {
     badge: "bg-amber-700 text-white",
     idle: "border-amber-200 bg-amber-50/70 hover:border-amber-500",
     icon: "text-amber-700",
+  },
+  fall: {
+    selected: "border-violet-600 bg-violet-50", ring: "ring-2 ring-violet-200",
+    badge: "bg-violet-700 text-white", idle: "border-violet-200 bg-violet-50/70 hover:border-violet-500", icon: "text-violet-700",
   },
 }
 
@@ -130,8 +135,8 @@ export function ClassFinder({ state, full }: { state: FinderState; full: (cohort
                 </Link>
               </p>
             )}
-            <ul className="grid gap-3 sm:grid-cols-3">
-              {TERMS_2027.map((term) => {
+            <ul className="grid gap-3 sm:grid-cols-4">
+              {activeTerms(TERMS_2027).map((term) => {
                 const s = termSummary(term)
                 const Icon = START_ICON[term.id]
                 return (
@@ -139,7 +144,7 @@ export function ClassFinder({ state, full }: { state: FinderState; full: (cohort
                     <OptionLink href={programsHref({ season: term.id, program })} selected={season === term.id} tone={SEASON_TONE[term.id]} idleTone={SEASON_TONE[term.id].idle}>
                       <span className="flex items-center gap-2 font-extrabold text-navy">
                         <Icon size={20} aria-hidden="true" className={SEASON_TONE[term.id].icon} />
-                        {term.id === "summer" ? term.name : termStartLabel(term.id)}
+                        {term.id === "summer" || term.id === "fall" ? term.name : termStartLabel(term.id)}
                       </span>
                       <span className="text-sm text-ink">{formatRange(s.startIso, s.endIso)}</span>
                       <span className="text-sm text-subtle">
@@ -265,6 +270,11 @@ function CohortDetail({ cohort, full }: { cohort: Cohort; full: boolean }) {
           ))}
         </ul>
         <p className="text-sm text-subtle">Discounts do not combine. Requesting enrollment does not reserve a seat or a discounted rate.</p>
+        {cohort.makeups.some((makeup) => !makeup.approved) && (
+          <p className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm leading-relaxed text-navy">
+            This class includes proposed holiday makeup dates. Final dates will be confirmed with families before enrollment is finalized.
+          </p>
+        )}
       </div>
     </article>
   )

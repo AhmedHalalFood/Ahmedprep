@@ -1,75 +1,67 @@
-# AhmedPrep 2027 approved scheduling reference
+# AhmedPrep 2027: approved master-plan program reference
 
-Status: scheduling framework approved November 6, 2026; enrollment-policy amendments approved November 8, 2026. Documentation only. Do not deploy without separate owner approval.
+**Authoritative source:** owner-approved `AhmedPrep_2027_Master_Plan_Complete_Readiness_Nov2026(2).pdf`, 16 pages, prepared November 23 and approved by owner November 25, 2026. This document supersedes older 2027 scheduling references where they conflict. **Preview implementation only:** do not merge or publish without successful acceptance testing and final owner production approval.
 
-## Winter (72 hours per cohort, 24 × 3-hour sessions)
-- SHSAT weekday: Mon/Wed 5:30–8:30 PM, Jan 11–Mar 31.
-- Digital SAT weekday: live online (Zoom), Tue/Thu 6:30–9:30 PM ET, Jan 12–Apr 1, open nationwide.
-- SHSAT weekend: Sat/Sun 10 AM–1 PM, Jan 9–Mar 28.
-- Digital SAT weekend: Sat/Sun 2–5 PM, Jan 9–Mar 28.
+## Institution-wide instructions
+- Maximum 12 students per paid cohort. All SHSAT cohorts in person at **20-65 47th Street, Astoria, NY 11105**. No confirmed Jamaica/Hollis campus.
+- Winter/Spring **weekday** Digital SAT live online via Zoom, Tuesday/Thursday 6:30–9:30 PM ET. Weekend SAT classes in person. Never describe delivery as "nationwide" in public copy.
+- All three-hour paid sessions: 75 minutes Math + 75 minutes ELA/Reading & Writing + 30 minutes cumulative guided practice/review. A full-length mock may replace these blocks on designated dates.
+- SHSAT develops cumulatively through Foundation, Advanced Mastery, Summer Intensive, Fall Final Intensive. Each Digital SAT seasonal cohort independently covers Foundation, Advanced Mastery, Intensive Application, and the 1600 Challenge, with diagnostic-based differentiation.
+- $20 per **actual instructional hour**. Weekend Summer/Fall SAT sessions are on site 10 AM–3 PM, but the 30-minute lunch break is excluded; 4.5 instructional hours per meeting.
+- Tuition fully upfront, no installments or discount stacking. Inquiry does not reserve a seat and there is no online checkout authorization.
 
-## Spring (72 hours per cohort)
-- SHSAT weekday: Mon/Wed 5:30–8:30 PM, Apr 5–Jun 23.
-- Digital SAT weekday: Tue/Thu 5:30–8:30 PM, Apr 6–Jun 24.
-- SHSAT weekend: Sat/Sun 10 AM–1 PM, Apr 3–Jun 20.
-- Digital SAT weekend: Sat/Sun 2–5 PM, Apr 3–Jun 20.
+## Twelve approved cohort formats
 
-## Summer
-- SHSAT intensive: Mon–Thu 10 AM–1 PM, Jul 6–Aug 26, 31 regular sessions + required final session Sun Aug 29 (10 AM–1 PM ET) = 32 sessions / 96 hours.
-- Digital SAT intensive: Mon–Thu 2–5 PM, Jul 6–Aug 26, 31 regular sessions + required final session Sun Aug 29 (2–5 PM ET) = 32 sessions / 96 hours.
-- SHSAT weekend: Sat/Sun 10 AM–1 PM, Jul 3–Aug 22, excluding Jul 4, plus Aug 28 makeup = 16 sessions / 48 hours.
-- Digital SAT weekend: Sat/Sun 2–5 PM, Jul 3–Aug 22, excluding Jul 4, plus Aug 28 makeup = 16 sessions / 48 hours.
-- Summer break begins Aug 30.
+| Season | Exam | Days, hours ET | First / last regular class | Meetings | Instructional hours | Regular tuition |
+| --- | --- | --- | --- | ---: | ---: | ---: |
+| Winter | SHSAT weekday | Mon/Wed 5:30–8:30 PM, in person | Jan 11 – Mar 31 | 24 | 72 | $1,440 |
+| Winter | SHSAT weekend | Sat/Sun 10 AM–1 PM, in person | Jan 9 – Mar 28 | 24 | 72 | $1,440 |
+| Winter | Digital SAT weekday | Tue/Thu 6:30–9:30 PM, LIVE ONLINE | Jan 12 – Apr 1 | 24 | 72 | $1,440 |
+| Winter | Digital SAT weekend | Sat/Sun 2–5 PM, in person | Jan 9 – Mar 28 | 24 | 72 | $1,440 |
+| Spring | SHSAT weekday | Mon/Wed 5:30–8:30 PM, in person | Apr 5 – Jun 23 | 24 | 72 | $1,440 |
+| Spring | SHSAT weekend | Sat/Sun 10 AM–1 PM, in person | Apr 3 – Jun 20 | 24 | 72 | $1,440 |
+| Spring | Digital SAT weekday | Tue/Thu 6:30–9:30 PM, LIVE ONLINE | Apr 6 – Jun 24 | 24 | 72 | $1,440 |
+| Spring | Digital SAT weekend | Sat/Sun 2–5 PM, in person | Apr 3 – Jun 20 | 24 | 72 | $1,440 |
+| Summer | SHSAT Weekday Intensive | Thu Jul 1 kickoff; Mon–Thu 10 AM–1 PM Jul 6–Aug 26, in person | Jul 1 – Aug 26 | 32 | 96 | $1,920 |
+| Summer | Digital SAT Weekend Intensive | Sat/Sun 10 AM–3 PM, 30-min break, in person | Jul 3 – Aug 28, Jul 4 closed | 16 | 72 | $1,440 |
+| Fall | SHSAT Final Intensive | Mon–Thu 5:30–8:30 PM, in person | Sep 13 – Nov 4 | 32 | 96 | $1,920 |
+| Fall | Digital SAT Weekend Intensive | Sat/Sun 10 AM–3 PM, 30-min break, in person | Sep 11 – Oct 31 | 16 | 72 | $1,440 |
 
-## Proposed makeup assignments (verify session sequencing and holiday calendar before publishing)
-Winter/Spring: Saturdays 5:30–8:30 PM only.
-- Jan 16: Winter SHSAT weekday, replaces Jan 18.
-- Feb 13: Winter SHSAT weekday, replaces Feb 15.
-- Mar 6: Winter Digital SAT weekday, replaces Mar 9; live online 6:30–9:30 PM ET (makeup date subject to calendar verification).
-- May 15: Spring SHSAT weekday, replaces May 17.
-- May 29: Spring SHSAT weekday, replaces May 31.
-Summer only: daytime weekend makeups after regular instruction.
-- Aug 28, 10 AM–1 PM: Summer weekend SHSAT (Jul 4).
-- Aug 28, 2–5 PM: Summer weekend Digital SAT (Jul 4).
-No Friday paid classes.
+**Calendar follow-ups:** Summer SHSAT July 1 kickoff is **one instructional meeting** and requires facility and instructor confirmation. Holiday closures/replacements and Fall 2027 SHSAT exam-date updates require calendar review. Winter/Spring suggested makeup dates are provisional and must be labeled as such. No paid Friday sessions.
 
-## Approved final instructional sessions (not makeups)
-Owner-approved: Sunday, August 29, 2027 is the required final instructional session for both summer intensive cohorts.
-- Aug 29, 10 AM–1 PM ET: Summer intensive SHSAT session 32.
-- Aug 29, 2–5 PM ET: Summer intensive Digital SAT session 32.
+## Tuition tiers and deadlines
+- Winter: **founding-family $1,080** for first **five fully paid students per class**, payment by **December 12, 2026, 11:59 PM ET**, while available. Winter regular $1,440; no Winter early-payment tier.
+- Spring (72h): regular $1,440; 10% early full-pay $1,296.
+- Summer SHSAT (96h) and Fall SHSAT (96h): regular $1,920; early $1,728.
+- Summer SAT (72h) and Fall SAT (72h): regular $1,440; early $1,296.
+- Spring/Summer/Fall early full-payment requirement: **at least 30 calendar days before first class** (supersedes older 28-day reference): Spring SHSAT weekend and SAT weekend Mar 4; SHSAT weekday Mar 6; SAT weekday Mar 7. Summer SHSAT Jun 1; Summer SAT Jun 3. Fall SHSAT Aug 14; Fall SAT Aug 12. All end 11:59 PM Eastern.
+- Do not advertise any offer after its deadline as live or guaranteed. No online payments, deposits, recurring charges or installments without a separate approved policy.
 
-## Free Sunday Zoom
-- Winter and Spring: every other Sunday, SHSAT 6–6:45 PM ET; Digital SAT 7–7:45 PM ET.
-- Summer (July–August): both free Sunday classes suspended.
-- Fall: evaluate whether to resume; no restart date approved.
+## Complete SHSAT 2027 annual package
+- One selected Winter + one selected Spring cohort + Summer Weekday Intensive + Fall Final Intensive.
+- 336 instructional hours; $6,720 sum of regular seasonal prices.
+- Standard annual 15% off: $5,712. Founding-family annual 25% off: $5,040 for first five qualifying annual enrollments.
+- **Proposed** January 8, 2027 at 11:59 PM ET annual payment deadline. The annual **written agreement** must be finalized before collecting funds: cohort identification, instructor coverage, full 336-hour commitment, tuition, refunds and withdrawals, class-cancellation policy, transfers, exam-date changes, minimum capacity and no admission guarantee.
+- Offer annual-package **inquiries only** until contractual and operational signoff. No stacking with seasonal discounts. The proposed 144-hour Digital SAT two-season $2,592 package is **not approved for advertising**.
 
-## Tuition and enrollment policy (owner-approved November 8, 2026)
-- Winter 72h regular $1,440; Winter-only founding-family $1,080 (25% off regular). Winter has no early-payment tier.
-- Spring 72h regular $1,440; 10% early-payment $1,296.
-- Summer intensive 96h regular $1,920; 10% early-payment $1,728.
-- Summer weekend 48h regular $960; 10% early-payment $864.
-- **Founding-family offer applies to Winter 2027 only**, limited to the first five fully paid enrollments per Winter cohort and its published founding deadline. Do not advertise or apply a founding-family tier for Spring or Summer unless the owner separately approves a future promotion after Winter enrollment review.
-- **Winter 2027 founding-family deadline is December 12, 2026 at 11:59 PM ET for every Winter cohort** (weekend, weekday SHSAT, and weekday Digital SAT). Winter has no separate early-payment tier or early-payment deadline.
-- **Spring and Summer early-payment discount requires full payment 28 calendar days before cohort start** (replaces the prior 21-day gap after a hypothetical founding deadline): Spring weekend Mar 6, 2027; Spring weekday SHSAT Mar 8; Spring weekday Digital SAT Mar 9; Summer weekend Jun 5; Summer intensive Jun 8.
-- All listed payment deadlines end 11:59:59 PM America/New_York on the listed date. Discounts do not stack. The regular tuition is unchanged.
-- **Summer $250 seat deposit: concept approved, payment-policy approval pending.** Proposed credit against tuition, for Summer intensive and weekend cohorts; do not collect deposits, promise guaranteed seats, or change payment flows until owner approves refundability, cancellation/withdrawal terms, balance due date, deposit handling, and capacity verification. A deposit alone does not satisfy the existing full-payment requirement for the 10% early discount.
+## Free Sunday classes
+- Every other Sunday from Jan 10, 2027: SHSAT 6–6:45 PM ET and Digital SAT 7–7:45 PM ET, both live Zoom, separate RSVP forms.
+- Both free classes paused July–August 2027; Fall restart unannounced. Public free classes do not count as paid cohorts.
 
-## Homepage and cohort discovery (approved for future implementation)
-- Replace bare season labels with clickable **Winter Programs 2027**, **Spring Programs 2027**, and **Summer Programs 2027** cards.
-- Show each season's overall program window below its label: Winter Jan 9–Apr 1; Spring Apr 3–Jun 24; Summer Jul 3–Aug 29, 2027. These are season-wide ranges; individual cohort start/end dates differ and must be shown accurately in each cohort's details.
-- Link each season card to its corresponding section of `/programs-2027` (`#winter`, `#spring`, `#summer`), where parents can view cohort schedules, tuition tiers, discount deadlines and enrollment options.
+## Instruction, assessment, progress
+- Baseline diagnostic, frequent timed quizzes and review, original practice with teacher-verified answer keys, mocks, error logs, attendance, and **parent reports every four instructional weeks**.
+- End-of-cohort parent consultation and final report; four Fall SHSAT mocks proposed and require verified schedule and materials before advertising as delivered.
+- Original materials are not the official adaptive SHSAT or official College Board Bluebook. No guaranteed score or admission claims.
+- Founder Tariq Ahmed personally teaches advertised classes, subject to verified instructor/absence coverage plan.
 
-## Cohort-specific waitlists (approved for future implementation)
-- Each of the 12 cohorts has its own capacity of 12 **confirmed** students and a separate waitlist; inquiries and waitlist entries do not occupy seats.
-- When a cohort reaches 12 confirmed seats, replace its enrollment call to action with **Class Full · Join Waitlist**; joining the waitlist is free and does not guarantee a seat.
-- Prevent duplicate active enrollment/waitlist entries, ensure concurrency-safe capacity checks, and protect family information.
-- When a seat becomes available, notify the administrator to offer it to the next eligible waitlisted family. Offer expiration, notification mechanics and deposit/payment interaction remain to be approved before implementation.
-- Existing `docs/seat-availability-plan.md` is an older proposal; this November 8 approval supersedes conflicting business rules but does **not** authorize a database migration or live implementation.
+## Digital platform: approved goal, not live service
+- Protected student homework, quizzes, mock examinations, answer explanations, grading, progress reporting, optional authorized parent view. Draft blueprint in `docs/student-learning-portal-plan.md`.
+- **4,000 unique original teacher-reviewed items are an initial target, not completed inventory** (2,000 SHSAT; 2,000 Digital SAT). Smoke test 10–20, classroom pilot approximately 200, then phased expansions.
+- Proposed self-paced $29/month student subscription is **not approved**, must never be advertised or charged. No authentication or subscriptions launched without security, guardian consent, retention, legal, technical, billing and separate production approvals.
+- GradeCam integration not yet implemented; manual current workflow must be accurately represented.
 
-## Teaching and enrollment safeguards
-- Approved maximum class size: 12 students per cohort (owner confirmation November 6, 2026).
-- Each 3h class: 75m Math, 75m ELA/Reading-Writing, 30m cumulative practice/review.
-- Diagnostic, quizzes, mock tests, error log, parent progress reporting; separate teacher answer keys; Digital SAT students bring laptops.
-- Parent registration is an inquiry until seat availability and payment are verified.
-- Refund/withdrawal/installment terms, precise session-by-session syllabi, and production Neon/Resend checks must be confirmed before publication.
-- Do not merge, deploy, publish, or change live database/email settings without separate approval.
+## Program retirement and publication governance
+- After a course finishes, remove active public ads/cards/enrollment options and reject expired submissions while preserving authorized historical academic records. Public educational program pages remain.
+- The plan flags an open decision between **exact session-end** and **following midnight in New York time** as the expiry instant. Current PR #112 implemented following-midnight; **confirm before release**. Protect concurrent inquiries and test date boundaries.
+- One-off December 2026 SAT Final Intensive draft redirects after Dec 3, 2026 at 9 PM ET; verify deployed routes and API expiry separately.
+- No production merge or deployment based solely on this file. Requires successful Vercel deployment check, mobile/desktop inspection, form/API tests, capacity/email persistence checks, security assessment when appropriate, and **explicit owner final go-live approval**. No database migration or billing activation without individual authorization.

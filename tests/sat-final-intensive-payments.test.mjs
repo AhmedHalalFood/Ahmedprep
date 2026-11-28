@@ -1,5 +1,5 @@
 // Run with: node --experimental-strip-types --import ./tests/alias-loader.mjs --test tests/sat-final-intensive-payments.test.mjs
-// Database tests run only against the Preview Neon branch, inside an isolated program key that is deleted afterwards.
+// Database tests require the disposable local PostgreSQL instance reserved for Preview QA.
 import { test, after } from "node:test"
 import assert from "node:assert/strict"
 import { randomUUID } from "node:crypto"
@@ -14,11 +14,45 @@ import {
 } from "../lib/sat-final-intensive-enrollment.ts"
 import { CLASS_DATES, quoteFor, validateRegistration } from "../lib/sat-final-intensive.ts"
 
-const PREVIEW_ENDPOINT = "ep-quiet-breeze-b8qi4eg2"
-const url = process.env.DATABASE_URL_UNPOOLED || process.env.DATABASE_URL
-const endpoint = url ? new URL(url).hostname.split(".")[0].replace(/-pooler$/, "") : null
-const dbSkip = endpoint === PREVIEW_ENDPOINT ? false : "needs the Preview database"
-const pool = dbSkip ? null : new pg.Pool({ connectionString: url, max: 8 })
+const qaUrl = process.env.SAT_INTENSIVE_QA_DATABASE_URL
+const dbSkip = qaUrl === undefined ? "requires SAT_INTENSIVE_QA_DATABASE_URL" : false
+let pool = null
+
+if (!dbSkip) {
+  const hasOverrides = Object.keys(process.env).some(
+    (key) => key.startsWith("PG") || key === "DATABASE_URL" || key === "DATABASE_URL_UNPOOLED",
+  )
+  if (hasOverrides) throw new Error("Remove PostgreSQL connection overrides before running database QA")
+
+  let target
+  try {
+    target = new URL(qaUrl)
+  } catch {
+    throw new Error("Invalid SAT_INTENSIVE_QA_DATABASE_URL")
+  }
+  if (
+    target.protocol !== "postgresql:" ||
+    target.host !== "127.0.0.1:55432" ||
+    target.pathname !== "/sat_intensive_qa" ||
+    target.username !== "sat_intensive_qa" ||
+    !target.password ||
+    target.href.includes("?") ||
+    target.href.includes("#")
+  ) {
+    throw new Error("SAT_INTENSIVE_QA_DATABASE_URL must point to the reserved disposable QA database")
+  }
+
+  pool = new pg.Pool({
+    host: target.hostname,
+    port: Number(target.port),
+    database: "sat_intensive_qa",
+    user: "sat_intensive_qa",
+    password: decodeURIComponent(target.password),
+    ssl: false,
+    max: 8,
+    connectionTimeoutMillis: 5000,
+  })
+}
 const PROGRAM = `qa-test-${randomUUID()}`
 const NOW = new Date("2026-11-14T15:00:00Z")
 const ADMIN = "qa-admin@example.test"
@@ -71,18 +105,21 @@ const countRows = async (table, publicId) =>
 
 after(async () => {
   if (!pool) return
-  const ids = `SELECT public_id FROM sat_intensive_enrollments WHERE program_key = $1`
-  await pool.query(
-    `DELETE FROM sat_intensive_email_attempts WHERE outbox_id IN (SELECT id FROM sat_intensive_email_outbox WHERE enrollment_public_id IN (${ids}))`,
-    [PROGRAM],
-  )
-  await pool.query(`DELETE FROM sat_intensive_email_outbox WHERE enrollment_public_id IN (${ids})`, [PROGRAM])
-  await pool.query(`DELETE FROM sat_intensive_audit_log WHERE enrollment_public_id IN (${ids})`, [PROGRAM])
-  await pool.query(`DELETE FROM sat_intensive_payments WHERE enrollment_public_id IN (${ids})`, [PROGRAM])
-  await pool.query(`DELETE FROM sat_intensive_enrollments WHERE program_key = $1`, [PROGRAM])
-  const left = await pool.query(`SELECT count(*) FROM sat_intensive_enrollments WHERE program_key = $1`, [PROGRAM])
-  assert.equal(Number(left.rows[0].count), 0)
-  await pool.end()
+  try {
+    const ids = `SELECT public_id FROM sat_intensive_enrollments WHERE program_key = $1`
+    await pool.query(
+      `DELETE FROM sat_intensive_email_attempts WHERE outbox_id IN (SELECT id FROM sat_intensive_email_outbox WHERE enrollment_public_id IN (${ids}))`,
+      [PROGRAM],
+    )
+    await pool.query(`DELETE FROM sat_intensive_email_outbox WHERE enrollment_public_id IN (${ids})`, [PROGRAM])
+    await pool.query(`DELETE FROM sat_intensive_audit_log WHERE enrollment_public_id IN (${ids})`, [PROGRAM])
+    await pool.query(`DELETE FROM sat_intensive_payments WHERE enrollment_public_id IN (${ids})`, [PROGRAM])
+    await pool.query(`DELETE FROM sat_intensive_enrollments WHERE program_key = $1`, [PROGRAM])
+    const left = await pool.query(`SELECT count(*) FROM sat_intensive_enrollments WHERE program_key = $1`, [PROGRAM])
+    assert.equal(Number(left.rows[0].count), 0)
+  } finally {
+    await pool.end()
+  }
 })
 
 // ---------- pure logic ----------

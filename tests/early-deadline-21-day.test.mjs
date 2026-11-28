@@ -24,7 +24,7 @@ test("Winter: one founding-family deadline (Dec 12, 2026) and no early-payment t
   }
 })
 
-test("Spring and Summer: no founding tier; early payment ends 30 calendar days before the first class", () => {
+test("Spring, Summer and Fall: no founding tier; early payment ends 30 calendar days before the first class", () => {
   assert.equal(EARLY_DAYS_BEFORE_SPRING_SUMMER, 30)
   let count = 0
   for (const term of TERMS_2027.filter((t) => t.id !== "winter")) {
@@ -44,8 +44,13 @@ test("approved tuition per cohort type; only one discount ever applies", () => {
   for (const c of byTerm.winter) assert.deepEqual(priceFor(c), { regular: 1440, early: null, founding: 1080 })
   for (const c of byTerm.spring) assert.deepEqual(priceFor(c), { regular: 1440, early: 1296, founding: null })
   for (const c of byTerm.summer) {
-    const expected = c.hours === 96 ? { regular: 1920, early: 1728, founding: null } : { regular: 960, early: 864, founding: null }
-    assert.equal([96, 48].includes(c.hours), true)
+    const expected = c.hours === 96 ? { regular: 1920, early: 1728, founding: null } : { regular: 1440, early: 1296, founding: null }
+    assert.equal([96, 72].includes(c.hours), true)
+    assert.deepEqual(priceFor(c), expected)
+  }
+  for (const c of byTerm.fall) {
+    const expected = c.hours === 96 ? { regular: 1920, early: 1728, founding: null } : { regular: 1440, early: 1296, founding: null }
+    assert.equal([96, 72].includes(c.hours), true)
     assert.deepEqual(priceFor(c), expected)
   }
 })

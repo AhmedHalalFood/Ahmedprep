@@ -1,15 +1,15 @@
 /**
- * The single source of truth for the 12 approved 2027 cohorts (AhmedPrep 2027 Master Plan, approved November 6, 2026).
+ * The single source of truth for 2027 seasonal cohorts in the updated AhmedPrep master program.
  * Pages, the enrollment form, the API route, confirmation emails, and syllabi all read from here, so a cohort id is
  * canonical everywhere. Session calendars are generated from the weekday pattern, closures, and makeups below and
  * are checked against the approved session counts in tests/cohorts-2027.test.mjs.
  */
 
 export type ProgramId = "SHSAT" | "Digital SAT"
-export type TermId = "winter" | "spring" | "summer"
+export type TermId = "winter" | "spring" | "summer" | "fall"
 
 export const PROGRAMS_2027: readonly ProgramId[] = ["SHSAT", "Digital SAT"] as const
-export const TERM_IDS: readonly TermId[] = ["winter", "spring", "summer"] as const
+export const TERM_IDS: readonly TermId[] = ["winter", "spring", "summer", "fall"] as const
 
 /** A closure removes a regularly scheduled date. Its instruction is preserved by a makeup session. */
 export type Closure = { iso: string; reason: string }
@@ -33,13 +33,14 @@ export type Cohort = {
   id: string
   term: TermId
   program: ProgramId
-  label: "Weekday" | "Weekend" | "Weekday Intensive"
+  label: "Weekday" | "Weekend" | "Weekday Intensive" | "Weekend Intensive" | "Final Intensive"
   days: string
   time: string
   /** Short date summary, kept for older displays. */
   dates: string
   sessions: number
   hours: number
+  breakMinutes?: number
   /** Day-of-week numbers (0 = Sunday) for regular sessions. */
   weekdays: readonly number[]
   firstIso: string
@@ -64,6 +65,7 @@ export const HOURLY_RATE = 20
 export const SESSION_HOURS = 3
 export const FOUNDING_SEATS_PER_COHORT = 5
 export const MAX_CLASS_SIZE = 12
+export const ANNUAL_SHSAT_2027 = { hours: 336, regular: 6720, standard: 5712, founding: 5040, foundingSeats: 5, paymentDeadlineIso: "2027-01-08" } as const
 export const SUMMER_BREAK_BEGINS_ISO = "2027-08-30"
 const EVENING_MAKEUP = "5:30–8:30 PM"
 const WINTER_ONLINE_SAT_MAKEUP = "6:30–9:30 PM"
@@ -72,15 +74,16 @@ const WINTER_WEEKEND = { weekdays: [6, 0], firstIso: "2027-01-09", regularEndIso
 const SPRING_WEEKEND = { weekdays: [6, 0], firstIso: "2027-04-03", regularEndIso: "2027-06-20", closures: [], makeups: [] }
 const SUMMER_INTENSIVE = {
   weekdays: [1, 2, 3, 4],
-  firstIso: "2027-07-06",
+  firstIso: "2027-07-01",
   regularEndIso: "2027-08-26",
-  closures: [],
+  closures: [{ iso: "2027-07-05", reason: "Independence Day observed" }],
 }
 const SUMMER_WEEKEND = {
   weekdays: [6, 0],
   firstIso: "2027-07-03",
-  regularEndIso: "2027-08-22",
+  regularEndIso: "2027-08-28",
   closures: [{ iso: "2027-07-04", reason: "Independence Day closure" }],
+  makeups: [],
 }
 
 const COHORTS: readonly Cohort[] = [
@@ -129,7 +132,7 @@ const COHORTS: readonly Cohort[] = [
   },
   {
     id: "spring-dsat-weekday", term: "spring", program: "Digital SAT", label: "Weekday",
-    days: "Tuesday and Thursday", time: "5:30–8:30 PM", dates: "April 6 – June 24", sessions: 24, hours: 72,
+    days: "Tuesday and Thursday", time: "6:30–9:30 PM", dates: "April 6 – June 24", sessions: 24, hours: 72,
     weekdays: [2, 4], firstIso: "2027-04-06", regularEndIso: "2027-06-24", closures: [], makeups: [],
   },
   {
@@ -144,32 +147,57 @@ const COHORTS: readonly Cohort[] = [
   },
   {
     id: "summer-shsat-intensive", term: "summer", program: "SHSAT", label: "Weekday Intensive",
-    days: "Monday–Thursday", time: "10 AM–1 PM", dates: "July 6 – August 26; final session August 29", sessions: 32, hours: 96,
+    days: "Monday–Thursday", time: "10 AM–1 PM", dates: "July 1 kickoff; July 6 – August 26", sessions: 32, hours: 96,
     ...SUMMER_INTENSIVE,
-    // Owner approved Sunday, August 29, 2027 as the required final instructional session for both intensive cohorts.
-    makeups: [{ iso: "2027-08-29", time: "10 AM–1 PM", replaces: "2027-07-05", approved: true, additional: true }],
+    makeups: [],
   },
   {
+    id: "summer-dsat-weekend", term: "summer", program: "Digital SAT", label: "Weekend Intensive",
+    days: "Saturday and Sunday", time: "10 AM–3 PM", dates: "July 3 – August 28; July 4 closed", sessions: 16, hours: 72,
+    breakMinutes: 30,
+    ...SUMMER_WEEKEND,
+  },
+  {
+    id: "fall-shsat-intensive", term: "fall", program: "SHSAT", label: "Final Intensive",
+    days: "Monday–Thursday", time: "5:30–8:30 PM", dates: "September 13 – November 4", sessions: 32, hours: 96,
+    weekdays: [1, 2, 3, 4], firstIso: "2027-09-13", regularEndIso: "2027-11-04",
+    closures: [], makeups: [],
+  },
+  {
+    id: "fall-dsat-weekend", term: "fall", program: "Digital SAT", label: "Weekend Intensive",
+    days: "Saturday and Sunday", time: "10 AM–3 PM", dates: "September 11 – October 31", sessions: 16, hours: 72,
+    breakMinutes: 30,
+    weekdays: [6, 0], firstIso: "2027-09-11", regularEndIso: "2027-10-31",
+    closures: [], makeups: [],
+  },
+]
+
+/**
+ * Legacy 2027 Summer offerings retained strictly for historical inquiry and confirmation-resend records.
+ * These were replaced in the November 23 approved master plan. Do not include in COHORTS, TERMS_2027,
+ * ALL_COHORTS, public class listings, or new enrollment/API selection.
+ */
+const HISTORICAL_SUPERSEDED_COHORTS: readonly Cohort[] = [
+  {
     id: "summer-dsat-intensive", term: "summer", program: "Digital SAT", label: "Weekday Intensive",
-    days: "Monday–Thursday", time: "2–5 PM", dates: "July 6 – August 26; final session August 29", sessions: 32, hours: 96,
-    ...SUMMER_INTENSIVE,
+    days: "Monday–Thursday", time: "2–5 PM", dates: "July 6 – August 26; final session August 29",
+    sessions: 32, hours: 96, weekdays: [1, 2, 3, 4],
+    firstIso: "2027-07-06", regularEndIso: "2027-08-26", closures: [],
     makeups: [{ iso: "2027-08-29", time: "2–5 PM", replaces: "2027-07-05", approved: true, additional: true }],
   },
   {
     id: "summer-shsat-weekend", term: "summer", program: "SHSAT", label: "Weekend",
-    days: "Saturday and Sunday", time: "10 AM–1 PM", dates: "July 3 – August 22; July 4 closure made up August 28", sessions: 16, hours: 48,
-    ...SUMMER_WEEKEND,
+    days: "Saturday and Sunday", time: "10 AM–1 PM",
+    dates: "July 3 – August 22; July 4 closure made up August 28",
+    sessions: 16, hours: 48, weekdays: [6, 0],
+    firstIso: "2027-07-03", regularEndIso: "2027-08-22",
+    closures: [{ iso: "2027-07-04", reason: "Independence Day closure" }],
     makeups: [{ iso: "2027-08-28", time: "10 AM–1 PM", replaces: "2027-07-04", approved: false }],
   },
-  {
-    id: "summer-dsat-weekend", term: "summer", program: "Digital SAT", label: "Weekend",
-    days: "Saturday and Sunday", time: "2–5 PM", dates: "July 3 – August 22; July 4 closure made up August 28", sessions: 16, hours: 48,
-    ...SUMMER_WEEKEND,
-    makeups: [{ iso: "2027-08-28", time: "2–5 PM", replaces: "2027-07-04", approved: false }],
-  },
 ]
+export const findHistoricalCohort = (id: string) => HISTORICAL_SUPERSEDED_COHORTS.find((c) => c.id === id)
 
-const TERM_NAMES: Record<TermId, string> = { winter: "Winter 2027", spring: "Spring 2027", summer: "Summer 2027" }
+const TERM_NAMES: Record<TermId, string> = { winter: "Winter 2027", spring: "Spring 2027", summer: "Summer 2027", fall: "Fall 2027" }
 
 /**
  * Customer-facing start-period labels. Term ids ("winter", ...) and TERM_NAMES stay unchanged for URLs, the database,
@@ -179,6 +207,7 @@ const TERM_START_LABELS: Record<TermId, string> = {
   winter: "January 2027 Classes",
   spring: "April 2027 Classes",
   summer: "July 2027 Classes",
+  fall: "September 2027 Classes",
 }
 /** "January 2027 Classes" */
 export const termStartLabel = (id: TermId) => TERM_START_LABELS[id]
@@ -234,10 +263,18 @@ export function cohortSpan(cohort: Cohort) {
 
 // ---------- Tuition ----------
 
-/** Phase 1 correction: Spring and Summer early payment must be received at least 30 calendar days before the first class. */
+/** Phase 1 correction: Spring, Summer and Fall early payment must be received at least 30 calendar days before the first class. */
 export const EARLY_DAYS_BEFORE_SPRING_SUMMER = 30
 /** Phase 1 correction: one founding-family deadline for every Winter 2027 cohort. */
 export const WINTER_FOUNDING_DEADLINE_ISO = "2026-12-12"
+
+/** Current New York calendar date, independent of Vercel server region. */
+export function newYorkDateToday(now: Date = new Date()): string {
+  const parts = new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(now)
+  const byType = (key: string) => parts.find((part) => part.type === key)?.value ?? ""
+  return `${byType("year")}-${byType("month")}-${byType("day")}`
+}
+export const winterFoundingOfferActive = (now: Date = new Date()) => newYorkDateToday(now) <= WINTER_FOUNDING_DEADLINE_ISO
 export const DEADLINE_TIME_LABEL = "11:59 PM ET"
 
 /** Founding-family tuition is offered for Winter 2027 cohorts only. */
@@ -245,7 +282,7 @@ export const foundingEligible = (cohort: Pick<Cohort, "term">) => cohort.term ==
 
 /**
  * $20 per scheduled instructional hour. Winter offers founding-family tuition (25% off) and no early-payment tier;
- * Spring and Summer offer early-payment tuition (10% off) and no founding-family tier. Only one discount ever applies.
+ * Spring, Summer and Fall offer early-payment tuition (10% off) and no founding-family tier. Only one discount ever applies.
  */
 export const priceFor = (cohort: Pick<Cohort, "hours" | "term">) => {
   const regular = cohort.hours * HOURLY_RATE
@@ -260,7 +297,7 @@ export const priceFor = (cohort: Pick<Cohort, "hours" | "term">) => {
 /**
  * Full-payment discount deadlines (each ends 11:59 PM ET on the date).
  * Winter: founding-family December 12, 2026; no early-payment deadline.
- * Spring and Summer: no founding-family deadline; early payment 30 calendar days before the first class.
+ * Spring, Summer and Fall: no founding-family deadline; early payment 30 calendar days before the first class.
  */
 export const deadlinesFor = (cohort: Pick<Cohort, "firstIso" | "term">): { foundingIso: string | null; earlyIso: string | null } =>
   foundingEligible(cohort)
@@ -281,7 +318,7 @@ export const dollars = (n: number) => "$" + n.toLocaleString("en-US")
 
 // ---------- Catalog ----------
 
-const groupName = (c: Cohort) => (c.label === "Weekday" ? `Weekday ${c.program}` : c.label === "Weekend" ? "Weekend SHSAT and Digital SAT" : "Weekday Intensive SHSAT and Digital SAT")
+const groupName = (c: Cohort) => `${c.program} ${c.label}`
 
 export const TERMS_2027: readonly Term[] = TERM_IDS.map((id) => {
   const cohorts = COHORTS.filter((c) => c.term === id)
@@ -309,9 +346,9 @@ export const cohortsFor = (program: string, term: string) => COHORTS.filter((c) 
 /** "Winter 2027 SHSAT Weekday" */
 export const cohortTitle = (c: Cohort) => `${TERM_NAMES[c.term]} ${c.program} ${c.label}`
 /** "Monday and Wednesday, 5:30–8:30 PM ET" */
-export const isOnlineCohort = (c: Pick<Cohort, "id">) => c.id === "winter-dsat-weekday"
-export const cohortDelivery = (c: Pick<Cohort, "id">) => isOnlineCohort(c) ? "Live online (Zoom), nationwide" : "In person · Astoria, Queens"
-export const cohortSchedule = (c: Cohort) => `${c.days}, ${c.time} ET · ${cohortDelivery(c)}`
+export const isOnlineCohort = (c: Pick<Cohort, "id">) => ["winter-dsat-weekday", "spring-dsat-weekday"].includes(c.id)
+export const cohortDelivery = (c: Pick<Cohort, "id">) => isOnlineCohort(c) ? "Live online (Zoom)" : "In person · Astoria, Queens"
+export const cohortSchedule = (c: Cohort) => `${c.days}, ${c.time} ET · ${cohortDelivery(c)}${c.breakMinutes ? ` · ${c.breakMinutes}-minute break included` : ""}`
 
 /** Inquiry form link with this cohort already selected. */
 export const cohortInquiryHref = (c: Cohort) =>
@@ -346,13 +383,13 @@ export const formatRange = (startIso: string, endIso: string) => {
 
 /**
  * The tuition options a family may be offered for one cohort, in display order: the one applicable discount
- * (founding-family for Winter, early-payment for Spring and Summer), then regular tuition.
+ * (founding-family for Winter, early-payment for Spring, Summer and Fall), then regular tuition.
  */
 export function tuitionOptionsFor(cohort: Cohort) {
   const price = priceFor(cohort)
   const d = deadlinesFor(cohort)
   const options: { id: "founding" | "early" | "regular"; label: string; amount: number; condition: string }[] = []
-  if (price.founding !== null && d.foundingIso) {
+  if (price.founding !== null && d.foundingIso && winterFoundingOfferActive()) {
     options.push({
       id: "founding",
       label: "Founding-family tuition (25% off)",
@@ -360,7 +397,7 @@ export function tuitionOptionsFor(cohort: Cohort) {
       condition: `First ${FOUNDING_SEATS_PER_COHORT} fully paid enrollments in this cohort, paid in full by ${formatDate(d.foundingIso)} at ${DEADLINE_TIME_LABEL}, subject to seat availability.`,
     })
   }
-  if (price.early !== null && d.earlyIso) {
+  if (price.early !== null && d.earlyIso && newYorkDateToday() <= d.earlyIso) {
     options.push({
       id: "early",
       label: "Early-payment tuition (10% off)",

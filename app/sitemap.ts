@@ -1,4 +1,7 @@
 import type { MetadataRoute } from "next"
+
+// Recompute sitemap so expired short-term intensive URLs are removed automatically.
+export const dynamic = "force-dynamic"
 import { SITE_URL } from "@/lib/business"
 import { RESOURCES } from "@/lib/resources"
 import { SAT_INTENSIVE_PATH, isSatIntensiveEnrollmentOpen } from "@/lib/sat-final-intensive"

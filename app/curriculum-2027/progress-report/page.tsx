@@ -54,7 +54,7 @@ function ReportTemplate({ program }: { program: ProgramId }) {
         <Field label="Student name" />
         <Field label="Cohort" />
         <Field label="Report date" />
-        <Field label="Report type (diagnostic / after mock exam / final)" />
+        <Field label="Report type and mock number, if applicable" />
       </div>
 
       <div className="overflow-x-auto">
@@ -67,7 +67,7 @@ function ReportTemplate({ program }: { program: ProgramId }) {
             </tr>
           </thead>
           <tbody>
-            {["Diagnostic", "Latest assessment"].map((r) => (
+            {["Diagnostic", "Previous mock (if available)", "Latest mock (if available)"].map((r) => (
               <tr key={r} className="border-b border-line">
                 <td className="py-3 pr-3 font-semibold text-ink">{r}</td><td /><td /><td /><td className="py-3 text-subtle">Raw / Scaled</td>
               </tr>
@@ -92,13 +92,13 @@ function ReportTemplate({ program }: { program: ProgramId }) {
         {[1, 2, 3].map((i) => <span key={i} className="h-7 border-b border-line" aria-hidden="true" />)}
       </div>
       <div className="flex flex-col gap-2">
-        <h3 className="font-bold text-navy">Recommended practice before the next assessment</h3>
+        <h3 className="font-bold text-navy">Recommended practice and next priorities</h3>
         {[1, 2, 3].map((i) => <span key={i} className="h-7 border-b border-line" aria-hidden="true" />)}
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="Instructor" />
-        <Field label="Next assessment date" />
+        <Field label="Next assessment or exam date, if known" />
       </div>
     </article>
   )

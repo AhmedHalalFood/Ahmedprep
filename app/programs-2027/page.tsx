@@ -1,11 +1,16 @@
 import type { Metadata } from "next"
+import { connection } from "next/server"
+import { redirect } from "next/navigation"
+import { activeTerms } from "@/lib/program-retirement"
 import Link from "next/link"
 import { ArrowUpRight, CalendarDays, ClipboardCheck, Info, Laptop, UserRound, Video } from "lucide-react"
 import { ClassFinder } from "@/components/programs/class-finder"
+import { AnnualShsatPackage } from "@/components/program-page/annual-shsat-package"
 import { FinderHashRestore } from "@/components/programs/finder-hash-restore"
 import {
   DEADLINE_TIME_LABEL,
   EARLY_DAYS_BEFORE_SPRING_SUMMER,
+  winterFoundingOfferActive,
   FOUNDING_SEATS_PER_COHORT,
   MAX_CLASS_SIZE,
   TERMS_2027,
@@ -25,14 +30,18 @@ import { absoluteUrl } from "@/lib/seo"
 export const metadata: Metadata = {
   title: "2027 Programs & Pricing: SHSAT and Digital SAT Classes",
   description:
-    "AhmedPrep's Winter, Spring, and Summer 2027 SHSAT and Digital SAT cohorts in Astoria: class schedules, dates, hours, tuition, discount deadlines, and enrollment.",
+    "AhmedPrep's Winter, Spring, Summer, and Fall 2027 SHSAT and Digital SAT cohorts in Astoria: class schedules, dates, hours, tuition, discount deadlines, and enrollment.",
   alternates: { canonical: absoluteUrl("/programs-2027") },
 }
 
 const SECONDARY_OPTIONS = (["free_diagnostic", "free_sunday", "private_tutoring"] as const).map((id) => getProgram(id)!)
 
 export default async function Programs2027Page({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+  await connection()
   const params = await searchParams
+  const currentTerms = activeTerms(TERMS_2027)
+  const foundingOpen = winterFoundingOfferActive()
+  if (!currentTerms.length) redirect("/free-diagnostic")
   const previewFull = params.previewFull === "1"
   const state = parseFinder(params)
   return (
@@ -40,12 +49,12 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
       <section aria-labelledby="programs-2027-title" className="border-b border-line px-5 pb-8 pt-10 sm:pt-14">
         <div className="mx-auto flex max-w-5xl flex-col gap-3">
           <p className="eyebrow blue">Programs &amp; Pricing</p>
-          <h1 id="programs-2027-title" className="text-balance font-serif text-3xl font-bold leading-tight text-navy sm:text-5xl">
+          <h1 id="programs-2027-title" className="text-balance text-3xl font-extrabold leading-tight tracking-tight text-navy sm:text-4xl">
             2027 SHSAT and Digital SAT classes
           </h1>
           <p className="max-w-3xl text-pretty text-lg leading-relaxed text-subtle">
             Choose when to start, SHSAT or Digital SAT, and a schedule to see one class&apos;s dates and tuition. Small groups in Astoria, maximum {MAX_CLASS_SIZE}{" "}
-            students. All times are Eastern Time.
+            students. All SHSAT preparation cohorts are in person at our Astoria classroom. Winter and Spring weekday Digital SAT classes are live online via Zoom; weekend and intensive cohorts meet in person in Astoria. Classes are personally taught by founder Tariq Ahmed. All times are Eastern Time.
           </p>
         </div>
       </section>
@@ -57,15 +66,15 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
           </h2>
           <div className="mt-4 grid gap-4 md:grid-cols-2">
             <div className="rounded-xl border border-blue-200 bg-blue-50/60 p-4">
-              <h3 className="font-extrabold text-navy">SHSAT: Four-stage preparation</h3>
-              <p className="mt-2 text-sm leading-relaxed text-ink">Winter Foundation → Spring Advanced Mastery → Summer Intensive → Fall Final Intensive. Entry is guided by a diagnostic, and the fall program is announced separately.</p>
+              <h3 className="font-extrabold text-navy">SHSAT: Four-stage preparation · All in person in Astoria</h3>
+              <p className="mt-2 text-sm leading-relaxed text-ink">Winter Foundation, Spring Advanced Mastery, Summer Intensive, and Fall Final Intensive build toward the SHSAT, with diagnostic-guided placement.</p>
               <Link href="/shsat-prep#shsat-pathway" className="mt-3 inline-flex items-center gap-1 text-sm font-extrabold text-navy underline underline-offset-4">
                 Explore the SHSAT pathway <ArrowUpRight size={15} aria-hidden="true" />
               </Link>
             </div>
             <div className="rounded-xl border border-emerald-200 bg-emerald-50/60 p-4">
               <h3 className="font-extrabold text-navy">Digital SAT: All mastery tiers in every cohort</h3>
-              <p className="mt-2 text-sm leading-relaxed text-ink">Each Winter, Spring, or Summer cohort covers Foundation, Advanced Mastery, Intensive Application, and the 1600 Challenge with diagnostic-based assignments. Final intensives are planned around SAT dates.</p>
+              <p className="mt-2 text-sm leading-relaxed text-ink">Each seasonal Digital SAT cohort covers Foundation, Advanced Mastery, Intensive Application, and the 1600 Challenge with diagnostic-based assignments. Summer and Fall meet on weekends, 10 AM–3 PM, with a 30-minute lunch break.</p>
               <Link href="/digital-sat-prep#sat-mastery" className="mt-3 inline-flex items-center gap-1 text-sm font-extrabold text-navy underline underline-offset-4">
                 Explore the Digital SAT model <ArrowUpRight size={15} aria-hidden="true" />
               </Link>
@@ -73,6 +82,8 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
           </div>
         </div>
       </section>
+
+      <AnnualShsatPackage compact />
 
       <FinderHashRestore season={state.season} program={state.program} />
       <ClassFinder state={state} full={(id) => isCohortFull(id, { previewFull })} />
@@ -84,18 +95,16 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
               How tuition discounts work
             </h2>
             <p className="text-pretty text-sm leading-relaxed text-ink">
-              Winter 2027: founding-family tuition (25% off) is available only to the first {FOUNDING_SEATS_PER_COHORT} fully paid enrollments
-              per cohort, paid in full by {formatDate(WINTER_FOUNDING_DEADLINE_ISO)} at {DEADLINE_TIME_LABEL}, subject to seat availability.
-              Winter has no separate early-payment tier. Spring and Summer 2027: early-payment tuition (10% off) requires full payment at least{" "}
-              {EARLY_DAYS_BEFORE_SPRING_SUMMER} calendar days before the selected cohort begins; there is no founding-family discount. Only one
-              discount applies.
+              {foundingOpen ? <>Winter 2027: founding-family tuition (25% off) is limited to the first {FOUNDING_SEATS_PER_COHORT} fully paid students per cohort by {formatDate(WINTER_FOUNDING_DEADLINE_ISO)} at {DEADLINE_TIME_LABEL}, while seats remain. </> : <>Winter 2027: regular tuition applies. </>}
+              Winter has no separate early-payment tier. Spring, Summer, and Fall offer 10% early-payment tuition if the full payment is received at least{" "}
+              {EARLY_DAYS_BEFORE_SPRING_SUMMER} calendar days before the selected cohort starts. Discounts cannot be combined. Full payment is required; no installments or online checkout.
             </p>
           </div>
 
           <div className="rounded-2xl border border-line bg-paper">
             <h2 className="flex min-h-14 items-center px-5 text-lg font-extrabold text-navy">Compare all 2027 classes</h2>
             <div className="flex flex-col gap-6 border-t border-line px-5 pb-5 pt-4">
-              {TERMS_2027.map((term) => (
+              {currentTerms.map((term) => (
                 <div
                   key={term.id}
                   className={`overflow-x-auto rounded-xl border ${
@@ -238,10 +247,10 @@ export default async function Programs2027Page({ searchParams }: { searchParams:
                 <h3 className="text-lg font-extrabold text-navy">Holiday makeups and summer dates</h3>
               </div>
               <div className="space-y-3 text-sm leading-relaxed text-ink">
-                <p><strong className="text-navy">Winter and Spring:</strong> Makeup instruction is scheduled on select Saturdays from 5:30–8:30 PM.</p>
-                <p><strong className="text-navy">Summer weekend makeup:</strong> A daytime session on August 28.</p>
-                <p><strong className="text-navy">Sunday, August 29:</strong> Required final instructional session for both summer intensive cohorts (SHSAT 10 AM–1 PM ET; Digital SAT 2–5 PM ET).</p>
-                <p className="text-subtle">Exact makeup assignments remain subject to final curriculum sequencing and calendar verification before publication.</p>
+                <p><strong className="text-navy">Winter and Spring:</strong> Proposed holiday replacement sessions are on select Saturdays; exact assignments require confirmation, including the live online Digital SAT makeup.</p>
+                <p><strong className="text-navy">Summer Digital SAT:</strong> July 4 closed; August 28 is the final Saturday class.</p>
+                <p><strong className="text-navy">Summer SHSAT:</strong> First class July 1, July 5 closed; weekday classes continue July 6–August 26.</p>
+                <p className="text-subtle">The July 1 Summer SHSAT kickoff is part of the approved 32-class calendar. Other proposed makeup dates are confirmed with families after calendar verification.</p>
               </div>
             </article>
             <article className="rounded-2xl border border-amber-200 bg-[#FFFAED] p-5 shadow-sm sm:p-6">

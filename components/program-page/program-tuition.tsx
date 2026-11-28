@@ -10,9 +10,11 @@ import {
   dollars,
   formatDate,
   tuitionOptionsFor,
+  winterFoundingOfferActive,
   type ProgramId,
 } from "@/lib/cohorts-2027"
 import { programsHref } from "@/lib/program-finder"
+import { activeTerms } from "@/lib/program-retirement"
 
 // Seasonal accents are intentionally subtle so program schedules and tuition remain readable.
 const SEASON_CARD_TONE = {
@@ -31,19 +33,22 @@ const SEASON_CARD_TONE = {
     card: "border-amber-200 bg-amber-50/50 hover:border-amber-500 hover:bg-amber-50",
     link: "text-amber-800",
   },
+  fall: {header: "border-violet-200 bg-violet-100 text-violet-900",card:"border-violet-200 bg-violet-50/50 hover:border-violet-500",link:"text-violet-800"},
 } as const
 
 export function ProgramTuition({ program, note }: { program: ProgramId; note?: string }) {
+  const terms = activeTerms(TERMS_2027).filter((term) => term.cohorts.some((cohort) => cohort.program === program))
+  if (terms.length === 0) return null
   return (
     <Section
       id="schedules-tuition"
       eyebrow="2027 schedules and tuition"
-      title={`${program} cohorts for Winter, Spring, and Summer 2027`}
-      intro={`Every cohort has a maximum of ${MAX_CLASS_SIZE} students. Winter weekday Digital SAT meets live online; all other listed cohorts meet in person at our Astoria classroom. Founding-family tuition (25% off) is offered for Winter 2027 only, paid in full by December 12, 2026. Spring and Summer offer a 10% early-payment discount when paid in full at least 30 calendar days before the cohort begins. Only one discount applies. All deadlines end at 11:59 PM ET.`}
+      title={`${program} cohorts for Winter, Spring, Summer, and Fall 2027`}
+      intro={`Every cohort has a maximum of ${MAX_CLASS_SIZE} students. ${program === "SHSAT" ? "All Winter, Spring, Summer, and Fall SHSAT preparation cohorts are held IN PERSON at our Astoria, Queens classroom. Free Sunday SHSAT Zoom sessions are a separate, online community offering." : "Winter and Spring weekday Digital SAT meet live online; weekend and intensive Digital SAT cohorts meet in person at our Astoria classroom."} ${winterFoundingOfferActive() ? "Winter founding-family tuition (25% off) is for the first five fully paid enrollments per class by December 12, 2026, subject to available seats." : "Winter founding-family discount deadline has passed; regular tuition applies."} Spring, Summer and Fall offer a 10% early-payment discount when paid in full at least 30 calendar days before the cohort begins. Only one discount applies. All deadlines end at 11:59 PM ET.`}
     >
       {note ? <p className="-mt-4 mb-8 max-w-2xl font-bold text-navy">{note}</p> : null}
       <div className="flex flex-col gap-10">
-        {TERMS_2027.map((term) => {
+        {terms.map((term) => {
           const cohorts = term.cohorts.filter((c) => c.program === program)
           const tone = SEASON_CARD_TONE[term.id]
           return (
@@ -76,7 +81,7 @@ export function ProgramTuition({ program, note }: { program: ProgramId; note?: s
                           {formatDate(span.startIso)} – {formatDate(span.endIso)}
                         </p>
                         <p className="text-sm text-subtle">
-                          {c.sessions} three-hour classes · {c.hours} scheduled hours
+                          {c.sessions} classes · {c.hours} instructional hours{c.breakMinutes ? ` · ${c.breakMinutes}-minute break per meeting` : ""}
                         </p>
                       </div>
                       <dl className="flex flex-col border-t border-line">

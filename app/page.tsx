@@ -1,4 +1,6 @@
 import type { Metadata } from "next"
+import { connection } from "next/server"
+import { isTermActive } from "@/lib/program-retirement"
 import { ArrowUpRight } from "lucide-react"
 import { ProgramsPreview } from "@/components/landing/programs-preview"
 import { Winter2027Promo } from "@/components/landing/winter-2027-promo"
@@ -12,14 +14,14 @@ import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 export const metadata: Metadata = {
   title: { absolute: "AhmedPrep | SHSAT & Digital SAT Prep in Astoria, Queens — Serving NYC & Long Island" },
   description:
-    "AhmedPrep offers in-person SHSAT and Digital SAT prep in Astoria, Queens, plus live online Winter weekday Digital SAT nationwide. Winter, Spring & Summer 2027 small-group classes, max 12 students, $20 per class hour, free diagnostic.",
+    "AhmedPrep offers in-person SHSAT and Digital SAT prep in Astoria, Queens, plus live online Winter and Spring weekday Digital SAT. Winter through Fall 2027 small-group classes, max 12 students, $20 per class hour, free diagnostic.",
   alternates: { canonical: absoluteUrl("/") },
   openGraph: {
     ...baseOpenGraph,
     url: absoluteUrl("/"),
     title: "AhmedPrep | In-Person SHSAT & Digital SAT Prep in Astoria, Queens",
     description:
-      "SHSAT and Digital SAT prep in Astoria, Queens, plus live online Winter weekday Digital SAT nationwide. Small-group 2027 classes, max 12 students. Book a free diagnostic.",
+      "SHSAT and Digital SAT prep in Astoria, Queens, plus live online Winter weekday Digital SAT. Small-group 2027 classes, max 12 students. Book a free diagnostic.",
   },
 }
 
@@ -28,10 +30,11 @@ export const revalidate = 3600
 
 
 export default async function Home() {
+  await connection()
   const showIntensive = await intensiveSitewidePromoActive()
   return (
     <>
-      <Winter2027Promo />
+      {isTermActive("winter") && <Winter2027Promo />}
 
       <ProgramsPreview />
 

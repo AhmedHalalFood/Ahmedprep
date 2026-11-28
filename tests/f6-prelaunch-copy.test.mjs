@@ -10,18 +10,17 @@ const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), "utf
 test("Why Choose AhmedPrep: compact benefits grid with class size, founder, and About link", () => {
   const src = read("components/landing/why-families.tsx")
   assert.match(src, /MAX_CLASS_SIZE/)
-  assert.match(src, /founder and lead instructor Tariq Ahmed/)
+  assert.match(src, /classes taught by Tariq Ahmed/)
   assert.match(src, /href="\/about"/)
   assert.doesNotMatch(src, /alternate between SHSAT and Digital SAT/)
   assert.doesNotMatch(src, /Free weekly learning/)
 })
 
-test("Home Free Resources preview: Sunday Zoom card derives the approved schedule centrally and links to RSVP", () => {
+test("Home Free Resources preview: Sunday Zoom card links to the live schedule", () => {
   const src = read("components/landing/tools-resources.tsx")
-  assert.match(src, /scheduleSummary\(\)/)
   assert.match(src, /href: "\/free-sunday-classes"/)
   assert.match(src, /href="\/resources"/)
-  assert.match(src, /Explore All Free Resources/)
+  assert.match(src, /Explore all free resources/)
   assert.doesNotMatch(src, /alternate between SHSAT and Digital SAT/)
 })
 
@@ -54,16 +53,13 @@ test("Programs: private tutoring keeps its contact-for-pricing behaviour", () =>
   assert.equal(getProgram("private_tutoring").price, null)
 })
 
-test("Home Programs & Pricing preview derives tuition centrally, does not repeat season cards, and links to /programs-2027", () => {
+test("Home Programs & Pricing preview derives current tuition centrally and links to /programs-2027", () => {
   const src = read("components/landing/programs-preview.tsx")
   assert.match(src, /TERMS_2027/)
   assert.match(src, /priceFor\(/)
-  assert.match(src, /EARLY_DAYS_BEFORE_SPRING_SUMMER/)
-  assert.match(src, /FOUNDING_SEATS_PER_COHORT/)
-  assert.match(src, /Winter only:/)
+  assert.match(src, /winterFoundingOfferActive\(/)
   assert.match(src, /href="\/programs-2027"/)
-  assert.match(src, /Compare All Programs/)
-  assert.doesNotMatch(src, /View Programs/)
+  assert.match(src, /Compare programs & pricing/)
   assert.doesNotMatch(src, /\$1,440|\$1,296|\$1,080|\$1,920|\$1,728|\$960|\$864/)
 })
 

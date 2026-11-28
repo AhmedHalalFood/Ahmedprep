@@ -59,9 +59,13 @@ export default async function CohortSyllabusPage({ params }: Params) {
             </p>
           ) : null}
           <DraftNotice />
+          {cohort.id === "fall-shsat-intensive" && (
+            <p className="text-sm leading-relaxed text-subtle">Mock dates are proposed pending confirmation of the Fall SHSAT exam calendar.</p>
+          )}
           <p className="text-sm leading-relaxed text-subtle">
-            Lesson sessions: {SESSION_BLOCKS.map((b) => `${b.minutes} min ${b.label}`).join(" · ")}. Diagnostic and mock-exam
-            sessions use the full period. Exam format: {format.summary}
+            Lesson sessions use {SESSION_BLOCKS.map((b) => `${b.minutes} min ${b.label}`).join(" · ")}.
+            {cohort.breakMinutes ? " Weekend intensives add 90 minutes of guided practice and a separate 30-minute break." : ""}
+            {" "}{format.summary}
           </p>
           <div className="flex flex-wrap gap-3"><PrintButton /></div>
         </header>

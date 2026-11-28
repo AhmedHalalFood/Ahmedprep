@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { isTermActive } from "@/lib/program-retirement"
 import { absoluteUrl, baseOpenGraph } from "@/lib/seo"
 import Link from "next/link"
 import { notFound } from "next/navigation"
@@ -13,6 +14,9 @@ import { EVENTS } from "@/lib/analytics"
 import { SITE_URL } from "@/lib/business"
 import { RESOURCES, getResource, type ResourceBlock } from "@/lib/resources"
 import { PracticePassage, PracticeQuestions } from "@/components/resources/practice-questions"
+
+// Refresh resource-page promo boxes quickly when a seasonal cohort finishes.
+export const revalidate = 60
 
 export function generateStaticParams() {
   return RESOURCES.map((r) => ({ slug: r.slug }))
@@ -82,7 +86,7 @@ export default async function ResourcePage({ params }: { params: Promise<{ slug:
               <p className="text-pretty text-lg leading-relaxed text-subtle">{resource.description}</p>
             )}
             </div>
-            {resource.category === "Digital SAT" && (
+            {resource.category === "Digital SAT" && isTermActive("winter") && (
               <section aria-labelledby="sat-winter-enrollment-title" className="mt-8 rounded-xl border border-gold/50 bg-warm p-5 sm:p-6">
                 <p className="text-xs font-extrabold uppercase tracking-wider text-brand">Winter 2027 · Digital SAT classes</p>
                 <h2 id="sat-winter-enrollment-title" className="mt-1 text-xl font-extrabold text-navy">
@@ -120,7 +124,7 @@ export default async function ResourcePage({ params }: { params: Promise<{ slug:
                 <Link href="/weekly-shsat-challenge" className="button button-gold mt-4">Start the weekly challenge <ArrowUpRight size={16} aria-hidden="true" /></Link>
               </section>
             )}
-            {resource.slug === "shsat-math-practice" && (
+            {resource.slug === "shsat-math-practice" && isTermActive("winter") && (
               <section aria-labelledby="math-winter-enrollment-title" className="mt-8 rounded-xl border border-gold/50 bg-warm p-5 sm:p-6">
                 <p className="text-xs font-extrabold uppercase tracking-wider text-brand">Winter 2027 · Enrollment open</p>
                 <h2 id="math-winter-enrollment-title" className="mt-1 text-xl font-extrabold text-navy">

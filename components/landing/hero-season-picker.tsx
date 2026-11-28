@@ -1,12 +1,12 @@
 "use client"
 
 import { useState } from "react"
-import { ArrowRight, CalendarDays, Clock, Leaf, type LucideIcon, Snowflake, Sun } from "lucide-react"
+import { ArrowRight, CalendarDays, Clock, Leaf, type LucideIcon, Snowflake, Sun, Sunset } from "lucide-react"
 import type { ProgramId, TermId } from "@/lib/cohorts-2027"
 import { programsHref } from "@/lib/program-finder"
 import "./hero-season-picker.css"
 
-const SEASON_ICONS: Record<TermId, LucideIcon> = { winter: Snowflake, spring: Leaf, summer: Sun }
+const SEASON_ICONS: Record<TermId, LucideIcon> = { winter: Snowflake, spring: Leaf, summer: Sun, fall: Sunset }
 
 const EXAMS: { id: ProgramId | null; label: string }[] = [
   { id: null, label: "All programs" },

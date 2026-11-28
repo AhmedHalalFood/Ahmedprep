@@ -11,7 +11,6 @@ import {
   TERMS_2027,
   cohortSchedule,
   cohortSpan,
-  cohortsFor,
   dollars,
   findCohort,
   formatShortDate,
@@ -22,6 +21,7 @@ import {
   tuitionOptionsFor,
 } from "@/lib/cohorts-2027"
 import { WAITLIST_DISCLAIMER } from "@/lib/cohort-capacity"
+import { activeCohorts, activeTerms, isCohortActive } from "@/lib/program-retirement"
 import { ENROLLMENT_ACTIONS, ENROLLMENT_DISCLAIMER, FOUNDING_INTEREST_OPTIONS, GRADES_2027, inquiryReceivedMessage } from "@/lib/enrollment-2027"
 import { foundingQuestionApplies, inquiryName, resolveSelection, selectionLabel } from "@/lib/enrollment-2027-inquiry"
 
@@ -53,7 +53,7 @@ export type Enrollment2027Preset = { program?: string; term?: string; cohortId?:
 /** Turns ?program=&term=&cohort= into a consistent preset; anything that doesn't match the catalog is dropped. */
 export function presetFrom(input: Enrollment2027Preset): Pick<InquiryData, "program" | "term" | "cohortId"> {
   const cohort = input.cohortId ? findCohort(input.cohortId) : undefined
-  if (cohort) return { program: cohort.program, term: cohort.term, cohortId: cohort.id }
+  if (cohort && isCohortActive(cohort)) return { program: cohort.program, term: cohort.term, cohortId: cohort.id }
   const program = input.program && isProgramId(input.program) ? input.program : ""
   const term = input.term && isTermId(input.term) ? input.term : ""
   return { program, term, cohortId: "" }
@@ -136,19 +136,6 @@ function ChoiceCards({
   )
 }
 
-function Placeholder({ label, text, error }: { label: string; text: string; error?: string }) {
-  return (
-    <div>
-      <p className="text-sm font-semibold text-ink">
-        {label} <span aria-hidden="true" className="text-error">*</span>
-        <span className="sr-only">(required)</span>
-      </p>
-      <p className="mt-2 border border-dashed border-line px-4 py-3 text-sm text-subtle">{text}</p>
-      {error && <p className="mt-1.5 text-xs font-medium text-error">{error}</p>}
-    </div>
-  )
-}
-
 /**
  * `selectionShownAbove`: the page already shows the selected class (with a "Change class" link) right above the form,
  * so the form skips its own selected-class and tuition boxes instead of repeating them.
@@ -198,8 +185,9 @@ export function Enrollment2027Form({ preset = {}, selectionShownAbove = false }:
     onChange: (v: string) => update(key, v),
   })
 
-  const cohorts = data.program && data.term ? cohortsFor(data.program, data.term) : []
-  const chosen = findCohort(data.cohortId)
+  const cohorts = data.program && data.term ? activeCohorts().filter((c) => c.program === data.program && c.term === data.term) : []
+  const selectedCohort = findCohort(data.cohortId)
+  const chosen = selectedCohort && isCohortActive(selectedCohort) ? selectedCohort : undefined
 
   if (status === "success" && submitted) {
     const selection = resolveSelection(submitted)
@@ -261,22 +249,9 @@ export function Enrollment2027Form({ preset = {}, selectionShownAbove = false }:
       <Honeypot id={`${LOCATION}-website`} inputRef={honeypotRef} />
       <RequiredNote id={`${LOCATION}-required-note`} />
 
-      <fieldset className="flex flex-col gap-4">
-        <legend className="mb-3 text-base font-extrabold text-navy">Parent or guardian</legend>
-        <TextField label="Parent/Guardian Name" autoComplete="name" required {...field("parentName")} />
-        <div className="grid gap-5 sm:grid-cols-2">
-          <TextField label="Email Address" type="email" inputMode="email" autoComplete="email" required {...field("email")} />
-          <TextField label="Phone Number" type="tel" inputMode="tel" autoComplete="tel" required {...field("phone")} />
-        </div>
-      </fieldset>
-
-      <fieldset className="flex flex-col gap-4 border-t border-line pt-6">
-        <legend className="mb-3 float-left w-full text-base font-extrabold text-navy">Student</legend>
-        <div className="grid gap-5 sm:grid-cols-2">
-          <TextField label="Student Name" autoComplete="off" required {...field("studentName")} />
-          <SelectField label="Current Grade" required placeholder="Select grade" options={GRADES_2027} {...field("studentGrade")} />
-        </div>
-      </fieldset>
+      {!selectionShownAbove && (
+        <p className="text-sm font-bold uppercase tracking-wider text-brand">1. Choose your class</p>
+      )}
 
       {chosen && !changingSelection && selectionShownAbove ? null : chosen && !changingSelection ? (
         <section aria-labelledby={`${LOCATION}-selected-title`} className="flex flex-col gap-3 rounded-2xl border-2 border-brand bg-brand-soft p-4 sm:flex-row sm:items-center sm:justify-between">
@@ -307,14 +282,14 @@ export function Enrollment2027Form({ preset = {}, selectionShownAbove = false }:
         legend="When would you like to start?"
         value={data.term}
         error={errors.term}
-        columns="sm:grid-cols-3"
+        columns="sm:grid-cols-2 lg:grid-cols-4"
         onChange={(v) => {
           update("term", v)
           update("cohortId", "")
           if (!(isTermId(v) && foundingQuestionApplies(v))) update("foundingInterest", "")
         }}
-        options={TERMS_2027.map((t) => {
-          const starts = (data.program ? cohortsFor(data.program, t.id) : t.cohorts).map((c) => c.firstIso).sort()
+        options={activeTerms(TERMS_2027).map((t) => {
+          const starts = t.cohorts.filter((cohort) => !data.program || cohort.program === data.program).map((cohort) => cohort.firstIso).sort()
           return { value: t.id, title: termStartLabel(t.id), detail: t.id === "winter" ? "Classes begin Jan 9–12, depending on schedule." : starts[0] ? `First class ${formatShortDate(starts[0])}` : undefined }
         })}
       />
@@ -332,7 +307,7 @@ export function Enrollment2027Form({ preset = {}, selectionShownAbove = false }:
           options={PROGRAMS_2027.map((p) => ({ value: p, title: p, detail: PROGRAM_DETAIL[p], tone: p === "SHSAT" ? "shsat" : "dsat" }))}
         />
       ) : (
-        <Placeholder label="Program" text="Choose when to start above, then SHSAT or Digital SAT." error={errors.program} />
+        errors.program ? <p role="alert" className="text-sm font-medium text-error">{errors.program}</p> : null
       )}
 
       {cohorts.length > 0 ? (
@@ -357,16 +332,36 @@ export function Enrollment2027Form({ preset = {}, selectionShownAbove = false }:
           })}
         />
       ) : (
-        <Placeholder
-          label="Schedule"
-          text="Choose a start date and program above to see the weekday and weekend schedules."
-          error={errors.cohortId}
-        />
+        errors.cohortId ? <p role="alert" className="text-sm font-medium text-error">{errors.cohortId}</p> : null
       )}
       </>
       )}
 
-      {chosen && !(selectionShownAbove && !changingSelection) && (
+      <div className="border-t border-line pt-5">
+        <p className="text-sm font-bold uppercase tracking-wider text-brand">
+          {selectionShownAbove ? "Your contact details" : "2. Tell us about your student"}
+        </p>
+      </div>
+
+      <fieldset className="flex flex-col gap-4">
+        <legend className="mb-3 text-base font-extrabold text-navy">Parent or guardian</legend>
+        <TextField label="Parent/Guardian Name" autoComplete="name" required {...field("parentName")} />
+        <div className="grid gap-5 sm:grid-cols-2">
+          <TextField label="Email Address" type="email" inputMode="email" autoComplete="email" required {...field("email")} />
+          <TextField label="Phone Number" type="tel" inputMode="tel" autoComplete="tel" required {...field("phone")} />
+        </div>
+      </fieldset>
+
+      <fieldset className="flex flex-col gap-4 border-t border-line pt-6">
+        <legend className="mb-3 float-left w-full text-base font-extrabold text-navy">Student</legend>
+        <div className="grid gap-5 sm:grid-cols-2">
+          <TextField label="Student Name" autoComplete="off" required {...field("studentName")} />
+          <SelectField label="Current Grade" required placeholder="Select grade" options={GRADES_2027} {...field("studentGrade")} />
+        </div>
+      </fieldset>
+
+
+      {chosen && chosen.term !== "winter" && !(selectionShownAbove && !changingSelection) && (
         <div aria-live="polite" className="border border-line bg-cream px-4 py-3 text-sm leading-relaxed text-navy">
           <p className="font-bold">Tuition for this cohort ({chosen.hours} hours at $20 per hour)</p>
           <ul className="mt-1 flex flex-col gap-1">
@@ -386,7 +381,7 @@ export function Enrollment2027Form({ preset = {}, selectionShownAbove = false }:
           required
           placeholder="Select an option"
           options={[...FOUNDING_INTEREST_OPTIONS]}
-          hint="Winter 2027 only: 25% off for the first 5 fully paid enrollments in each cohort, while seats remain."
+          hint="AhmedPrep will confirm whether the discount is available before payment."
           {...field("foundingInterest")}
         />
       )}

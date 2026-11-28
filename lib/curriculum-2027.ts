@@ -179,7 +179,8 @@ const CUMULATIVE_SESSIONS: Record<number, readonly number[]> = { 16: [6, 13], 24
 /** Final instructional sessions reserved for mixed, timed question sets. */
 const MIXED_SESSIONS: Record<number, number> = { 16: 2, 24: 3, 32: 4 }
 
-export const mockSessionsFor = (sessions: number) => MOCK_SESSIONS[sessions] ?? []
+export const mockSessionsFor = (sessions: number, cohortId?: string) =>
+  cohortId === "fall-shsat-intensive" ? [5, 13, 21, 29] : MOCK_SESSIONS[sessions] ?? []
 export const cumulativeSessionsFor = (sessions: number) => CUMULATIVE_SESSIONS[sessions] ?? []
 
 export type Slot = Topic & { stage: Stage }
@@ -278,13 +279,16 @@ export function syllabusFor(cohort: Cohort): SyllabusSession[] {
   const n = calendar.length
   const program = cohort.program
   const verbalName = VERBAL_LABEL[program]
-  const mocks = new Set(mockSessionsFor(n))
+  const mocks = new Set(mockSessionsFor(n, cohort.id))
   const cumulative = new Set(cumulativeSessionsFor(n))
   const instructionalCount = calendar.filter((s) => s.number !== 1 && !mocks.has(s.number)).length
   const mixed = MIXED_SESSIONS[n] ?? 0
   const math = planTrack(TOPICS[program].math, instructionalCount, mixed, "math", program)
   const verbal = planTrack(TOPICS[program].verbal, instructionalCount, mixed, "verbal", program)
   const exam = fullLengthExam(program)
+  const examTiming = program === "SHSAT"
+    ? "Use all 180 scheduled minutes for the timed test. Give directions before the session and debrief at the next lesson."
+    : `Allow 134 minutes of testing plus the 10-minute exam break. Use the remaining ${cohort.breakMinutes ? 136 : 36} minutes for directions and guided practice or review.${cohort.breakMinutes ? " Count the exam break toward the separately scheduled 30-minute break and take the other 20 minutes outside the timed test." : ""}`
 
   let taught = 0
   let mockCount = 0
@@ -294,9 +298,9 @@ export function syllabusFor(cohort: Cohort): SyllabusSession[] {
         ...s, format: "diagnostic", smart: [],
         assessments: [
           { kind: "diagnostic", label: `Initial diagnostic — ${exam}` },
-          { kind: "report", label: "Parent progress report 1: diagnostic baseline" },
+          { kind: "report", label: "Send the diagnostic baseline report after scoring" },
         ],
-        review: "Full period: check-in, directions, and the diagnostic. Students start their error log from the results in the next session.",
+        review: examTiming,
         homework: "Error-log reflection on the diagnostic: mark each miss as content gap, careless error, or timing.",
       }
     }
@@ -306,9 +310,9 @@ export function syllabusFor(cohort: Cohort): SyllabusSession[] {
         ...s, format: "mock", smart: [],
         assessments: [
           { kind: "mock", label: `Mock exam ${mockCount} — ${exam}` },
-          { kind: "report", label: `Parent progress report after mock exam ${mockCount}` },
+          { kind: "report", label: `Send the parent progress report after scoring mock exam ${mockCount}` },
         ],
-        review: "Full period: full-length exam under official timing. Students mark guessed and time-pressure items for the debrief.",
+        review: examTiming,
         homework: "Log every missed and guessed item in the error log with the reason it was missed.",
       }
     }
@@ -353,7 +357,10 @@ export function syllabusFor(cohort: Cohort): SyllabusSession[] {
     const target = cumulative.has(last.number) ? (lessons.filter((s) => !cumulative.has(s.number)).at(-1) ?? last) : last
     const notes: string[] = []
     if (target !== last) notes.push(`moved from session ${last.number}, which holds the cumulative checkpoint`)
-    else if (cumulative.has(target.number)) notes.push("taken in place of 15 minutes of the checkpoint review, which is shortened to 15 minutes")
+    else if (cumulative.has(target.number)) {
+      target.assessments.find((assessment) => assessment.kind === "cumulative")!.label = "Cumulative review checkpoint (15 min, all topics taught so far)"
+      notes.push("followed by a 15-minute cumulative checkpoint")
+    }
     const weekEnd = week[week.length - 1]
     if (weekEnd.format === "mock") notes.push(`the week ends with mock exam on session ${weekEnd.number}`)
     target.assessments.unshift({ kind: "quiz", label: QUIZ(verbalName) + (notes.length ? ` — ${notes.join("; ")}` : "") })
@@ -371,10 +378,10 @@ export const syllabusForId = (id: string) => {
 export type AssessmentPlanRow = { assessment: string; frequency: string; purpose: string; scoring: string }
 
 export const ASSESSMENT_PLAN: readonly AssessmentPlanRow[] = [
-  { assessment: "Initial diagnostic", frequency: "Session 1 of every cohort (full period)", purpose: "Baseline score and topic-level gaps that set each student's priorities.", scoring: "Original AhmedPrep full-length test on paper, scanned and scored with the manual GradeCam workflow. Raw scores." },
+  { assessment: "Initial diagnostic", frequency: "Session 1 of every cohort", purpose: "Baseline score and topic-level gaps that set each student's priorities.", scoring: "Original AhmedPrep full-length test on paper, scanned and scored with the manual GradeCam workflow. Raw scores." },
   { assessment: "Weekly quiz", frequency: "Every calendar week with a regular lesson, on the week's last lesson. Moved to an earlier lesson that week if a checkpoint falls on that session; replaced only when the week has no regular lesson, and labeled as such.", purpose: "Check retention of that week's Math and verbal topics.", scoring: "15-minute paper quiz in the review block, manual GradeCam workflow. Raw scores." },
   { assessment: "Cumulative review checkpoint", frequency: "2 per 16- and 24-session cohort; 3 per 32-session cohort", purpose: "Retrieval practice across every topic taught so far.", scoring: "Paper, manual GradeCam workflow; results logged by topic." },
-  { assessment: "Full-length mock exam", frequency: "2 per 16- and 24-session cohort; 3 per 32-session cohort (full period)", purpose: "Measure growth, pacing, and stamina under official timing.", scoring: "Original AhmedPrep test unless an official test is verified for use. Official Bluebook tests report College Board scaled scores; all other tests report raw scores." },
+  { assessment: "Full-length mock exam", frequency: "2 per 16- and 24-session cohort; 3 per 32-session cohort, except Fall SHSAT with 4 proposed", purpose: "Measure growth, pacing, and stamina under official timing.", scoring: "Original AhmedPrep test unless an official test is verified for use. Official Bluebook tests report College Board scaled scores; all other tests report raw scores." },
   { assessment: "Student error log", frequency: "Updated after every session, quiz, and exam; teacher-reviewed weekly", purpose: "Record why each item was missed (content gap, careless error, timing, guess) and drive targeted review.", scoring: "Not scored; reviewed for patterns." },
   { assessment: "Parent progress report", frequency: "After the diagnostic, after each mock exam, and at course end", purpose: "Scores, performance by area, attendance, homework, and next priorities.", scoring: "Prepared manually by the instructor on the AhmedPrep template." },
 ]
@@ -426,9 +433,9 @@ export const SCORE_RULES: Record<ProgramId, string> = {
 export type CalendarFinding = { dates: string; cohorts: string; finding: string; status: "No conflict found" | "Owner decision needed" | "Approved" }
 
 export const CALENDAR_REVIEW: readonly CalendarFinding[] = [
-  { dates: "All proposed makeups", cohorts: "Winter and Spring weekday; Summer weekend", finding: "Each falls on a day its cohort has no other class and preserves exactly one 3-hour session. Saturday evening makeups (5:30–8:30 PM) start after the same-day weekend cohorts end (5 PM), a 30-minute gap if one instructor teaches both.", status: "No conflict found" },
-  { dates: "Aug 29 (Sun)", cohorts: "Summer weekday intensive (both)", finding: "July 4, 2027 is a Sunday, so the federal holiday is observed Monday July 5. The intensive begins Tuesday July 6, so July 5 was never a scheduled class. Sunday, August 29 is the owner-approved required final instructional session (SHSAT 10 AM–1 PM ET; Digital SAT 2–5 PM ET) that completes the approved 32 sessions and 96 hours. It is not a makeup. No overlap between the two cohorts; falls before the August 30 summer break.", status: "Approved" },
-  { dates: "Aug 28 (Sat)", cohorts: "Summer weekend (both)", finding: "Makeup for the July 4 closure. Falls before the August 30 summer break; no overlap with the intensive cohorts.", status: "No conflict found" },
+  { dates: "Winter and Spring makeups", cohorts: "Winter and Spring weekday", finding: "Proposed makeup dates require verification of holiday calendars and instructor availability. Each replacement preserves the enrolled cohort’s total instructional hours.", status: "Owner decision needed" },
+  { dates: "Jul 1–Aug 26", cohorts: "Summer SHSAT weekday intensive", finding: "The first instructional day is Thursday July 1, followed by July 6–August 26 on Monday–Thursday. July 5 is closed. This yields 32 sessions of three hours, or 96 instructional hours. Confirm facility and instructor availability for July 1.", status: "Owner decision needed" },
+  { dates: "Jul 3–Aug 28", cohorts: "Summer Digital SAT weekend intensive", finding: "July 4 is closed. Sixteen Saturday/Sunday sessions are scheduled, ending Saturday August 28; each is 10 AM–3 PM with 30 minutes excluded as lunch, yielding 72 instructional hours.", status: "Approved" },
   { dates: "Mar 9 (Tue) closure", cohorts: "Winter Digital SAT weekday", finding: "Closure reason is pending. Eid al-Fitr 2027 is expected around March 9–10 depending on moon sighting; if it falls on Wednesday March 10, the Winter SHSAT weekday class meets that day.", status: "Owner decision needed" },
   { dates: "May 17 (Mon) closure", cohorts: "Spring SHSAT weekday", finding: "Closure reason is pending. Eid al-Adha 2027 is expected around May 16–17; if it falls on Sunday May 16, both Spring weekend cohorts meet that day.", status: "Owner decision needed" },
   { dates: "Mar 28 (Sun)", cohorts: "Winter weekend (both)", finding: "The final winter weekend session falls on Easter Sunday.", status: "Owner decision needed" },
